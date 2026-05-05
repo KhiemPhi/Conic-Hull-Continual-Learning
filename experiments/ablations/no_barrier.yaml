@@ -1,0 +1,7 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_no_barrier
+  description: "Disable log-barrier distillation; fall back to L2 + relational KD"
+  tags: [ablation, distillation]
+pipeline:
+  use_log_barrier_distill: false

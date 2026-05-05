@@ -1,0 +1,7 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_fine_grained
+  description: "2 classes per stage — tests plasticity under highly granular task splits"
+  tags: [ablation, schedule]
+pipeline:
+  classes_per_stage: 2

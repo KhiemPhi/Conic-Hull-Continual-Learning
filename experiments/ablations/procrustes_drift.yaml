@@ -1,0 +1,7 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_procrustes_drift
+  description: "Use Procrustes (orthogonal) instead of covariance-based drift estimation"
+  tags: [ablation, analytical]
+pipeline:
+  drift_method: procrustes

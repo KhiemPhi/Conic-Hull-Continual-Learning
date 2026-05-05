@@ -1,0 +1,9 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_head_mlp
+  description: "Replace conic head with incremental MLP head (512 hidden)"
+  tags: [ablation, head]
+pipeline:
+  head_type: mlp
+  mlp_hidden_dim: 512
+  mlp_dropout: 0.0

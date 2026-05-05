@@ -1,0 +1,7 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_small_memory
+  description: "Reduce replay buffer to 1% of dataset to stress-test memory efficiency"
+  tags: [ablation, memory]
+pipeline:
+  memory_budget: 0.01

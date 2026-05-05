@@ -1,0 +1,7 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_no_analytical_correction
+  description: "Disable analytical A^{-T} head weight correction after backbone drift"
+  tags: [ablation, analytical]
+pipeline:
+  use_analytical_head_update: false

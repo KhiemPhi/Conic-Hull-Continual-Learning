@@ -1,0 +1,8 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_no_distill
+  description: "No distillation of any kind — measures raw forgetting without KD"
+  tags: [ablation, distillation, baseline]
+pipeline:
+  use_log_barrier_distill: false
+  distill_weight: 0.0

@@ -1,0 +1,7 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_incremental_conic_head
+  description: "Grow conic head incrementally instead of pre-allocating all class slots"
+  tags: [ablation, head]
+pipeline:
+  reserved_space: false

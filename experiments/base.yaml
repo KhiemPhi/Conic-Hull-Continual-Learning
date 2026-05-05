@@ -1,0 +1,60 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# base.yaml — canonical defaults for train_incremental_pipeline_replay
+#
+# Every ablation YAML should start with:
+#   base: experiments/base.yaml
+# and override only the fields that differ.
+# ─────────────────────────────────────────────────────────────────────────────
+
+experiment:
+  name: base
+  description: "Full system with all components enabled (conic head, barrier loss, analytical correction, logdet penalty)"
+  tags: []
+
+pipeline:
+  # ── Data ──────────────────────────────────────────────────────────────────
+  dataset_name: CIFAR100
+  classes_per_stage: 10
+  batch_size: 128
+
+  # ── Model ─────────────────────────────────────────────────────────────────
+  model_name: vit_tiny_patch16_224
+
+  # ── Training schedule ─────────────────────────────────────────────────────
+  epochs_per_stage: 10
+  learning_rate: 1.0e-4
+  min_delta: 0.001
+  patience: 3
+
+  # ── Classifier head ───────────────────────────────────────────────────────
+  # Choices: "conic" | "linear" | "mlp"
+  head_type: conic
+  # Conic-specific
+  reserved_space: true
+  conic_hull_margin: 0.7
+  conic_hull_n_rays: 150
+  # MLP-specific (only used when head_type: mlp)
+  mlp_hidden_dim: 512
+  mlp_dropout: 0.0
+
+  # ── Replay buffer ─────────────────────────────────────────────────────────
+  memory_budget: 0.04          # fraction of total dataset
+
+  # ── Distillation ──────────────────────────────────────────────────────────
+  alpha: 0.1                   # tolerance margin for legacy L2 distillation
+  distill_weight: 10.0         # multiplier for legacy distillation path
+  pointwise_distill_weight: 0.2
+
+  # Log-Barrier margin-preservation loss
+  use_log_barrier_distill: true
+  barrier_weight: 1.0
+
+  # ── Analytical head weight correction ─────────────────────────────────────
+  use_analytical_head_update: true
+  # Choices: "procrustes" | "covariance"
+  drift_method: covariance
+
+  # ── Log-Det volume penalty ────────────────────────────────────────────────
+  use_logdet_penalty: false
+  logdet_weight: 1.0e-3
+  logdet_eps: 1.0e-4

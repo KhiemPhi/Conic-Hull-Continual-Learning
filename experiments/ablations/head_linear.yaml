@@ -1,0 +1,7 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_head_linear
+  description: "Replace conic head with incremental linear head"
+  tags: [ablation, head]
+pipeline:
+  head_type: linear

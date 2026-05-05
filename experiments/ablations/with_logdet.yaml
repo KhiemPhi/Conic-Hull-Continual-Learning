@@ -1,0 +1,9 @@
+base: experiments/base.yaml
+experiment:
+  name: ablation_with_logdet
+  description: "Enable log-det volume penalty to prevent feature-space collapse"
+  tags: [ablation, logdet]
+pipeline:
+  use_logdet_penalty: true
+  logdet_weight: 1.0e-3
+  logdet_eps: 1.0e-4
