@@ -3,3 +3,4 @@ cil_checkpoints
 data
 results
 *.pt
+sync.sh
