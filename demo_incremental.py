@@ -107,114 +107,42 @@ def demo(
     -------
     dict with keys: model, history, feature_dict, class_hulls, sep_df, confusions
     """
-    device            = "cuda" if torch.cuda.is_available() else "cpu"
-    checkpoint_path   = f"best_{model_name}_{dataset_name.lower()}_.pt"
-
-    print("=" * 60)
-    print(f"  backbone  : {model_name}")
-    print(f"  dataset   : {dataset_name}")
-    print(f"  device    : {device}")
-    print("=" * 60)
-
-    # ── 1. Train or reload ────────────────────────────────────────────────
-    if skip_training:
-        print("\n[demo] Skipping training — loading pretrained weights only.")
-        model   = load_backbone(model_name, pretrained=True,
-                                num_classes=0, device=device)
-        history = {}
-
-    elif os.path.exists(checkpoint_path):
-        print(f"\n[demo] Found checkpoint '{checkpoint_path}' — loading.")
-        model = load_backbone(model_name, pretrained=False,
-                              num_classes=0, device=device)
-        raw = torch.load(checkpoint_path, map_location=device)
-        clean = {
-            (k.replace("backbone.", "") if k.startswith("backbone.") else k): v
-            for k, v in raw.items()
-        }
-        msg = model.load_state_dict(clean, strict=False)
-        print(f"  missing keys     : {msg.missing_keys}")
-        print(f"  unexpected keys  : {msg.unexpected_keys}")
-        history = {"loaded_checkpoint": checkpoint_path}
-
-    else:
-        cfg = TrainingConfig(
-            max_epochs      = 30,
-            lr              = 1e-3,
-            weight_decay    = 0.05,
-            warmup_epochs   = 5,
-            patience        = 8,
-            freeze_backbone = True,
-            unfreeze_after  = 3,
-            checkpoint_path = checkpoint_path,
-            mixed_precision = True,
-        )
-        model, history = train_to_convergence(
-            model_name   = model_name,
-            dataset_name = dataset_name,
-            dataset_root = dataset_root,
-            batch_size   = batch_size,
-            cfg          = cfg,
-            device       = device,
-        )
-
-    # ── 2. Verify checkpoint ──────────────────────────────────────────────
-    if os.path.exists(checkpoint_path):
-        verify_trained_weights(
-            model_name      = model_name,
-            checkpoint_path = checkpoint_path,
-            dataset_name    = dataset_name,
-            dataset_root    = dataset_root,
-        )
-
-    # ── 3. Single-image sanity check ──────────────────────────────────────
-    dummy = Image.fromarray(
-        np.random.randint(0, 255, (224, 224, 3), dtype=np.uint8))
-    feat = extract_features(model, dummy, device=device)
-    print(f"\n[demo] Single-image feature shape: {feat.shape}")
-
-    (backbone, head, acc_matrix, acc_matrix_conic_hull_static, acc_matrix_conic_hull_dynamic,
+   
+    (backbone, head, acc_matrix, acc_matrix_conic_hull_static_procrustes, acc_matrix_conic_hull_dynamic,
      drift_matrix, final_forgetting, final_forgetting_static, final_forgetting_dynamic,
      _sc_history) = train_incremental_pipeline_replay(
         dataset_name="CIFAR10",
         model_name="vit_tiny_patch16_224",
         classes_per_stage=1,
-        epochs_per_stage=10,
+        epochs_per_stage=20,
         alpha=0.1,
-        distill_weight=10.0,
-        min_delta=0.001,
+        distill_weight=10.0, # distillation loss must be used
+        min_delta=0.01,
         patience=3,
-        batch_size=128,
+        batch_size=256,
         reserved_space=False,
         conic_hull_margin=0.7,
         conic_hull_n_rays=200,
         learning_rate=1e-4,
-        pointwise_distill_weight=0.2,
+        pointwise_distill_weight=0.,
         memory_budget=0.004,
-        use_analytical_head_update=True,
-        use_log_barrier_distill=False,
-        head_type="mlp",
+        use_analytical_head_update=True, # most key update 
+        head_type="mlp", # need to test heads 
         drift_method="covariance",
-        track_superclass_confusion=True,
+        track_superclass_confusion=False,
         superclass_confusion_top_n=15,
         superclass_confusion_plot=False,
-        use_ortho_routing=True, 
-        lambda_lock=1.0, 
-        lambda_route=1.0,
-        n_lock_rays_sample=64, 
-        ortho_svd_variance=0.95
+        head_update_method="covariance", # method does not matter
+        head_update_magnitude_preserving=True, 
+        use_conic_hull_rotation=True, 
+        rotate_dynamic_hulls=False,
+        rotate_static_hulls=False, 
+        lora_alpha=8.0, 
+        lora_rank=16
     )
 
 
-    plot_incremental_comparison_grid(
-        acc_pairs=[
-            (acc_matrix, acc_matrix_conic_hull_static),
-        ],
-        titles=[
-            "Conic Head Baseline vs Conic Head Conic Hull Classifier",
-        ],
-        classes_per_stage=2,
-    )
+ 
 
 if __name__ == "__main__":
     demo()

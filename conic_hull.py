@@ -58,7 +58,7 @@ class ConicHull:
         else:
             X_proc = X_norm
 
-        indices            = self._spa(X_proc, self.n_rays)
+        indices            = self._robust_density_spa(X_proc, self.n_rays)
         self.extreme_rays_ = X_norm[indices]
         self.extreme_rays_index = indices
         return self
@@ -84,6 +84,66 @@ class ConicHull:
             u_norm = u / (np.linalg.norm(u) + 1e-12)        # unit vector (D,)
             proj   = resid @ u_norm                          # (N,) scalar projections
             resid  = resid - np.outer(proj, u_norm)          # (N, D) subtract component
+
+        return np.array(indices)
+    
+    def _robust_density_spa(self, X: np.ndarray, m: int, k_neighbors: int = 5, outlier_percentile: int = 95) -> np.ndarray:
+        """
+        Robust Successive Projection Algorithm.
+        Filters out isolated outliers before finding the extreme rays of the data manifold.
+        
+        X: (N, D) — N feature vectors
+        m: number of images to select for the replay buffer (e.g., 20)
+        k_neighbors: number of neighbors to evaluate local density
+        outlier_percentile: threshold to define what constitutes an outlier
+        """
+        N, D = X.shape
+        from sklearn.neighbors import NearestNeighbors
+        
+        # -------------------   --------------------------------------
+        # STEP 1: Outlier Detection via Local Density
+        # ---------------------------------------------------------
+        # Find the distance to the k-nearest neighbors for every point
+        nbrs = NearestNeighbors(n_neighbors=k_neighbors + 1).fit(X)
+        distances, _ = nbrs.kneighbors(X)
+        
+        # Ignore the first column (distance to itself, which is 0)
+        # Calculate the mean distance to its local neighborhood
+        mean_local_dist = distances[:, 1:].mean(axis=1)
+        
+        # Determine the cutoff threshold. 
+        # E.g., if outlier_percentile=95, the 5% most isolated points are marked as outliers.
+        threshold = np.percentile(mean_local_dist, outlier_percentile)
+        
+        # Boolean mask: True if the point is an inlier, False if it's an outlier
+        valid_inlier_mask = mean_local_dist <= threshold
+
+        # ---------------------------------------------------------
+        # STEP 2: Masked Successive Projection
+        # ---------------------------------------------------------
+        indices = []
+        resid = X.copy().astype(np.float64)
+
+        for _ in range(m):
+            # Calculate residual norms
+            norms = np.linalg.norm(resid, axis=1)
+            
+            # Apply the outlier mask: force outlier norms to -1 so they are never picked
+            norms[~valid_inlier_mask] = -1.0
+            
+            # Force already-selected indices to -1 so we don't pick duplicates
+            for idx in indices:
+                norms[idx] = -1.0
+                
+            # 1. Find valid inlier with the largest residual norm
+            best_idx = int(np.argmax(norms))
+            indices.append(best_idx)
+
+            # 2. Project out the direction of the selected point
+            u = resid[best_idx]
+            u_norm = u / (np.linalg.norm(u) + 1e-12)
+            proj = resid @ u_norm
+            resid = resid - np.outer(proj, u_norm)
 
         return np.array(indices)
 

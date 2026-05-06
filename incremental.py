@@ -9,7 +9,8 @@ from conic_hull import ConicHull, build_class_conic_hulls
 import timm
 
 from features import get_default_transform
-import numpy as np 
+from backbone import load_backbone, get_lora_params
+import numpy as np
 import os
 
 
@@ -558,12 +559,134 @@ def estimate_affine_drift(
         )
 
 
+def rotate_conic_hulls(
+    old_stats: Dict,
+    new_stats: Dict,
+    A_global: np.ndarray,
+    boundary_margin: float = 0.05,
+) -> np.ndarray:
+    """
+    Refines a global drift matrix A into a boundary-aware rotation via polar
+    decomposition and class-conditional angular width scaling.
+
+    **Motivation.**  A global affine A minimises Euclidean MSE on class means but
+    may "squash" inter-class angles in high dimensions, allowing conic hulls to
+    bleed into each other after the transformation.  This function replaces the
+    raw A with a corrected matrix that (a) uses only the rotation component of A
+    so inter-class angles are isometrically preserved, and (b) applies a
+    centripetal contraction proportional to how much wider the new cones are
+    relative to the old ones, pulling class boundaries away from one another.
+
+    **Algorithm**
+
+    1.  *Angular width* per class is estimated as the square root of the largest
+        eigenvalue of the class covariance divided by the mean norm — a proxy for
+        the half-angle subtended by the conic hull:
+
+            w_c = sqrt( λ_max(Σ_c) ) / ( ‖μ_c‖ + ε )
+
+    2.  A per-class *scale factor* compares old and new widths:
+
+            s_c = min( 1, (w_old_c / w_new_c) × (1 − margin) )
+
+        When the new cone is wider (w_new > w_old) the factor is < 1,
+        applying centripetal pressure.  When it is narrower, s_c = 1
+        (no expansion allowed — only contraction is protective).
+
+    3.  The global A is polar-decomposed:
+
+            A = U Σ V^T  →  R = U V^T    (pure rotation / isometry)
+
+        R preserves all L2 distances and inter-class angles by construction.
+
+    4.  The protected matrix returned is:
+
+            A_protected = R × mean(s_c)
+
+    Parameters
+    ----------
+    old_stats       : per-class stats dict before backbone training
+                      { class_id: {"mean": (D,), "cov": (D,D), "n": int} }
+    new_stats       : same structure, after backbone training
+    A_global        : (D, D) drift matrix from ``estimate_affine_drift``
+    boundary_margin : safety margin subtracted from the scale factor,
+                      preventing exact-boundary cases.  0.05 = 5% buffer.
+
+    Returns
+    -------
+    A_protected : (D, D) ndarray — rotation-only transformation with
+                  boundary-contraction scaling applied
+    """
+    common = sorted(set(old_stats.keys()) & set(new_stats.keys()))
+
+    def _angular_width(stats: Dict, class_id: int) -> float:
+        mu  = stats[class_id]["mean"]
+        cov = stats[class_id]["cov"]
+        lam_max = float(np.linalg.eigvalsh(cov)[-1])          # largest eigenvalue
+        return np.sqrt(max(lam_max, 0.0)) / (np.linalg.norm(mu) + 1e-8)
+
+    scales = []
+    for c in common:
+        w_old = _angular_width(old_stats, c)
+        w_new = _angular_width(new_stats, c)
+        if w_new > 1e-12:
+            s = min(1.0, (w_old / w_new) * (1.0 - boundary_margin))
+        else:
+            s = 1.0
+        scales.append(s)
+
+    s_factor = float(np.mean(scales))
+
+    # Polar decomposition: A = U diag(S) V^T  →  R = U V^T (isometric part)
+    U, _, Vt = np.linalg.svd(A_global)
+    R = U @ Vt                                                  # (D, D) rotation
+
+    return R * s_factor
+
+
+def rotate_hulls(
+    hulls: Dict[str, "ConicHull"], 
+    old_stats: Dict, 
+    new_stats: Dict, 
+    A: np.ndarray,
+    shrinkage: float = 0.95
+) -> None:
+    # 1. Calculate the Global Translation (Bias)
+    common = list(set(old_stats.keys()) & set(new_stats.keys()))
+    mu_old_gen = np.mean([old_stats[c]["mean"] for c in common], axis=0)
+    mu_new_gen = np.mean([new_stats[c]["mean"] for c in common], axis=0)
+    
+    for class_name, hull in hulls.items():
+        if hull.extreme_rays_ is None:
+            continue
+
+        # 2. De-bias, Rotate, and Re-bias
+        # This ensures the 'origin' of the conic hull matches the new space
+        centered_rays = hull.extreme_rays_ - mu_old_gen
+        rotated = centered_rays @ A.T
+        shifted = rotated + mu_new_gen
+        
+        # 3. Boundary Protection (Shrinkage)
+        # We push the rays slightly closer to the class mean to prevent overlap
+        class_mu_new = new_stats[class_name]["mean"]
+        # Pull rays toward the mean by 'shrinkage' amount
+        protected_rays = class_mu_new + shrinkage * (shifted - class_mu_new)
+
+        # 4. Final Re-normalization
+        norms = np.linalg.norm(protected_rays, axis=1, keepdims=True)
+        hull.extreme_rays_ = protected_rays / np.maximum(norms, 1e-12)
+        
+        # 5. Wipe PCA (It's safer to re-fit or ignore it after non-rigid drift)
+        hull.pca_ = None
+
+
 def update_head_weights_analytically(
     head: nn.Module,
     A: np.ndarray,
     old_class_ids: List[int],
     device: torch.device,
     renormalize: bool = True,
+    magnitude_preserving: bool = False,
 ) -> None:
     """
     Corrects old classifier-head weights to account for feature-space drift.
@@ -581,21 +704,30 @@ def update_head_weights_analytically(
     For orthogonal A (Procrustes output): A^{-T} = A, so the update is a
     pure rotation with no matrix inversion required.
 
-    For cosine / ArcFace heads the corrected weight is re-projected onto the
-    unit sphere so that the angular margin interpretation is preserved.
+    **Magnitude-preserving mode.**  When A contains a contraction (features
+    cluster more tightly), A^{-T} is an expansion.  Without correction, the
+    adapted old weights grow in norm and dominate the softmax purely through
+    logit volume, not angular advantage.  Setting ``magnitude_preserving=True``
+    decouples direction from scale:
+
+        w_final = (w_adapted / ‖w_adapted‖) × ‖w_old‖
+
+    This keeps the directional benefit of A^{-T} while holding the confidence
+    level of each old class at its pre-drift value.
 
     Parameters
     ----------
-    head          : Module whose ``.weight`` tensor has shape
-                    (num_classes, feat_dim). Works for ``FixedConicHead`` and
-                    ``IncrementalConicHead`` (registered buffer) as well as
-                    ``IncrementalLinearHead.fc`` (nn.Parameter).
-    A             : (D, D) drift matrix from ``estimate_affine_drift``.
-    old_class_ids : Indices of classes whose weights need updating.
-    device        : Computation device.
-    renormalize   : Re-normalise updated weights to the unit sphere.
-                    Set True for cosine / ArcFace heads, False for plain
-                    linear heads where magnitude carries information.
+    head                 : Module with a ``.weight`` tensor (num_classes, D).
+    A                    : (D, D) drift matrix from ``estimate_affine_drift``.
+    old_class_ids        : Indices of old-class weights to update.
+    device               : Computation device.
+    renormalize          : Project updated weight onto the unit sphere.
+                           Use True for ArcFace heads, False for plain linear.
+                           Ignored when ``magnitude_preserving=True``.
+    magnitude_preserving : If True, restore ‖w_old‖ after applying A^{-T},
+                           decoupling the rotation from the expansion/contraction
+                           induced by A.  Recommended when the drift matrix is
+                           ill-conditioned or when old and new logit scales diverge.
     """
     A_inv_T   = np.linalg.inv(A).T                                # (D, D)
     A_inv_T_t = torch.tensor(A_inv_T, dtype=head.weight.dtype, device=device)
@@ -604,11 +736,90 @@ def update_head_weights_analytically(
         for class_id in old_class_ids:
             if class_id >= head.weight.shape[0]:
                 continue
-            w_old = head.weight[class_id]                          # (D,)
-            w_new = A_inv_T_t @ w_old                              # (D,)
-            if renormalize:
-                w_new = F.normalize(w_new.unsqueeze(0), p=2, dim=1).squeeze(0)
+            w_old     = head.weight[class_id]                      # (D,)
+            norm_old  = w_old.norm()
+            w_adapted = A_inv_T_t @ w_old                          # (D,)
+
+            if magnitude_preserving and w_adapted.norm() > 1e-8:
+                # Use direction of A^{-T} w_old, scale of w_old
+                w_new = F.normalize(w_adapted.unsqueeze(0), p=2, dim=1).squeeze(0) * norm_old
+            elif renormalize:
+                w_new = F.normalize(w_adapted.unsqueeze(0), p=2, dim=1).squeeze(0)
+            else:
+                w_new = w_adapted
+
             head.weight[class_id] = w_new
+
+
+def update_head_weights_orthogonal_projected(
+    head: nn.Module,
+    A: np.ndarray,
+    old_class_ids: List[int],
+    new_class_means: np.ndarray,
+    device: torch.device,
+    magnitude_preserving: bool = False,
+) -> None:
+    """
+    A^{-T} drift correction with Gram-Schmidt projection onto the orthogonal
+    complement of the new-class subspace.
+
+    **Motivation.**  The plain A^{-T} update preserves relative margins among
+    old classes but is blind to where new classes have landed.  The adapted old
+    weights may rotate directly into the new cones, causing overlapping logits.
+
+    **Math.**
+    Let U_new ∈ R^{D×k} be an orthonormal basis for the subspace spanned by the
+    new-class mean feature vectors (obtained via thin SVD of the mean matrix).
+
+        P_perp = I − U_new U_new^T       (projector onto orthogonal complement)
+
+    The update proceeds in three steps:
+
+        w_adapted = A^{-T} w_old          (drift correction)
+        w_proj    = P_perp w_adapted      (zero out component in new-class directions)
+        w_final   = rescale(w_proj)       (see magnitude_preserving below)
+
+    If the projection collapses a vector (‖w_proj‖ < ε), w_adapted is kept as
+    a safe fallback.
+
+    Parameters
+    ----------
+    head                 : classifier module with a ``.weight`` tensor (num_classes, D)
+    A                    : (D, D) drift matrix from ``estimate_affine_drift``
+    old_class_ids        : indices of old-class weights to update
+    new_class_means      : (n_new, D) mean feature vectors of the newly learned classes
+    device               : computation device
+    magnitude_preserving : If False (default), normalise w_proj to the unit sphere
+                           (correct for ArcFace heads).
+                           If True, restore ‖w_old‖ after projection to prevent the
+                           expansion of A^{-T} from inflating old-class logit confidence.
+    """
+    D = new_class_means.shape[1]
+
+    _, _, Vt   = np.linalg.svd(new_class_means, full_matrices=False)  # Vt: (k, D)
+    U_new      = Vt.T                                                   # (D, k)
+    P_perp     = np.eye(D) - U_new @ U_new.T                           # (D, D)
+    A_inv_T    = np.linalg.inv(A).T                                     # (D, D)
+
+    P_perp_t   = torch.tensor(P_perp,  dtype=head.weight.dtype, device=device)
+    A_inv_T_t  = torch.tensor(A_inv_T, dtype=head.weight.dtype, device=device)
+
+    with torch.no_grad():
+        for class_id in old_class_ids:
+            if class_id >= head.weight.shape[0]:
+                continue
+            w_old     = head.weight[class_id]                           # (D,)
+            norm_old  = w_old.norm()
+            w_adapted = A_inv_T_t @ w_old                               # (D,)
+            w_proj    = P_perp_t  @ w_adapted                           # (D,)
+
+            w_base = w_proj if w_proj.norm() > 1e-8 else w_adapted
+            if magnitude_preserving:
+                w_final = F.normalize(w_base.unsqueeze(0), p=2, dim=1).squeeze(0) * norm_old
+            else:
+                w_final = F.normalize(w_base.unsqueeze(0), p=2, dim=1).squeeze(0)
+
+            head.weight[class_id] = w_final
 
 
 def _extract_class_stats_from_buffer(
@@ -1040,7 +1251,7 @@ def train_incremental_pipeline_lwf(
     for param in backbone.patch_embed.parameters():
         param.requires_grad = False
         
-    for i in range(11): # Freeze first 10 blocks
+    for i in range(10): # Freeze first 10 blocks
         for param in backbone.blocks[i].parameters():
             param.requires_grad = False
     
@@ -1211,7 +1422,7 @@ def evaluate_spa_conic_hulls(backbone, test_loader, memory_images, memory_labels
 
 
 
-def calculate_distillation_loss(distill_type, new_features, old_features, alpha=0.1, pointwise_weight=0.2, predictor=None):
+def calculate_distillation_loss(distill_type, new_features, old_features, alpha=0.1, pointwise_weight=0.2, predictor=None, kl_divergence=True):
     """
     Modular distillation function.
     - 'basic': Uses your existing L2 drift + Relational MSE.
@@ -1235,8 +1446,17 @@ def calculate_distillation_loss(distill_type, new_features, old_features, alpha=
         
         drift = F.pairwise_distance(f_new, f_old, p=2)
         loss_pointwise = torch.clamp(drift, min=0.0).mean()
-        loss_distill_relational = F.mse_loss(sim_matrix_new, sim_matrix_old)
-        
+        if not kl_divergence:
+            loss_distill_relational = F.mse_loss(sim_matrix_new, sim_matrix_old)
+        else: 
+            temp = 0.05
+            sim_matrix_new *= temp
+            sim_matrix_old *= temp 
+            # Convert to probabilities using Softmax
+            p_new = F.log_softmax(sim_matrix_new, dim=1)
+            p_old = F.softmax(sim_matrix_old, dim=1)
+            loss_distill_relational = F.kl_div(p_new, p_old, reduction='batchmean') * (temp ** 2)
+      
         return (pointwise_weight * loss_pointwise) + loss_distill_relational
         
     else:
@@ -1261,7 +1481,9 @@ def train_incremental_pipeline_replay(
     memory_budget=0.04,                # 4% of the total dataset
     use_analytical_head_update=True,   # Analytically correct old class weights after drift
     drift_method="covariance",         # "procrustes" | "covariance"
-    use_log_barrier_distill=True,      # Replace L2 KD with log-barrier margin loss
+    head_update_method="affine",             # "affine" | "ortho_projected"
+    head_update_magnitude_preserving=False,  # decouple A^{-T} rotation from scale expansion
+    use_log_barrier_distill=False,      # Replace L2 KD with log-barrier margin loss
     barrier_weight=1.0,                # λ in  L = L_cls + λ * L_barrier
     head_type="conic",                 # "conic" | "linear" | "mlp"  (ablation)
     mlp_hidden_dim=512,                # hidden width when head_type="mlp"
@@ -1277,43 +1499,55 @@ def train_incremental_pipeline_replay(
     lambda_route=1.0,                  # weight for L_route (subspace routing)
     n_lock_rays_sample=128,            # extreme-ray images sampled per step for L_lock
     ortho_svd_variance=0.95,           # fraction of variance kept in P_old SVD truncation
+    use_conic_hull_rotation=False,     # refine A via polar decomp + angular width scaling
+    hull_rotation_boundary_margin=0.05,  # centripetal safety margin for cone scaling
+    rotate_static_hulls=False,         # apply A to frozen static hull extreme rays each stage
+    rotate_dynamic_hulls=False,        # apply A to freshly re-fit dynamic hull extreme rays
+    blocks_freeze=12,
+    lora_rank=0,                       # > 0 → inject LoRA into ViT attention layers
+    lora_alpha=1.0,                    # LoRA scaling factor α (effective scale = α/rank)
+    lora_target_modules=None,          # layer suffixes to adapt, e.g. ["attn.qkv", "attn.proj"]
 ):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     stages, total_classes, total_data_size = get_incremental_dataloaders(dataset_name, classes_per_stage, batch_size)
 
-    # ==========================================
-    #           DATASET DEBUGGING 
-    # ==========================================
-    print("\n" + "="*50)
-    print("   [Debug] Data Distribution Per Stage")
-    print("="*50)
+    # # ==========================================
+    # #           DATASET DEBUGGING 
+    # # ==========================================
+    # print("\n" + "="*50)
+    # print("   [Debug] Data Distribution Per Stage")
+    # print("="*50)
 
-    for stage_idx, stage in enumerate(stages):
-        train_loader = stage["train_loader"]
-        test_loader = stage["test_loader"]
-        stage_classes = stage["classes"]
+    # for stage_idx, stage in enumerate(stages):
+    #     train_loader = stage["train_loader"]
+    #     test_loader = stage["test_loader"]
+    #     stage_classes = stage["classes"]
         
-        # Tally up the exact number of examples per class in the train set
-        train_counts = Counter()
-        for _, labels in train_loader:
-            train_counts.update(labels.tolist())
+    #     # Tally up the exact number of examples per class in the train set
+    #     train_counts = Counter()
+    #     for _, labels in train_loader:
+    #         train_counts.update(labels.tolist())
             
-        # Tally up the exact number of examples per class in the test set
-        test_counts = Counter()
-        for _, labels in test_loader:
-            test_counts.update(labels.tolist())
+    #     # Tally up the exact number of examples per class in the test set
+    #     test_counts = Counter()
+    #     for _, labels in test_loader:
+    #         test_counts.update(labels.tolist())
             
-        print(f"\n  --- Stage {stage_idx} | Classes: {stage_classes} ---")
+    #     print(f"\n  --- Stage {stage_idx} | Classes: {stage_classes} ---")
         
-        # Print the breakdown per class
-        for cls in sorted(stage_classes):
-            n_train = train_counts.get(cls, 0)
-            n_test = test_counts.get(cls, 0)
-            print(f"    Class {cls:>3} -> Train: {n_train:>4} examples | Test: {n_test:>4} examples")
+    #     # Print the breakdown per class
+    #     for cls in sorted(stage_classes):
+    #         n_train = train_counts.get(cls, 0)
+    #         n_test = test_counts.get(cls, 0)
+    #         print(f"    Class {cls:>3} -> Train: {n_train:>4} examples | Test: {n_test:>4} examples")
 
-    print("\n" + "="*50 + "\n")
+    # print("\n" + "="*50 + "\n")
     
-    backbone = timm.create_model(model_name, pretrained=True, num_classes=0).to(device)
+    backbone = load_backbone(
+        model_name, pretrained=True, num_classes=0, device=str(device),
+        lora_rank=lora_rank, lora_alpha=lora_alpha,
+        lora_target_modules=lora_target_modules,
+    )
     feat_dim = backbone.num_features
 
     if head_type == "conic":
@@ -1341,12 +1575,14 @@ def train_incremental_pipeline_replay(
     acc_matrix_conic_hull_dynamic = np.zeros((num_stages, num_stages)) # NEW: Track dynamic hull accuracy separately
     drift_matrix = np.zeros((num_stages, num_stages))
 
-    for param in backbone.patch_embed.parameters():
-        param.requires_grad = False
-        
-    for i in range(10): # Freeze first 10 blocks
-        for param in backbone.blocks[i].parameters():
+    for name, param in backbone.patch_embed.named_parameters():
+        if 'lora_' not in name:
             param.requires_grad = False
+
+    for i in range(blocks_freeze): # Freeze first 10 blocks
+        for name, param in backbone.blocks[i].named_parameters():
+            if 'lora_' not in name:
+                param.requires_grad = False
     
     
     memory_limit = memory_budget * total_data_size
@@ -1374,8 +1610,10 @@ def train_incremental_pipeline_replay(
             head.add_classes(num_new_classes, device)
         
         train_loader = stage["train_loader"]
-        # MLP and linear heads have trainable parameters; conic heads are frozen buffers
-        trainable_params = list(backbone.parameters())
+        # Collect only parameters that require gradients.
+        # When LoRA is active the original linear weights inside LoRALinear are
+        # frozen; block-level freezing still suppresses adapters in frozen blocks.
+        trainable_params = [p for p in backbone.parameters() if p.requires_grad]
         if isinstance(head, (IncrementalLinearHead, IncrementalMLPHead)):
             trainable_params += list(head.parameters())
         optimizer = torch.optim.AdamW(trainable_params, lr=learning_rate)
@@ -1458,14 +1696,14 @@ def train_incremental_pipeline_replay(
                                 new_features=new_mem_features,
                                 old_features=mem_embs_stored.to(device),
                                 alpha=alpha,
-                                pointwise_weight=0.5,
+                                pointwise_weight=pointwise_distill_weight,
                             )
                             + calculate_distillation_loss(
                                 distill_type="basic",
                                 new_features=new_mem_features,
                                 old_features=old_mem_features,
                                 alpha=alpha,
-                                pointwise_weight=0.5,
+                                pointwise_weight=1-pointwise_distill_weight,
                             )
                         )
 
@@ -1540,6 +1778,7 @@ def train_incremental_pipeline_replay(
         #   w_new = A^{-T} w_old
         #
         # This avoids the need to fine-tune the frozen conic head on replay data.
+        _stage_A: Optional[np.ndarray] = None   # A persists for hull rotation after this block
         if use_analytical_head_update and _prev_stats is not None and len(_prev_stats) >= 2:
             print("  -> Analytical head correction: estimating feature-space drift...")
             old_class_ids = list(_prev_stats.keys())
@@ -1554,13 +1793,60 @@ def train_incremental_pipeline_replay(
             if len(new_stats) >= 2:
                 try:
                     A = estimate_affine_drift(_prev_stats, new_stats, method=drift_method)
-                    update_head_weights_analytically(
-                        head, A, list(new_stats.keys()), device, renormalize=True
-                    )
-                    print(
-                        f"  -> Applied A^{{-T}} weight correction to "
-                        f"{len(new_stats)} old classes (method={drift_method})."
-                    )
+
+                    if use_conic_hull_rotation:
+                        A = rotate_conic_hulls(
+                            _prev_stats, new_stats, A,
+                            boundary_margin=hull_rotation_boundary_margin,
+                        )
+                        print(f"  -> Applied conic hull rotation (boundary_margin={hull_rotation_boundary_margin}).")
+
+                    _stage_A = A  # expose A for hull rotation after this try block
+
+                    if rotate_static_hulls:
+                        rotate_hulls(hull_mgr.static_hulls, _prev_stats, new_stats, A)
+                        print(f"  -> Rotated {len(hull_mgr.static_hulls)} static hull(s) into new feature space.")
+
+                    if head_update_method == "ortho_projected":
+                        # Compute new-class mean feature vectors for subspace projection.
+                        # One forward pass through the current stage's training data.
+                        backbone.eval()
+                        new_mean_acc: Dict[int, np.ndarray] = {}
+                        new_mean_cnt: Dict[int, int]        = {}
+                        with torch.no_grad():
+                            for imgs, labels in stage["train_loader"]:
+                                feats = backbone(imgs.to(device)).cpu().numpy()
+                                for feat, lbl in zip(feats, labels.tolist()):
+                                    if lbl not in new_mean_acc:
+                                        new_mean_acc[lbl] = feat.copy()
+                                        new_mean_cnt[lbl] = 1
+                                    else:
+                                        new_mean_acc[lbl] += feat
+                                        new_mean_cnt[lbl] += 1
+                        new_class_means = np.stack([
+                            new_mean_acc[c] / new_mean_cnt[c]
+                            for c in sorted(new_mean_acc)
+                        ])                                              # (n_new, D)
+                        update_head_weights_orthogonal_projected(
+                            head, A, list(new_stats.keys()),
+                            new_class_means, device,
+                            magnitude_preserving=head_update_magnitude_preserving,
+                        )
+                        print(
+                            f"  -> Applied A^{{-T}} + P_perp correction to "
+                            f"{len(new_stats)} old classes "
+                            f"(new subspace dim={new_class_means.shape[0]})."
+                        )
+                    else:
+                        update_head_weights_analytically(
+                            head, A, list(new_stats.keys()), device,
+                            renormalize=not head_update_magnitude_preserving,
+                            magnitude_preserving=head_update_magnitude_preserving,
+                        )
+                        print(
+                            f"  -> Applied A^{{-T}} weight correction to "
+                            f"{len(new_stats)} old classes (method={drift_method})."
+                        )
                 except Exception as exc:
                     print(f"  [WARNING] Analytical head update skipped: {exc}")
             else:
@@ -1656,6 +1942,11 @@ def train_incremental_pipeline_replay(
 
         # Step 5: Fit dynamic hulls from the current-backbone extreme-ray features.
         dynamic_hulls = hull_mgr.get_dynamic_hulls(feature_dict)
+
+        # if rotate_dynamic_hulls and _stage_A is not None:
+            
+        #     rotate_hulls(dynamic_hulls, _prev_stats)
+        #     print(f"  -> Rotated {len(dynamic_hulls)} dynamic hull(s) into new feature space.")
 
         # ── Orthogonal Conic Routing: rebuild projector ───────────────────────────
         if use_ortho_routing:
