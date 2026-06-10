@@ -58,17 +58,17 @@ SEARCH_SPACE: Dict[str, List[Any]] = {
 
 # Fixed hyperparameters — not part of the search
 FIXED_CONFIG: Dict[str, Any] = {
-    "dataset_name":                  "CIFAR10",
-    "model_name":                    "vit_tiny_patch16_224",
-    "classes_per_stage":             1,
+    "dataset_name":                  "CIFAR100",
+    "model_name":                    "vit_base_patch16_224.orig_in21k",
+    "classes_per_stage":             10,
     "distill_weight":                10.0,
     "min_delta":                     0.001,
     "patience":                      3,
-    "batch_size":                    256,
+    "batch_size":                    128,
     "reserved_space":                False,
     "conic_hull_n_rays":             200,
     "learning_rate":                 1e-4,
-    "memory_budget":                 0.004,
+    "memory_budget":                 0.04,
     "use_analytical_head_update":    True,
     "head_update_magnitude_preserving": True,
     "rotate_dynamic_hulls":          True,
@@ -162,7 +162,7 @@ def _config_key(config: Dict[str, Any]) -> str:
 
 def hyperparameter_search(
     n_trials: int = 20,
-    strategy: str = "random",
+    strategy: str = "grid",
     results_path: str = "hp_search_results.jsonl",
     search_space: Optional[Dict[str, List[Any]]] = None,
     fixed_config: Optional[Dict[str, Any]] = None,
@@ -393,7 +393,7 @@ def plot_incremental_comparison_grid(
 if __name__ == "__main__":
     all_results = hyperparameter_search(
         n_trials=30,
-        strategy="random",
+        strategy="grid",
         results_path="hp_search_results.jsonl",
     )
 
