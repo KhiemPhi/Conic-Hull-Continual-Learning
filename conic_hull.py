@@ -46,8 +46,31 @@ class ConicHull:
         self.k_local         = k_local
         self.ray_diversity   = ray_diversity   # "spa" | "fps" | "hybrid"
         self.spa_oversample  = spa_oversample  # multiplier for hybrid/fps candidate pool
-        self.extreme_rays_: Optional[np.ndarray] = None
+
+        # ── cached GPU reconstruction factors ─────────────────────────────────
+        # R_t (K,D), Gram H = R_t R_tᵀ (K,K) and the FISTA step size lr depend
+        # only on extreme_rays_.  They are recomputed on every score() call
+        # otherwise — wasteful in the O(n²) separation analysis where each hull
+        # is scored against every class.  Built lazily in _gpu_factors() and
+        # dropped whenever the rays change (the extreme_rays_ setter below), so
+        # external ray edits (drift correction, spherical-cap projection in
+        # incremental.py) stay correct without each call-site remembering to
+        # invalidate.
+        self._gpu_cache: dict = {}
+        self._extreme_rays: Optional[np.ndarray] = None
         self.pca_:          Optional[PCA]        = None
+
+    def _invalidate_cache(self) -> None:
+        self._gpu_cache = {}
+
+    @property
+    def extreme_rays_(self) -> Optional[np.ndarray]:
+        return self._extreme_rays
+
+    @extreme_rays_.setter
+    def extreme_rays_(self, value: Optional[np.ndarray]) -> None:
+        self._extreme_rays = value
+        self._invalidate_cache()   # rays changed → stale GPU factors
 
     # ── fitting ──────────────────────────────────────────────────────────────
 
@@ -86,7 +109,7 @@ class ConicHull:
         else:  # hybrid
             indices = self._hybrid_spa_fps(X_proc, self.n_rays, self.spa_oversample)
 
-        self.extreme_rays_      = X_norm[indices]
+        self.extreme_rays_      = X_norm[indices]   # setter clears the GPU cache
         self.extreme_rays_index = indices
         return self
 
@@ -296,15 +319,27 @@ class ConicHull:
         -------
         np.ndarray of shape (N_queries, n_rays) — the NNLS weight vectors
         """
-        from sklearn.preprocessing import normalize
-
         queries_norm = normalize(queries, axis=1)          # (N, D)
-        R            = self.extreme_rays_.T                # (D, K)
-        k            = k_local if k_local is not None else self.k_local
+        return self._reconstruct_norm(queries_norm, k_local=k_local)
 
-        # ── try GPU path ──────────────────────────────────────────────────────────
+    def _reconstruct_norm(self, queries_norm: np.ndarray,
+                          k_local: Optional[int] = None) -> np.ndarray:
+        """reconstruct() for queries that are *already* L2-normalised.
+
+        Lets callers that need the unit queries anyway (every score* method)
+        normalise once and reuse them, instead of normalising in reconstruct()
+        and again in the score.
+        """
+        R = self.extreme_rays_.T                            # (D, K)
+        k = k_local if k_local is not None else self.k_local
+
+        # Force fp32 / disable any ambient autocast: hull reconstruction is fp32,
+        # and a bf16 caller context (e.g. AMP eval) would otherwise cache a bf16
+        # Gram matrix and break later fp32 callers (back-projection).
+        import torch
         if self._torch_cuda_available():
-            return self._reconstruct_gpu_fast(queries_norm, R, k_local=k)
+            with torch.autocast(device_type="cuda", enabled=False):
+                return self._reconstruct_gpu_fast(queries_norm, R, k_local=k)
 
         # ── CPU fallback (your original scipy NNLS) ───────────────────────────────
         return self._reconstruct_cpu(queries_norm, R, k_local=k)
@@ -385,6 +420,35 @@ class ConicHull:
 
         return W_out.numpy()
     
+    def _gpu_factors(self, R: np.ndarray, device, dtype):
+        """Return cached (R_t, H, lr) for this hull's fixed ray dictionary.
+
+        R_t (K,D), Gram H = R_t R_tᵀ (K,K) and the FISTA step size
+        lr = 1/λ_max(H) depend only on the (immutable-after-fit) ray matrix, so
+        they are computed once and reused across every score()/reconstruct()
+        call.  Keyed by (device, dtype); cleared by fit() via _invalidate_cache.
+        """
+        import torch
+        key    = (str(device), str(dtype))
+        cached = self._gpu_cache.get(key)
+        if cached is not None:
+            return cached
+
+        _dt = device.type if hasattr(device, "type") else "cuda"
+        with torch.autocast(device_type=_dt, enabled=False), torch.no_grad():
+            R_t = torch.as_tensor(R.T, dtype=dtype, device=device)   # (K, D)
+            H   = R_t @ R_t.T                                          # (K, K) — fp32, not bf16
+            v = torch.randn(H.shape[0], device=device, dtype=dtype)
+            v = v / v.norm()
+            for _ in range(50):                                   # power iteration
+                v = H @ v
+                v = v / v.norm()
+            L  = (v @ H @ v).item()                               # λ_max(H)
+            lr = 1.0 / (L + 1e-8)
+
+        self._gpu_cache[key] = (R_t, H, lr)
+        return R_t, H, lr
+
     def _reconstruct_gpu_fast(self,
         queries_norm: np.ndarray,
         R:            np.ndarray,
@@ -399,19 +463,9 @@ class ConicHull:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         dtype  = torch.float32
 
-        R_t   = torch.tensor(R.T, dtype=dtype, device=device)   # (K, D)
-        Q_all = torch.tensor(queries_norm, dtype=dtype, device=device)  # (N, D)
-
-        H = R_t @ R_t.T                                          # (K, K)
-
-        with torch.no_grad():
-            v = torch.randn(H.shape[0], device=device, dtype=dtype)
-            v = v / v.norm()
-            for _ in range(50):
-                v = H @ v
-                v = v / v.norm()
-            L  = (v @ H @ v).item()
-            lr = 1.0 / (L + 1e-8)
+        # R_t / H / lr are constant for a fitted hull → fetch from cache.
+        R_t, H, lr = self._gpu_factors(R, device, dtype)
+        Q_all = torch.as_tensor(queries_norm, dtype=dtype, device=device)  # (N, D)
 
         N, K  = Q_all.shape[0], R_t.shape[0]
         W_out = torch.zeros(N, K, dtype=dtype)
@@ -507,9 +561,9 @@ class ConicHull:
 
         Returns np.ndarray of shape (N_queries,) in (-1, 1].
         """
-        weights       = self.reconstruct(queries)
+        q_n           = normalize(queries, axis=1)          # normalise once …
+        weights       = self._reconstruct_norm(q_n)         # … reuse for the NNLS
         reconstructed = weights @ self.extreme_rays_
-        q_n           = normalize(queries,       axis=1)
         r_n           = normalize(reconstructed, axis=1)
         return np.sum(q_n * r_n, axis=1)
 

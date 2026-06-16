@@ -5,6 +5,8 @@ Image transforms, single-image feature extraction, and batch feature
 extraction over a full torchvision test split.
 """
 
+import contextlib
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -13,6 +15,16 @@ from torchvision import datasets, transforms
 from PIL import Image
 from typing import Dict, List, Optional
 from tqdm import tqdm
+
+
+def _infer_autocast(device) -> "contextlib.AbstractContextManager":
+    """bf16 autocast for pure-inference forward passes on CUDA (≈2× faster,
+    no accuracy impact); a no-op context elsewhere. Callers cast the result
+    back to fp32 with .float() so all downstream numpy/hull math is unchanged.
+    """
+    if str(device).startswith("cuda"):
+        return torch.autocast("cuda", dtype=torch.bfloat16)
+    return contextlib.nullcontext()
 
 
 def get_default_transform(img_size: int = 224) -> transforms.Compose:
@@ -59,9 +71,9 @@ def extract_features(
         raise TypeError(f"Unsupported image type: {type(image)}")
 
     tensor = tensor.to(device)
-    with torch.no_grad():
+    with torch.inference_mode(), _infer_autocast(device):
         features = model(tensor)
-    return features.squeeze(0).cpu().numpy()
+    return features.float().squeeze(0).cpu().numpy()
 
 
 def build_feature_dict(
@@ -85,13 +97,20 @@ def build_feature_dict(
     transform = get_default_transform()
     name = dataset_name.upper()
 
-    if name == "CIFAR10":
-        ds = datasets.CIFAR10(dataset_root, train=train,
-                              download=True, transform=transform)
-        class_names = ds.classes
-    elif name == "CIFAR100":
-        ds = datasets.CIFAR100(dataset_root, train=train,
-                               download=True, transform=transform)
+    # ImageNet normalize stats used by get_default_transform(); shared uint8
+    # resize cache (see cached_cifar.py) makes repeated CIFAR passes ~10× faster.
+    _IMAGENET_MEAN = (0.485, 0.456, 0.406)
+    _IMAGENET_STD  = (0.229, 0.224, 0.225)
+    if name in ("CIFAR10", "CIFAR100"):
+        try:
+            from cached_cifar import CachedResizeCIFAR
+            _cls = datasets.CIFAR100 if name == "CIFAR100" else datasets.CIFAR10
+            ds = CachedResizeCIFAR(_cls, dataset_root, train, size=224,
+                                   mean=_IMAGENET_MEAN, std=_IMAGENET_STD)
+        except Exception as _e:
+            print(f"[build_feature_dict] resize cache unavailable ({_e}); live dataset")
+            _cls = datasets.CIFAR100 if name == "CIFAR100" else datasets.CIFAR10
+            ds = _cls(dataset_root, train=train, download=True, transform=transform)
         class_names = ds.classes
     elif name == "STL10":
         ds = datasets.STL10(dataset_root, split="test",
@@ -111,13 +130,13 @@ def build_feature_dict(
           f"({len(class_names)} classes)  dataset={dataset_name}")
 
     model.eval()
-    with torch.no_grad():
+    with torch.inference_mode(), _infer_autocast(device):
         pbar = tqdm(loader, desc="Extracting features",
                     unit="batch", dynamic_ncols=True)
         for imgs, labels in pbar:
-            imgs = imgs.to(device)
+            imgs = imgs.to(device, non_blocking=True)
             feats = model(imgs)
-            all_features.append(feats.cpu().numpy())
+            all_features.append(feats.float().cpu().numpy())
             all_labels.extend(labels.tolist())
             pbar.set_postfix({"samples": len(all_labels)})
 

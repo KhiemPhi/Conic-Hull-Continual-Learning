@@ -42,8 +42,18 @@ import os
 
 
 import copy
+import contextlib
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
+
+
+def _amp_infer(device) -> "contextlib.AbstractContextManager":
+    """bf16 autocast for inference-only backbone passes on CUDA (≈2× faster, no
+    accuracy impact); a no-op elsewhere.  Callers must .float() the output before
+    .cpu()/.numpy() since numpy has no bf16 dtype."""
+    if str(device).startswith("cuda"):
+        return torch.autocast("cuda", dtype=torch.bfloat16)
+    return contextlib.nullcontext()
 
 import torch
 import torch.nn as nn
@@ -234,25 +244,25 @@ class HullManager:
         per_class = max(self.min_rays, budget // self.total_classes)
         result = min(per_class, self.n_rays)
         return result
-    
+
     def orthogonalize_new_features(self, new_feature_dict, threshold=1e-4):
         """
         Projects new features into the null space of all past static hulls.
         This isolates the new conic hulls from intersecting with past tasks.
-        
+
         Parameters
         ----------
         new_feature_dict : dict {class_id: np.ndarray of shape (N, D)}
         threshold        : float, cutoff for SVD singular values to determine rank
-        
+
         Returns
         -------
         dict : The rotated/projected feature dictionary ready for fit_new_classes.
         """
         if not self.static_hulls:
             # Stage 0: Nothing to rotate away from yet
-            return new_feature_dict 
-            
+            return new_feature_dict
+
         # 1. Collect all extreme rays from past static hulls to define the occupied subspace.
         # (Assuming your hull objects store their defining vectors in a '.rays' or '.vertices' attribute)
         past_vectors = []
@@ -263,45 +273,45 @@ class HullManager:
                 past_vectors.append(hull.vertices)
             else:
                past_vectors.append(hull.extreme_rays)
-                
+
         # Stack into matrix of shape (total_past_rays, feature_dim)
-        past_matrix = np.vstack(past_vectors) 
+        past_matrix = np.vstack(past_vectors)
         feature_dim = past_matrix.shape[1]
-        
+
         # 2. Perform SVD to find the basis of the occupied space
         # past_matrix = U * S * Vh. The rows of Vh form an orthonormal basis for the space.
         _, S, Vh = np.linalg.svd(past_matrix, full_matrices=False)
-        
+
         # Determine the rank (how many dimensions are actually being used by past tasks)
         rank = np.sum(S > threshold)
-        
+
         if rank >= feature_dim:
             print(f"[Warning] Past tasks occupy the entire {feature_dim}D space. No null space available for rotation.")
             return new_feature_dict
-            
+
         # V_past contains the basis vectors of the occupied space
         V_past = Vh[:rank, :] # (rank, feature_dim)
-        
+
         # 3. Construct the null space projection matrix
         # P_null = I - V_past^T * V_past
         identity = np.eye(feature_dim)
-        P_null = identity - (V_past.T @ V_past) 
-        
+        P_null = identity - (V_past.T @ V_past)
+
         # 4. Project and re-normalize the new features
         rotated_feature_dict = {}
         for cls, feats in new_feature_dict.items():
             # Project into the null space
             proj_feats = feats @ P_null.T
-            
+
             # L2 Normalize to push the features back onto the unit hypersphere.
             # This maintains the exact intra-class cosine geometry.
             norms = np.linalg.norm(proj_feats, axis=1, keepdims=True)
-            
+
             # Avoid division by zero for any outlier vectors that lived entirely in the past subspace
-            norms[norms < 1e-9] = 1.0 
-            
+            norms[norms < 1e-9] = 1.0
+
             rotated_feature_dict[cls] = proj_feats / norms
-            
+
         print(f"    [HullManager] Projected new features into {feature_dim - rank}D null space.")
         return rotated_feature_dict
 
@@ -359,6 +369,257 @@ class HullManager:
             gamma=gamma,
         )
 
+    # ── Transported skeleton hulls (RanPAC-inspired drift-aware rebuild) ──────
+    def _fit_transport(self, X_old, X_new, pair_method, ridge,
+                       pca_subspace, pca_components,
+                       holdout_frac: float = 0.2, seed: int = 0):
+        """Fit a FORWARD drift map (birth space -> current space) from paired
+        replay features and return ``(transport_fn, oos_residual)``.
+
+        ``oos_residual`` is OUT-OF-SAMPLE: the map is fit on a train split and the
+        cosine residual is measured on a held-out split, so it reflects how well
+        the map *generalises* to rays it never saw — unlike the in-sample residual,
+        which at ``pca_components≈n_pairs`` is driven to ~0 by interpolation and is
+        meaningless.  The returned ``transport_fn`` is the final map re-fit on ALL
+        pairs (the held-out split is only for the diagnostic).  Returns NaN when
+        there are too few pairs to split.
+
+        ``transport_fn(rays)`` maps (M, D) birth-space rays into current space:
+
+            rays_new = (rays - mu_old) @ Aᵀ + mu_new
+
+        where ``(X_new - mu_new) = (X_old - mu_old) @ Aᵀ`` is the map fit by
+        ``fit_drift_map_from_pairs`` (see its A_inv_T derivation).  For
+        ``procrustes`` A is orthogonal → the transport is a rigid motion
+        (rotation + translation) that carries the birth cone's intrinsic shape
+        forward rather than re-estimating it from the few replay points; only its
+        position tracks the drift.  (Inter-ray angles from the origin shift
+        slightly under the translation + re-normalisation onto the sphere, but
+        the cone is relocated as a whole rather than re-fit.)
+
+        With ``pca_subspace`` the map is fit in a low-rank PCA basis (where the
+        ~20 replay points are well-conditioned) and applied ONLY to the
+        in-subspace component; the orthogonal complement of each ray is preserved
+        (identity off-subspace), mirroring ``_lift_pca_drift``.
+        """
+        # Fit on the UNIT SPHERE: the birth hull's extreme rays are L2-normalised
+        # and score() normalises queries, so the drift map must live in the same
+        # normalised space.  Fitting on raw features (norm ≫ 1) and then applying
+        # the map to unit rays makes the translation term (mu ≈ raw-feature norm)
+        # dwarf the ray, collapsing every transported ray to one direction.
+        X_old = normalize(np.asarray(X_old, dtype=np.float64), axis=1)
+        X_new = normalize(np.asarray(X_new, dtype=np.float64), axis=1)
+
+        # Core fitter: returns a transport closure fit on the given pair subset.
+        # Pass explicit uniform weights: fit_drift_map_from_pairs only normalises
+        # its weights when sample_weights is not None — called with None it uses
+        # unnormalised ones, making mu_old/mu_new *sums* rather than means.
+        def _fit(Xo, Xn):
+            sw = np.ones(Xo.shape[0], dtype=np.float64)
+            if not pca_subspace:
+                fit  = fit_drift_map_from_pairs(Xo, Xn, method=pair_method,
+                                                ridge=ridge, sample_weights=sw)
+                A    = fit["A"].astype(np.float64)
+                mu_o = fit["mu_old"].astype(np.float64)
+                mu_n = fit["mu_new"].astype(np.float64)
+
+                def transport(rays):
+                    return (np.asarray(rays, dtype=np.float64) - mu_o) @ A.T + mu_n
+                return transport
+
+            # Low-rank subspace: fit the map only where the replay data has
+            # variance.  CRITICAL: cap the rank at n_pairs-1 — _fit_pca_on_features
+            # derives its default rank from the *stacked* row count (2·n_pairs-1),
+            # which would leave the Procrustes/affine fit UNDERDETERMINED
+            # (k > n_pairs) and inject a spurious rotation in the unconstrained
+            # dims.  In practice keep pca_components well below n_pairs (≈ drift
+            # rank): at k≈n_pairs the fit interpolates the (noisy) pairs and
+            # generalises poorly — exactly what the oos_residual below exposes.
+            n_pairs = Xo.shape[0]
+            k_cap   = max(1, n_pairs - 1)
+            k_eff   = min(pca_components, k_cap) if pca_components else k_cap
+            pca_mean, pca_comps = _fit_pca_on_features(
+                {"_": np.vstack([Xo, Xn])}, n_components=k_eff,
+            )                                          # (D,), (k, D)
+            O   = (Xo - pca_mean) @ pca_comps.T         # (n, k)
+            N   = (Xn - pca_mean) @ pca_comps.T         # (n, k)
+            fit = fit_drift_map_from_pairs(O, N, method=pair_method, ridge=ridge,
+                                           sample_weights=sw)
+            A    = fit["A"].astype(np.float64)
+            mu_o = fit["mu_old"].astype(np.float64)
+            mu_n = fit["mu_new"].astype(np.float64)
+
+            def transport(rays):
+                c       = np.asarray(rays, dtype=np.float64) - pca_mean
+                par     = c @ pca_comps.T
+                perp    = c - par @ pca_comps
+                par_new = (par - mu_o) @ A.T + mu_n
+                return pca_mean + par_new @ pca_comps + perp
+            return transport
+
+        # Out-of-sample residual: fit on a train split, score the held-out split.
+        n      = X_old.shape[0]
+        n_hold = int(round(holdout_frac * n))
+        min_tr = max(2, (pca_components or 1) + 1)
+        oos_resid = float("nan")
+        if n_hold >= 2 and (n - n_hold) >= min_tr:
+            perm   = np.random.default_rng(seed).permutation(n)
+            te, tr = perm[:n_hold], perm[n_hold:]
+            tr_fn  = _fit(X_old[tr], X_new[tr])
+            pred   = normalize(tr_fn(X_old[te]), axis=1)
+            oos_resid = float(1.0 - np.mean(np.sum(pred * X_new[te], axis=1)))
+
+        # Final map uses ALL pairs (the held-out split was only for the diagnostic).
+        return _fit(X_old, X_new), oos_resid
+
+    def get_transported_hulls(
+        self,
+        backbone,
+        replay_buffer,
+        stage_feature_snapshots: Dict[int, Dict[int, np.ndarray]],
+        birth_stage: Dict[int, int],
+        current_stage_idx: int,
+        device,
+        new_class_ids,
+        new_feature_dict: Optional[Dict[str, np.ndarray]] = None,
+        pair_method: str = "procrustes",
+        ridge: float = 1e-3,
+        pca_subspace: bool = True,
+        pca_components: Optional[int] = None,
+        stage_poles: Optional[np.ndarray] = None,
+        cos_stage_cap: Optional[float] = None,
+        project_to_cap: bool = False,
+        batch_size: int = 64,
+        verbose: bool = True,
+    ) -> Dict[str, "ConicHull"]:
+        """Build per-class hulls in the CURRENT feature space by transporting each
+        old class's rich, frozen birth-time hull forward via a drift map fit on
+        the replay buffer — the "transported skeleton hull".
+
+        Why this beats re-fitting (``get_dynamic_hulls``) for old classes: a
+        dynamic hull is re-fit from only the ~20 buffer exemplars, so its sampled
+        extreme rays under-cover the true class cone (biased-tight, mis-oriented).
+        Here the *shape* comes from the birth hull (fit on full data, hundreds of
+        rays) and only the *drift transform* is estimated from the buffer — which
+        20 points CAN do robustly in a low-rank subspace. Birth rays are the
+        non-forgotten memory; the buffer just re-anchors them into the drifted
+        space.
+
+        NEW classes (born this stage) have no drift → their hulls are fit
+        directly on the full current-stage features (``new_feature_dict``).
+
+        Stage-cap linkage (``project_to_cap``)
+        --------------------------------------
+        When ``project_hulls_to_stage_cap`` confines each stage's classes to a
+        disjoint spherical cap around a fixed pole, that cap is enforced in BIRTH
+        space.  Transport carries the rays into current space, so to keep the
+        stages disjoint here we transport the cap too: old-class rays are
+        re-projected into the cap around ``transport(pole_birth_stage)`` (the same
+        map that moved the rays), and new-class rays into the current stage's pole
+        directly.  For a rigid (procrustes) map this is nearly a no-op — the cap
+        structure is preserved — and only corrects the small translation+renorm
+        slack; for ``ridge_affine`` it re-tightens a sheared cap.
+
+        Returns ``{class_str: ConicHull}`` scoreable by the same
+        ``evaluate_all_scores`` path as static/dynamic hulls.
+        """
+        result: Dict[str, ConicHull] = {}
+        new_set = {int(c) for c in (new_class_ids or [])}
+        _do_cap = (project_to_cap and stage_poles is not None
+                   and cos_stage_cap is not None)
+
+        # ── NEW classes: full-data hull (no drift to correct) ─────────────────
+        if new_feature_dict:
+            new_fd = {k: v for k, v in new_feature_dict.items()
+                      if int(k) in new_set}
+            if new_fd:
+                D = next(iter(new_fd.values())).shape[1]
+                new_hulls = build_class_conic_hulls(
+                    new_fd,
+                    n_rays=self._compute_n_rays(D),
+                    use_pca=False,
+                    k_local=10,
+                    ray_diversity=self.ray_diversity,
+                    spa_oversample=self.spa_oversample,
+                )
+                # New classes are already in current space → cap to the current
+                # stage's (un-transported) pole, matching the fit-time projection.
+                if _do_cap and current_stage_idx < len(stage_poles):
+                    _pole = stage_poles[current_stage_idx]
+                    for _h in new_hulls.values():
+                        _h.extreme_rays_ = project_to_spherical_cap(
+                            _h.extreme_rays_, _pole, cos_stage_cap)
+                result.update(new_hulls)
+
+        # ── OLD classes: one transport map per birth stage, applied to all its
+        #    classes' birth hulls (pooling classes makes the map well-determined).
+        old_by_stage: Dict[int, list] = defaultdict(list)
+        for cls_str, hull in self.static_hulls.items():
+            cid = int(cls_str)
+            if cid in new_set or hull.extreme_rays_ is None:
+                continue
+            s = birth_stage.get(cid)
+            if s is None or s >= current_stage_idx:
+                result[cls_str] = hull          # no earlier space → keep frozen
+                continue
+            old_by_stage[s].append(cid)
+
+        for s, cls_ids in sorted(old_by_stage.items()):
+            snapshot = {
+                c: stage_feature_snapshots[s][c]
+                for c in cls_ids
+                if s in stage_feature_snapshots and c in stage_feature_snapshots[s]
+            }
+            X_old, X_new = _extract_paired_replay_features(
+                backbone, replay_buffer, cls_ids, snapshot, device, batch_size,
+            )
+            min_pairs = max(2, (pca_components or 0) + 1)
+            if X_old.shape[0] < min_pairs or X_old.shape[0] != X_new.shape[0]:
+                for c in cls_ids:                # frozen-birth fallback
+                    result[str(c)] = self.static_hulls[str(c)]
+                if verbose:
+                    print(f"    [Transport] stage {s}: only {X_old.shape[0]} "
+                          f"replay pairs (<{min_pairs}) — kept frozen birth hulls.")
+                continue
+
+            transport, resid = self._fit_transport(
+                X_old, X_new, pair_method, ridge, pca_subspace, pca_components,
+            )
+            # Transport the stage's cap pole through the SAME map so re-confinement
+            # tracks the drift instead of fighting it (rigid map → ~no-op).
+            pole_now = None
+            if _do_cap and s < len(stage_poles):
+                pole_now = normalize(
+                    transport(np.asarray(stage_poles[s], dtype=np.float64)[None, :]),
+                    axis=1,
+                )[0]
+            for c in cls_ids:
+                birth_hull = self.static_hulls[str(c)]
+                moved = normalize(transport(birth_hull.extreme_rays_), axis=1)
+                if pole_now is not None:
+                    moved = normalize(
+                        project_to_spherical_cap(moved, pole_now, cos_stage_cap),
+                        axis=1,
+                    )
+                new_hull = ConicHull(
+                    n_rays=len(moved),
+                    use_pca=False,
+                    k_local=birth_hull.k_local,
+                    ray_diversity=self.ray_diversity,
+                    spa_oversample=self.spa_oversample,
+                )
+                new_hull.extreme_rays_       = moved.astype(np.float32)
+                new_hull.extreme_rays_index  = None
+                result[str(c)] = new_hull
+            if verbose:
+                _rs = f"{resid:.4f}" if resid == resid else "n/a"  # NaN-safe
+                print(f"    [Transport] stage {s}->{current_stage_idx}: "
+                      f"{len(cls_ids)} hull(s) via {pair_method}"
+                      f"{'+pca' if pca_subspace else ''} on {X_old.shape[0]} "
+                      f"pairs (oos-resid={_rs}).")
+
+        return result
+
     # Canonical ordering used everywhere for consistent printing
     SCORE_NAMES = ["cosine", "angular_margin", "blended", "max_ray_sim"]
 
@@ -368,9 +629,9 @@ class HullManager:
         correct, total = 0, 0
         all_classes = list(hulls.keys())
 
-        with torch.no_grad():
+        with torch.no_grad(), _amp_infer(device):
             for imgs, labels in test_loader:
-                feats = backbone(imgs.to(device)).cpu().numpy()
+                feats = backbone(imgs.to(device)).float().cpu().numpy()
                 scores = np.stack([hulls[name].score(feats) for name in all_classes], axis=1)
                 best_idx = np.argmax(scores, axis=1)
                 preds = np.array([int(all_classes[i]) for i in best_idx])
@@ -395,9 +656,9 @@ class HullManager:
         correct = {s: 0 for s in self.SCORE_NAMES}
         total   = 0
 
-        with torch.no_grad():
+        with torch.no_grad(), _amp_infer(device):
             for imgs, labels in test_loader:
-                feats      = backbone(imgs.to(device)).cpu().numpy()
+                feats      = backbone(imgs.to(device)).float().cpu().numpy()
                 labels_np  = labels.numpy()
 
                 # One score_all call per class hull — single NNLS solve each
@@ -453,9 +714,9 @@ class HullManager:
         correct = {s: 0 for s in self.COLLAB_SCORE_NAMES}
         total   = 0
 
-        with torch.no_grad():
+        with torch.no_grad(), _amp_infer(device):
             for imgs, labels in test_loader:
-                feats     = backbone(imgs.to(device)).cpu().numpy()
+                feats     = backbone(imgs.to(device)).float().cpu().numpy()
                 labels_np = labels.numpy()
 
                 # One joint NNLS solve for all classes
@@ -506,9 +767,9 @@ class HullManager:
 
         def _max_scores(loader) -> np.ndarray:
             parts: list = []
-            with torch.no_grad():
+            with torch.no_grad(), _amp_infer(device):
                 for imgs, _ in loader:
-                    feats = backbone(imgs.to(device)).cpu().numpy()
+                    feats = backbone(imgs.to(device)).float().cpu().numpy()
                     per_class = [hulls[name].score_all(feats) for name in all_classes]
                     mat = np.stack([pc[score_key] for pc in per_class], axis=1)  # (N, C)
                     parts.append(mat.max(axis=1))                                # (N,)
@@ -606,7 +867,7 @@ class HullManager:
 
         with torch.no_grad():
             for imgs, labels in loader:
-                feats = backbone(imgs.to(device)).cpu().numpy()
+                feats = backbone(imgs.to(device)).float().cpu().numpy()
                 for i, lbl in enumerate(labels.numpy().tolist()):
                     key = str(lbl)
                     if want is not None and key not in want:
@@ -869,7 +1130,7 @@ class HullManager:
 
         with torch.no_grad():
             for imgs, labels in calibration_loader:
-                feats = backbone(imgs.to(device)).cpu().numpy()
+                feats = backbone(imgs.to(device)).float().cpu().numpy()
                 mat   = _score_batch(feats)
                 stage_max = np.stack(
                     [mat[:, stage_cols_map[s]].max(axis=1) for s in ordered_stages],
@@ -1261,9 +1522,9 @@ class HullManager:
                 preds[mask] = np.array([int(stage_cls[i]) for i in best_local])
             return preds
 
-        with torch.no_grad():
+        with torch.no_grad(), _amp_infer(device):
             for imgs, labels in test_loader:
-                feats     = backbone(imgs.to(device)).cpu().numpy()
+                feats     = backbone(imgs.to(device)).float().cpu().numpy()
                 labels_np = labels.numpy()
                 N         = feats.shape[0]
                 feats_n   = normalize(feats, axis=1)
@@ -1462,9 +1723,9 @@ class HullManager:
         confusion_by_predicted_stage: dict = defaultdict(int)
         per_sample = []
 
-        with torch.no_grad():
+        with torch.no_grad(), _amp_infer(device):
             for imgs, labels in test_loader:
-                feats     = backbone(imgs.to(device)).cpu().numpy()
+                feats     = backbone(imgs.to(device)).float().cpu().numpy()
                 labels_np = labels.numpy()
 
                 per_class = [hulls[name].score_all(feats) for name in all_classes]
@@ -1535,26 +1796,26 @@ class ReplayBuffer:
         self.max_classes = max_classes
         self.buffer = defaultdict(list) # Now stores tuples: {class_id: [(image_tensor, emb_tensor), ...]}
         self.all_classes = []
-       
+
         self.per_class_cap = int(max_total_size // max_classes)
-        
+
 
     def add(self, images: torch.Tensor, embeddings: torch.Tensor, labels: torch.Tensor):
         """Adds images and their embeddings to the buffer, ensuring class balance."""
         images_cpu = images.detach().cpu()
         embeddings_cpu = embeddings.detach().cpu()
         labels_cpu = labels.detach().cpu()
-        
+
         for img, emb, lbl in zip(images_cpu, embeddings_cpu, labels_cpu):
             class_id = lbl.item()
             if class_id not in self.buffer:
                 self.all_classes.append(class_id)
-            
+
             # Store as a paired tuple
             self.buffer[class_id].append((img, emb, lbl))
-            
+
             # Keep a per-class cap to prevent memory explosion
-           
+
             if len(self.buffer[class_id]) > self.per_class_cap:
                 self.buffer[class_id].pop(random.randrange(len(self.buffer[class_id])))
 
@@ -1616,7 +1877,7 @@ class ReplayBuffer:
             class_pool = self.buffer[class_id]
             if not class_pool:
                 continue
-                
+
             for img, emb, lbl in class_pool:
                 all_images.append(img)
                 all_embeddings.append(emb)
@@ -1743,16 +2004,18 @@ class IncrementalLinearHead(nn.Module):
         old_fc = self.fc
         old_out = old_fc.out_features
         new_out = old_out + num_new_classes
-        
-        # Create new linear layer
-        new_fc = nn.Linear(self.in_features, new_out)
-        
+
+        # Create new linear layer on the SAME device as the head (the `device`
+        # arg was previously ignored, leaving fc on CPU after growth → device
+        # mismatch once features are on CUDA).
+        new_fc = nn.Linear(self.in_features, new_out).to(device)
+
         # Copy old weights to the new layer to preserve previous knowledge
         if old_out > 0:
             with torch.no_grad():
-                new_fc.weight[:old_out] = old_fc.weight
-                new_fc.bias[:old_out] = old_fc.bias
-        
+                new_fc.weight[:old_out] = old_fc.weight.to(device)
+                new_fc.bias[:old_out] = old_fc.bias.to(device)
+
         self.fc = new_fc
 
     def forward(self, x):
@@ -1766,7 +2029,7 @@ class FixedConicHead(nn.Module):
         super().__init__()
         self.s = s
         self.m = m
-        
+
         self.cos_m = math.cos(m)
         self.sin_m = math.sin(m)
         self.th = math.cos(math.pi - m)
@@ -1779,7 +2042,7 @@ class FixedConicHead(nn.Module):
 
     def forward(self, features: torch.Tensor, labels: torch.Tensor = None) -> torch.Tensor:
         cosine = F.linear(F.normalize(features), self.weight)
-        
+
         if labels is None:
             return cosine * self.s
 
@@ -1790,7 +2053,7 @@ class FixedConicHead(nn.Module):
 
         one_hot = torch.zeros(cosine.size(), device=features.device)
         one_hot.scatter_(1, labels.view(-1, 1).long(), 1)
-        
+
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
         return output * self.s
 
@@ -1810,14 +2073,14 @@ def classify_by_conic_hull(features, head, margin_threshold=None):
     # 2. Determine membership: Angle must be <= Radius
     # Find the closest cone for every sample
     min_angles, preds = angles.min(dim=1)
-    
+
     # 3. Apply the Hull Constraint
     # If the closest angle is still larger than the margin, it's not in the hull
     is_inside_any_hull = min_angles <= margin_threshold
-    
+
     # Optional: Mark orphans as -1 or a special 'unknown' class
     final_preds = torch.where(is_inside_any_hull, preds, torch.tensor(-1).to(preds.device))
-    
+
     return final_preds, min_angles
 
 class IncrementalConicHead(nn.Module):
@@ -1826,7 +2089,7 @@ class IncrementalConicHead(nn.Module):
         self.in_features = in_features
         self.s = s
         self.m = m
-        
+
         # Pre-compute constants for the ArcFace margin
         self.cos_m = math.cos(m)
         self.sin_m = math.sin(m)
@@ -1838,7 +2101,7 @@ class IncrementalConicHead(nn.Module):
 
     def add_classes(self, num_new_classes: int, device: torch.device):
         # Radius of each cone is m. For no overlap, distance must be > 2*m
-        min_separation = 2 * self.m 
+        min_separation = 2 * self.m
         new_centers = []
 
         while len(new_centers) < num_new_classes:
@@ -1854,10 +2117,10 @@ class IncrementalConicHead(nn.Module):
                 max_cos = cosines.max().item()
                 # Convert to angle
                 min_angle = math.acos(max_cos)
-                
+
                 if min_angle < min_separation:
                     continue # Too close! Re-roll.
-            
+
             # 3. Check against other centers currently being added in this batch
             if len(new_centers) > 0:
                 current_new = torch.cat(new_centers, dim=0)
@@ -1877,10 +2140,10 @@ class IncrementalConicHead(nn.Module):
     def forward(self, features: torch.Tensor, labels: torch.Tensor = None) -> torch.Tensor:
         # Normalize features to the unit hypersphere
         features_norm = F.normalize(features, p=2, dim=1)
-        
+
         # Calculate cosine similarity (dot product) with all existing centers
         cosine = F.linear(features_norm, self.weight)
-        
+
         if labels is None:
             return cosine * self.s
 
@@ -1892,7 +2155,7 @@ class IncrementalConicHead(nn.Module):
         # One-hot mask for the current batch labels
         one_hot = torch.zeros(cosine.size(), device=features.device)
         one_hot.scatter_(1, labels.view(-1, 1).long(), 1)
-        
+
         # Inject the margin only into the target class logits
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
         return output * self.s
@@ -2402,9 +2665,9 @@ def rotate_conic_hulls(
 
 
 def rotate_hulls(
-    hulls: Dict[str, "ConicHull"], 
-    old_stats: Dict, 
-    new_stats: Dict, 
+    hulls: Dict[str, "ConicHull"],
+    old_stats: Dict,
+    new_stats: Dict,
     A: np.ndarray,
     shrinkage: float = 0.95
 ) -> None:
@@ -2412,9 +2675,25 @@ def rotate_hulls(
     common = list(set(old_stats.keys()) & set(new_stats.keys()))
     mu_old_gen = np.mean([old_stats[c]["mean"] for c in common], axis=0)
     mu_new_gen = np.mean([new_stats[c]["mean"] for c in common], axis=0)
-    
+
+    # Hull dict keys may be strings ('27') while stats dicts are keyed by int (27).
+    # Resolve each hull key to the matching stats key (mirrors translate_hulls'
+    # int() handling); skip classes with no stats so a single mismatch can't
+    # abort the whole rotation via the caller's try/except.
+    def _statkey(k):
+        if k in new_stats:
+            return k
+        try:
+            ik = int(k)
+        except (TypeError, ValueError):
+            return None
+        return ik if ik in new_stats else None
+
     for class_name, hull in hulls.items():
         if hull.extreme_rays_ is None:
+            continue
+        key = _statkey(class_name)
+        if key is None:
             continue
 
         # 2. De-bias, Rotate, and Re-bias
@@ -2422,20 +2701,20 @@ def rotate_hulls(
         centered_rays = hull.extreme_rays_ - mu_old_gen
         rotated = centered_rays @ A.T
         shifted = rotated + mu_new_gen
-        
+
         # 3. Boundary Protection (Shrinkage)
         # We push the rays slightly closer to the class mean to prevent overlap
-        class_mu_new = new_stats[class_name]["mean"]
+        class_mu_new = new_stats[key]["mean"]
         # Pull rays toward the mean by 'shrinkage' amount
         protected_rays = class_mu_new + shrinkage * (shifted - class_mu_new)
 
         # 4. Final Re-normalization
         norms = np.linalg.norm(protected_rays, axis=1, keepdims=True)
         hull.extreme_rays_ = protected_rays / np.maximum(norms, 1e-12)
-        
+
         # 5. Wipe PCA (It's safer to re-fit or ignore it after non-rigid drift)
         hull.pca_ = None
-        
+
 def translate_hulls(
     hulls:     Dict[str, "ConicHull"],
     old_stats: Dict,
@@ -2449,10 +2728,10 @@ def translate_hulls(
     for cls_id in old_stats:
         if cls_id in new_stats:
             all_deltas.append(new_stats[cls_id]["mean"] - old_stats[cls_id]["mean"])
-    
+
     if not all_deltas:
         return 0
-    
+
     # Global drift is much more stable than per-class drift for N=20
     global_delta = np.mean(all_deltas, axis=0)
 
@@ -2461,7 +2740,7 @@ def translate_hulls(
             continue
 
         cls_id = int(cls_str)
-        
+
         # Calculate Class-Specific Drift
         if cls_id in old_stats and cls_id in new_stats:
             local_delta = new_stats[cls_id]["mean"] - old_stats[cls_id]["mean"]
@@ -2474,12 +2753,12 @@ def translate_hulls(
         # Apply Momentum-based update
         # This prevents the Hull from 'jumping' too far based on one bad batch
         translated = hull.extreme_rays_ + (alpha * delta)
-        
+
         # Re-normalize to unit sphere
         norms = np.linalg.norm(translated, axis=1, keepdims=True)
         hull.extreme_rays_ = translated / np.maximum(norms, 1e-12)
 
-        hull.pca_ = None 
+        hull.pca_ = None
         n_translated += 1
 
     return n_translated
@@ -2494,7 +2773,7 @@ def update_head_weights_analytically(
     magnitude_preserving: bool = False,
 ) -> None:
     """
-    Updates old classifier-head weights. 
+    Updates old classifier-head weights.
     Uses EXACT new centroids if available in the memory buffer (new_stats).
     Falls back to the Affine drift matrix A only for classes not in the buffer.
     """
@@ -2505,7 +2784,7 @@ def update_head_weights_analytically(
         for class_id in old_class_ids:
             if class_id >= head.weight.shape[0]:
                 continue
-            
+
             w_old = head.weight[class_id]
             norm_old = w_old.norm()
 
@@ -2513,13 +2792,13 @@ def update_head_weights_analytically(
             if class_id in new_stats:
                 # We have the exact new mean, so bypass the linear 'A' assumption completely
                 new_mean = torch.tensor(
-                    new_stats[class_id]["mean"], 
-                    dtype=head.weight.dtype, 
+                    new_stats[class_id]["mean"],
+                    dtype=head.weight.dtype,
                     device=device
                 )
                 w_adapted = new_mean
-                
-                # If using magnitude preserving, we want the direction of the new mean, 
+
+                # If using magnitude preserving, we want the direction of the new mean,
                 # but the scale of the old weight.
                 if magnitude_preserving and w_adapted.norm() > 1e-8:
                     w_new = F.normalize(w_adapted.unsqueeze(0), p=2, dim=1).squeeze(0) * norm_old
@@ -2527,10 +2806,10 @@ def update_head_weights_analytically(
                     w_new = F.normalize(w_adapted.unsqueeze(0), p=2, dim=1).squeeze(0)
                 else:
                     w_new = w_adapted
-                    
+
             # --- FALLBACK: Affine Transformation ---
             else:
-                # We don't have buffered data for this class, so we must guess 
+                # We don't have buffered data for this class, so we must guess
                 # its new location using the global drift matrix A
                 w_adapted = A_inv_T_t @ w_old
 
@@ -3188,21 +3467,44 @@ def orthogonal_centroid_loss(
     return sims.pow(2).sum(dim=1).mean()               # scalar
 
 
-def get_incremental_dataloaders(dataset_name="CIFAR100", classes_per_stage=10, batch_size=128, class_order=None):
+def get_incremental_dataloaders(dataset_name="CIFAR100", classes_per_stage=10, batch_size=128, class_order=None,
+                                num_workers=None):
     transform = transforms.Compose([
         transforms.Resize(224),
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))
     ])
 
-    if dataset_name == "CIFAR100":
-        train_ds = datasets.CIFAR100(root="./data", train=True, download=True, transform=transform)
-        test_ds = datasets.CIFAR100(root="./data", train=False, download=True, transform=transform)
-        total_classes = 100
-    else:
-        train_ds = datasets.CIFAR10(root="./data", train=True, download=True, transform=transform)
-        test_ds = datasets.CIFAR10(root="./data", train=False, download=True, transform=transform)
-        total_classes = 10
+    # Parallel data loading: each CIFAR image is upsampled 32²→224² on the CPU.
+    # With num_workers=0 (the old default) that resize happens serially on the
+    # main process and the GPU starves between batches.  Default to a healthy
+    # fraction of available cores and pin/prefetch so batches are staged ahead.
+    if num_workers is None:
+        num_workers = min(12, max(2, (os.cpu_count() or 4) - 2))
+    _loader_kw = dict(num_workers=num_workers, pin_memory=True)
+    if num_workers > 0:
+        _loader_kw.update(persistent_workers=True, prefetch_factor=4)
+
+    # Pre-resized disk cache: the 32²→224² upsample is the wall-clock bottleneck
+    # (re-done every pass). CachedResizeCIFAR caches resized uint8 once and only
+    # does ToTensor+Normalize((0.5,),(0.5,)) at access — identical tensors, ~10×
+    # faster passes. Falls back to live torchvision datasets if anything fails.
+    try:
+        from cached_cifar import CachedResizeCIFAR
+        _cls = datasets.CIFAR100 if dataset_name == "CIFAR100" else datasets.CIFAR10
+        train_ds = CachedResizeCIFAR(_cls, "./data", True,  size=224, mean=(0.5,), std=(0.5,))
+        test_ds  = CachedResizeCIFAR(_cls, "./data", False, size=224, mean=(0.5,), std=(0.5,))
+        total_classes = 100 if dataset_name == "CIFAR100" else 10
+    except Exception as _e:
+        print(f"  [dataloader] resize cache unavailable ({_e}); using live datasets")
+        if dataset_name == "CIFAR100":
+            train_ds = datasets.CIFAR100(root="./data", train=True, download=True, transform=transform)
+            test_ds = datasets.CIFAR100(root="./data", train=False, download=True, transform=transform)
+            total_classes = 100
+        else:
+            train_ds = datasets.CIFAR10(root="./data", train=True, download=True, transform=transform)
+            test_ds = datasets.CIFAR10(root="./data", train=False, download=True, transform=transform)
+            total_classes = 10
 
     if class_order is None:
         class_order = list(range(total_classes))
@@ -3223,8 +3525,8 @@ def get_incremental_dataloaders(dataset_name="CIFAR100", classes_per_stage=10, b
         stages.append({
             "stage_id": i,
             "classes": stage_classes,
-            "train_loader": DataLoader(Subset(train_ds, idx_train), batch_size=batch_size, shuffle=True),
-            "test_loader": DataLoader(Subset(test_ds, idx_test), batch_size=batch_size, shuffle=False)
+            "train_loader": DataLoader(Subset(train_ds, idx_train), batch_size=batch_size, shuffle=True, **_loader_kw),
+            "test_loader": DataLoader(Subset(test_ds, idx_test), batch_size=batch_size, shuffle=False, **_loader_kw)
         })
 
     return stages, total_classes, len(train_ds)
@@ -3240,7 +3542,9 @@ def evaluate_stage(backbone, head, old_backbone, test_loader, device, class_to_i
         for imgs, labels in test_loader:
             imgs, labels = imgs.to(device), labels.to(device)
 
-            features = backbone(imgs)
+            with _amp_infer(device):
+                features = backbone(imgs)
+            features = features.float()
 
             if isinstance(head, (FixedConicHead, IncrementalConicHead, ArcFaceHead)):
                 logits = head(features, labels=None)  # Eval mode: raw cosines
@@ -3263,36 +3567,38 @@ def evaluate_stage(backbone, head, old_backbone, test_loader, device, class_to_i
 
             correct += (preds == gt).sum().item()
             total += labels.size(0)
-            
+
             # Calculate Feature Drift if we have an older model to compare against
             if old_backbone is not None:
-                old_features = old_backbone(imgs)
+                with _amp_infer(device):
+                    old_features = old_backbone(imgs)
+                old_features = old_features.float()
                 f_new = F.normalize(features, p=2, dim=1)
                 f_old = F.normalize(old_features, p=2, dim=1)
                 # Euclidean distance between normalized vectors
                 drift = F.pairwise_distance(f_new, f_old, p=2).mean().item()
                 total_drift += drift
                 drift_batches += 1
-                
+
     acc = correct / total if total > 0 else 0.0
     avg_drift = total_drift / drift_batches if drift_batches > 0 else 0.0
     return acc, avg_drift
 
 
 def train_incremental_pipeline_lwf(
-    dataset_name="CIFAR100", 
-    classes_per_stage=10, 
-    epochs_per_stage=10, 
-    alpha=0.1,  
-    distill_weight=10.0, 
+    dataset_name="CIFAR100",
+    classes_per_stage=10,
+    epochs_per_stage=10,
+    alpha=0.1,
+    distill_weight=10.0,
     min_delta=0.001,
-    patience=3, 
+    patience=3,
     batch_size=128,
 ):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     stages, total_classes, total_data_size = get_incremental_dataloaders(dataset_name, classes_per_stage, batch_size)
     # ==========================================
-    #           DATASET DEBUGGING 
+    #           DATASET DEBUGGING
     # ==========================================
     print("\n" + "="*50)
     print("   [Debug] Data Distribution Per Stage")
@@ -3302,19 +3608,19 @@ def train_incremental_pipeline_lwf(
         train_loader = stage["train_loader"]
         test_loader = stage["test_loader"]
         stage_classes = stage["classes"]
-        
+
         # Tally up the exact number of examples per class in the train set
         train_counts = Counter()
         for _, labels in train_loader:
             train_counts.update(labels.tolist())
-            
+
         # Tally up the exact number of examples per class in the test set
         test_counts = Counter()
         for _, labels in test_loader:
             test_counts.update(labels.tolist())
-            
+
         print(f"\n  --- Stage {stage_idx} | Classes: {stage_classes} ---")
-        
+
         # Print the breakdown per class
         for cls in sorted(stage_classes):
             n_train = train_counts.get(cls, 0)
@@ -3322,14 +3628,14 @@ def train_incremental_pipeline_lwf(
             print(f"    Class {cls:>3} -> Train: {n_train:>4} examples | Test: {n_test:>4} examples")
 
     print("\n" + "="*50 + "\n")
-        
+
     backbone = timm.create_model('vit_tiny_patch16_224', pretrained=True, num_classes=0).to(device)
     feat_dim = backbone.num_features
     head = FixedConicHead(in_features=feat_dim, total_classes=total_classes, m=0.3).to(device)
-    
+
     criterion = nn.CrossEntropyLoss()
     old_backbone = None
-    
+
     # Trackers for Continual Learning Metrics
     num_stages = len(stages)
     acc_matrix = np.zeros((num_stages, num_stages))
@@ -3337,40 +3643,40 @@ def train_incremental_pipeline_lwf(
 
     for param in backbone.patch_embed.parameters():
         param.requires_grad = False
-        
+
     for i in range(10): # Freeze first 10 blocks
         for param in backbone.blocks[i].parameters():
             param.requires_grad = False
-    
-    
+
+
     for current_stage_idx, stage in enumerate(stages):
         print(f"\n{'='*50}")
         print(f"=== Training Stage {current_stage_idx} (Classes {stage['classes'][0]} to {stage['classes'][-1]}) ===")
         print(f"{'='*50}")
-        
+
         train_loader = stage["train_loader"]
         optimizer = torch.optim.AdamW(backbone.parameters(), lr=1e-4)
-        
+
         # Early stopping trackers
         best_loss = float('inf')
         patience_counter = 0
-        
+
         # Set tqdm total to max_epochs, but we will break out of it early
         epoch_iterator = tqdm(range(epochs_per_stage), desc=f"Stage {current_stage_idx}", unit="ep")
-        
+
         for epoch in epoch_iterator:
             backbone.train()
             head.train()
             total_loss, total_cls, total_dist = 0, 0, 0
-            
+
             for imgs, labels in train_loader:
                 imgs, labels = imgs.to(device), labels.to(device)
                 optimizer.zero_grad()
-                
+
                 features = backbone(imgs)
                 logits = head(features, labels)
                 loss_cls = criterion(logits, labels)
-                
+
                 loss_distill = torch.tensor(0.0).to(device)
                 if old_backbone is not None:
                     with torch.no_grad():
@@ -3383,13 +3689,13 @@ def train_incremental_pipeline_lwf(
                 loss = loss_cls + (distill_weight * loss_distill)
                 loss.backward()
                 optimizer.step()
-                
+
                 total_loss += loss.item()
                 total_cls += loss_cls.item()
                 total_dist += loss_distill.item() if isinstance(loss_distill, torch.Tensor) else 0
 
             avg_loss = total_loss / len(train_loader)
-            
+
             # Update the progress bar suffix
             epoch_iterator.set_postfix({
                 "Loss": f"{avg_loss:.4f}",
@@ -3404,32 +3710,32 @@ def train_incremental_pipeline_lwf(
                 # If you wanted to save the absolute best weights, you would do `torch.save` here
             else:
                 patience_counter += 1
-                
+
             if patience_counter >= patience:
                 tqdm.write(f"  -> Early stopping triggered at epoch {epoch+1} (Best Loss: {best_loss:.4f})")
                 epoch_iterator.close() # Close the progress bar cleanly
                 break
-        
+
         print(f"\n--- Evaluation after Stage {current_stage_idx} ---")
-        
+
         # Evaluate on all stages seen so far
         for eval_stage_idx in range(current_stage_idx + 1):
             test_loader = stages[eval_stage_idx]["test_loader"]
             acc, avg_drift = evaluate_stage(backbone, head, old_backbone, test_loader, device)
-            
+
             acc_matrix[current_stage_idx, eval_stage_idx] = acc
             drift_matrix[current_stage_idx, eval_stage_idx] = avg_drift
-            
+
             stage_type = "NEW" if eval_stage_idx == current_stage_idx else "OLD"
             if stage_type == "OLD":
                 print(f"  [Task {eval_stage_idx} - {stage_type}] Acc: {acc:.2%} | Feature Drift from prev: {avg_drift:.4f}")
-            else: 
+            else:
                 print(f"  [Task {eval_stage_idx} - {stage_type}] Acc: {acc:.2%}")
-            
-            
+
+
         # Compute Metrics
         current_avg_acc = np.mean(acc_matrix[current_stage_idx, :current_stage_idx + 1])
-        
+
         # Calculate Forgetting (Max accuracy achieved in the past minus current accuracy)
         forgetting = 0.0
         if current_stage_idx > 0:
@@ -3439,7 +3745,7 @@ def train_incremental_pipeline_lwf(
                 current_acc = acc_matrix[current_stage_idx, j]
                 forgetting_per_task.append(best_past_acc - current_acc)
             forgetting = np.mean(forgetting_per_task)
-            
+
         print(f"\n  -> Average Accuracy (Tasks 0-{current_stage_idx}): {current_avg_acc:.2%}")
         if current_stage_idx > 0:
             print(f"  -> Average Forgetting: {forgetting:.2%}")
@@ -3449,11 +3755,11 @@ def train_incremental_pipeline_lwf(
         old_backbone.eval()
         for param in old_backbone.parameters():
             param.requires_grad = False
-            
+
     print("\n=== Final CL Performance Matrix ===")
     print("Rows: Model state after Task i. Columns: Evaluated on Task j.")
     print(np.round(acc_matrix, 3))
-    
+
     return backbone, head, acc_matrix
 
 def evaluate_spa_conic_hulls(backbone, test_loader, memory_images, memory_labels, device, n_rays=50):
@@ -3462,7 +3768,7 @@ def evaluate_spa_conic_hulls(backbone, test_loader, memory_images, memory_labels
     and classifying test samples based on the highest hull score.
     """
     backbone.eval()
-    
+
     # 1. Extract features from memory to build the hulls
     feature_dict = {}
     print(f"  -> Extracting features for {len(memory_images)} replay images...")
@@ -3470,13 +3776,13 @@ def evaluate_spa_conic_hulls(backbone, test_loader, memory_images, memory_labels
         # Process in batches to avoid VRAM overflow
         mem_tensor = torch.stack(memory_images).to(device)
         mem_features = backbone(mem_tensor).cpu().numpy()
-        
+
         for i, lbl in enumerate(memory_labels):
             lbl_str = str(lbl)
             if lbl_str not in feature_dict:
                 feature_dict[lbl_str] = []
             feature_dict[lbl_str].append(mem_features[i])
-    
+
     feature_dict = {k: np.array(v) for k, v in feature_dict.items()}
 
     # 2. Fit one ConicHull per class using your provided builder
@@ -3486,25 +3792,25 @@ def evaluate_spa_conic_hulls(backbone, test_loader, memory_images, memory_labels
     # 3. Classify test samples
     correct, total = 0, 0
     all_class_names = list(class_hulls.keys())
-    
-    with torch.no_grad():
+
+    with torch.no_grad(), _amp_infer(device):
         for imgs, labels in tqdm(test_loader, desc="Testing hulls"):
-            test_feats = backbone(imgs.to(device)).cpu().numpy()
-            
+            test_feats = backbone(imgs.to(device)).float().cpu().numpy()
+
             # Scores matrix: (N_queries, N_classes)
             # Each entry is the conic angular similarity score
             scores = np.zeros((test_feats.shape[0], len(all_class_names)))
-            
+
             for idx, name in enumerate(all_class_names):
                 scores[:, idx] = class_hulls[name].score(test_feats)
-            
+
             # Prediction is the class with the highest hull membership score
             best_idx = np.argmax(scores, axis=1)
             preds = np.array([int(all_class_names[i]) for i in best_idx])
-            
+
             correct += (preds == labels.numpy()).sum()
             total += labels.size(0)
-            
+
     return correct / total
 
 
@@ -3693,7 +3999,7 @@ def train_incremental_pipeline_replay(
     lambda_stage_replay=0.15,          # weight for replay stage confinement
     stage_cap_deg=35.0,                # angular radius of each stage cap (degrees)
     stage_inter_cos_max=0.35,          # max cos to other stage poles (~70° separation)
-    project_hulls_to_stage_cap=True,   # snap new hull rays into cap at fit time
+    project_hulls_to_stage_cap=False,   # snap new hull rays into cap at fit time
     visualize_extreme_rays=False,      # plot PCA-3D cone visualisation after each stage
     use_kernel_hull=False,             # also build KernelConicHull each stage
     kernel_hull_type="spread",          # "spread" | "vmf" | "rbf" | "poly"
@@ -3746,8 +4052,59 @@ def train_incremental_pipeline_replay(
     # ── Collaborative scoring (joint NNLS over all class dictionaries) ───────
     evaluate_collaborative_scoring=False,  # add collab_energy/residual/margin to per-stage table
     collaborative_lasso_lambda=0.0,        # L1 penalty; 0 = pure NNLS, try 1e-2 for sparser attribution
+    # ── Mixed-precision training ─────────────────────────────────────────────
+    use_amp=True,                          # run backbone fwd/bwd in low precision (big speedup on A100)
+    amp_dtype="bf16",                      # "bf16" (no GradScaler needed) | "fp16"
+    # ── Gaussian-replay classifier alignment (SLCA/MACIL-style) ──────────────
+    use_gaussian_replay_head=False,        # after each task, retrain the linear head over ALL classes
+                                           # on samples ~ N(mu_c, Sigma_c) → debiases the head
+    ca_samples_per_class=256,              # pseudo-features sampled per class for alignment
+    ca_epochs=20,                          # alignment training epochs
+    ca_lr=1e-2,                            # alignment learning rate
+    # ── Learned inter-stage drift back-projection ────────────────────────────
+    use_learned_drift=True,               # learn g_t: phi_t->phi_{t-1}; back-project queries to
+                                           # each old class's birth space before scoring its hull.
+                                           # Use with rotate_static_hulls=False (hulls stay in birth space).
+    drift_epochs=200,                      # epochs to fit each stage's drift MLP
+    drift_hidden=2048,                     # hidden width of the drift MLP
+    drift_lr=1e-3,                         # drift MLP learning rate
+    # ── Transported skeleton hulls (RanPAC-inspired drift-aware rebuild) ──────
+    # Score old classes against their RICH frozen birth hull (full-data, hundreds
+    # of rays) FORWARD-transported into current space via a drift map fit on the
+    # replay buffer — instead of re-fitting from the ~20 buffer exemplars. New
+    # classes use full-data hulls. Adds a "Transp." column next to Dynamic.
+    evaluate_transported_hulls=True,
+    transport_pair_method="procrustes",    # "procrustes" (isometry, angle-preserving) | "ridge_affine"
+    transport_ridge=1e-3,                  # ridge for ridge_affine map fitting
+    transport_pca_subspace=True,           # fit the map in a low-rank PCA subspace (robust for ~20 pts)
+    transport_pca_components=32,           # PCA dims (≈ drift/LoRA rank). Keep ≪ n_pairs: None→n_pairs-1 interpolates noise (overfits). Watch oos-resid.
 ):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # ── GPU speed switches (safe, numerics-preserving) ───────────────────────
+    # TF32 matmul/conv on Ampere+ (A100) gives a large speedup over fp32 with
+    # negligible accuracy impact; cudnn.benchmark autotunes kernels for the
+    # fixed 224² input shape.
+    if device.type == "cuda":
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32       = True
+        torch.backends.cudnn.benchmark        = True
+        torch.set_float32_matmul_precision("high")
+
+    # ── Mixed-precision autocast helper ──────────────────────────────────────
+    # Wrap only the expensive backbone forward passes in autocast; the heavy ViT
+    # matmuls run in bf16 (≈1.5-2× faster fwd+bwd on A100) while every downstream
+    # loss / hull / numpy op stays in fp32 (we cast features back with .float()).
+    # bf16 has the same exponent range as fp32 so no GradScaler is needed and the
+    # optimizer / grad-projection / grad-zeroing code below is left untouched.
+    _amp_enabled = bool(use_amp) and device.type == "cuda"
+    _amp_dtype   = torch.float16 if str(amp_dtype).lower() in ("fp16", "float16") \
+                   else torch.bfloat16
+    def _autocast():
+        return torch.autocast(device_type="cuda", dtype=_amp_dtype,
+                              enabled=_amp_enabled)
+    if _amp_enabled:
+        print(f"[amp] mixed-precision training enabled (dtype={_amp_dtype})")
 
     class_order = None
     if shuffle_class_order:
@@ -3770,7 +4127,7 @@ def train_incremental_pipeline_replay(
             stage_class_map[_cls_id] = _s_idx
 
     # # ==========================================
-    # #           DATASET DEBUGGING 
+    # #           DATASET DEBUGGING
     # # ==========================================
     # print("\n" + "="*50)
     # print("   [Debug] Data Distribution Per Stage")
@@ -3780,19 +4137,19 @@ def train_incremental_pipeline_replay(
     #     train_loader = stage["train_loader"]
     #     test_loader = stage["test_loader"]
     #     stage_classes = stage["classes"]
-        
+
     #     # Tally up the exact number of examples per class in the train set
     #     train_counts = Counter()
     #     for _, labels in train_loader:
     #         train_counts.update(labels.tolist())
-            
+
     #     # Tally up the exact number of examples per class in the test set
     #     test_counts = Counter()
     #     for _, labels in test_loader:
     #         test_counts.update(labels.tolist())
-            
+
     #     print(f"\n  --- Stage {stage_idx} | Classes: {stage_classes} ---")
-        
+
     #     # Print the breakdown per class
     #     for cls in sorted(stage_classes):
     #         n_train = train_counts.get(cls, 0)
@@ -3800,7 +4157,7 @@ def train_incremental_pipeline_replay(
     #         print(f"    Class {cls:>3} -> Train: {n_train:>4} examples | Test: {n_test:>4} examples")
 
     # print("\n" + "="*50 + "\n")
-    
+
     backbone = load_backbone(
         model_name, pretrained=True, num_classes=0, device=str(device),
         lora_rank=lora_rank, lora_alpha=lora_alpha,
@@ -3850,6 +4207,7 @@ def train_incremental_pipeline_replay(
     acc_matrix = np.zeros((num_stages, num_stages))
     acc_matrix_conic_hull_static          = np.zeros((num_stages, num_stages))
     acc_matrix_conic_hull_dynamic         = np.zeros((num_stages, num_stages))
+    acc_matrix_conic_hull_transported     = np.zeros((num_stages, num_stages))
     acc_matrix_conic_hull_staged          = np.zeros((num_stages, num_stages))
     acc_matrix_conic_hull_angular_margin  = np.zeros((num_stages, num_stages))
     acc_matrix_kernel_static              = np.zeros((num_stages, num_stages))
@@ -3866,8 +4224,8 @@ def train_incremental_pipeline_replay(
         for name, param in backbone.blocks[i].named_parameters():
             if 'lora_' not in name:
                 param.requires_grad = False
-    
-    
+
+
     memory_limit = memory_budget * total_data_size
 
     _memory_enabled = not (
@@ -3881,7 +4239,7 @@ def train_incremental_pipeline_replay(
 
     replay_buffer = ReplayBuffer(max_total_size=memory_limit, max_classes=total_classes)
     sampling_type = "balanced" # or "uniform"
-    
+
 
     hull_mgr = HullManager(
         n_rays=conic_hull_n_rays,
@@ -4015,6 +4373,20 @@ def train_incremental_pipeline_replay(
     # remapping; all other heads use this map.
     class_to_idx: Dict[int, int] = {}
 
+    # Persistent per-class feature Gaussians for classifier alignment. New classes
+    # get full-task-data (mean, cov); old-class means are drift-tracked each stage
+    # from the current backbone. See use_gaussian_replay_head below.
+    ca_stats: Dict[int, Dict[str, np.ndarray]] = {}
+
+    # Learned drift back-projection: g_t maps phi_t -> phi_{t-1}; birth_stage[c] is
+    # the stage class c was introduced (its hull's native space).
+    drift_maps: Dict[int, object] = {}
+    birth_stage: Dict[int, int] = {}
+    if use_learned_drift and rotate_static_hulls:
+        print("  [Drift] WARNING: use_learned_drift with rotate_static_hulls=True double-"
+              "corrects; back-projection assumes hulls stay in birth space — set "
+              "rotate_static_hulls=False.")
+
     for current_stage_idx, stage in enumerate(stages):
         print(f"\n{'='*50}")
         print(f"=== Training Stage {current_stage_idx} (Classes {stage['classes'][0]} to {stage['classes'][-1]}) ===")
@@ -4046,6 +4418,10 @@ def train_incremental_pipeline_replay(
             for _i, _cls_id in enumerate(stage["classes"]):
                 class_to_idx[_cls_id] = _base + _i
 
+        # Record each class's birth stage (its hull's native feature space).
+        for _cls_id in stage["classes"]:
+            birth_stage.setdefault(int(_cls_id), current_stage_idx)
+
         train_loader = stage["train_loader"]
 
         # Helper: remap a tensor of raw dataset class-IDs to sequential head
@@ -4073,8 +4449,8 @@ def train_incremental_pipeline_replay(
         if isinstance(head, (IncrementalLinearHead, IncrementalMLPHead, ArcFaceHead)):
             trainable_params += list(head.parameters())
         optimizer = torch.optim.AdamW(trainable_params, lr=learning_rate)
-        
-        
+
+
         # Early stopping trackers
         best_loss = float('inf')
         patience_counter = 0
@@ -4160,6 +4536,13 @@ def train_incremental_pipeline_replay(
             total_own_align, total_worst_other = 0.0, 0.0
             _geo_metric_n = 0
 
+            # On-GPU accumulators for the always-on per-batch losses — summed on
+            # the device and synced to Python once per epoch (below the batch
+            # loop) instead of three GPU→CPU .item() stalls every step.
+            _acc_loss = torch.zeros((), device=device)
+            _acc_cls  = torch.zeros((), device=device)
+            _acc_dist = torch.zeros((), device=device)
+
             _use_replay = not use_cone_anchor
             _cone_margin_rad = math.radians(cone_margin_deg)
             _cone_old_ids = (
@@ -4169,7 +4552,8 @@ def train_incremental_pipeline_replay(
             )
 
             for imgs, labels in train_loader:
-                imgs, labels = imgs.to(device), labels.to(device)
+                imgs   = imgs.to(device, non_blocking=True)
+                labels = labels.to(device, non_blocking=True)
                 optimizer.zero_grad()
 
                 N_new     = imgs.size(0)
@@ -4192,12 +4576,18 @@ def train_incremental_pipeline_replay(
                     _reh_lbls = _reh_lbls_t.to(device)
 
                 # ── Single forward pass (new only, or new + replay combined) ──
+                # autocast the ViT forward; .float() returns to fp32 so all the
+                # loss / hull math below is bit-for-bit the same code path.
                 if _reh_imgs is not None:
-                    _combined = backbone(torch.cat([imgs, _reh_imgs], dim=0))
+                    with _autocast():
+                        _combined = backbone(torch.cat([imgs, _reh_imgs], dim=0))
+                    _combined = _combined.float()
                     features       = _combined[:N_new]    # new-class features
                     _reh_new_feats = _combined[N_new:]    # replay features (new backbone)
                 else:
-                    features = backbone(imgs)
+                    with _autocast():
+                        features = backbone(imgs)
+                    features = features.float()
 
                 # ── Accumulate new-class features for per-epoch NSR hull ──────
                 if use_nsr_loss:
@@ -4282,11 +4672,14 @@ def train_incremental_pipeline_replay(
                         mem_imgs_dist = mem_imgs_dist.to(device)
                         mem_lbls_dist = _mem_lbls_t.to(device)
                         backbone.eval()
-                        new_mem_features = backbone(mem_imgs_dist)
+                        with _autocast():
+                            new_mem_features = backbone(mem_imgs_dist)
+                        new_mem_features = new_mem_features.float()
                         backbone.train()
 
-                    with torch.no_grad():
+                    with torch.no_grad(), _autocast():
                         old_mem_features = old_backbone(mem_imgs_dist)
+                    old_mem_features = old_mem_features.float()
 
                     if use_log_barrier_distill:
                         # ── Log-Barrier Margin-Preservation Loss ─────────────────
@@ -4388,7 +4781,9 @@ def train_incremental_pipeline_replay(
                         _ray_imgs = torch.stack(
                             [_nsr_ray_imgs[i] for i in _perm]
                         ).to(device)
-                        _ray_feats = backbone(_ray_imgs)   # gradient flows through backbone
+                        with _autocast():
+                            _ray_feats = backbone(_ray_imgs)   # gradient flows through backbone
+                        _ray_feats = _ray_feats.float()
 
                         # wrap in a lightweight hull-like object so null_space_repulsion_loss
                         # can read .extreme_rays_ without refitting
@@ -4527,9 +4922,10 @@ def train_incremental_pipeline_replay(
                     head.weight.grad[:num_old_classes].zero_()
                 optimizer.step()
 
-                total_loss    += loss.item()
-                total_cls     += loss_cls.item()
-                total_dist    += loss_distill.item() if isinstance(loss_distill, torch.Tensor) else 0
+                _acc_loss += loss.detach()
+                _acc_cls  += loss_cls.detach()
+                if isinstance(loss_distill, torch.Tensor):
+                    _acc_dist += loss_distill.detach()
 
             # ── Refit per-epoch new-class hull; cache its extreme-ray images ──
             if use_nsr_loss:
@@ -4549,6 +4945,11 @@ def train_incremental_pipeline_replay(
                 _nsr_ray_imgs  = _nsr_ray_imgs_new
                 _nsr_feats_buf = defaultdict(list)
                 _nsr_imgs_buf  = defaultdict(list)
+
+            # Single GPU→CPU sync per epoch for the always-on losses.
+            total_loss += _acc_loss.item()
+            total_cls  += _acc_cls.item()
+            total_dist += _acc_dist.item()
 
             avg_loss     = total_loss     / len(train_loader)
             avg_cls      = total_cls      / len(train_loader)
@@ -4607,12 +5008,12 @@ def train_incremental_pipeline_replay(
                 # If you wanted to save the absolute best weights, you would do `torch.save` here
             else:
                 patience_counter += 1
-                
+
             if patience_counter >= patience:
                 tqdm.write(f"  -> Early stopping triggered at epoch {epoch+1} (Best Loss: {best_loss:.4f})")
                 epoch_iterator.close() # Close the progress bar cleanly
                 break
-        
+
         # ── Analytical Classifier Head Correction ────────────────────────────────
         # After backbone training the feature space has drifted.  We estimate the
         # linear transformation A : x_old → x_new from per-class statistics
@@ -4673,7 +5074,7 @@ def train_incremental_pipeline_replay(
                         new_mean_cnt: Dict[int, int]        = {}
                         with torch.no_grad():
                             for imgs, labels in stage["train_loader"]:
-                                feats = backbone(imgs.to(device)).cpu().numpy()
+                                feats = backbone(imgs.to(device)).float().cpu().numpy()
                                 for feat, lbl in zip(feats, labels.tolist()):
                                     if lbl not in new_mean_acc:
                                         new_mean_acc[lbl] = feat.copy()
@@ -4758,7 +5159,7 @@ def train_incremental_pipeline_replay(
 
         with torch.no_grad():
             for imgs, labels in stage["train_loader"]:
-                feats_np = backbone(imgs.to(device)).cpu().numpy()
+                feats_np = backbone(imgs.to(device)).float().cpu().numpy()
                 imgs_cpu = imgs.cpu()
                 for img, feat, lbl in zip(imgs_cpu, feats_np, labels.tolist()):
                     new_cls_images[lbl].append(img)
@@ -5049,8 +5450,98 @@ def train_incremental_pipeline_replay(
                   f"(used for drift estimation in next stage). "
                   f"PCA fitted: {k_pca} components on {sum(v.shape[0] for v in feature_dict.values())} vectors.")
 
+        # ── Gaussian-replay classifier alignment (SLCA / MACIL-style) ────────────
+        # Debias the head: retrain it over ALL seen classes on pseudo-features
+        # sampled from each class's Gaussian. New-class (mu, cov) come from the
+        # full-task features (new_feature_dict, best quality); old-class means are
+        # refreshed to the current backbone (feature_dict, replay), covariances
+        # kept from when the class was learned. The backbone and conic hull are
+        # left untouched — the hull stays the feature-preserving boundary.
+        if use_gaussian_replay_head and isinstance(head, IncrementalLinearHead):
+            try:
+                from classifier_alignment import align_linear_head
+                for _cid_str, _f in new_feature_dict.items():           # new classes: full-data stats
+                    _c = int(_cid_str)
+                    _n = _f.shape[0]
+                    ca_stats[_c] = {
+                        "mean": _f.mean(axis=0),
+                        "cov":  np.cov(_f.T, ddof=1) if _n > 1 else np.zeros((_f.shape[1],) * 2),
+                    }
+                for _cid_str, _f in feature_dict.items():               # old classes: drift-track mean
+                    _c = int(_cid_str)
+                    if _c in stage["classes"] or _c not in ca_stats:
+                        continue
+                    ca_stats[_c]["mean"] = _f.mean(axis=0)              # keep cov from learning time
+                _ca_loss = align_linear_head(
+                    head, ca_stats, class_to_idx, device,
+                    samples_per_class=ca_samples_per_class,
+                    epochs=ca_epochs, lr=ca_lr, seed=current_stage_idx,
+                )
+                print(f"  [CA] Gaussian-replay aligned head over {len(ca_stats)} "
+                      f"classes (final loss={_ca_loss:.3f}).")
+            except Exception as exc:
+                print(f"  [WARNING] Gaussian-replay alignment skipped: {exc}")
+
+        # ── Learn this stage's drift map g_t: phi_t -> phi_{t-1} ─────────────────
+        # Paired supervision from replay images: phi_t = current backbone,
+        # phi_{t-1} = old_backbone (frozen). Stored for query back-projection at
+        # eval. (old_backbone is reassigned to phi_t only at the very end of the
+        # stage, so it is still phi_{t-1} here.)
+        if use_learned_drift and old_backbone is not None:
+            try:
+                from drift_module import DriftMLP, fit_drift
+                _imgs_all = [it[0] for _cid in replay_buffer.all_classes
+                             for it in replay_buffer.buffer[_cid]]
+                if _imgs_all:
+                    _Xn, _Xo = [], []
+                    backbone.eval()
+                    with torch.no_grad():
+                        for _i0 in range(0, len(_imgs_all), 256):
+                            _b = torch.stack(_imgs_all[_i0:_i0 + 256]).to(device)
+                            with _autocast():
+                                _n = backbone(_b).float()
+                                _o = old_backbone(_b).float()
+                            _Xn.append(_n.cpu().numpy()); _Xo.append(_o.cpu().numpy())
+                    _Xn = np.concatenate(_Xn); _Xo = np.concatenate(_Xo)
+                    _g = DriftMLP(_Xn.shape[1], hidden=drift_hidden, depth=2)
+                    _dl = fit_drift(_g, _Xn, _Xo, device, epochs=drift_epochs,
+                                    lr=drift_lr, batch_size=512, seed=current_stage_idx)
+                    drift_maps[current_stage_idx] = _g
+                    print(f"  [Drift] learned g_{current_stage_idx}: phi_t->phi_(t-1) "
+                          f"on {len(_imgs_all)} replay imgs (fit loss={_dl:.4f}).")
+            except Exception as exc:
+                print(f"  [WARNING] learned drift map skipped: {exc}")
+
         # Step 5: Fit dynamic hulls from the current-backbone extreme-ray features.
         dynamic_hulls = hull_mgr.get_dynamic_hulls(feature_dict)
+
+        # Step 5b: Build transported skeleton hulls — old classes' rich frozen
+        # birth hulls drift-transported into the current space (RanPAC-inspired);
+        # new classes use full-data hulls. At stage 0 there are no old classes,
+        # so this coincides with the new-class hulls.
+        if evaluate_transported_hulls:
+            transported_hulls = hull_mgr.get_transported_hulls(
+                backbone, replay_buffer,
+                stage_feature_snapshots=stage_feature_snapshots,
+                birth_stage=birth_stage,
+                current_stage_idx=current_stage_idx,
+                device=device,
+                new_class_ids=stage["classes"],
+                new_feature_dict=new_feature_dict,
+                pair_method=transport_pair_method,
+                ridge=transport_ridge,
+                pca_subspace=transport_pca_subspace,
+                pca_components=transport_pca_components,
+                # Stage-cap linkage: if birth hulls were confined to per-stage
+                # caps, transport the cap with the rays so stages stay disjoint
+                # in current space (see get_transported_hulls docstring).
+                stage_poles=stage_poles_np if project_hulls_to_stage_cap else None,
+                cos_stage_cap=cos_stage_cap,
+                project_to_cap=(project_hulls_to_stage_cap and not use_region_hulls),
+                batch_size=batch_size,
+            )
+        else:
+            transported_hulls = None
 
         if use_kernel_hull:
             _kernel_feat_dict = feature_dict
@@ -5088,7 +5579,7 @@ def train_incremental_pipeline_replay(
             kernel_dynamic_hulls = None
 
         # if rotate_dynamic_hulls and _stage_A is not None:
-            
+
         #     rotate_hulls(dynamic_hulls, _prev_stats)
         #     print(f"  -> Rotated {len(dynamic_hulls)} dynamic hull(s) into new feature space.")
 
@@ -5125,6 +5616,7 @@ def train_incremental_pipeline_replay(
             )
 
         # Evaluate on all stages seen so far
+        _bp_accs = []   # back-projected static-hull accuracy per task (learned drift)
         for eval_stage_idx in range(current_stage_idx + 1):
             test_loader = stages[eval_stage_idx]["test_loader"]
             acc, avg_drift = evaluate_stage(backbone, head, old_backbone, test_loader, device,
@@ -5132,6 +5624,19 @@ def train_incremental_pipeline_replay(
 
             static_scores  = hull_mgr.evaluate_all_scores(backbone, test_loader, hull_mgr.static_hulls, device)
             dynamic_scores = hull_mgr.evaluate_all_scores(backbone, test_loader, dynamic_hulls, device)
+            if transported_hulls is not None:
+                transported_scores = hull_mgr.evaluate_all_scores(backbone, test_loader, transported_hulls, device)
+            else:
+                transported_scores = None
+
+            if use_learned_drift and drift_maps:
+                try:
+                    from drift_module import backproj_static_hull_accuracy
+                    _bp_accs.append(backproj_static_hull_accuracy(
+                        backbone, test_loader, hull_mgr.static_hulls, birth_stage,
+                        drift_maps, current_stage_idx, device))
+                except Exception as exc:
+                    print(f"  [WARNING] back-projected hull eval skipped: {exc}")
 
             if evaluate_collaborative_scoring:
                 collab_static_scores = hull_mgr.evaluate_collaborative(
@@ -5148,6 +5653,7 @@ def train_incremental_pipeline_replay(
             # Primary metric for matrix tracking: cosine (preserves existing semantics)
             acc_static_hull              = static_scores["cosine"]
             acc_dynamic_hull             = dynamic_scores["cosine"]
+            acc_transported_hull         = transported_scores["cosine"] if transported_scores is not None else 0.0
             acc_static_angular_margin    = static_scores["angular_margin"]
 
             # Staged evaluation: cascade through stages in order
@@ -5225,6 +5731,7 @@ def train_incremental_pipeline_replay(
             drift_matrix[current_stage_idx, eval_stage_idx] = avg_drift
             acc_matrix_conic_hull_static[current_stage_idx, eval_stage_idx]         = acc_static_hull
             acc_matrix_conic_hull_dynamic[current_stage_idx, eval_stage_idx]        = acc_dynamic_hull
+            acc_matrix_conic_hull_transported[current_stage_idx, eval_stage_idx]    = acc_transported_hull
             acc_matrix_conic_hull_staged[current_stage_idx, eval_stage_idx]         = acc_staged_hull
             acc_matrix_conic_hull_angular_margin[current_stage_idx, eval_stage_idx] = acc_static_angular_margin
             acc_matrix_kernel_static[current_stage_idx, eval_stage_idx]             = acc_kernel_static
@@ -5239,6 +5746,8 @@ def train_incremental_pipeline_replay(
             # Scoring-scheme comparison table
             col_w = 20
             header = f"  {'Scoring':<{col_w}} {'Static':>8}  {'Dynamic':>8}"
+            if transported_scores is not None:
+                header += f"  {'Transp.':>8}"
             if evaluate_staged_hulls:
                 header += f"  {'Staged':>8}"
             if use_kernel_hull:
@@ -5249,6 +5758,8 @@ def train_incremental_pipeline_replay(
                 header += f"  {'Layered':>8}"
             print(header)
             sep_w = col_w + 20
+            if transported_scores is not None:
+                sep_w += 10
             if evaluate_staged_hulls:
                 sep_w += 10
             if use_kernel_hull:
@@ -5261,6 +5772,8 @@ def train_incremental_pipeline_replay(
             for s in hull_mgr.SCORE_NAMES:
                 marker = " *" if s == "cosine" else "  "
                 row = f"  {s:<{col_w}} {static_scores[s]:>7.2%}   {dynamic_scores[s]:>7.2%}{marker}"
+                if transported_scores is not None:
+                    row += f"  {transported_scores[s]:>7.2%}"
                 if evaluate_staged_hulls and s == "cosine":
                     row += f"  {acc_staged_hull:>7.2%}"
                 if use_kernel_hull and s == "cosine":
@@ -5332,6 +5845,7 @@ def train_incremental_pipeline_replay(
         current_avg_acc                     = np.mean(acc_matrix[current_stage_idx, :current_stage_idx + 1])
         current_avg_acc_hull_static         = np.mean(acc_matrix_conic_hull_static[current_stage_idx,          :current_stage_idx + 1])
         current_avg_acc_hull_dynamic        = np.mean(acc_matrix_conic_hull_dynamic[current_stage_idx,         :current_stage_idx + 1])
+        current_avg_acc_hull_transported    = np.mean(acc_matrix_conic_hull_transported[current_stage_idx,     :current_stage_idx + 1])
         current_avg_acc_hull_staged         = np.mean(acc_matrix_conic_hull_staged[current_stage_idx,          :current_stage_idx + 1])
         current_avg_acc_angular_margin      = np.mean(acc_matrix_conic_hull_angular_margin[current_stage_idx,  :current_stage_idx + 1])
         current_avg_acc_kernel_static       = np.mean(acc_matrix_kernel_static[current_stage_idx,              :current_stage_idx + 1])
@@ -5343,6 +5857,7 @@ def train_incremental_pipeline_replay(
         forgetting = 0.0
         forgetting_static         = 0.0
         forgetting_dynamic        = 0.0
+        forgetting_transported    = 0.0
         forgetting_staged         = 0.0
         forgetting_angular_margin = 0.0
         forgetting_kernel_static  = 0.0
@@ -5353,6 +5868,7 @@ def train_incremental_pipeline_replay(
             forgetting_per_task                = []
             forgetting_per_task_static         = []
             forgetting_per_task_dynamic        = []
+            forgetting_per_task_transported    = []
             forgetting_per_task_staged         = []
             forgetting_per_task_angular_margin = []
             forgetting_per_task_kernel_static  = []
@@ -5371,6 +5887,10 @@ def train_incremental_pipeline_replay(
                 forgetting_per_task_dynamic.append(
                     np.max(acc_matrix_conic_hull_dynamic[:current_stage_idx, j])
                     - acc_matrix_conic_hull_dynamic[current_stage_idx, j]
+                )
+                forgetting_per_task_transported.append(
+                    np.max(acc_matrix_conic_hull_transported[:current_stage_idx, j])
+                    - acc_matrix_conic_hull_transported[current_stage_idx, j]
                 )
                 forgetting_per_task_staged.append(
                     np.max(acc_matrix_conic_hull_staged[:current_stage_idx, j])
@@ -5399,6 +5919,7 @@ def train_incremental_pipeline_replay(
             forgetting                = np.mean(forgetting_per_task)
             forgetting_static         = np.mean(forgetting_per_task_static)
             forgetting_dynamic        = np.mean(forgetting_per_task_dynamic)
+            forgetting_transported    = np.mean(forgetting_per_task_transported)
             forgetting_staged         = np.mean(forgetting_per_task_staged)
             forgetting_angular_margin = np.mean(forgetting_per_task_angular_margin)
             forgetting_kernel_static  = np.mean(forgetting_per_task_kernel_static)
@@ -5408,7 +5929,12 @@ def train_incremental_pipeline_replay(
 
         print(f"\n  -> Average Accuracy (Tasks 0-{current_stage_idx}): {current_avg_acc:.2%}")
         print(f"  -> Average Static Hull Accuracy    (Tasks 0-{current_stage_idx}): {current_avg_acc_hull_static:.2%}")
+        if use_learned_drift and _bp_accs:
+            print(f"  -> Average Static Hull (back-proj) (Tasks 0-{current_stage_idx}): "
+                  f"{float(np.mean(_bp_accs)):.2%}   [learned drift g_t]")
         print(f"  -> Average Dynamic Hull Accuracy   (Tasks 0-{current_stage_idx}): {current_avg_acc_hull_dynamic:.2%}")
+        if evaluate_transported_hulls:
+            print(f"  -> Average Transported Hull Acc.   (Tasks 0-{current_stage_idx}): {current_avg_acc_hull_transported:.2%}   [drift-transported birth hulls]")
         print(f"  -> Average Angular Margin Accuracy (Tasks 0-{current_stage_idx}): {current_avg_acc_angular_margin:.2%}")
         if evaluate_staged_hulls:
             print(f"  -> Average Staged Hull Accuracy    (Tasks 0-{current_stage_idx}): {current_avg_acc_hull_staged:.2%}")
@@ -5424,6 +5950,8 @@ def train_incremental_pipeline_replay(
             print(f"  -> Average Forgetting (Linear):         {forgetting:.2%}")
             print(f"  -> Average Forgetting (Static Hull):    {forgetting_static:.2%}")
             print(f"  -> Average Forgetting (Dynamic Hull):   {forgetting_dynamic:.2%}")
+            if evaluate_transported_hulls:
+                print(f"  -> Average Forgetting (Transported):    {forgetting_transported:.2%}")
             print(f"  -> Average Forgetting (Angular Margin): {forgetting_angular_margin:.2%}")
             if evaluate_staged_hulls:
                 print(f"  -> Average Forgetting (Staged Hull):    {forgetting_staged:.2%}")
@@ -5476,7 +6004,7 @@ def train_incremental_pipeline_replay(
         old_backbone.eval()
         for param in old_backbone.parameters():
             param.requires_grad = False
-            
+
     # ── Final summary ─────────────────────────────────────────────────────────
     def _print_avg_stats(label: str, mat: np.ndarray) -> None:
         print(f"\n=== {label} ===")
@@ -5492,6 +6020,8 @@ def train_incremental_pipeline_replay(
     _print_avg_stats("Head Classifier",           acc_matrix)
     _print_avg_stats("Static Hull (cosine)",       acc_matrix_conic_hull_static)
     _print_avg_stats("Dynamic Hull (cosine)",      acc_matrix_conic_hull_dynamic)
+    if evaluate_transported_hulls:
+        _print_avg_stats("Transported Hull (cosine)", acc_matrix_conic_hull_transported)
     _print_avg_stats("Static Hull (angular_margin)", acc_matrix_conic_hull_angular_margin)
     if evaluate_staged_hulls:
         _print_avg_stats("Staged Hull (cosine)", acc_matrix_conic_hull_staged)
@@ -5573,81 +6103,81 @@ def train_incremental_pipeline_replay(
         acc_matrix_shifted_hull,
         acc_matrix_layered_hull,
         drift_matrix,
-        
+        acc_matrix_conic_hull_transported,
     )
 
 
 def train_incremental_pipeline_benchmark(
-    dataset_name="CIFAR100", 
-    classes_per_stage=10, 
-    epochs_per_stage=10, 
-    alpha=0.1,  
-    distill_weight=10.0, 
+    dataset_name="CIFAR100",
+    classes_per_stage=10,
+    epochs_per_stage=10,
+    alpha=0.1,
+    distill_weight=10.0,
     min_delta=0.001,
-    patience=3, 
+    patience=3,
     batch_size=128,
     memory_size_per_stage=200
 ):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     stages, total_classes = get_incremental_dataloaders(dataset_name, classes_per_stage, batch_size)
-    
+
     # 1. Standard Backbone + Standard Linear Head
     backbone = timm.create_model('vit_tiny_patch16_224', pretrained=True, num_classes=0).to(device)
     feat_dim = backbone.num_features
     head = IncrementalLinearHead(in_features=feat_dim).to(device)
-    
+
     criterion = nn.CrossEntropyLoss()
     old_backbone = None
-    
+
     num_stages = len(stages)
     acc_matrix = np.zeros((num_stages, num_stages))
-    acc_matrix_conic_hull = np.zeros((num_stages, num_stages)) # NEW: Track conic hull accuracy separately  
+    acc_matrix_conic_hull = np.zeros((num_stages, num_stages)) # NEW: Track conic hull accuracy separately
     memory_images = []
     memory_labels = []  # Track labels for replay samples for conic hull evaluation
 
     # Freeze Backbone layers same as Conic to be fair
     for param in backbone.patch_embed.parameters(): param.requires_grad = False
-    for i in range(10): 
+    for i in range(10):
         for param in backbone.blocks[i].parameters(): param.requires_grad = False
-    
+
     for current_stage_idx, stage in enumerate(stages):
         print(f"\n{'='*50}\n=== BENCHMARK: Stage {current_stage_idx} (MLP Head) ===\n{'='*50}")
-        
+
         # Expand the Linear Layer for new classes
         head.add_classes(len(stage["classes"]), device)
         head.to(device)
-        
+
         train_loader = stage["train_loader"]
         # Optimizer must now include BOTH backbone and the trainable head
         optimizer = torch.optim.AdamW(list(backbone.parameters()) + list(head.parameters()), lr=1e-4)
-        
+
         best_loss = float('inf')
         patience_counter = 0
         epoch_iterator = tqdm(range(epochs_per_stage), desc=f"Stage {current_stage_idx}", unit="ep")
-        
+
         for epoch in epoch_iterator:
             backbone.train()
             head.train()
             total_loss = 0
-            
+
             for imgs, labels in train_loader:
                 imgs, labels = imgs.to(device), labels.to(device)
                 optimizer.zero_grad()
-                
+
                 features = backbone(imgs)
                 logits = head(features) # Standard Linear Logits
                 loss_cls = criterion(logits, labels)
-                
+
                 # Replay Distillation
                 loss_distill = torch.tensor(0.0).to(device)
                 if old_backbone is not None and len(memory_images) > 0:
                     mem_idx = torch.randint(0, len(memory_images), (imgs.size(0),))
                     mem_batch = torch.stack([memory_images[i] for i in mem_idx]).to(device)
-                    
+
                     with torch.no_grad():
                         old_mem_features = old_backbone(mem_batch)
                     new_mem_features = backbone(mem_batch)
-                    
+
                     # Same L2 Drift Distillation for fairness
                     drift = F.pairwise_distance(F.normalize(new_mem_features), F.normalize(old_mem_features))
                     loss_distill = torch.clamp(drift - alpha, min=0.0).mean()
@@ -5666,7 +6196,7 @@ def train_incremental_pipeline_benchmark(
             else:
                 patience_counter += 1
             if patience_counter >= patience: break
-        
+
         # --- AFTER THE STAGE COMPLETES: Update Memory Buffer ---
         # Randomly select a subset of the current stage's data to save for the future
         print(f"  -> Updating Hull Replay Buffer...")
@@ -5679,9 +6209,9 @@ def train_incremental_pipeline_benchmark(
                 saved_count += 1
                 if saved_count >= memory_size_per_stage: break
             if saved_count >= memory_size_per_stage: break
-            
+
         print(f"\n--- Evaluation after Stage {current_stage_idx} ---")
-        
+
         # Evaluation
         for eval_stage_idx in range(current_stage_idx + 1):
             test_loader = stages[eval_stage_idx]["test_loader"]
@@ -5693,16 +6223,16 @@ def train_incremental_pipeline_benchmark(
                     logits = head(backbone(imgs))
                     correct += (logits.argmax(dim=1) == labels).sum().item()
                     total += labels.size(0)
-            
+
             acc = correct / total
             acc_matrix[current_stage_idx, eval_stage_idx] = acc
-            
+
             # Conic Hull Evaluation
             acc_hull = evaluate_spa_conic_hulls(backbone, test_loader, memory_images, memory_labels, device)
             acc_matrix_conic_hull[current_stage_idx, eval_stage_idx] = acc_hull
-            
+
             print(f"  [Task {eval_stage_idx}] Acc: {acc:.2%}, Hull Acc: {acc_hull:.2%}")
-            
+
         old_backbone = copy.deepcopy(backbone)
 
     return acc_matrix, acc_matrix_conic_hull
