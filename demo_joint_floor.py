@@ -48,10 +48,17 @@ N_CLASSES = 100  # auto-overwritten from the data in main()
 # MERGE_K=1 → no merge.  Reuses the feature cache (labels remapped only).
 MERGE_K = 5
 MERGE_SEED = 0
+# Use CIFAR-100's REAL semantic superclasses (100 fine → 20 coarse, related sub-
+# modes) instead of random merge.  CIFAR-100 only; overrides MERGE_K when True.
+SEMANTIC_COARSE = False
 # Keep only the first CLASS_LIMIT classes (after any merge). 0 = all.  Use this to
 # DISENTANGLE "few classes" from "multimodal": e.g. CLASS_LIMIT=20 + MERGE_K=1
 # (20 unimodal) vs MERGE_K=5 (20 multimodal) — same class count, different modality.
 CLASS_LIMIT = 0
+# Cap train samples PER CLASS (0 = all).  Matches data volume across arms so the
+# multimodal win can't be attributed to more data (merge-5 has 5× samples/class).
+SAMPLES_PER_CLASS = 0
+SUBSET_SEED = 0
 N_RAYS = 25  # extreme rays per class (match cone_boundary; raise for a higher ceiling)
 USE_PCA = False  # PCA before SPA (speed); rays stored in original space
 PCA_DIM = 128  # PCA dim (match cone_boundary; raise for a higher ceiling)
@@ -236,6 +243,29 @@ def merge_labels(ytr, yte, k, seed=0):
     for gi, start in enumerate(range(0, n_fine, k)):
         fine2coarse[perm[start:start + k]] = gi
     return fine2coarse[ytr], fine2coarse[yte], int(np.ceil(n_fine / k))
+
+
+# CIFAR-100 fine→coarse map (fine label 0..99 in torchvision's alphabetical order →
+# one of the 20 official superclasses).  Each superclass groups 5 RELATED fine
+# classes (e.g. trees = maple/oak/palm/pine/willow) — real, milder multimodality
+# than random merge.
+_CIFAR100_COARSE = np.array([
+    4, 1, 14, 8, 0, 6, 7, 7, 18, 3,
+    3, 14, 9, 18, 7, 11, 3, 9, 7, 11,
+    6, 11, 5, 10, 7, 6, 13, 15, 3, 15,
+    0, 11, 1, 10, 12, 14, 16, 9, 11, 5,
+    5, 19, 8, 8, 15, 13, 14, 17, 18, 10,
+    16, 4, 17, 4, 2, 0, 17, 4, 18, 17,
+    10, 3, 2, 12, 12, 16, 12, 1, 9, 19,
+    2, 10, 0, 1, 16, 12, 9, 13, 15, 13,
+    16, 19, 2, 4, 6, 19, 5, 5, 8, 19,
+    18, 1, 2, 15, 6, 0, 17, 8, 14, 13], dtype=np.int64)
+
+
+def cifar100_coarse_labels(ytr, yte):
+    """Map CIFAR-100 fine labels (0..99) to the 20 official semantic superclasses.
+    Only valid for CIFAR-100 features extracted in torchvision's default order."""
+    return _CIFAR100_COARSE[ytr], _CIFAR100_COARSE[yte], 20
 
 
 def ncm_accuracy_generic(Ftr, ytr, Fte, yte, n_classes):
@@ -475,8 +505,11 @@ def main():
     # normalization / extraction sanity check for the (possibly new) dataset
     check_feature_health(Ftr, Fte, ytr_np, yte_np, DATASET)
 
-    # multimodal test: randomly merge fine classes into coarse groups
-    if MERGE_K > 1:
+    # multimodal labels: CIFAR-100 semantic superclasses, else random merge-K
+    if SEMANTIC_COARSE and DATASET == "CIFAR100":
+        ytr_np, yte_np, n_coarse = cifar100_coarse_labels(ytr_np, yte_np)
+        print(f"[coarse] CIFAR-100 semantic superclasses: 100 → {n_coarse}")
+    elif MERGE_K > 1:
         n_fine = int(max(int(ytr_np.max()), int(yte_np.max()))) + 1
         ytr_np, yte_np, n_coarse = merge_labels(ytr_np, yte_np, MERGE_K, MERGE_SEED)
         print(f"[merge] random merge-{MERGE_K}: {n_fine} → {n_coarse} multimodal classes")
@@ -486,6 +519,17 @@ def main():
         Ftr, ytr_np, Fte, yte_np = Ftr[trm], ytr_np[trm], Fte[tem], yte_np[tem]
         print(f"[limit] kept first {CLASS_LIMIT} classes "
               f"(train {Ftr.shape[0]}, test {Fte.shape[0]})")
+
+    if SAMPLES_PER_CLASS and SAMPLES_PER_CLASS > 0:   # match data volume across arms
+        rng = np.random.default_rng(SUBSET_SEED)
+        keep = []
+        for c in np.unique(ytr_np):
+            idx = np.where(ytr_np == c)[0]
+            keep.append(rng.choice(idx, SAMPLES_PER_CLASS, replace=False)
+                        if len(idx) > SAMPLES_PER_CLASS else idx)
+        keep = np.concatenate(keep)
+        Ftr, ytr_np = Ftr[keep], ytr_np[keep]
+        print(f"[subsample] ≤{SAMPLES_PER_CLASS} train/class → {len(ytr_np)} total")
 
     N_CLASSES = int(max(int(ytr_np.max()), int(yte_np.max()))) + 1  # from the data
     print(f"[data] {DATASET}: {N_CLASSES} classes, "

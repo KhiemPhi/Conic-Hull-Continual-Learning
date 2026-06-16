@@ -97,18 +97,23 @@ multi-prototype there.) See `cones-win-on-multimodal`.
 
 ---
 
-## 5. OPEN CONFOUND (top priority): "few classes" vs "multimodal"
+## 5. CONFOUND RESOLVED: it's multimodality, not "few classes"
 
-Merge-5 changed **two** things at once: classes became multimodal **and** dropped
-100 → 20. The +6% could be from *fewer classes* (less crowding), not modes.
+Merge-5 changed two things (multimodal AND 100→20 classes). The control fixes the
+class count at 20 and varies only modality:
 
-**Control (now runnable via `CLASS_LIMIT`):** fix the class count, vary modality.
-- `CLASS_LIMIT=20, MERGE_K=1` → 20 **unimodal** classes.
-- `MERGE_K=5` → 20 **multimodal** classes.
-Same count; if the unimodal-20 also shows a large cone−NCM, the win was class
-count, not multimodality. Also: unimodal class-count sweep {10,20,50,100}.
-(Section 4 of `reproduce_experiments.sh`.) **This must be resolved before claiming
-the multimodal result.**
+| 20 classes (pca, disc) | NCM | best cone | cone − NCM | OOD Δ |
+|---|---|---|---|---|
+| **unimodal** (CLASS_LIMIT=20, MERGE_K=1) | 0.937 | 0.932 | **−0.005 (NCM)** | −0.003 |
+| **multimodal** (MERGE_K=5) | 0.742 | 0.803 | **+0.061 (cone)** | +0.058 |
+
+Class count held at 20: the cone **loses** when unimodal, **wins +6%** when
+multimodal. The +0.066 swing is attributable purely to multimodality. The
+"few-classes" hypothesis is **refuted** (at 20 unimodal classes the cone still
+loses). Mechanism: merging drops NCM 0.94→0.74 (one mean can't cover 5 modes); the
+cone recovers it to 0.80. Confirmatory follow-ups (still nice to have): unimodal
+class-count sweep {10,20,50,100} should stay ≤0; MERGE_K sweep {2,3,5,10} should
+show cone−NCM growing with #modes; `none`≈`pca`; semantic CIFAR-100 superclasses.
 
 ---
 
