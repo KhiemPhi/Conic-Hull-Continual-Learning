@@ -62,12 +62,29 @@ from drift_control import (
 
 
 # ── data + backbone factories ──────────────────────────────────────────────────
-def load_cifar100():
-    """The real conic-hull data: CIFAR-100 as (Xtr, ytr, Xte, yte) where the X are
-    LazyImageSets (224px ViT transform, decoded on access).  Reuses
-    drift_control.get_dataset, so it matches the main pipeline's inputs."""
-    args = SimpleNamespace(data="cifar100", seed=0)
-    return get_dataset(args, np.random.default_rng(0))
+def load_cifar100(model_name="vit_base_patch16_224.orig_in21k", data_dir="./data"):
+    """CIFAR-100 as (Xtr, ytr, Xte, yte) with the X as LazyImageSets, using the
+    MODEL'S OWN normalization (timm data config) — NOT CIFAR channel stats.
+
+    A frozen backbone is extremely sensitive to input normalization: the previous
+    CIFAR-stats transform fed mis-normalized images to the IN21k ViT and crushed
+    the frozen features (joint floor 0.38 → 0.82 once corrected).  pretrained=False
+    only reads the architecture's data config (mean/std/input_size) — no weight
+    download — so this is cheap."""
+    import timm
+    from torchvision import datasets
+    from drift_control import LazyImageSet
+
+    _m = timm.create_model(model_name, pretrained=False, num_classes=0)
+    cfg = timm.data.resolve_model_data_config(_m)
+    tf = timm.data.create_transform(**cfg, is_training=False)
+    del _m
+    print(f"[norm] {model_name}: mean={tuple(round(m, 3) for m in cfg['mean'])} "
+          f"std={tuple(round(s, 3) for s in cfg['std'])} input={cfg['input_size']}")
+    tr = datasets.CIFAR100(data_dir, train=True, download=True, transform=tf)
+    te = datasets.CIFAR100(data_dir, train=False, download=True, transform=tf)
+    return (LazyImageSet(tr), torch.tensor(tr.targets),
+            LazyImageSet(te), torch.tensor(te.targets))
 
 
 def make_mlp_backbone(seed, device):

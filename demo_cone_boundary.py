@@ -34,11 +34,11 @@ ARMS = ("cone_frozen_rp",)
 MODEL_NAME = "vit_base_patch16_224.orig_in21k"
 N_TASKS = 10
 CLASSES_PER = 10
-EPOCHS = 2  # cone-anchor epochs per training session (was 3)
-BATCH_SIZE = 64
-LR = 1e-4
+EPOCHS = 1  # cone-anchor epochs per session (less is better on correct features; try 0 = fully training-free)
+BATCH_SIZE = 256
+LR = 1e-3
 K_RAYS = 200
-LORA_RANK = 16
+LORA_RANK = 32
 LORA_BLOCKS = 4
 N_PROJ = 10000  # RP expansion dim M (try 5000–10000)
 RP_SEED = 0
@@ -49,7 +49,7 @@ def main():
     if device.type != "cuda":
         print("[warning] no CUDA — ViT-B on CPU will be extremely slow.")
     print(f"[setup] CIFAR-100 + {MODEL_NAME} on {device}; arms={ARMS}; M={N_PROJ}")
-    data = load_cifar100()
+    data = load_cifar100(MODEL_NAME)
 
     vit_factory = make_vit_backbone_factory(
         MODEL_NAME, lora_rank=LORA_RANK, lora_alpha=4.0, lora_blocks=LORA_BLOCKS
