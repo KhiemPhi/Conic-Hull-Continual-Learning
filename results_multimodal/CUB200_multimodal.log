@@ -1,0 +1,39 @@
+[setup] CUB200 + frozen vit_base_patch16_224.orig_in21k on cuda  (rays=disc×25, transform=pca, rp=False)
+[cache] loaded feats_CUB200_vit_base_patch16_224_orig_in21k_modelnorm.npz  train(5994, 768)  test(5794, 768)
+[health:CUB200] norm mean=4.4 min=3.6 max=5.8 dim=768  train-NCM=0.875 (chance 0.005)  ✓
+[merge] random merge-5: 200 → 40 multimodal classes
+[data] CUB200: 40 classes, train 5994, test 5794, dim 768
+[transform] pca applied → feature dim 512
+build disc:   0%|          | 0/40 [00:00<?, ?cls/s]build disc:   8%|▊         | 3/40 [00:00<00:01, 24.01cls/s]build disc:  18%|█▊        | 7/40 [00:00<00:01, 30.87cls/s]build disc:  28%|██▊       | 11/40 [00:00<00:00, 31.93cls/s]build disc:  38%|███▊      | 15/40 [00:00<00:00, 32.37cls/s]build disc:  48%|████▊     | 19/40 [00:00<00:00, 33.99cls/s]build disc:  57%|█████▊    | 23/40 [00:00<00:00, 32.75cls/s]build disc:  68%|██████▊   | 27/40 [00:00<00:00, 33.80cls/s]build disc:  78%|███████▊  | 31/40 [00:00<00:00, 35.07cls/s]build disc:  88%|████████▊ | 35/40 [00:01<00:00, 35.27cls/s]build disc: 100%|██████████| 40/40 [00:01<00:00, 37.22cls/s]build disc: 100%|██████████| 40/40 [00:01<00:00, 34.36cls/s]
+score test:   0%|          | 0/40 [00:00<?, ?cls/s]score test:   2%|▎         | 1/40 [00:00<00:27,  1.43cls/s]score test:   5%|▌         | 2/40 [00:00<00:14,  2.55cls/s]score test:   8%|▊         | 3/40 [00:01<00:11,  3.15cls/s]score test:  10%|█         | 4/40 [00:01<00:10,  3.58cls/s]score test:  12%|█▎        | 5/40 [00:01<00:08,  4.23cls/s]score test:  15%|█▌        | 6/40 [00:01<00:10,  3.33cls/s]score test:  18%|█▊        | 7/40 [00:02<00:09,  3.60cls/s]score test:  20%|██        | 8/40 [00:02<00:07,  4.13cls/s]score test:  22%|██▎       | 9/40 [00:02<00:07,  4.16cls/s]score test:  25%|██▌       | 10/40 [00:02<00:06,  4.62cls/s]score test:  28%|██▊       | 11/40 [00:02<00:05,  5.13cls/s]score test:  30%|███       | 12/40 [00:03<00:05,  5.54cls/s]score test:  32%|███▎      | 13/40 [00:03<00:05,  4.84cls/s]score test:  35%|███▌      | 14/40 [00:03<00:05,  4.43cls/s]score test:  38%|███▊      | 15/40 [00:03<00:05,  4.52cls/s]score test:  40%|████      | 16/40 [00:04<00:05,  4.33cls/s]score test:  42%|████▎     | 17/40 [00:04<00:05,  4.02cls/s]score test:  45%|████▌     | 18/40 [00:04<00:05,  4.21cls/s]score test:  48%|████▊     | 19/40 [00:04<00:04,  4.38cls/s]score test:  50%|█████     | 20/40 [00:04<00:04,  4.68cls/s]score test:  52%|█████▎    | 21/40 [00:05<00:03,  4.80cls/s]score test:  55%|█████▌    | 22/40 [00:05<00:03,  5.13cls/s]score test:  57%|█████▊    | 23/40 [00:05<00:03,  5.11cls/s]score test:  60%|██████    | 24/40 [00:05<00:02,  5.44cls/s]score test:  62%|██████▎   | 25/40 [00:05<00:02,  5.18cls/s]score test:  65%|██████▌   | 26/40 [00:06<00:02,  4.80cls/s]score test:  68%|██████▊   | 27/40 [00:06<00:02,  4.92cls/s]score test:  70%|███████   | 28/40 [00:06<00:02,  5.00cls/s]score test:  72%|███████▎  | 29/40 [00:06<00:02,  4.85cls/s]score test:  75%|███████▌  | 30/40 [00:06<00:02,  4.12cls/s]score test:  78%|███████▊  | 31/40 [00:07<00:02,  4.01cls/s]score test:  80%|████████  | 32/40 [00:07<00:01,  4.19cls/s]score test:  82%|████████▎ | 33/40 [00:07<00:01,  4.84cls/s]score test:  85%|████████▌ | 34/40 [00:07<00:01,  5.17cls/s]score test:  88%|████████▊ | 35/40 [00:07<00:00,  5.78cls/s]score test:  90%|█████████ | 36/40 [00:08<00:00,  6.26cls/s]score test:  92%|█████████▎| 37/40 [00:08<00:00,  6.09cls/s]score test:  95%|█████████▌| 38/40 [00:08<00:00,  6.12cls/s]score test:  98%|█████████▊| 39/40 [00:08<00:00,  5.82cls/s]score test: 100%|██████████| 40/40 [00:08<00:00,  5.63cls/s]score test: 100%|██████████| 40/40 [00:08<00:00,  4.58cls/s]
+
+========================================================
+Joint FLOOR — CUB200 / frozen vit_base_patch16_224.orig_in21k  (transform=pca, rays=disc)
+  40 classes, 25 rays/class, rp=False
+========================================================
+  NCM (cosine-to-mean)   0.5671   <- reference
+  ----------------------------------------
+  cone:cosine            0.6707 *
+  cone:angular_margin    0.6322
+  cone:blended           0.6829
+  cone:max_ray_sim       0.6809
+
+  best cone scheme: blended = 0.6829   |   NCM = 0.5671
+  cone − NCM: +0.1158  (cone ahead)
+build disc:   0%|          | 0/32 [00:00<?, ?cls/s]build disc:   3%|▎         | 1/32 [00:00<00:03,  7.78cls/s]build disc:  16%|█▌        | 5/32 [00:00<00:01, 23.11cls/s]build disc:  31%|███▏      | 10/32 [00:00<00:00, 31.84cls/s]build disc:  47%|████▋     | 15/32 [00:00<00:00, 36.03cls/s]build disc:  59%|█████▉    | 19/32 [00:00<00:00, 35.61cls/s]build disc:  72%|███████▏  | 23/32 [00:00<00:00, 36.86cls/s]build disc:  84%|████████▍ | 27/32 [00:00<00:00, 37.25cls/s]build disc:  97%|█████████▋| 31/32 [00:00<00:00, 36.43cls/s]build disc: 100%|██████████| 32/32 [00:00<00:00, 34.41cls/s]
+ood score:   0%|          | 0/32 [00:00<?, ?cls/s]ood score:   3%|▎         | 1/32 [00:00<00:04,  6.37cls/s]ood score:   6%|▋         | 2/32 [00:00<00:05,  5.26cls/s]ood score:   9%|▉         | 3/32 [00:00<00:07,  4.14cls/s]ood score:  12%|█▎        | 4/32 [00:00<00:06,  4.32cls/s]ood score:  16%|█▌        | 5/32 [00:01<00:05,  4.65cls/s]ood score:  19%|█▉        | 6/32 [00:01<00:06,  4.17cls/s]ood score:  22%|██▏       | 7/32 [00:01<00:05,  4.46cls/s]ood score:  25%|██▌       | 8/32 [00:01<00:04,  4.94cls/s]ood score:  28%|██▊       | 9/32 [00:01<00:04,  4.70cls/s]ood score:  31%|███▏      | 10/32 [00:02<00:04,  4.87cls/s]ood score:  34%|███▍      | 11/32 [00:02<00:03,  5.29cls/s]ood score:  38%|███▊      | 12/32 [00:02<00:04,  4.98cls/s]ood score:  41%|████      | 13/32 [00:02<00:03,  4.75cls/s]ood score:  44%|████▍     | 14/32 [00:03<00:04,  4.46cls/s]ood score:  47%|████▋     | 15/32 [00:03<00:04,  4.14cls/s]ood score:  50%|█████     | 16/32 [00:03<00:03,  4.26cls/s]ood score:  53%|█████▎    | 17/32 [00:03<00:03,  4.75cls/s]ood score:  56%|█████▋    | 18/32 [00:03<00:02,  4.82cls/s]ood score:  59%|█████▉    | 19/32 [00:03<00:02,  5.33cls/s]ood score:  62%|██████▎   | 20/32 [00:04<00:02,  5.50cls/s]ood score:  66%|██████▌   | 21/32 [00:04<00:02,  5.12cls/s]ood score:  69%|██████▉   | 22/32 [00:04<00:02,  4.95cls/s]ood score:  72%|███████▏  | 23/32 [00:04<00:01,  5.58cls/s]ood score:  75%|███████▌  | 24/32 [00:04<00:01,  6.09cls/s]ood score:  78%|███████▊  | 25/32 [00:05<00:01,  6.38cls/s]ood score:  81%|████████▏ | 26/32 [00:05<00:00,  6.47cls/s]ood score:  84%|████████▍ | 27/32 [00:05<00:00,  6.54cls/s]ood score:  88%|████████▊ | 28/32 [00:05<00:00,  6.57cls/s]ood score:  91%|█████████ | 29/32 [00:05<00:00,  6.24cls/s]ood score:  94%|█████████▍| 30/32 [00:05<00:00,  5.50cls/s]ood score:  97%|█████████▋| 31/32 [00:06<00:00,  5.64cls/s]ood score: 100%|██████████| 32/32 [00:06<00:00,  5.81cls/s]ood score: 100%|██████████| 32/32 [00:06<00:00,  5.17cls/s]
+
+========================================================
+OPEN-SET OOD (transform=pca) — 32 ID vs 8 unseen (ID test 4631, OOD test 1163)
+========================================================
+  detector                 AUROC   FPR@95
+  ----------------------------------------
+  ncm                     0.6967   0.7403
+  cone:cosine             0.7931   0.6715
+  cone:angular_margin     0.7829   0.6870
+  cone:blended            0.7960   0.6948
+  cone:max_ray_sim        0.7847   0.7214
+  cone:geo_residual       0.7929   0.6715
+
+  best cone AUROC: 0.7960 (cone:blended)  |  NCM AUROC: 0.6967  (Δ=+0.0994)
+  cone beats NCM on OOD — this is the cone primitive's structural edge.

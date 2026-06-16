@@ -1,0 +1,39 @@
+[setup] Flowers102 + frozen vit_base_patch16_224.orig_in21k on cuda  (rays=disc×25, transform=pca, rp=False)
+[cache] loaded feats_Flowers102_vit_base_patch16_224_orig_in21k_modelnorm.npz  train(1020, 768)  test(6149, 768)
+[health:Flowers102] norm mean=4.4 min=3.6 max=5.8 dim=768  train-NCM=0.997 (chance 0.010)  ✓
+[merge] random merge-5: 102 → 21 multimodal classes
+[data] Flowers102: 21 classes, train 1020, test 6149, dim 768
+[transform] pca applied → feature dim 512
+build disc:   0%|          | 0/21 [00:00<?, ?cls/s]build disc:  10%|▉         | 2/21 [00:00<00:01, 18.52cls/s]build disc:  38%|███▊      | 8/21 [00:00<00:00, 39.86cls/s]build disc:  62%|██████▏   | 13/21 [00:00<00:00, 42.65cls/s]build disc:  90%|█████████ | 19/21 [00:00<00:00, 46.20cls/s]build disc: 100%|██████████| 21/21 [00:00<00:00, 45.56cls/s]
+score test:   0%|          | 0/21 [00:00<?, ?cls/s]score test:   5%|▍         | 1/21 [00:00<00:14,  1.34cls/s]score test:  10%|▉         | 2/21 [00:00<00:07,  2.49cls/s]score test:  14%|█▍        | 3/21 [00:01<00:05,  3.36cls/s]score test:  19%|█▉        | 4/21 [00:01<00:04,  3.65cls/s]score test:  24%|██▍       | 5/21 [00:01<00:04,  3.94cls/s]score test:  29%|██▊       | 6/21 [00:01<00:03,  4.36cls/s]score test:  33%|███▎      | 7/21 [00:01<00:03,  4.65cls/s]score test:  38%|███▊      | 8/21 [00:02<00:02,  4.55cls/s]score test:  43%|████▎     | 9/21 [00:02<00:02,  4.33cls/s]score test:  48%|████▊     | 10/21 [00:02<00:02,  4.48cls/s]score test:  52%|█████▏    | 11/21 [00:02<00:01,  5.00cls/s]score test:  57%|█████▋    | 12/21 [00:02<00:01,  5.34cls/s]score test:  62%|██████▏   | 13/21 [00:03<00:01,  5.18cls/s]score test:  67%|██████▋   | 14/21 [00:03<00:01,  5.07cls/s]score test:  71%|███████▏  | 15/21 [00:03<00:01,  5.35cls/s]score test:  76%|███████▌  | 16/21 [00:03<00:00,  5.59cls/s]score test:  81%|████████  | 17/21 [00:03<00:00,  5.11cls/s]score test:  86%|████████▌ | 18/21 [00:04<00:00,  4.79cls/s]score test:  90%|█████████ | 19/21 [00:04<00:00,  5.04cls/s]score test:  95%|█████████▌| 20/21 [00:04<00:00,  5.49cls/s]score test: 100%|██████████| 21/21 [00:04<00:00,  5.57cls/s]score test: 100%|██████████| 21/21 [00:04<00:00,  4.56cls/s]
+
+========================================================
+Joint FLOOR — Flowers102 / frozen vit_base_patch16_224.orig_in21k  (transform=pca, rays=disc)
+  21 classes, 25 rays/class, rp=False
+========================================================
+  NCM (cosine-to-mean)   0.9050   <- reference
+  ----------------------------------------
+  cone:cosine            0.8198 *
+  cone:angular_margin    0.8107
+  cone:blended           0.8203
+  cone:max_ray_sim       0.8182
+
+  best cone scheme: blended = 0.8203   |   NCM = 0.9050
+  cone − NCM: -0.0847  (NCM ahead)
+build disc:   0%|          | 0/17 [00:00<?, ?cls/s]build disc:  12%|█▏        | 2/17 [00:00<00:00, 19.07cls/s]build disc:  65%|██████▍   | 11/17 [00:00<00:00, 59.36cls/s]build disc: 100%|██████████| 17/17 [00:00<00:00, 62.98cls/s]
+ood score:   0%|          | 0/17 [00:00<?, ?cls/s]ood score:   6%|▌         | 1/17 [00:00<00:01,  8.89cls/s]ood score:  12%|█▏        | 2/17 [00:00<00:01,  8.50cls/s]ood score:  18%|█▊        | 3/17 [00:00<00:01,  7.26cls/s]ood score:  24%|██▎       | 4/17 [00:00<00:02,  5.95cls/s]ood score:  29%|██▉       | 5/17 [00:00<00:02,  5.68cls/s]ood score:  35%|███▌      | 6/17 [00:01<00:02,  5.19cls/s]ood score:  41%|████      | 7/17 [00:01<00:02,  4.52cls/s]ood score:  47%|████▋     | 8/17 [00:01<00:02,  4.28cls/s]ood score:  53%|█████▎    | 9/17 [00:01<00:01,  4.47cls/s]ood score:  59%|█████▉    | 10/17 [00:01<00:01,  4.47cls/s]ood score:  65%|██████▍   | 11/17 [00:02<00:01,  4.43cls/s]ood score:  71%|███████   | 12/17 [00:02<00:01,  3.85cls/s]ood score:  76%|███████▋  | 13/17 [00:02<00:01,  3.85cls/s]ood score:  82%|████████▏ | 14/17 [00:03<00:00,  3.36cls/s]ood score:  88%|████████▊ | 15/17 [00:03<00:00,  3.78cls/s]ood score:  94%|█████████▍| 16/17 [00:03<00:00,  3.99cls/s]ood score: 100%|██████████| 17/17 [00:03<00:00,  4.03cls/s]ood score: 100%|██████████| 17/17 [00:03<00:00,  4.41cls/s]
+
+========================================================
+OPEN-SET OOD (transform=pca) — 17 ID vs 4 unseen (ID test 5074, OOD test 1075)
+========================================================
+  detector                 AUROC   FPR@95
+  ----------------------------------------
+  ncm                     0.9376   0.2819
+  cone:cosine             0.9217   0.5628
+  cone:angular_margin     0.9050   0.6260
+  cone:blended            0.9185   0.6009
+  cone:max_ray_sim        0.9120   0.6549
+  cone:geo_residual       0.9278   0.4251
+
+  best cone AUROC: 0.9278 (cone:geo_residual)  |  NCM AUROC: 0.9376  (Δ=-0.0098)
+  NCM ahead on OOD — this is the cone primitive's structural edge.

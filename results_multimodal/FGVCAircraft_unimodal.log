@@ -1,0 +1,39 @@
+[setup] FGVCAircraft + frozen vit_base_patch16_224.orig_in21k on cuda  (rays=disc×25, transform=pca, rp=False)
+[cache] loaded feats_FGVCAircraft_vit_base_patch16_224_orig_in21k_modelnorm.npz  train(6667, 768)  test(3333, 768)
+[health:FGVCAircraft] norm mean=4.4 min=3.8 max=5.8 dim=768  train-NCM=0.318 (chance 0.010)  ✓
+[limit] kept first 20 classes (train 1334, test 666)
+[data] FGVCAircraft: 20 classes, train 1334, test 666, dim 768
+[transform] pca applied → feature dim 512
+build disc:   0%|          | 0/20 [00:00<?, ?cls/s]build disc:   5%|▌         | 1/20 [00:00<00:01,  9.91cls/s]build disc:  30%|███       | 6/20 [00:00<00:00, 30.91cls/s]build disc:  60%|██████    | 12/20 [00:00<00:00, 41.01cls/s]build disc:  85%|████████▌ | 17/20 [00:00<00:00, 43.32cls/s]build disc: 100%|██████████| 20/20 [00:00<00:00, 40.77cls/s]
+score test:   0%|          | 0/20 [00:00<?, ?cls/s]score test:   5%|▌         | 1/20 [00:00<00:10,  1.73cls/s]score test:  20%|██        | 4/20 [00:00<00:02,  7.24cls/s]score test:  45%|████▌     | 9/20 [00:00<00:00, 16.57cls/s]score test:  70%|███████   | 14/20 [00:00<00:00, 23.62cls/s]score test:  90%|█████████ | 18/20 [00:01<00:00, 25.29cls/s]score test: 100%|██████████| 20/20 [00:01<00:00, 17.89cls/s]
+
+========================================================
+Joint FLOOR — FGVCAircraft / frozen vit_base_patch16_224.orig_in21k  (transform=pca, rays=disc)
+  20 classes, 25 rays/class, rp=False
+========================================================
+  NCM (cosine-to-mean)   0.2117   <- reference
+  ----------------------------------------
+  cone:cosine            0.2057 *
+  cone:angular_margin    0.2087
+  cone:blended           0.2327
+  cone:max_ray_sim       0.2207
+
+  best cone scheme: blended = 0.2327   |   NCM = 0.2117
+  cone − NCM: +0.0210  (cone ahead)
+build disc:   0%|          | 0/16 [00:00<?, ?cls/s]build disc:  12%|█▎        | 2/16 [00:00<00:00, 15.19cls/s]build disc:  50%|█████     | 8/16 [00:00<00:00, 37.69cls/s]build disc:  88%|████████▊ | 14/16 [00:00<00:00, 44.49cls/s]build disc: 100%|██████████| 16/16 [00:00<00:00, 40.97cls/s]
+ood score:   0%|          | 0/16 [00:00<?, ?cls/s]ood score:  31%|███▏      | 5/16 [00:00<00:00, 48.39cls/s]ood score:  62%|██████▎   | 10/16 [00:00<00:00, 48.21cls/s]ood score:  94%|█████████▍| 15/16 [00:00<00:00, 39.18cls/s]ood score: 100%|██████████| 16/16 [00:00<00:00, 39.84cls/s]
+
+========================================================
+OPEN-SET OOD (transform=pca) — 16 ID vs 4 unseen (ID test 533, OOD test 133)
+========================================================
+  detector                 AUROC   FPR@95
+  ----------------------------------------
+  ncm                     0.6169   0.9323
+  cone:cosine             0.5545   0.9323
+  cone:angular_margin     0.5595   0.9248
+  cone:blended            0.5273   0.9549
+  cone:max_ray_sim        0.5121   0.9624
+  cone:geo_residual       0.5546   0.9323
+
+  best cone AUROC: 0.5595 (cone:angular_margin)  |  NCM AUROC: 0.6169  (Δ=-0.0574)
+  NCM ahead on OOD — this is the cone primitive's structural edge.

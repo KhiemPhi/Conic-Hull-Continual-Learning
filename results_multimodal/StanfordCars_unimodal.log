@@ -1,0 +1,39 @@
+[setup] StanfordCars + frozen vit_base_patch16_224.orig_in21k on cuda  (rays=disc×25, transform=pca, rp=False)
+[cache] loaded feats_StanfordCars_vit_base_patch16_224_orig_in21k_modelnorm.npz  train(8143, 768)  test(8040, 768)
+[health:StanfordCars] norm mean=4.2 min=3.7 max=5.6 dim=768  train-NCM=0.412 (chance 0.005)  ✓
+[limit] kept first 39 classes (train 1600, test 1580)
+[data] StanfordCars: 39 classes, train 1600, test 1580, dim 768
+[transform] pca applied → feature dim 512
+build disc:   0%|          | 0/39 [00:00<?, ?cls/s]build disc:  15%|█▌        | 6/39 [00:00<00:00, 52.75cls/s]build disc:  69%|██████▉   | 27/39 [00:00<00:00, 139.77cls/s]build disc: 100%|██████████| 39/39 [00:00<00:00, 143.93cls/s]
+score test:   0%|          | 0/39 [00:00<?, ?cls/s]score test:   3%|▎         | 1/39 [00:00<00:24,  1.58cls/s]score test:   8%|▊         | 3/39 [00:00<00:08,  4.30cls/s]score test:  10%|█         | 4/39 [00:00<00:06,  5.03cls/s]score test:  13%|█▎        | 5/39 [00:01<00:06,  5.21cls/s]score test:  15%|█▌        | 6/39 [00:01<00:06,  4.78cls/s]score test:  18%|█▊        | 7/39 [00:01<00:06,  5.28cls/s]score test:  21%|██        | 8/39 [00:01<00:05,  5.49cls/s]score test:  23%|██▎       | 9/39 [00:01<00:04,  6.19cls/s]score test:  28%|██▊       | 11/39 [00:01<00:03,  7.85cls/s]score test:  33%|███▎      | 13/39 [00:02<00:03,  8.55cls/s]score test:  36%|███▌      | 14/39 [00:02<00:02,  8.44cls/s]score test:  41%|████      | 16/39 [00:02<00:02,  8.75cls/s]score test:  46%|████▌     | 18/39 [00:02<00:02,  9.56cls/s]score test:  51%|█████▏    | 20/39 [00:02<00:01, 10.27cls/s]score test:  56%|█████▋    | 22/39 [00:03<00:01, 10.49cls/s]score test:  62%|██████▏   | 24/39 [00:03<00:01, 10.52cls/s]score test:  67%|██████▋   | 26/39 [00:03<00:01, 10.16cls/s]score test:  72%|███████▏  | 28/39 [00:03<00:01, 10.59cls/s]score test:  77%|███████▋  | 30/39 [00:03<00:00, 10.84cls/s]score test:  82%|████████▏ | 32/39 [00:04<00:00,  9.11cls/s]score test:  87%|████████▋ | 34/39 [00:04<00:00,  9.82cls/s]score test:  92%|█████████▏| 36/39 [00:04<00:00,  9.69cls/s]score test:  97%|█████████▋| 38/39 [00:04<00:00,  9.12cls/s]score test: 100%|██████████| 39/39 [00:04<00:00,  8.11cls/s]
+
+========================================================
+Joint FLOOR — StanfordCars / frozen vit_base_patch16_224.orig_in21k  (transform=pca, rays=disc)
+  39 classes, 25 rays/class, rp=False
+========================================================
+  NCM (cosine-to-mean)   0.3968   <- reference
+  ----------------------------------------
+  cone:cosine            0.3880 *
+  cone:angular_margin    0.3937
+  cone:blended           0.3987
+  cone:max_ray_sim       0.3747
+
+  best cone scheme: blended = 0.3987   |   NCM = 0.3968
+  cone − NCM: +0.0019  (tied)
+build disc:   0%|          | 0/31 [00:00<?, ?cls/s]build disc:  19%|█▉        | 6/31 [00:00<00:00, 48.55cls/s]build disc: 100%|██████████| 31/31 [00:00<00:00, 147.34cls/s]build disc: 100%|██████████| 31/31 [00:00<00:00, 131.01cls/s]
+ood score:   0%|          | 0/31 [00:00<?, ?cls/s]ood score:   3%|▎         | 1/31 [00:00<00:03,  9.20cls/s]ood score:   6%|▋         | 2/31 [00:00<00:03,  8.21cls/s]ood score:  10%|▉         | 3/31 [00:00<00:03,  8.34cls/s]ood score:  13%|█▎        | 4/31 [00:00<00:03,  8.17cls/s]ood score:  16%|█▌        | 5/31 [00:00<00:03,  8.56cls/s]ood score:  23%|██▎       | 7/31 [00:00<00:02, 10.26cls/s]ood score:  29%|██▉       | 9/31 [00:00<00:01, 12.32cls/s]ood score:  35%|███▌      | 11/31 [00:01<00:01, 12.86cls/s]ood score:  42%|████▏     | 13/31 [00:01<00:01, 14.02cls/s]ood score:  48%|████▊     | 15/31 [00:01<00:01, 13.96cls/s]ood score:  55%|█████▍    | 17/31 [00:01<00:01, 13.99cls/s]ood score:  61%|██████▏   | 19/31 [00:01<00:00, 13.80cls/s]ood score:  68%|██████▊   | 21/31 [00:01<00:00, 13.74cls/s]ood score:  74%|███████▍  | 23/31 [00:01<00:00, 13.45cls/s]ood score:  81%|████████  | 25/31 [00:02<00:00, 13.56cls/s]ood score:  87%|████████▋ | 27/31 [00:02<00:00, 13.19cls/s]ood score:  94%|█████████▎| 29/31 [00:02<00:00, 12.99cls/s]ood score: 100%|██████████| 31/31 [00:02<00:00, 12.83cls/s]ood score: 100%|██████████| 31/31 [00:02<00:00, 12.43cls/s]
+
+========================================================
+OPEN-SET OOD (transform=pca) — 31 ID vs 8 unseen (ID test 1258, OOD test 322)
+========================================================
+  detector                 AUROC   FPR@95
+  ----------------------------------------
+  ncm                     0.5888   0.9441
+  cone:cosine             0.6113   0.9286
+  cone:angular_margin     0.6115   0.9286
+  cone:blended            0.6061   0.9379
+  cone:max_ray_sim        0.5881   0.9410
+  cone:geo_residual       0.6107   0.9720
+
+  best cone AUROC: 0.6115 (cone:angular_margin)  |  NCM AUROC: 0.5888  (Δ=+0.0227)
+  cone beats NCM on OOD — this is the cone primitive's structural edge.

@@ -1,0 +1,40 @@
+[setup] CIFAR100 + frozen vit_base_patch16_224.orig_in21k on cuda  (rays=disc×25, transform=pca, rp=False)
+[cache] loaded feats_CIFAR100_vit_base_patch16_224_orig_in21k_modelnorm.npz  train(50000, 768)  test(10000, 768)
+[health:CIFAR100] norm mean=4.7 min=3.4 max=5.9 dim=768  train-NCM=0.820 (chance 0.010)  ✓
+[coarse] CIFAR-100 semantic superclasses: 100 → 20
+[subsample] ≤500 train/class → 10000 total
+[data] CIFAR100: 20 classes, train 10000, test 10000, dim 768
+[transform] pca applied → feature dim 512
+build disc:   0%|          | 0/20 [00:00<?, ?cls/s]build disc:   5%|▌         | 1/20 [00:00<00:02,  8.80cls/s]build disc:  15%|█▌        | 3/20 [00:00<00:01, 12.42cls/s]build disc:  25%|██▌       | 5/20 [00:00<00:01, 14.79cls/s]build disc:  35%|███▌      | 7/20 [00:00<00:00, 15.23cls/s]build disc:  45%|████▌     | 9/20 [00:00<00:00, 12.57cls/s]build disc:  55%|█████▌    | 11/20 [00:00<00:00, 13.25cls/s]build disc:  65%|██████▌   | 13/20 [00:00<00:00, 14.45cls/s]build disc:  75%|███████▌  | 15/20 [00:01<00:00, 14.84cls/s]build disc:  85%|████████▌ | 17/20 [00:01<00:00, 15.91cls/s]build disc:  95%|█████████▌| 19/20 [00:01<00:00, 16.81cls/s]build disc: 100%|██████████| 20/20 [00:01<00:00, 14.82cls/s]
+score test:   0%|          | 0/20 [00:00<?, ?cls/s]score test:   5%|▌         | 1/20 [00:00<00:17,  1.11cls/s]score test:  10%|█         | 2/20 [00:01<00:09,  1.95cls/s]score test:  15%|█▌        | 3/20 [00:01<00:06,  2.50cls/s]score test:  20%|██        | 4/20 [00:01<00:05,  3.06cls/s]score test:  25%|██▌       | 5/20 [00:01<00:04,  3.33cls/s]score test:  30%|███       | 6/20 [00:02<00:04,  3.49cls/s]score test:  35%|███▌      | 7/20 [00:02<00:03,  3.48cls/s]score test:  40%|████      | 8/20 [00:02<00:03,  3.68cls/s]score test:  45%|████▌     | 9/20 [00:02<00:03,  3.52cls/s]score test:  50%|█████     | 10/20 [00:03<00:02,  3.74cls/s]score test:  55%|█████▌    | 11/20 [00:03<00:02,  4.17cls/s]score test:  60%|██████    | 12/20 [00:03<00:01,  4.38cls/s]score test:  65%|██████▌   | 13/20 [00:03<00:01,  3.85cls/s]score test:  70%|███████   | 14/20 [00:04<00:01,  3.90cls/s]score test:  75%|███████▌  | 15/20 [00:04<00:01,  4.19cls/s]score test:  80%|████████  | 16/20 [00:04<00:01,  3.96cls/s]score test:  85%|████████▌ | 17/20 [00:04<00:00,  4.10cls/s]score test:  90%|█████████ | 18/20 [00:05<00:00,  4.01cls/s]score test:  95%|█████████▌| 19/20 [00:05<00:00,  3.95cls/s]score test: 100%|██████████| 20/20 [00:05<00:00,  3.97cls/s]score test: 100%|██████████| 20/20 [00:05<00:00,  3.54cls/s]
+
+========================================================
+Joint FLOOR — CIFAR100 / frozen vit_base_patch16_224.orig_in21k  (transform=pca, rays=disc)
+  20 classes, 25 rays/class, rp=False
+========================================================
+  NCM (cosine-to-mean)   0.8474   <- reference
+  ----------------------------------------
+  cone:cosine            0.8498 *
+  cone:angular_margin    0.8495
+  cone:blended           0.8524
+  cone:max_ray_sim       0.8531
+
+  best cone scheme: max_ray_sim = 0.8531   |   NCM = 0.8474
+  cone − NCM: +0.0057  (cone ahead)
+build disc:   0%|          | 0/16 [00:00<?, ?cls/s]build disc:  12%|█▎        | 2/16 [00:00<00:00, 17.44cls/s]build disc:  25%|██▌       | 4/16 [00:00<00:00, 18.85cls/s]build disc:  38%|███▊      | 6/16 [00:00<00:00, 17.99cls/s]build disc:  50%|█████     | 8/16 [00:00<00:00, 16.98cls/s]build disc:  62%|██████▎   | 10/16 [00:00<00:00, 16.86cls/s]build disc:  75%|███████▌  | 12/16 [00:00<00:00, 16.47cls/s]build disc:  88%|████████▊ | 14/16 [00:00<00:00, 15.35cls/s]build disc: 100%|██████████| 16/16 [00:00<00:00, 16.08cls/s]build disc: 100%|██████████| 16/16 [00:00<00:00, 16.53cls/s]
+ood score:   0%|          | 0/16 [00:00<?, ?cls/s]ood score:   6%|▋         | 1/16 [00:00<00:03,  4.09cls/s]ood score:  12%|█▎        | 2/16 [00:00<00:03,  3.71cls/s]ood score:  19%|█▉        | 3/16 [00:00<00:03,  3.93cls/s]ood score:  25%|██▌       | 4/16 [00:01<00:03,  3.90cls/s]ood score:  31%|███▏      | 5/16 [00:01<00:02,  3.97cls/s]ood score:  38%|███▊      | 6/16 [00:01<00:02,  3.98cls/s]ood score:  44%|████▍     | 7/16 [00:01<00:02,  4.21cls/s]ood score:  50%|█████     | 8/16 [00:02<00:02,  3.78cls/s]ood score:  56%|█████▋    | 9/16 [00:02<00:01,  3.67cls/s]ood score:  62%|██████▎   | 10/16 [00:02<00:01,  3.65cls/s]ood score:  69%|██████▉   | 11/16 [00:02<00:01,  3.83cls/s]ood score:  75%|███████▌  | 12/16 [00:03<00:00,  4.03cls/s]ood score:  81%|████████▏ | 13/16 [00:03<00:00,  4.03cls/s]ood score:  88%|████████▊ | 14/16 [00:03<00:00,  4.45cls/s]ood score:  94%|█████████▍| 15/16 [00:03<00:00,  4.36cls/s]ood score: 100%|██████████| 16/16 [00:04<00:00,  3.60cls/s]ood score: 100%|██████████| 16/16 [00:04<00:00,  3.88cls/s]
+
+========================================================
+OPEN-SET OOD (transform=pca) — 16 ID vs 4 unseen (ID test 8000, OOD test 2000)
+========================================================
+  detector                 AUROC   FPR@95
+  ----------------------------------------
+  ncm                     0.8281   0.6000
+  cone:cosine             0.8677   0.6815
+  cone:angular_margin     0.8645   0.6820
+  cone:blended            0.8709   0.6820
+  cone:max_ray_sim        0.8676   0.6835
+  cone:geo_residual       0.8382   0.6485
+
+  best cone AUROC: 0.8709 (cone:blended)  |  NCM AUROC: 0.8281  (Δ=+0.0428)
+  cone beats NCM on OOD — this is the cone primitive's structural edge.

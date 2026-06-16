@@ -1,0 +1,39 @@
+[setup] CUB200 + frozen vit_base_patch16_224.orig_in21k on cuda  (rays=disc×25, transform=pca, rp=False)
+[cache] loaded feats_CUB200_vit_base_patch16_224_orig_in21k_modelnorm.npz  train(5994, 768)  test(5794, 768)
+[health:CUB200] norm mean=4.4 min=3.6 max=5.8 dim=768  train-NCM=0.875 (chance 0.005)  ✓
+[limit] kept first 40 classes (train 1200, test 1090)
+[data] CUB200: 40 classes, train 1200, test 1090, dim 768
+[transform] pca applied → feature dim 512
+build disc:   0%|          | 0/40 [00:00<?, ?cls/s]build disc: 100%|██████████| 40/40 [00:00<00:00, 552.03cls/s]
+score test:   0%|          | 0/40 [00:00<?, ?cls/s]score test:   2%|▎         | 1/40 [00:00<00:24,  1.59cls/s]score test:  10%|█         | 4/40 [00:00<00:06,  5.95cls/s]score test:  15%|█▌        | 6/40 [00:01<00:04,  6.92cls/s]score test:  22%|██▎       | 9/40 [00:01<00:02, 10.77cls/s]score test:  28%|██▊       | 11/40 [00:01<00:02, 11.92cls/s]score test:  35%|███▌      | 14/40 [00:01<00:01, 14.95cls/s]score test:  42%|████▎     | 17/40 [00:01<00:01, 17.90cls/s]score test:  52%|█████▎    | 21/40 [00:01<00:00, 22.09cls/s]score test:  68%|██████▊   | 27/40 [00:01<00:00, 29.85cls/s]score test:  78%|███████▊  | 31/40 [00:01<00:00, 30.74cls/s]score test:  92%|█████████▎| 37/40 [00:01<00:00, 36.50cls/s]score test: 100%|██████████| 40/40 [00:02<00:00, 19.45cls/s]
+
+========================================================
+Joint FLOOR — CUB200 / frozen vit_base_patch16_224.orig_in21k  (transform=pca, rays=disc)
+  40 classes, 25 rays/class, rp=False
+========================================================
+  NCM (cosine-to-mean)   0.8633   <- reference
+  ----------------------------------------
+  cone:cosine            0.8569 *
+  cone:angular_margin    0.8578
+  cone:blended           0.8615
+  cone:max_ray_sim       0.8440
+
+  best cone scheme: blended = 0.8615   |   NCM = 0.8633
+  cone − NCM: -0.0018  (tied)
+build disc:   0%|          | 0/32 [00:00<?, ?cls/s]build disc: 100%|██████████| 32/32 [00:00<00:00, 831.84cls/s]
+ood score:   0%|          | 0/32 [00:00<?, ?cls/s]ood score:  12%|█▎        | 4/32 [00:00<00:00, 33.97cls/s]ood score:  28%|██▊       | 9/32 [00:00<00:00, 42.31cls/s]ood score:  44%|████▍     | 14/32 [00:00<00:00, 35.05cls/s]ood score:  59%|█████▉    | 19/32 [00:00<00:00, 39.86cls/s]ood score:  78%|███████▊  | 25/32 [00:00<00:00, 44.21cls/s]ood score:  97%|█████████▋| 31/32 [00:00<00:00, 48.40cls/s]ood score: 100%|██████████| 32/32 [00:00<00:00, 44.12cls/s]
+
+========================================================
+OPEN-SET OOD (transform=pca) — 32 ID vs 8 unseen (ID test 854, OOD test 236)
+========================================================
+  detector                 AUROC   FPR@95
+  ----------------------------------------
+  ncm                     0.9464   0.1229
+  cone:cosine             0.9487   0.1186
+  cone:angular_margin     0.9486   0.1186
+  cone:blended            0.9458   0.1144
+  cone:max_ray_sim        0.9448   0.1144
+  cone:geo_residual       0.9382   0.1186
+
+  best cone AUROC: 0.9487 (cone:cosine)  |  NCM AUROC: 0.9464  (Δ=+0.0023)
+  cone beats NCM on OOD — this is the cone primitive's structural edge.

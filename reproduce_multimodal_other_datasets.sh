@@ -25,7 +25,7 @@ export https_proxy=${https_proxy:-http://fwdproxy:8080}
 
 K=${K:-5}                     # merge factor
 S=${S:-0}                     # samples/class cap (0 = off; set e.g. 30 for airtight match)
-DATASETS=${DATASETS:-"FGVCAircraft Flowers102 OxfordIIITPet"}
+DATASETS=${DATASETS:-"CUB200 StanfordCars"}
 OUT=results_multimodal; mkdir -p "$OUT"
 
 # known class counts (for the matched unimodal class limit C/K)
