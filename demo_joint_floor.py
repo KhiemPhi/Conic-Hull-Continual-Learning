@@ -31,11 +31,27 @@ from tqdm import tqdm
 
 # ── knobs ──────────────────────────────────────────────────────────────────────
 MODEL_NAME = "vit_base_patch16_224.orig_in21k"
-# torchvision datasets that download cleanly (one feature cache each):
-#   CIFAR100(100) | FGVCAircraft(100, fine-grained) | Flowers102(102) |
-#   OxfordIIITPet(37) | Food101(101).  FGVCAircraft is the multimodal test.
+# Datasets (one feature cache each).  torchvision (clean download):
+#   CIFAR100(100) | FGVCAircraft(100) | Flowers102(102) | OxfordIIITPet(37) |
+#   Food101(101).  HuggingFace (CUB/Cars aren't cleanly in torchvision):
+#   CUB200(200, fine-grained) | StanfordCars(196, fine-grained).
 DATASET = "FGVCAircraft"
+# HF repos for the non-torchvision sets (repo names drift on the Hub — override if
+# load_dataset fails). Format: name -> (repo, train_split, test_split).
+HF_REPOS = {
+    "CUB200": ("Donghyun99/CUB-200-2011", "train", "test"),
+    "StanfordCars": ("Donghyun99/Stanford-Cars", "train", "test"),
+}
 N_CLASSES = 100  # auto-overwritten from the data in main()
+# Multimodal test: randomly merge MERGE_K fine classes into one label (each merged
+# class then has K dissimilar sub-modes — a single mean can't cover it, a cone can).
+# MERGE_K=1 → no merge.  Reuses the feature cache (labels remapped only).
+MERGE_K = 5
+MERGE_SEED = 0
+# Keep only the first CLASS_LIMIT classes (after any merge). 0 = all.  Use this to
+# DISENTANGLE "few classes" from "multimodal": e.g. CLASS_LIMIT=20 + MERGE_K=1
+# (20 unimodal) vs MERGE_K=5 (20 multimodal) — same class count, different modality.
+CLASS_LIMIT = 0
 N_RAYS = 25  # extreme rays per class (match cone_boundary; raise for a higher ceiling)
 USE_PCA = False  # PCA before SPA (speed); rays stored in original space
 PCA_DIM = 128  # PCA dim (match cone_boundary; raise for a higher ceiling)
@@ -73,9 +89,57 @@ def cache_path():
     return f"feats_{DATASET}_{tag}_modelnorm.npz"
 
 
+class _HFImageDataset(torch.utils.data.Dataset):
+    """Wrap a HuggingFace image split as (transform(image), label) for a DataLoader."""
+
+    def __init__(self, hf_ds, transform, img_key, lbl_key):
+        self.ds, self.tf, self.ik, self.lk = hf_ds, transform, img_key, lbl_key
+
+    def __len__(self):
+        return len(self.ds)
+
+    def __getitem__(self, i):
+        r = self.ds[i]
+        img = r[self.ik]
+        if not hasattr(img, "mode"):                  # bytes dict → PIL
+            from PIL import Image
+            import io
+            img = Image.open(io.BytesIO(img["bytes"]))
+        if img.mode != "RGB":
+            img = img.convert("RGB")
+        return self.tf(img), int(r[self.lk])
+
+
+def build_hf_datasets(name, transform):
+    """Load a HuggingFace image dataset (CUB/Cars), auto-detecting the image/label
+    columns and falling back validation→test for the eval split."""
+    try:
+        from datasets import load_dataset
+    except ImportError as e:
+        raise ImportError("HuggingFace `datasets` needed for CUB/Cars: "
+                          "pip install datasets") from e
+    repo, tr_split, te_split = HF_REPOS[name]
+    dd = load_dataset(repo)
+    if te_split not in dd:                             # some repos use 'validation'
+        te_split = "validation" if "validation" in dd else tr_split
+    tr, te = dd[tr_split], dd[te_split]
+    cols = tr.column_names
+    ik = next((c for c in ("image", "img", "Image", "picture") if c in cols), None)
+    lk = next((c for c in ("label", "labels", "fine_label", "class", "target")
+               if c in cols), None)
+    if ik is None or lk is None:
+        raise ValueError(f"{repo}: can't find image/label cols in {cols}")
+    print(f"[hf] {repo}: splits {tr_split}/{te_split}, cols image='{ik}' label='{lk}'")
+    return (_HFImageDataset(tr, transform, ik, lk),
+            _HFImageDataset(te, transform, ik, lk))
+
+
 def build_torchvision_datasets(name, transform, data_dir):
-    """Return (train_ds, test_ds) for a clean-download torchvision dataset.  Labels
-    come from the DataLoader (0..C−1), so no per-dataset label attribute needed."""
+    """Return (train_ds, test_ds).  HF for CUB/Cars; else clean-download torchvision.
+    Labels come from the DataLoader (0..C−1), so no per-dataset label attr needed."""
+    if name in HF_REPOS:
+        return build_hf_datasets(name, transform)
+
     from torchvision import datasets as D
 
     if name == "CIFAR100":
@@ -139,6 +203,47 @@ def get_features(device):
     np.savez(path, Ftr=Ftr, ytr=ytr, Fte=Fte, yte=yte)
     print(f"[cache] saved {path}")
     return Ftr, ytr, Fte, yte
+
+
+def check_feature_health(Ftr, Fte, ytr, yte, name):
+    """Catch normalization / extraction errors on a new dataset.  Healthy frozen
+    ViT features have O(10) L2 norms, no NaN/Inf, no near-zero rows, and a NCM
+    train accuracy well above chance.  A mis-normalized transform (the CIFAR bug)
+    shows up as collapsed/erratic norms and near-chance train NCM."""
+    norms = np.linalg.norm(Ftr, axis=1)
+    n_cls = int(max(int(ytr.max()), int(yte.max()))) + 1
+    flags = []
+    if not np.isfinite(Ftr).all() or not np.isfinite(Fte).all():
+        flags.append("NaN/Inf!")
+    if (norms < 1e-6).mean() > 0.01:
+        flags.append(f"{(norms < 1e-6).mean():.1%} zero rows")
+    # train-on-train NCM: bad features ⇒ even this is near chance (1/n_cls)
+    tr_acc = ncm_accuracy_generic(Ftr, ytr, Ftr, ytr, n_cls)
+    if tr_acc < 3.0 / n_cls:
+        flags.append(f"train-NCM {tr_acc:.2f} ≈ chance ({1/n_cls:.3f}) — suspect norm")
+    status = "  ⚠ " + "; ".join(flags) if flags else "  ✓"
+    print(f"[health:{name}] norm mean={norms.mean():.1f} "
+          f"min={norms.min():.1f} max={norms.max():.1f} dim={Ftr.shape[1]}  "
+          f"train-NCM={tr_acc:.3f} (chance {1/n_cls:.3f}){status}")
+
+
+def merge_labels(ytr, yte, k, seed=0):
+    """Randomly partition fine classes into groups of k → multimodal coarse labels.
+    Reuses cached features; only labels are remapped.  Returns (ytr', yte')."""
+    n_fine = int(max(int(ytr.max()), int(yte.max()))) + 1
+    perm = np.random.default_rng(seed).permutation(n_fine)
+    fine2coarse = np.empty(n_fine, dtype=np.int64)
+    for gi, start in enumerate(range(0, n_fine, k)):
+        fine2coarse[perm[start:start + k]] = gi
+    return fine2coarse[ytr], fine2coarse[yte], int(np.ceil(n_fine / k))
+
+
+def ncm_accuracy_generic(Ftr, ytr, Fte, yte, n_classes):
+    """NCM (cosine-to-mean) for an explicit class count (used by the health check)."""
+    means = np.stack([Ftr[ytr == c].mean(axis=0) for c in range(n_classes)])
+    means /= np.linalg.norm(means, axis=1, keepdims=True) + 1e-8
+    Q = Fte / (np.linalg.norm(Fte, axis=1, keepdims=True) + 1e-8)
+    return float(((Q @ means.T).argmax(axis=1) == yte).mean())
 
 
 def ncm_accuracy(Ftr, ytr, Fte, yte):
@@ -366,6 +471,22 @@ def main():
     # ── 1-3. features (model's own normalization), cached to disk ───────────────
     Ftr, ytr_np, Fte, yte_np = get_features(device)
     d_feat = Ftr.shape[1]
+
+    # normalization / extraction sanity check for the (possibly new) dataset
+    check_feature_health(Ftr, Fte, ytr_np, yte_np, DATASET)
+
+    # multimodal test: randomly merge fine classes into coarse groups
+    if MERGE_K > 1:
+        n_fine = int(max(int(ytr_np.max()), int(yte_np.max()))) + 1
+        ytr_np, yte_np, n_coarse = merge_labels(ytr_np, yte_np, MERGE_K, MERGE_SEED)
+        print(f"[merge] random merge-{MERGE_K}: {n_fine} → {n_coarse} multimodal classes")
+
+    if CLASS_LIMIT and CLASS_LIMIT > 0:           # few-classes vs multimodal control
+        trm, tem = ytr_np < CLASS_LIMIT, yte_np < CLASS_LIMIT
+        Ftr, ytr_np, Fte, yte_np = Ftr[trm], ytr_np[trm], Fte[tem], yte_np[tem]
+        print(f"[limit] kept first {CLASS_LIMIT} classes "
+              f"(train {Ftr.shape[0]}, test {Fte.shape[0]})")
+
     N_CLASSES = int(max(int(ytr_np.max()), int(yte_np.max()))) + 1  # from the data
     print(f"[data] {DATASET}: {N_CLASSES} classes, "
           f"train {Ftr.shape[0]}, test {Fte.shape[0]}, dim {d_feat}")
@@ -419,12 +540,10 @@ def main():
         star = " *" if s == "cosine" else ""
         print(f"  {'cone:' + s:<22} {accs[s]:.4f}{star}")
     best = max(accs, key=accs.get)
-    gap = ncm - accs[best]
+    d = accs[best] - ncm  # cone − NCM; positive = cone ahead
+    verdict = "cone ahead" if d > 0.003 else "NCM ahead" if d < -0.003 else "tied"
     print(f"\n  best cone scheme: {best} = {accs[best]:.4f}   |   NCM = {ncm:.4f}")
-    print(
-        f"  cone vs NCM gap: {gap:+.4f}  "
-        f"({'cone scoring is the bottleneck' if gap > 0.03 else 'cones competitive'})"
-    )
+    print(f"  cone − NCM: {d:+.4f}  ({verdict})")
 
     # ── open-set OOD: cones vs NCM at telling seen from unseen classes ───────────
     if EVAL_OOD:
