@@ -1,0 +1,14 @@
+[setup] CIFAR100 + frozen vit_base_patch16_224.orig_in21k on cuda  (rays=disc×25, transform=lda, rp=False)
+[cache] loaded feats_CIFAR100_vit_base_patch16_224_orig_in21k_modelnorm.npz  train(50000, 768)  test(10000, 768)
+[health:CIFAR100] norm mean=4.7 min=3.4 max=5.9 dim=768  train-NCM=0.820 (chance 0.010)  ✓
+
+============================================================
+HIERARCHICAL coarse(cone)→fine(centroid) — CIFAR-100 (100 fine / 20 coarse, transform=lda)
+============================================================
+  flat 100-way NCM (prototype)       0.8338
+  hier: NCM-coarse  → centroid       0.8061   (coarse route 0.8788)
+  hier: CONE-coarse → centroid       0.8300   (coarse route 0.8986)
+  hier: ORACLE-coarse → centroid     0.9051   (ceiling)
+
+  cone vs NCM coarse routing: +0.0198  (cone routes better)
+  hier(cone) vs flat NCM:     -0.0038  (flat better)

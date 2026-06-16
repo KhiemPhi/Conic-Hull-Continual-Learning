@@ -51,6 +51,15 @@ MERGE_SEED = 0
 # Use CIFAR-100's REAL semantic superclasses (100 fine → 20 coarse, related sub-
 # modes) instead of random merge.  CIFAR-100 only; overrides MERGE_K when True.
 SEMANTIC_COARSE = False
+# Hierarchical coarse→fine eval: coarse route with a CONE per superclass (rays =
+# its fine-class centroids), then fine = nearest centroid in the routed group.
+# Compared vs flat 100-way prototype, NCM-coarse router, and oracle.  CIFAR-100.
+RUN_HIERARCHICAL = False
+# Soft routing to avoid hard-route error propagation:
+#   top-k : keep top-k coarse cones, fine-rank over their union.
+#   fusion: score(f) = α·cone(g(f)) + (1−α)·cos(q,cent_f)   (α=0 ⇒ flat NCM).
+HIER_TOPK = [1, 2, 3, 5]
+HIER_ALPHA = [0.0, 0.2, 0.4, 0.6, 0.8]
 # Keep only the first CLASS_LIMIT classes (after any merge). 0 = all.  Use this to
 # DISENTANGLE "few classes" from "multimodal": e.g. CLASS_LIMIT=20 + MERGE_K=1
 # (20 unimodal) vs MERGE_K=5 (20 multimodal) — same class count, different modality.
@@ -488,6 +497,70 @@ def ood_eval(
     return out, n_id, len(F_all) - n_id
 
 
+def hierarchical_eval(Ftr, ytr, Fte, yte, coarse_of, transform="pca"):
+    """Coarse(cone)→fine(centroid) hierarchy vs flat prototype, on fine labels.
+
+    Structure is SHARED: per fine class f a unit centroid (fine prototype); a coarse
+    class g's cone has rays = the centroids of its member fine classes.
+      coarse: argmax_g cone_g membership(q)         (cone wins — coarse is multimodal)
+      fine  : argmax_{f∈g*} cos(q, centroid_f)      (prototype wins — fine is unimodal)
+    Reports flat 100-way NCM, hier with CONE vs NCM coarse routers, and oracle-coarse
+    (ceiling), plus coarse routing accuracy for cone vs NCM."""
+    T = fit_feature_transform(Ftr, ytr, transform, ridge=WHITEN_RIDGE,
+                              lda_shrink=LDA_SHRINK, alpha=WHITEN_ALPHA, k=PCA_KEEP)
+    Ftr, Fte = T(Ftr), T(Fte)
+    C = int(ytr.max()) + 1
+    G = int(coarse_of[:C].max()) + 1
+    groups = {g: np.where(coarse_of[:C] == g)[0] for g in range(G)}   # fine ids per coarse
+
+    fcent = np.stack([_l2n(Ftr[ytr == f].mean(0)[None], axis=1)[0]    # (C,D) fine prototypes
+                      for f in range(C)])
+    Fn = _l2n(Fte, axis=1)
+    yc = coarse_of[yte]                                               # true coarse of test
+
+    fine_cos = Fn @ fcent.T                                           # (N,C) cos to fine centroids
+    flat_acc = float((fine_cos.argmax(1) == yte).mean())             # flat 100-way prototype
+
+    # coarse routers
+    cones = {g: _rays_to_hull(fcent[groups[g]]) for g in range(G)}    # cone rays = fine centroids
+    cone_sc = np.stack([cones[g].score(Fte) for g in range(G)], 1)    # (N,G) coarse cone membership
+    g_cone = cone_sc.argmax(1)
+    ccent = np.stack([_l2n(Ftr[coarse_of[ytr] == g].mean(0)[None], axis=1)[0]
+                      for g in range(G)])                             # coarse class means
+    g_ncm = (Fn @ ccent.T).argmax(1)
+
+    def fine_acc(groute):                                            # hard route → nearest fine centroid in group
+        pred = np.empty(len(yte), dtype=int)
+        for g in range(G):
+            m = groute == g
+            if m.any():
+                fl = groups[g]
+                pred[m] = fl[(Fn[m] @ fcent[fl].T).argmax(1)]
+        return float((pred == yte).mean())
+
+    def topk_acc(k):                                                 # soft: fine-rank over top-k coarse cones
+        k = min(k, G)
+        topg = np.argsort(-cone_sc, axis=1)[:, :k]
+        allowed = np.zeros((len(yte), C), dtype=bool)
+        cf = coarse_of[:C][None, :]
+        for j in range(k):
+            allowed |= cf == topg[:, j][:, None]
+        return float((np.where(allowed, fine_cos, -np.inf).argmax(1) == yte).mean())
+
+    cone_per_fine = cone_sc[:, coarse_of[:C]]                        # (N,C) each fine ← its coarse score
+    def fusion_acc(a):                                              # score(f)=α·cone(g(f))+(1−α)·cos(q,cent_f)
+        return float(((a * cone_per_fine + (1 - a) * fine_cos).argmax(1) == yte).mean())
+
+    return dict(
+        flat_ncm=flat_acc,
+        hier_ncm=fine_acc(g_ncm), coarse_ncm=float((g_ncm == yc).mean()),
+        hier_cone=fine_acc(g_cone), coarse_cone=float((g_cone == yc).mean()),
+        oracle=fine_acc(yc), n_fine=C, n_coarse=G,
+        topk={k: topk_acc(k) for k in HIER_TOPK},
+        fusion={a: fusion_acc(a) for a in HIER_ALPHA},
+    )
+
+
 def main():
     global N_CLASSES
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -504,6 +577,34 @@ def main():
 
     # normalization / extraction sanity check for the (possibly new) dataset
     check_feature_health(Ftr, Fte, ytr_np, yte_np, DATASET)
+
+    # ── hierarchical coarse(cone)→fine(centroid) eval (CIFAR-100; uses fine labels) ─
+    if RUN_HIERARCHICAL:
+        assert DATASET == "CIFAR100", "hierarchical eval uses CIFAR-100 superclasses"
+        r = hierarchical_eval(Ftr, ytr_np, Fte, yte_np, _CIFAR100_COARSE, TRANSFORM)
+        print("\n" + "=" * 60)
+        print(f"HIERARCHICAL coarse(cone)→fine(centroid) — CIFAR-100 "
+              f"({r['n_fine']} fine / {r['n_coarse']} coarse, transform={TRANSFORM})")
+        print("=" * 60)
+        print(f"  {'flat 100-way NCM (prototype)':<34} {r['flat_ncm']:.4f}")
+        print(f"  {'hier: NCM-coarse  → centroid':<34} {r['hier_ncm']:.4f}"
+              f"   (coarse route {r['coarse_ncm']:.4f})")
+        print(f"  {'hier: CONE-coarse → centroid':<34} {r['hier_cone']:.4f}"
+              f"   (coarse route {r['coarse_cone']:.4f})")
+        print(f"  {'hier: ORACLE-coarse → centroid':<34} {r['oracle']:.4f}   (ceiling)")
+        print("  -- soft top-k routing (fine-rank over union of top-k coarse) --")
+        for k in sorted(r["topk"]):
+            print(f"    top-{k:<2} {r['topk'][k]:.4f}")
+        print("  -- score fusion  α·cone(g(f)) + (1−α)·cos(q,cent_f)  (α=0 ⇒ flat) --")
+        for a in sorted(r["fusion"]):
+            print(f"    α={a:<4} {r['fusion'][a]:.4f}")
+        best_soft = max([r["hier_cone"], *r["topk"].values(), *r["fusion"].values()])
+        print(f"\n  cone vs NCM coarse routing: {r['coarse_cone'] - r['coarse_ncm']:+.4f}"
+              f"  ({'cone routes better' if r['coarse_cone'] > r['coarse_ncm'] else 'NCM routes better'})")
+        print(f"  best soft method vs flat NCM: {best_soft - r['flat_ncm']:+.4f}"
+              f"  ({'hierarchy helps' if best_soft > r['flat_ncm'] else 'flat still better'})"
+              f"   [oracle ceiling {r['oracle'] - r['flat_ncm']:+.4f}]")
+        return
 
     # multimodal labels: CIFAR-100 semantic superclasses, else random merge-K
     if SEMANTIC_COARSE and DATASET == "CIFAR100":

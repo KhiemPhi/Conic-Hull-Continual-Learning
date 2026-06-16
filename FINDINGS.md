@@ -151,6 +151,28 @@ Random merge-5, matched class count (C/K), pca/disc, unimodal vs multimodal:
   loses (−0.085). Threshold ≈ 10–30 samples/mode. Likely rescued by fewer rays
   (N_RAYS scaling with samples/mode) — TODO confirm.
 
+## 5c. Hierarchical coarse(cone)→fine(centroid) on CIFAR-100 superclasses
+
+Shared structure: fine prototypes = centroids; each superclass cone's rays = its 5
+fine centroids. Route coarse, then nearest fine centroid in the routed group.
+
+| transform | flat NCM | hier(NCM-route) | hier(cone-route) | oracle | coarse route cone vs NCM |
+|---|---|---|---|---|---|
+| pca | 0.818 | 0.771 | 0.811 | **0.892** | 0.887 vs 0.849 (**+0.038**) |
+| none | 0.818 | 0.773 | 0.805 | 0.893 | 0.881 vs 0.850 (+0.031) |
+| lda | 0.834 | 0.806 | 0.830 | 0.905 | 0.899 vs 0.879 (+0.020) |
+
+- **Confirmed:** the cone routes the (multimodal) coarse level better than the
+  prototype, every transform (+0.02 to +0.04 routing accuracy).
+- **But hard hierarchy loses to flat** (−0.004 to −0.013): ~12% coarse-routing
+  errors propagate (fine stage can't recover); flat 100-way never makes an
+  unrecoverable coarse error.
+- **Oracle (0.89–0.90) ≫ flat (0.82):** the promise is large (+0.07–0.09); the
+  bottleneck is routing accuracy, not the architecture.
+- **Fix:** SOFT routing — top-k coarse + fine-rank over the union, or score fusion
+  `score(f)=α·cone(g(f))+(1−α)·cos(q,cent_f)` (α=0 ⇒ flat, so dominates flat for
+  tuned α). Converts the cone's routing edge into end-to-end gain. (TODO.)
+
 ## 6. Incremental: forgetting-free boundary (ε < γ/2)
 
 `demo_cone_boundary.py`: a class is a cone; forgetting splits into **drift** (ε,
