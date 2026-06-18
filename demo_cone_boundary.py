@@ -34,12 +34,12 @@ ARMS = ("cone_frozen_rp",)
 MODEL_NAME = "vit_base_patch16_224.orig_in21k"
 N_TASKS = 10
 CLASSES_PER = 10
-EPOCHS = 1  # cone-anchor epochs per session (less is better on correct features; try 0 = fully training-free)
+EPOCHS = 2  # cone-anchor epochs per session (less is better on correct features; try 0 = fully training-free)
 BATCH_SIZE = 256
-LR = 1e-3
+LR = 1e-4
 K_RAYS = 200
 LORA_RANK = 32
-LORA_BLOCKS = 4
+LORA_BLOCKS = 5
 N_PROJ = 10000  # RP expansion dim M (try 5000–10000)
 RP_SEED = 0
 

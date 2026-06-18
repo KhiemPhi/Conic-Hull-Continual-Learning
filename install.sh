@@ -40,7 +40,8 @@ pip install \
     Pillow>=10.0.0 \
     tqdm>=4.66.0 \
     addict>=2.4.0 \
-    pyyaml>=6.0
+    pyyaml>=6.0 \
+    datasets
 
 # --- Verify ---
 echo ">>> Verifying install"
@@ -49,3 +50,5 @@ python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA available: {t
 echo ""
 echo "✅ Done! To activate this env in future sessions:"
 echo "   source ${ENV_DIR}/bin/activate"
+
+# source /home/khiemphi/venvs/ml_env/bin/activate

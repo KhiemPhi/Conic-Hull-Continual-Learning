@@ -28,7 +28,7 @@ def demo():
         #   hull_ray_budget=384   → half-D budget (~3 rays/class for 100 cls)
         #   hull_ray_budget=2000  → looser budget (~20 rays/class for 100 cls)
         #   adaptive_hull_rays=False → revert to fixed conic_hull_n_rays
-        conic_hull_n_rays=400,  # hard cap; also used when adaptive=False
+        conic_hull_n_rays=100,  # hard cap; also used when adaptive=False
         adaptive_hull_rays=False,  # scale rays/class with 1/total_classes
         hull_ray_budget=None,  # None → D (auto); set int to override
         # --- ray diversity (addresses packed-ray problem) ---
@@ -58,7 +58,7 @@ def demo():
         lora_rank=32,
         lora_alpha=4.0,
         lora_config="task_specific",
-        blocks_freeze=10,
+        blocks_freeze=0,
         # visualization
         visualize_extreme_rays=True,
         shuffle_class_order=True,
@@ -69,7 +69,7 @@ def demo():
         # query into its hull's BIRTH space before scoring. Hulls stay frozen in
         # birth space, so rotate_static_hulls MUST be False (no double-correction).
         rotate_static_hulls=False,
-        use_learned_drift=True,
+        use_learned_drift=False,
         drift_epochs=200,
         drift_hidden=2048,
         drift_lr=1e-3,
@@ -82,7 +82,7 @@ def demo():
         evaluate_transported_hulls=True,
         # "procrustes": rigid rotation+translation (shape-preserving; best default)
         # "ridge_affine": allows shear — try if drift is non-rigid
-        transport_pair_method="procrustes",
+        transport_pair_method="ridge_affine",
         transport_ridge=1e-3,  # ridge for ridge_affine map fitting
         transport_pca_subspace=True,  # fit the map in a low-rank subspace (robust for ~20 pts)
         # PCA dims for the map ≈ drift/LoRA rank. Keep WELL BELOW n_pairs (≈200):
@@ -111,7 +111,7 @@ def demo():
         # GradScaler and matches fp32 accuracy. Set use_amp=False to disable.
         use_amp=True,
         amp_dtype="bf16",
-        project_hulls_to_stage_cap=True,
+        project_hulls_to_stage_cap=False,
     )
 
 
