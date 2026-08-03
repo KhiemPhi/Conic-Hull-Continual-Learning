@@ -1,0 +1,78 @@
+### exp6_dirichlet_vs_gauss
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env VARIANTS=virt_gauss,virt_dirichlet python -u exp6_covcone_virtual.py
+### started: 2026-08-01T10:50:49-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    3.9s] [ImageNet-R] train 24000 test 6000 classes 200 | 10x20 | m_eig=64 lam1=1.0
+[    4.4s] === VARIANT virt_gauss  (lam1=0.0, virtual=gauss, stats=recompute, pen=lowrank) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   55.5s]   [virt_gauss t=0] train-acc 0.740  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.8861  [penalty inactive: lam1=0]
+[   63.6s]   [virt_gauss t=0] seen= 20  acc 0.8891
+[  109.1s]   [virt_gauss t=1] train-acc 0.915  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.3678  [penalty inactive: lam1=0]
+[  119.4s]   [virt_gauss t=1] seen= 40  acc 0.8559
+[  158.6s]   [virt_gauss t=2] train-acc 0.891  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.4477  [penalty inactive: lam1=0]
+[  168.0s]   [virt_gauss t=2] seen= 60  acc 0.7693
+[  212.2s]   [virt_gauss t=3] train-acc 0.870  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.5325  [penalty inactive: lam1=0]
+[  224.8s]   [virt_gauss t=3] seen= 80  acc 0.7197
+[  269.3s]   [virt_gauss t=4] train-acc 0.900  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.4189  [penalty inactive: lam1=0]
+[  282.2s]   [virt_gauss t=4] seen=100  acc 0.6831
+[  326.9s]   [virt_gauss t=5] train-acc 0.902  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.3620  [penalty inactive: lam1=0]
+[  340.9s]   [virt_gauss t=5] seen=120  acc 0.5754
+[  384.8s]   [virt_gauss t=6] train-acc 0.955  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.1974  [penalty inactive: lam1=0]
+[  399.7s]   [virt_gauss t=6] seen=140  acc 0.5756
+[  445.7s]   [virt_gauss t=7] train-acc 0.922  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.5401  [penalty inactive: lam1=0]
+[  462.5s]   [virt_gauss t=7] seen=160  acc 0.5140
+[  509.6s]   [virt_gauss t=8] train-acc 0.939  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.2479  [penalty inactive: lam1=0]
+[  527.8s]   [virt_gauss t=8] seen=180  acc 0.5443
+[  581.4s]   [virt_gauss t=9] train-acc 0.948  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.2487  [penalty inactive: lam1=0]
+[  598.9s]   [virt_gauss t=9] seen=200  acc 0.4408
+[  598.9s] === VARIANT virt_dirichlet  (lam1=0.0, virtual=dirichlet, stats=recompute, pen=lowrank) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  651.0s]   [virt_dirichlet t=0] train-acc 0.723  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.8917  [penalty inactive: lam1=0]
+[  659.7s]   [virt_dirichlet t=0] seen= 20  acc 0.8832
+[  710.7s]   [virt_dirichlet t=1] train-acc 0.903  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.3314  [penalty inactive: lam1=0]
+[  721.9s]   [virt_dirichlet t=1] seen= 40  acc 0.8649
+[  765.5s]   [virt_dirichlet t=2] train-acc 0.909  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.3360  [penalty inactive: lam1=0]
+[  775.4s]   [virt_dirichlet t=2] seen= 60  acc 0.7805
+[  824.2s]   [virt_dirichlet t=3] train-acc 0.854  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.3915  [penalty inactive: lam1=0]
+[  836.2s]   [virt_dirichlet t=3] seen= 80  acc 0.7151
+[  887.2s]   [virt_dirichlet t=4] train-acc 0.922  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.2325  [penalty inactive: lam1=0]
+[  901.7s]   [virt_dirichlet t=4] seen=100  acc 0.6726
+[  950.0s]   [virt_dirichlet t=5] train-acc 0.905  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.3753  [penalty inactive: lam1=0]
+[  964.8s]   [virt_dirichlet t=5] seen=120  acc 0.6106
+[ 1012.5s]   [virt_dirichlet t=6] train-acc 0.952  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.2200  [penalty inactive: lam1=0]
+[ 1029.3s]   [virt_dirichlet t=6] seen=140  acc 0.5839
+[ 1079.1s]   [virt_dirichlet t=7] train-acc 0.931  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.1016  [penalty inactive: lam1=0]
+[ 1098.0s]   [virt_dirichlet t=7] seen=160  acc 0.5571
+[ 1146.0s]   [virt_dirichlet t=8] train-acc 0.937  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.3533  [penalty inactive: lam1=0]
+[ 1172.5s]   [virt_dirichlet t=8] seen=180  acc 0.4961
+[ 1226.5s]   [virt_dirichlet t=9] train-acc 0.940  cone-pen 0.0000e+00  lam1*pen 0.0000e+00  CE 0.2441  [penalty inactive: lam1=0]
+[ 1257.3s]   [virt_dirichlet t=9] seen=200  acc 0.4448
+
+[saved] exp6_results_augreg_in21k.npy now holds: ['virt_dirichlet', 'virt_dirichlet@lam1', 'virt_gauss', 'virt_gauss@lam1']
+
+================================================================================================
+EXP6 — covariance-cone penalty + virtual conic replay (Split-ImageNet-R, lam1=1.0)
+================================================================================================
+         variant   A-last    A-avg    vs BAR  vs prev best
+      virt_gauss   0.4408   0.6567   -0.3450       -0.2982
+  virt_dirichlet   0.4448   0.6609   -0.3410       -0.2942
+------------------------------------------------------------------------------------------------
+        A_frozen   0.7272   (floor)
+A+ first-session   0.7858   <- THE BAR (real RanPAC)
+prev best (Gram)   0.7390   seqGram_recompute+synth
+   joint ceiling   0.8355   (not a CIL method)
+------------------------------------------------------------------------------------------------
+dirichlet - gauss       : +0.0040   <- is the LITERAL conic mixture better? (yes)
+
+WIN CONDITION: any variant A-last > 0.7858. Note A+ is the lam1->inf limit of
+cone_only (an infinite penalty freezes the backbone after task 0), so watch whether
+the curve is MONOTONE toward the degenerate endpoint again.
+================================================================================================
+### finished: 2026-08-01T11:11:53-07:00  [OK]

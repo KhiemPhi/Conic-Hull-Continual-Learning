@@ -1,0 +1,167 @@
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+=== phi_0: frozen pretrained backbone (anchor frame, always reproducible) ===
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+
+[t=0] seen=10  frozen 0.959 | stale 0.984 | oracle 0.986
+      source         map  n_fit   fwd_err     acc  vs oracle
+     curtask  orthogonal   1000    0.1763  0.9820    -0.0040
+     curtask      linear   1000    0.1090  0.9730    -0.0130
+     curtask         mlp   1000    0.1593  0.9800    -0.0060
+     generic  orthogonal   1000    0.2937  0.9780    -0.0080
+     generic      linear   1000    0.2277  0.9800    -0.0060
+     generic         mlp   1000    0.3161  0.9640    -0.0220
+           -    identity      0    0.2342  0.9840    -0.0020
+
+[t=1] seen=20  frozen 0.926 | stale 0.895 | oracle 0.929
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal    200    0.3027  0.6145    -0.3145
+      replay      linear    200    0.1233  0.8640    -0.0650
+      replay         mlp    200    0.1515  0.8435    -0.0855
+     curtask  orthogonal   1000    0.4106  0.7905    -0.1385
+     curtask      linear   1000    0.2469  0.8915    -0.0375
+     curtask         mlp   1000    0.3771  0.7725    -0.1565
+     generic  orthogonal   1000    0.4389  0.8560    -0.0730
+     generic      linear   1000    0.2699  0.8690    -0.0600
+     generic         mlp   1000    0.3761  0.7340    -0.1950
+           -    identity      0    0.4021  0.8955    -0.0335
+
+[t=2] seen=30  frozen 0.903 | stale 0.769 | oracle 0.888
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal    400    0.2913  0.7017    -0.1860
+      replay      linear    400    0.1113  0.8057    -0.0820
+      replay         mlp    400    0.1758  0.7340    -0.1537
+     curtask  orthogonal   1000    0.4456  0.6570    -0.2307
+     curtask      linear   1000    0.2433  0.7783    -0.1093
+     curtask         mlp   1000    0.3833  0.5897    -0.2980
+     generic  orthogonal   1000    0.4555  0.7607    -0.1270
+     generic      linear   1000    0.2549  0.7747    -0.1130
+     generic         mlp   1000    0.3817  0.5457    -0.3420
+           -    identity      0    0.4417  0.7690    -0.1187
+
+[t=3] seen=40  frozen 0.889 | stale 0.797 | oracle 0.877
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal    600    0.2819  0.8063    -0.0707
+      replay      linear    600    0.1166  0.8495    -0.0275
+      replay         mlp    600    0.2149  0.7705    -0.1065
+     curtask  orthogonal   1000    0.4263  0.6362    -0.2408
+     curtask      linear   1000    0.2334  0.7535    -0.1235
+     curtask         mlp   1000    0.3580  0.6155    -0.2615
+     generic  orthogonal   1000    0.4803  0.7458    -0.1312
+     generic      linear   1000    0.2843  0.7708    -0.1062
+     generic         mlp   1000    0.4041  0.6070    -0.2700
+           -    identity      0    0.4653  0.7975    -0.0795
+
+[t=4] seen=50  frozen 0.861 | stale 0.663 | oracle 0.803
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal    800    0.2862  0.7212    -0.0820
+      replay      linear    800    0.0974  0.7600    -0.0432
+      replay         mlp    800    0.1605  0.7278    -0.0754
+     curtask  orthogonal   1000    0.4776  0.4312    -0.3720
+     curtask      linear   1000    0.2481  0.6268    -0.1764
+     curtask         mlp   1000    0.3737  0.4612    -0.3420
+     generic  orthogonal   1000    0.5063  0.5568    -0.2464
+     generic      linear   1000    0.2580  0.6302    -0.1730
+     generic         mlp   1000    0.3893  0.4458    -0.3574
+           -    identity      0    0.5283  0.6628    -0.1404
+
+[t=5] seen=60  frozen 0.854 | stale 0.671 | oracle 0.804
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal   1000    0.2830  0.7247    -0.0798
+      replay      linear   1000    0.1020  0.7742    -0.0303
+      replay         mlp   1000    0.1745  0.7270    -0.0775
+     curtask  orthogonal   1000    0.5076  0.4730    -0.3315
+     curtask      linear   1000    0.3204  0.5928    -0.2117
+     curtask         mlp   1000    0.4479  0.4913    -0.3132
+     generic  orthogonal   1000    0.5179  0.5917    -0.2128
+     generic      linear   1000    0.3053  0.5918    -0.2127
+     generic         mlp   1000    0.4314  0.4438    -0.3607
+           -    identity      0    0.5317  0.6715    -0.1330
+
+[t=6] seen=70  frozen 0.847 | stale 0.645 | oracle 0.794
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal   1000    0.3336  0.6820    -0.1117
+      replay      linear   1000    0.1389  0.7211    -0.0726
+      replay         mlp   1000    0.2351  0.6591    -0.1346
+     curtask  orthogonal   1000    0.5064  0.3926    -0.4011
+     curtask      linear   1000    0.3097  0.5021    -0.2916
+     curtask         mlp   1000    0.4539  0.3776    -0.4161
+     generic  orthogonal   1000    0.5144  0.5669    -0.2269
+     generic      linear   1000    0.2903  0.5827    -0.2110
+     generic         mlp   1000    0.4102  0.4433    -0.3504
+           -    identity      0    0.5489  0.6447    -0.1490
+
+[t=7] seen=80  frozen 0.830 | stale 0.496 | oracle 0.702
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal   1000    0.3725  0.5320    -0.1697
+      replay      linear   1000    0.1349  0.5814    -0.1204
+      replay         mlp   1000    0.2375  0.5192    -0.1825
+     curtask  orthogonal   1000    0.5057  0.2039    -0.4979
+     curtask      linear   1000    0.2445  0.4100    -0.2918
+     curtask         mlp   1000    0.4233  0.2676    -0.4341
+     generic  orthogonal   1000    0.5683  0.3221    -0.3796
+     generic      linear   1000    0.3198  0.3877    -0.3140
+     generic         mlp   1000    0.4353  0.2504    -0.4514
+           -    identity      0    0.6324  0.4961    -0.2056
+
+[t=8] seen=90  frozen 0.828 | stale 0.678 | oracle 0.789
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal   1000    0.3574  0.6419    -0.1476
+      replay      linear   1000    0.1790  0.6783    -0.1111
+      replay         mlp   1000    0.3041  0.5769    -0.2126
+     curtask  orthogonal   1000    0.5315  0.3910    -0.3984
+     curtask      linear   1000    0.3478  0.5459    -0.2436
+     curtask         mlp   1000    0.5112  0.3838    -0.4057
+     generic  orthogonal   1000    0.5375  0.5727    -0.2168
+     generic      linear   1000    0.3699  0.5608    -0.2287
+     generic         mlp   1000    0.5073  0.3848    -0.4047
+           -    identity      0    0.5546  0.6777    -0.1118
+
+[t=9] seen=100  frozen 0.815 | stale 0.567 | oracle 0.723
+      source         map  n_fit   fwd_err     acc  vs oracle
+      replay  orthogonal   1000    0.3762  0.5251    -0.1977
+      replay      linear   1000    0.1646  0.5647    -0.1581
+      replay         mlp   1000    0.2886  0.4786    -0.2442
+     curtask  orthogonal   1000    0.5351  0.3289    -0.3939
+     curtask      linear   1000    0.3149  0.4081    -0.3147
+     curtask         mlp   1000    0.4610  0.2817    -0.4411
+     generic  orthogonal   1000    0.5672  0.4431    -0.2797
+     generic      linear   1000    0.3524  0.4502    -0.2726
+     generic         mlp   1000    0.4914  0.2764    -0.4464
+           -    identity      0    0.6122  0.5671    -0.1557
+
+====================================================================================
+FORWARD TRANSPORT FIDELITY  fwd_err = 1 - cos(V(phi_0(x)), phi_t(x))   [LOWER=BETTER]
+====================================================================================
+  source         map |      t0      t1      t2      t3      t4      t5      t6      t7      t8      t9
+       -    identity |  0.2342  0.4021  0.4417  0.4653  0.5283  0.5317  0.5489  0.6324  0.5546  0.6122
+  replay  orthogonal |  0.3027  0.2913  0.2819  0.2862  0.2830  0.3336  0.3725  0.3574  0.3762
+  replay      linear |  0.1233  0.1113  0.1166  0.0974  0.1020  0.1389  0.1349  0.1790  0.1646
+  replay         mlp |  0.1515  0.1758  0.2149  0.1605  0.1745  0.2351  0.2375  0.3041  0.2886
+ curtask  orthogonal |  0.1763  0.4106  0.4456  0.4263  0.4776  0.5076  0.5064  0.5057  0.5315  0.5351
+ curtask      linear |  0.1090  0.2469  0.2433  0.2334  0.2481  0.3204  0.3097  0.2445  0.3478  0.3149
+ curtask         mlp |  0.1593  0.3771  0.3833  0.3580  0.3737  0.4479  0.4539  0.4233  0.5112  0.4610
+ generic  orthogonal |  0.2937  0.4389  0.4555  0.4803  0.5063  0.5179  0.5144  0.5683  0.5375  0.5672
+ generic      linear |  0.2277  0.2699  0.2549  0.2843  0.2580  0.3053  0.2903  0.3198  0.3699  0.3524
+ generic         mlp |  0.3161  0.3761  0.3817  0.4041  0.3893  0.4314  0.4102  0.4353  0.5073  0.4914
+
+====================================================================================
+SEEN-WAY ACCURACY with transported prototypes   [oracle/frozen for reference]
+====================================================================================
+  source         map |      t0      t1      t2      t3      t4      t5      t6      t7      t8      t9
+baseline      frozen |  0.9590  0.9265  0.9030  0.8888  0.8612  0.8543  0.8470  0.8297  0.8282  0.8145
+baseline      oracle |  0.9860  0.9290  0.8877  0.8770  0.8032  0.8045  0.7937  0.7017  0.7894  0.7228
+baseline       stale |  0.9840  0.8955  0.7690  0.7975  0.6628  0.6715  0.6447  0.4961  0.6777  0.5671
+  replay  orthogonal |  0.6145  0.7017  0.8063  0.7212  0.7247  0.6820  0.5320  0.6419  0.5251
+  replay      linear |  0.8640  0.8057  0.8495  0.7600  0.7742  0.7211  0.5814  0.6783  0.5647
+  replay         mlp |  0.8435  0.7340  0.7705  0.7278  0.7270  0.6591  0.5192  0.5769  0.4786
+ curtask  orthogonal |  0.9820  0.7905  0.6570  0.6362  0.4312  0.4730  0.3926  0.2039  0.3910  0.3289
+ curtask      linear |  0.9730  0.8915  0.7783  0.7535  0.6268  0.5928  0.5021  0.4100  0.5459  0.4081
+ curtask         mlp |  0.9800  0.7725  0.5897  0.6155  0.4612  0.4913  0.3776  0.2676  0.3838  0.2817
+ generic  orthogonal |  0.9780  0.8560  0.7607  0.7458  0.5568  0.5917  0.5669  0.3221  0.5727  0.4431
+ generic      linear |  0.9800  0.8690  0.7747  0.7708  0.6302  0.5918  0.5827  0.3877  0.5608  0.4502
+ generic         mlp |  0.9640  0.7340  0.5457  0.6070  0.4458  0.4438  0.4433  0.2504  0.3848  0.2764
+====================================================================================

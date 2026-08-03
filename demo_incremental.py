@@ -6,7 +6,7 @@ from incremental import train_incremental_pipeline_replay
 def demo():
     train_incremental_pipeline_replay(
         dataset_name="CIFAR100",
-        model_name="vit_base_patch16_224.orig_in21k",
+        model_name="vit_base_patch16_224.augreg2_in21k_ft_in1k",
         classes_per_stage=10,
         epochs_per_stage=10,
         batch_size=256,

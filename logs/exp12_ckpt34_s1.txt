@@ -1,0 +1,30 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    2.6s] stage 'ckpt34' seed 1: 3 configs, M_RP=[10000, 3000], delta-ref augreg_in21k ep40 lr0.0003
+[    2.6s] skip (already done) vit_base_patch16_224.augreg_in21k ep40 lr0.0003
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.orig_in21k'  pretrained=True  device=cuda  feature_dim=768
+[    9.8s]   [orig_in21k_ep40_lr0.0003_aug1_s1] training task 0 (2299 imgs)
+[  218.6s]   [orig_in21k_ep40_lr0.0003_aug1_s1] task-0 train acc 0.902 -> frozen
+[  265.1s]   -> orig_in21k     ep40  lr0.0003  A-last 0.6555  A-avg 0.7411  [262s]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.orig_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  270.3s]   [orig_in21k_ep40_lr0.0001_aug1_s1] training task 0 (2299 imgs)
+[  480.5s]   [orig_in21k_ep40_lr0.0001_aug1_s1] task-0 train acc 0.796 -> frozen
+[  526.3s]   -> orig_in21k     ep40  lr0.0001  A-last 0.6793  A-avg 0.7522  [261s]
+
+================================================================================================================
+EXP12 [ckpt34] — zero-memory levers on A_plus   (ImageNet-R, 10 tasks, AUG=1)
+deltas are vs THIS run's baseline: augreg_in21k ep40 lr0.0003 = 0.8090/0.8609
+context only, do not diff against these: exp8 A_plus_aug40 0.8027/0.8552 | GR-LoRA 0.8209/0.8620 | MACIL 0.8182/0.8576
+================================================================================================================
+checkpoint        ep      lr A-last@10000  A-avg@10000  A-last@3000   A-avg@3000   dA-last   dA-avg
+augreg_in21k      40  0.0003       0.8090       0.8609       0.7875       0.8470   +0.0000  +0.0000
+orig_in21k        40  0.0001       0.6793       0.7522       0.6597       0.7396   -0.1297  -0.1087
+orig_in21k        40  0.0003       0.6555       0.7411       0.6355       0.7297   -0.1535  -0.1197
+================================================================================================================
+wrote exp12_free_points_ckpt34_s1.json

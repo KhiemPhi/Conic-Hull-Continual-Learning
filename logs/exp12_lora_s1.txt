@@ -1,0 +1,17 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    2.8s] stage 'lora' seed 1: 7 configs, M_RP=[10000, 3000], delta-ref augreg_in21k ep40 lr0.0003
+[    2.8s]   [augreg_in21k_ep40_lr0.0003_aug1_s1] features from cache
+[    8.9s]   -> augreg_in21k  ep40  lr0.0003  r32  a4     qkvproj     A-last 0.8090  A-avg 0.8609  [6s]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=10, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 552,960 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   15.2s]   [augreg_in21k_ep40_lr0.0003_r10_a4_qkvproj_aug1_s1] training task 0 (2299 imgs)
+[  239.2s]   [augreg_in21k_ep40_lr0.0003_r10_a4_qkvproj_aug1_s1] task-0 train acc 0.986 -> frozen
+[  287.9s]   -> augreg_in21k  ep40  lr0.0003  r10  a4     qkvproj     A-last 0.8055  A-avg 0.8590  [279s]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=10, alpha=1.25, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 552,960 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  294.8s]   [augreg_in21k_ep40_lr0.0003_r10_a1.25_qkvproj_aug1_s1] training task 0 (2299 imgs)

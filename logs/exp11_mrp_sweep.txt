@@ -1,0 +1,35 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    5.3s] A_plus features from cache exp11_aplus_feats_aug40_s0.npz
+[    6.7s]   M_RP   256  A-last 0.6017  A-avg 0.7129  persist     0.9 MB(f64) /    0.5 MB(f32)  lam=100  [1s]
+[    7.3s]   M_RP   512  A-last 0.6837  A-avg 0.7734  persist     2.9 MB(f64) /    1.5 MB(f32)  lam=100  [1s]
+[    8.0s]   M_RP  1000  A-last 0.7292  A-avg 0.8033  persist     9.6 MB(f64) /    4.8 MB(f32)  lam=100  [1s]
+[    8.9s]   M_RP  2000  A-last 0.7578  A-avg 0.8227  persist    35.2 MB(f64) /   17.6 MB(f32)  lam=100  [1s]
+[   10.0s]   M_RP  3000  A-last 0.7708  A-avg 0.8296  persist    76.8 MB(f64) /   38.4 MB(f32)  lam=100  [1s]
+[   11.6s]   M_RP  5000  A-last 0.7808  A-avg 0.8364  persist   208.0 MB(f64) /  104.0 MB(f32)  lam=100  [2s]
+[   14.3s]   M_RP  7500  A-last 0.7865  A-avg 0.8410  persist   462.0 MB(f64) /  231.0 MB(f32)  lam=1000  [3s]
+[   18.5s]   M_RP 10000  A-last 0.7897  A-avg 0.8413  persist   816.0 MB(f64) /  408.0 MB(f32)  lam=1000  [4s]
+
+========================================================================================================
+EXP11 — RanPAC projection width vs storage   [A_plus_aug40, ImageNet-R, vit_base_patch16_224.augreg_in21k]
+FIDELITY @M_RP=10000: 0.7897/0.8413 vs exp8 0.8027/0.8552  (d -0.0130/-0.0139)  *** MISMATCH — replay is not reproducing exp8 ***
+========================================================================================================
+   M_RP   A-last    A-avg  dA-last  persist f64  persist f32    infer  vs SOTA 473MB
+    256   0.6017   0.7129  -0.1880         0.9M         0.5M     1.0M           0.1%
+    512   0.6837   0.7734  -0.1060         2.9M         1.5M     2.0M           0.3%
+   1000   0.7292   0.8033  -0.0605         9.6M         4.8M     3.9M           1.0%
+   2000   0.7578   0.8227  -0.0318        35.2M        17.6M     7.7M           3.7%
+   3000   0.7708   0.8296  -0.0188        76.8M        38.4M    11.6M           8.1%
+   5000   0.7808   0.8364  -0.0088       208.0M       104.0M    19.4M          22.0%
+   7500   0.7865   0.8410  -0.0032       462.0M       231.0M    29.0M          48.8%
+  10000   0.7897   0.8413  +0.0000       816.0M       408.0M    38.7M          86.3%
+--------------------------------------------------------------------------------------------------------
+SOTA reference (ImageNet-R 10-task, ViT-B/16-IN21k):
+  GR-LoRA 82.09/86.20 | MACIL 81.82/85.76 | CL-LoRA 79.78/85.10 | SSIAT 79.54/83.67 | SLCA 79.35/83.29
+  all store mu+Sigma per class = 473 MB on ImageNet-R
+--------------------------------------------------------------------------------------------------------
+No config beats CL-LoRA — the storage-matched framing needs rethinking.
+========================================================================================================
+wrote exp11_mrp_sweep_augreg_in21k.json

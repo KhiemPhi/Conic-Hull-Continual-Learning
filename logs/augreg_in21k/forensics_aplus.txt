@@ -1,0 +1,49 @@
+### forensics:aplus  variant=A_plus seed=0
+
+[    4.6s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    5.1s] === A_plus_ff  (cone=0.0, maha=0.0, distill=0.0, stats=accum, freeze_after=0) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  235.5s]   [A_plus_ff t=0] train 0.955 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00 anticollapse 0.000e+00
+[  256.1s]   [A_plus_ff t=0] seen= 20  acc 0.9109
+[  256.1s]   [A_plus_ff t=1] backbone FROZEN (freeze_after=0) — no training
+[  278.1s]   [A_plus_ff t=1] seen= 40  acc 0.8973
+[  278.1s]   [A_plus_ff t=2] backbone FROZEN (freeze_after=0) — no training
+[  297.8s]   [A_plus_ff t=2] seen= 60  acc 0.8750
+[  297.8s]   [A_plus_ff t=3] backbone FROZEN (freeze_after=0) — no training
+[  318.8s]   [A_plus_ff t=3] seen= 80  acc 0.8532
+[  318.8s]   [A_plus_ff t=4] backbone FROZEN (freeze_after=0) — no training
+[  342.0s]   [A_plus_ff t=4] seen=100  acc 0.8358
+[  342.0s]   [A_plus_ff t=5] backbone FROZEN (freeze_after=0) — no training
+[  365.5s]   [A_plus_ff t=5] seen=120  acc 0.8270
+[  365.5s]   [A_plus_ff t=6] backbone FROZEN (freeze_after=0) — no training
+[  388.8s]   [A_plus_ff t=6] seen=140  acc 0.8192
+[  388.8s]   [A_plus_ff t=7] backbone FROZEN (freeze_after=0) — no training
+[  412.4s]   [A_plus_ff t=7] seen=160  acc 0.8077
+[  412.4s]   [A_plus_ff t=8] backbone FROZEN (freeze_after=0) — no training
+[  436.9s]   [A_plus_ff t=8] seen=180  acc 0.7974
+[  436.9s]   [A_plus_ff t=9] backbone FROZEN (freeze_after=0) — no training
+[  462.0s]   [A_plus_ff t=9] seen=200  acc 0.7897
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+!! WARNING: backbone is NOT augreg2 but no A_plus was measured in this run.
+!! The bars below are from augreg2 and are MEANINGLESS here.
+!! Run:  VARIANTS=A_frozen,A_plus python -u exp8_combined.py
+bar source: augreg2 — STALE if MODEL changed
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+           A_plus_ff   0.7897   0.8413 |   +0.0039  +0.0100 |       +0.0507  *** BEATS BAR ***
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.7272   floor
+    A+ first-session   0.7858   0.8313   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: A-last > 0.7858 or A-avg > 0.8313 with ZERO stored images (augreg2 — STALE if MODEL changed).
+================================================================================================

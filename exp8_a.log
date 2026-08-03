@@ -1,0 +1,76 @@
+[    6.2s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    6.7s] === maha_only  (cone=0.0, maha=1.0, distill=0.0) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+[   56.3s]   [maha_only t=0] train 0.824 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[   64.3s]   [maha_only t=0] seen= 20  acc 0.8871
+[   70.6s]   [maha_only t=1] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2366, 768)
+[  119.8s]   [maha_only t=1] train 0.844 | cone 0.000e+00 maha 3.040e-02 distill 0.000e+00
+[  130.5s]   [maha_only t=1] seen= 40  acc 0.8541
+[  135.0s]   [maha_only t=2] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2097, 768)
+[  177.5s]   [maha_only t=2] train 0.811 | cone 0.000e+00 maha 3.276e-02 distill 0.000e+00
+[  188.1s]   [maha_only t=2] seen= 60  acc 0.8085
+[  194.4s]   [maha_only t=3] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2256, 768)
+[  242.0s]   [maha_only t=3] train 0.784 | cone 0.000e+00 maha 3.616e-02 distill 0.000e+00
+[  254.1s]   [maha_only t=3] seen= 80  acc 0.7879
+[  260.0s]   [maha_only t=4] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2603, 768)
+[  308.6s]   [maha_only t=4] train 0.813 | cone 0.000e+00 maha 3.829e-02 distill 0.000e+00
+[  321.2s]   [maha_only t=4] seen=100  acc 0.7932
+[  327.0s]   [maha_only t=5] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2427, 768)
+[  374.3s]   [maha_only t=5] train 0.800 | cone 0.000e+00 maha 4.305e-02 distill 0.000e+00
+[  389.2s]   [maha_only t=5] seen=120  acc 0.7589
+[  395.1s]   [maha_only t=6] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2394, 768)
+[  443.9s]   [maha_only t=6] train 0.850 | cone 0.000e+00 maha 5.065e-02 distill 0.000e+00
+[  460.5s]   [maha_only t=6] seen=140  acc 0.7593
+[  466.4s]   [maha_only t=7] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2601, 768)
+[  516.7s]   [maha_only t=7] train 0.837 | cone 0.000e+00 maha 4.516e-02 distill 0.000e+00
+[  532.4s]   [maha_only t=7] seen=160  acc 0.7472
+[  537.7s]   [maha_only t=8] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2523, 768)
+[  588.0s]   [maha_only t=8] train 0.849 | cone 0.000e+00 maha 4.361e-02 distill 0.000e+00
+[  610.8s]   [maha_only t=8] seen=180  acc 0.7408
+[  617.1s]   [maha_only t=9] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2557, 768)
+[  674.0s]   [maha_only t=9] train 0.836 | cone 0.000e+00 maha 6.073e-02 distill 0.000e+00
+[  692.8s]   [maha_only t=9] seen=200  acc 0.7228
+[  692.9s] === cone_only  (cone=1.0, maha=0.0, distill=0.0) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+[  744.9s]   [cone_only t=0] train 0.842 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[  756.7s]   [cone_only t=0] seen= 20  acc 0.8812
+[  820.4s]   [cone_only t=1] train 0.860 | cone 5.678e-02 maha 0.000e+00 distill 0.000e+00
+[  837.1s]   [cone_only t=1] seen= 40  acc 0.8712
+[  881.1s]   [cone_only t=2] train 0.846 | cone 5.274e-02 maha 0.000e+00 distill 0.000e+00
+[  894.0s]   [cone_only t=2] seen= 60  acc 0.8296
+[  947.7s]   [cone_only t=3] train 0.811 | cone 5.644e-02 maha 0.000e+00 distill 0.000e+00
+[  966.9s]   [cone_only t=3] seen= 80  acc 0.8104
+[ 1020.1s]   [cone_only t=4] train 0.839 | cone 4.539e-02 maha 0.000e+00 distill 0.000e+00
+[ 1040.5s]   [cone_only t=4] seen=100  acc 0.8142
+[ 1091.6s]   [cone_only t=5] train 0.843 | cone 4.599e-02 maha 0.000e+00 distill 0.000e+00
+[ 1109.3s]   [cone_only t=5] seen=120  acc 0.7930
+[ 1160.2s]   [cone_only t=6] train 0.889 | cone 4.035e-02 maha 0.000e+00 distill 0.000e+00
+[ 1180.4s]   [cone_only t=6] seen=140  acc 0.7729
+[ 1229.6s]   [cone_only t=7] train 0.870 | cone 3.885e-02 maha 0.000e+00 distill 0.000e+00
+[ 1250.7s]   [cone_only t=7] seen=160  acc 0.7558
+[ 1298.3s]   [cone_only t=8] train 0.868 | cone 4.177e-02 maha 0.000e+00 distill 0.000e+00
+[ 1319.2s]   [cone_only t=8] seen=180  acc 0.7594
+[ 1375.0s]   [cone_only t=9] train 0.874 | cone 4.465e-02 maha 0.000e+00 distill 0.000e+00
+[ 1399.2s]   [cone_only t=9] seen=200  acc 0.7283
+
+================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R, recompute + virtual features)
+================================================================================================
+             variant   A-last    A-avg    vs BAR  vs prev best
+           maha_only   0.7228   0.7860   -0.0630       -0.0162
+           cone_only   0.7283   0.8016   -0.0575       -0.0107
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.7272   floor
+    A+ first-session   0.7858   <- THE BAR
+       joint ceiling   0.8355
+------------------------------------------------------------------------------------------------
+replay-free Mahalanobis vs seqCE  : +0.0671   (Gram got +0.0833 WITH stored images)
+
+WIN: any variant > 0.7858 with ZERO stored images.
+================================================================================================

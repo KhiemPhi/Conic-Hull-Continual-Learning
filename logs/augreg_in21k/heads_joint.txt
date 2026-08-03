@@ -1,0 +1,19 @@
+### heads_joint
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env FEATS=joint python -u exp9_heads.py
+### started: 2026-08-01T23:06:48-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.2s] [ImageNet-R] train 24000 test 6000 classes 200 | per-class 39..343 (imbalance 8.8x)
+[    4.2s] joint fine-tune (40 ep, aug=1) -- the ceiling configuration
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   42.9s]   joint ep 1/40 train 0.0842
+[  422.1s]   joint ep 11/40 train 0.8473
+Traceback (most recent call last):
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp9_heads.py", line 134, in <module>
+    ok += int((lg.argmax(1) == y).sum()); tot += len(y)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

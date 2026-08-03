@@ -1,0 +1,54 @@
+### split_full_accum
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env ORACLE_STATS=1 TAG=orc VARIANTS=full_accum python -u exp8_combined.py
+### started: 2026-08-01T17:46:11-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.3s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    4.7s] === full_accum_orc  (cone=1.0, maha=1.0, distill=0.1, stats=accum, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   57.5s]   [full_accum_orc t=0] train 0.740 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[   74.8s]   [full_accum_orc t=0] seen= 20  acc 0.8891 | oracle-stats 0.8891  (statistics gap +0.0000)
+[   82.1s]   [full_accum_orc t=1] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2366, 768)
+[  142.0s]   [full_accum_orc t=1] train 0.730 | cone 2.073e-02 maha 2.789e-02 distill 1.335e+01
+[  166.2s]   [full_accum_orc t=1] seen= 40  acc 0.8685 | oracle-stats 0.8658  (statistics gap -0.0027)
+[  170.7s]   [full_accum_orc t=2] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2097, 768)
+[  224.5s]   [full_accum_orc t=2] train 0.694 | cone 2.692e-02 maha 1.989e-02 distill 1.306e+01
+[  248.7s]   [full_accum_orc t=2] seen= 60  acc 0.8414 | oracle-stats 0.8458  (statistics gap +0.0044)
+[  254.8s]   [full_accum_orc t=3] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2256, 768)
+[  312.5s]   [full_accum_orc t=3] train 0.610 | cone 3.257e-02 maha 2.297e-02 distill 1.143e+01
+[  341.8s]   [full_accum_orc t=3] seen= 80  acc 0.8178 | oracle-stats 0.8168  (statistics gap -0.0009)
+[  347.4s]   [full_accum_orc t=4] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2603, 768)
+[  408.0s]   [full_accum_orc t=4] train 0.680 | cone 3.692e-02 maha 2.006e-02 distill 1.015e+01
+[  439.7s]   [full_accum_orc t=4] seen=100  acc 0.7985 | oracle-stats 0.7992  (statistics gap +0.0007)
+[  445.1s]   [full_accum_orc t=5] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2427, 768)
+[  502.6s]   [full_accum_orc t=5] train 0.686 | cone 3.675e-02 maha 2.693e-02 distill 9.823e+00
+[  537.7s]   [full_accum_orc t=5] seen=120  acc 0.7870 | oracle-stats 0.7870  (statistics gap +0.0000)
+[  543.3s]   [full_accum_orc t=6] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2394, 768)
+[  601.4s]   [full_accum_orc t=6] train 0.744 | cone 3.636e-02 maha 2.225e-02 distill 8.748e+00
+[  641.6s]   [full_accum_orc t=6] seen=140  acc 0.7814 | oracle-stats 0.7857  (statistics gap +0.0044)
+[  647.6s]   [full_accum_orc t=7] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2601, 768)
+[  707.9s]   [full_accum_orc t=7] train 0.719 | cone 4.234e-02 maha 2.055e-02 distill 7.631e+00
+[  752.8s]   [full_accum_orc t=7] seen=160  acc 0.7650 | oracle-stats 0.7660  (statistics gap +0.0010)
+[  758.6s]   [full_accum_orc t=8] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2523, 768)
+[  819.3s]   [full_accum_orc t=8] train 0.711 | cone 3.730e-02 maha 2.194e-02 distill 5.624e+00
+[  866.6s]   [full_accum_orc t=8] seen=180  acc 0.7579 | oracle-stats 0.7635  (statistics gap +0.0056)
+[  873.3s]   [full_accum_orc t=9] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2557, 768)
+[  938.6s]   [full_accum_orc t=9] train 0.725 | cone 3.996e-02 maha 2.225e-02 distill 6.935e+00
+[  992.2s]   [full_accum_orc t=9] seen=200  acc 0.7512 | oracle-stats 0.7547  (statistics gap +0.0035)
+[  992.2s]   [full_accum_orc] HEADROOM SPLIT at t=9:  method 0.7512 -> oracle-stats 0.7547 (statistics gap +0.0035) -> ceiling 0.8510 (feature gap +0.0963)
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+Traceback (most recent call last):
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp8_combined.py", line 564, in <module>
+    
+KeyError: 'full_accum'
+### finished: 2026-08-01T18:02:50-07:00  [FAIL(rc=1)]

@@ -1,0 +1,77 @@
+### bars_A_frozen_A_plus
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env VARIANTS=A_frozen,A_plus python -u exp8_combined.py
+### started: 2026-08-01T09:07:57-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    5.5s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    6.0s] === A_frozen  (cone=0.0, maha=0.0, distill=0.0, stats=accum, freeze_after=-1) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[    9.7s]   [A_frozen t=0] backbone FROZEN (freeze_after=-1) — no training
+[   19.2s]   [A_frozen t=0] seen= 20  acc 0.8356
+[   19.2s]   [A_frozen t=1] backbone FROZEN (freeze_after=-1) — no training
+[   30.0s]   [A_frozen t=1] seen= 40  acc 0.8216
+[   30.1s]   [A_frozen t=2] backbone FROZEN (freeze_after=-1) — no training
+[   38.5s]   [A_frozen t=2] seen= 60  acc 0.7879
+[   38.6s]   [A_frozen t=3] backbone FROZEN (freeze_after=-1) — no training
+[   48.8s]   [A_frozen t=3] seen= 80  acc 0.7713
+[   48.8s]   [A_frozen t=4] backbone FROZEN (freeze_after=-1) — no training
+[   61.5s]   [A_frozen t=4] seen=100  acc 0.7462
+[   61.5s]   [A_frozen t=5] backbone FROZEN (freeze_after=-1) — no training
+[   74.1s]   [A_frozen t=5] seen=120  acc 0.7336
+[   74.2s]   [A_frozen t=6] backbone FROZEN (freeze_after=-1) — no training
+[   86.7s]   [A_frozen t=6] seen=140  acc 0.7239
+[   86.7s]   [A_frozen t=7] backbone FROZEN (freeze_after=-1) — no training
+[  102.2s]   [A_frozen t=7] seen=160  acc 0.7070
+[  102.2s]   [A_frozen t=8] backbone FROZEN (freeze_after=-1) — no training
+[  118.1s]   [A_frozen t=8] seen=180  acc 0.6970
+[  118.1s]   [A_frozen t=9] backbone FROZEN (freeze_after=-1) — no training
+[  134.6s]   [A_frozen t=9] seen=200  acc 0.6867
+[  134.6s] === A_plus  (cone=0.0, maha=0.0, distill=0.0, stats=accum, freeze_after=0) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  181.8s]   [A_plus t=0] train 0.747 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[  190.3s]   [A_plus t=0] seen= 20  acc 0.8950
+[  190.3s]   [A_plus t=1] backbone FROZEN (freeze_after=0) — no training
+[  200.5s]   [A_plus t=1] seen= 40  acc 0.8649
+[  200.5s]   [A_plus t=2] backbone FROZEN (freeze_after=0) — no training
+[  208.6s]   [A_plus t=2] seen= 60  acc 0.8427
+[  208.6s]   [A_plus t=3] backbone FROZEN (freeze_after=0) — no training
+[  219.3s]   [A_plus t=3] seen= 80  acc 0.8201
+[  219.3s]   [A_plus t=4] backbone FROZEN (freeze_after=0) — no training
+[  233.3s]   [A_plus t=4] seen=100  acc 0.8002
+[  233.3s]   [A_plus t=5] backbone FROZEN (freeze_after=0) — no training
+[  246.4s]   [A_plus t=5] seen=120  acc 0.7842
+[  246.4s]   [A_plus t=6] backbone FROZEN (freeze_after=0) — no training
+[  259.6s]   [A_plus t=6] seen=140  acc 0.7778
+[  259.6s]   [A_plus t=7] backbone FROZEN (freeze_after=0) — no training
+[  275.3s]   [A_plus t=7] seen=160  acc 0.7591
+[  275.3s]   [A_plus t=8] backbone FROZEN (freeze_after=0) — no training
+[  291.8s]   [A_plus t=8] seen=180  acc 0.7518
+[  291.8s]   [A_plus t=9] backbone FROZEN (freeze_after=0) — no training
+[  307.9s]   [A_plus t=9] seen=200  acc 0.7463
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+            A_frozen   0.6867   0.7511 |   -0.0597  -0.0531 |       -0.0523
+              A_plus   0.7463   0.8042 |   +0.0000  +0.0000 |       +0.0073
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7463   0.8042   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: any variant > 0.7858 with ZERO stored images.
+================================================================================================
+### finished: 2026-08-01T09:13:12-07:00  [OK]

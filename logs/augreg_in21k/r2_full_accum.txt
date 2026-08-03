@@ -1,0 +1,71 @@
+### r2_full_accum
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env AUG=1 EPOCHS=40 TAG=aug40 VARIANTS=full_accum python -u exp8_combined.py
+### started: 2026-08-01T18:15:00-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.7s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    5.1s] === full_accum_aug40  (cone=1.0, maha=1.0, distill=0.1, stats=accum, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  218.4s]   [full_accum_aug40 t=0] train 0.955 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[  221.3s]   [full_accum_aug40 t=0] bank updated (total, sum); energy kept 0.707
+[  229.1s]   [full_accum_aug40 t=0] seen= 20  acc 0.9109
+[  235.8s]   [full_accum_aug40 t=1] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2366, 768)
+[  507.4s]   [full_accum_aug40 t=1] train 0.902 | cone 1.340e-02 maha 6.736e-02 distill 1.239e+01
+[  510.3s]   [full_accum_aug40 t=1] bank updated (total, sum); energy kept 0.698
+[  520.6s]   [full_accum_aug40 t=1] seen= 40  acc 0.8964
+[  524.9s]   [full_accum_aug40 t=2] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2097, 768)
+[  777.2s]   [full_accum_aug40 t=2] train 0.887 | cone 1.597e-02 maha 6.425e-02 distill 1.017e+01
+[  780.2s]   [full_accum_aug40 t=2] bank updated (total, sum); energy kept 0.694
+[  788.7s]   [full_accum_aug40 t=2] seen= 60  acc 0.8750
+[  794.7s]   [full_accum_aug40 t=3] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2256, 768)
+[ 1066.0s]   [full_accum_aug40 t=3] train 0.863 | cone 1.638e-02 maha 9.734e-02 distill 1.022e+01
+[ 1069.1s]   [full_accum_aug40 t=3] bank updated (total, sum); energy kept 0.693
+[ 1080.0s]   [full_accum_aug40 t=3] seen= 80  acc 0.8541
+[ 1085.8s]   [full_accum_aug40 t=4] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2603, 768)
+[ 1379.7s]   [full_accum_aug40 t=4] train 0.884 | cone 1.674e-02 maha 5.781e-02 distill 1.353e+01
+[ 1383.2s]   [full_accum_aug40 t=4] bank updated (total, sum); energy kept 0.693
+[ 1395.9s]   [full_accum_aug40 t=4] seen=100  acc 0.8354
+[ 1402.1s]   [full_accum_aug40 t=5] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2427, 768)
+[ 1683.2s]   [full_accum_aug40 t=5] train 0.878 | cone 1.673e-02 maha 6.816e-02 distill 1.224e+01
+[ 1686.4s]   [full_accum_aug40 t=5] bank updated (total, sum); energy kept 0.692
+[ 1699.5s]   [full_accum_aug40 t=5] seen=120  acc 0.8273
+[ 1705.3s]   [full_accum_aug40 t=6] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2394, 768)
+[ 1983.1s]   [full_accum_aug40 t=6] train 0.913 | cone 1.553e-02 maha 7.243e-02 distill 8.967e+00
+[ 1986.0s]   [full_accum_aug40 t=6] bank updated (total, sum); energy kept 0.692
+[ 2000.0s]   [full_accum_aug40 t=6] seen=140  acc 0.8199
+[ 2006.1s]   [full_accum_aug40 t=7] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2601, 768)
+[ 2300.7s]   [full_accum_aug40 t=7] train 0.893 | cone 1.612e-02 maha 6.739e-02 distill 8.974e+00
+[ 2303.8s]   [full_accum_aug40 t=7] bank updated (total, sum); energy kept 0.692
+[ 2319.6s]   [full_accum_aug40 t=7] seen=160  acc 0.8087
+[ 2325.7s]   [full_accum_aug40 t=8] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2523, 768)
+[ 2608.3s]   [full_accum_aug40 t=8] train 0.887 | cone 1.585e-02 maha 6.473e-02 distill 1.013e+01
+[ 2611.0s]   [full_accum_aug40 t=8] bank updated (total, sum); energy kept 0.692
+[ 2625.7s]   [full_accum_aug40 t=8] seen=180  acc 0.7978
+[ 2631.8s]   [full_accum_aug40 t=9] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2557, 768)
+[ 2918.5s]   [full_accum_aug40 t=9] train 0.910 | cone 1.617e-02 maha 6.788e-02 distill 1.004e+01
+[ 2922.1s]   [full_accum_aug40 t=9] bank updated (total, sum); energy kept 0.691
+[ 2937.5s]   [full_accum_aug40 t=9] seen=200  acc 0.7903
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+    full_accum_aug40   0.7903   0.8416 |   +0.0440  +0.0374 |       +0.0513  *** BEATS BAR ***
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7463   0.8042   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: A-last > 0.7463 or A-avg > 0.8042 with ZERO stored images (measured THIS backbone).
+================================================================================================
+### finished: 2026-08-01T19:04:05-07:00  [OK]

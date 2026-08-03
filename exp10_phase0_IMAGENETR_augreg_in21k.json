@@ -1,0 +1,26 @@
+[
+  {
+    "dataset": "IMAGENETR",
+    "M": "20",
+    "M_used": 20,
+    "N": 1,
+    "rho_aniso": 0.5614818236163364,
+    "rho_iso": 0.4992879778995467,
+    "rho_ctrl": 0.36081062295942945,
+    "rho_nn": 0.36081062295942945,
+    "rho_dist": 0.32987932732259334,
+    "lift": 0.2006712006569069,
+    "cv_extent": 0.07603620858818719,
+    "frac_overlap": 0.9659798994974874,
+    "frac_overlap_iso": 1.0,
+    "radius_med": 1.0353042589695884,
+    "radius_med_iso": 1.1467125483974483,
+    "free": 0.9117233058515987,
+    "free_unif": 1.0,
+    "storage_floats_per_class": 13056,
+    "pass_A": true,
+    "pass_B": true,
+    "pass_C": false,
+    "pass_D": true
+  }
+]

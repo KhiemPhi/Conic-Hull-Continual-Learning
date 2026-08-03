@@ -1,0 +1,82 @@
+### diversity_vs_volume
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env DATASET=IMAGENETR CONTROL=1 python -u crux_headroom.py
+### started: 2026-08-02T09:24:02-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[IMAGENETR] train 24000  test 6000  classes 200
+
+=== frozen phi_0 ===
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+  frozen : NCM 0.5293 | RanPAC 0.6902 (lam=1000)
+
+=== div_only_200cls_12each  [lora aug=1 ep=40 lr=0.0001 warm=3 r=32] ===
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+    subsampled training set -> 2400 images (per_class=12, n_classes=None)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+    [lora] epoch 1/40 train-acc 0.0054 lr 3.40e-05
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:243: UserWarning: The epoch parameter in `scheduler.step()` was not necessary and is being deprecated where possible. Please use `scheduler.step()` to step the scheduler. During the deprecation, if epoch is different from None, the closed form is used instead of the new chainable form, where available. Please open an issue if you are unable to replicate your use case: https://github.com/pytorch/pytorch/issues/new/choose.
+  warnings.warn(EPOCH_DEPRECATION_WARNING, UserWarning)
+    [lora] epoch 5/40 train-acc 0.0333 lr 9.93e-05
+    [lora] epoch 9/40 train-acc 0.1921 lr 9.37e-05
+    [lora] epoch 13/40 train-acc 0.5275 lr 8.30e-05
+    [lora] epoch 17/40 train-acc 0.7050 lr 6.86e-05
+    [lora] epoch 21/40 train-acc 0.7829 lr 5.21e-05
+    [lora] epoch 25/40 train-acc 0.8221 lr 3.54e-05
+    [lora] epoch 29/40 train-acc 0.8517 lr 2.03e-05
+    [lora] epoch 33/40 train-acc 0.8596 lr 8.57e-06
+    [lora] epoch 37/40 train-acc 0.8654 lr 1.61e-06
+    [lora] epoch 40/40 train-acc 0.8742 lr 0.00e+00
+  -> div_only_200cls_12each: NCM 0.7275 | RanPAC 0.7942 (lam=100)  [5 min]
+
+=== vol_only_20cls_120each  [lora aug=1 ep=40 lr=0.0001 warm=3 r=32] ===
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+    subsampled training set -> 2114 images (per_class=120, n_classes=20)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+    [lora] epoch 1/40 train-acc 0.0076 lr 3.40e-05
+    [lora] epoch 5/40 train-acc 0.2119 lr 9.93e-05
+    [lora] epoch 9/40 train-acc 0.6769 lr 9.37e-05
+    [lora] epoch 13/40 train-acc 0.8259 lr 8.30e-05
+    [lora] epoch 17/40 train-acc 0.8704 lr 6.86e-05
+    [lora] epoch 21/40 train-acc 0.8851 lr 5.21e-05
+    [lora] epoch 25/40 train-acc 0.8950 lr 3.54e-05
+    [lora] epoch 29/40 train-acc 0.9044 lr 2.03e-05
+    [lora] epoch 33/40 train-acc 0.9021 lr 8.57e-06
+    [lora] epoch 37/40 train-acc 0.9101 lr 1.61e-06
+    [lora] epoch 40/40 train-acc 0.9196 lr 0.00e+00
+  -> vol_only_20cls_120each: NCM 0.6560 | RanPAC 0.7715 (lam=100)  [4 min]
+
+====================================================================================
+HEADROOM — IMAGENETR / vit_base_patch16_224.augreg_in21k  (joint/offline; adaptation's best case)
+====================================================================================
+                  recipe       NCM    RanPAC |     dNCM   dRanPAC
+                  frozen    0.5293    0.6902 |  +0.0000   +0.0000  <- frozen floor
+  vol_only_20cls_120each    0.6560    0.7715 |  +0.1267   +0.0813
+  div_only_200cls_12each    0.7275    0.7942 |  +0.1982   +0.1040
+                  fullft    0.7877    0.8102 |  +0.2583   +0.1200
+                    lora    0.7825    0.8332 |  +0.2532   +0.1430
+    lora_base_noaug_10ep    0.7825    0.8332 |  +0.2532   +0.1430
+           lora_aug_10ep    0.7842    0.8340 |  +0.2548   +0.1438
+    lora_aug_40ep_lr3e-4    0.8323    0.8478 |  +0.3030   +0.1577
+           lora_aug_40ep    0.8120    0.8498 |  +0.2827   +0.1597
+       lora_aug_40ep_r64    0.8112    0.8510 |  +0.2818   +0.1608
+------------------------------------------------------------------------------------
+CEILING = 0.8510  (lora_aug_40ep_r64)
+recipe gain over the original 10ep/no-aug recipe: +0.0178
+
+No CIL method can exceed 0.8510. Targets:
+  A-last 0.80: needs  68.3% of headroom captured   (reachable)
+  A-last 0.82: needs  80.7% of headroom captured   (reachable)
+  A-last 0.84: needs  93.2% of headroom captured   (reachable)
+RanPAC headroom = +0.1608
+  <= 0  -> NO headroom: no CIL adaptation scheme can beat RanPAC here. Stop.
+  >> 0  -> headroom is real; build the CIL method that captures it.
+====================================================================================
+### finished: 2026-08-02T09:34:03-07:00  [OK]

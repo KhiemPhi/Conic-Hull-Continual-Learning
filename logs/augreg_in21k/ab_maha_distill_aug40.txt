@@ -1,0 +1,61 @@
+### ab_maha_distill_aug40
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env AUG=1 EPOCHS=40 TAG=aug40 VARIANTS=maha_distill_accum python -u exp8_combined.py
+### started: 2026-08-01T21:26:37-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.2s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    4.7s] === maha_distill_accum_aug40  (cone=0.0, maha=1.0, distill=0.1, stats=accum, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  219.2s]   [maha_distill_accum_aug40 t=0] train 0.955 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00 anticollapse 0.000e+00
+[  227.9s]   [maha_distill_accum_aug40 t=0] seen= 20  acc 0.9109
+[  234.4s]   [maha_distill_accum_aug40 t=1] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2366, 768)
+[  514.5s]   [maha_distill_accum_aug40 t=1] train 0.911 | cone 0.000e+00 maha 9.214e-02 distill 1.125e+01 anticollapse 0.000e+00
+[  525.0s]   [maha_distill_accum_aug40 t=1] seen= 40  acc 0.8946
+[  529.3s]   [maha_distill_accum_aug40 t=2] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2097, 768)
+[  782.2s]   [maha_distill_accum_aug40 t=2] train 0.886 | cone 0.000e+00 maha 6.680e-02 distill 1.387e+01 anticollapse 0.000e+00
+[  793.0s]   [maha_distill_accum_aug40 t=2] seen= 60  acc 0.8762
+[  803.0s]   [maha_distill_accum_aug40 t=3] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2256, 768)
+[ 1080.6s]   [maha_distill_accum_aug40 t=3] train 0.859 | cone 0.000e+00 maha 1.055e-01 distill 1.110e+01 anticollapse 0.000e+00
+[ 1091.7s]   [maha_distill_accum_aug40 t=3] seen= 80  acc 0.8527
+[ 1097.6s]   [maha_distill_accum_aug40 t=4] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2603, 768)
+[ 1388.7s]   [maha_distill_accum_aug40 t=4] train 0.870 | cone 0.000e+00 maha 7.263e-02 distill 1.637e+01 anticollapse 0.000e+00
+[ 1400.8s]   [maha_distill_accum_aug40 t=4] seen=100  acc 0.8375
+[ 1406.7s]   [maha_distill_accum_aug40 t=5] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2427, 768)
+[ 1681.5s]   [maha_distill_accum_aug40 t=5] train 0.888 | cone 0.000e+00 maha 9.061e-02 distill 9.154e+00 anticollapse 0.000e+00
+[ 1694.0s]   [maha_distill_accum_aug40 t=5] seen=120  acc 0.8282
+[ 1699.8s]   [maha_distill_accum_aug40 t=6] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2394, 768)
+[ 1970.5s]   [maha_distill_accum_aug40 t=6] train 0.914 | cone 0.000e+00 maha 8.701e-02 distill 1.214e+01 anticollapse 0.000e+00
+[ 1983.9s]   [maha_distill_accum_aug40 t=6] seen=140  acc 0.8209
+[ 1989.5s]   [maha_distill_accum_aug40 t=7] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2601, 768)
+[ 2269.4s]   [maha_distill_accum_aug40 t=7] train 0.888 | cone 0.000e+00 maha 8.009e-02 distill 1.309e+01 anticollapse 0.000e+00
+[ 2285.5s]   [maha_distill_accum_aug40 t=7] seen=160  acc 0.8098
+[ 2292.0s]   [maha_distill_accum_aug40 t=8] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2523, 768)
+[ 2570.0s]   [maha_distill_accum_aug40 t=8] train 0.910 | cone 0.000e+00 maha 9.179e-02 distill 1.096e+01 anticollapse 0.000e+00
+[ 2586.3s]   [maha_distill_accum_aug40 t=8] seen=180  acc 0.7989
+[ 2592.4s]   [maha_distill_accum_aug40 t=9] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2557, 768)
+[ 2887.9s]   [maha_distill_accum_aug40 t=9] train 0.913 | cone 0.000e+00 maha 8.413e-02 distill 1.061e+01 anticollapse 0.000e+00
+[ 2905.6s]   [maha_distill_accum_aug40 t=9] seen=200  acc 0.7910
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: A_plus_aug40, measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+maha_distill_accum_aug40   0.7910   0.8421 |   +0.0013  +0.0008 |       +0.0520  *** BEATS BAR ***
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7897   0.8413   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: A-last > 0.7897 or A-avg > 0.8413 with ZERO stored images (A_plus_aug40, measured THIS backbone).
+================================================================================================
+### finished: 2026-08-01T22:15:09-07:00  [OK]

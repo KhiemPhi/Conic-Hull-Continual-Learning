@@ -1,0 +1,59 @@
+### freepoints:lam  variant=A_plus rank=32
+### model=vit_base_patch16_224.augreg_in21k
+### env: {"AUG": 1, "EPOCHS": 40, "SEED": "0", "TAG": "aug40"}
+### grids: old=[100.0, 1000.0, 10000.0]  wide=[0.1, 1.0, 10.0, 100.0, 1000.0, 10000.0]
+
+[    4.5s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    5.0s] === A_plus_aug40  (cone=0.0, maha=0.0, distill=0.0, stats=accum, freeze_after=0) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  230.3s]   [A_plus_aug40 t=0] train 0.955 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00 anticollapse 0.000e+00
+[  239.4s]   [lam] seen= 20 | old-grid lam=10000   acc 0.9109 | wide-grid lam=10000   acc 0.9109 | free +0.0000
+[  239.4s]   [A_plus_aug40 t=0] seen= 20  acc 0.9109
+[  239.4s]   [A_plus_aug40 t=1] backbone FROZEN (freeze_after=0) — no training
+[  250.1s]   [lam] seen= 40 | old-grid lam=1000    acc 0.8973 | wide-grid lam=1000    acc 0.8973 | free +0.0000
+[  250.1s]   [A_plus_aug40 t=1] seen= 40  acc 0.8973
+[  250.1s]   [A_plus_aug40 t=2] backbone FROZEN (freeze_after=0) — no training
+[  258.9s]   [lam] seen= 60 | old-grid lam=1000    acc 0.8750 | wide-grid lam=1000    acc 0.8750 | free +0.0000
+[  258.9s]   [A_plus_aug40 t=2] seen= 60  acc 0.8750
+[  258.9s]   [A_plus_aug40 t=3] backbone FROZEN (freeze_after=0) — no training
+[  269.6s]   [lam] seen= 80 | old-grid lam=1000    acc 0.8532 | wide-grid lam=1000    acc 0.8532 | free +0.0000
+[  269.6s]   [A_plus_aug40 t=3] seen= 80  acc 0.8532
+[  269.6s]   [A_plus_aug40 t=4] backbone FROZEN (freeze_after=0) — no training
+[  282.0s]   [lam] seen=100 | old-grid lam=1000    acc 0.8358 | wide-grid lam=1000    acc 0.8358 | free +0.0000
+[  282.0s]   [A_plus_aug40 t=4] seen=100  acc 0.8358
+[  282.0s]   [A_plus_aug40 t=5] backbone FROZEN (freeze_after=0) — no training
+[  294.6s]   [lam] seen=120 | old-grid lam=1000    acc 0.8270 | wide-grid lam=1000    acc 0.8270 | free +0.0000
+[  294.6s]   [A_plus_aug40 t=5] seen=120  acc 0.8270
+[  294.6s]   [A_plus_aug40 t=6] backbone FROZEN (freeze_after=0) — no training
+[  307.6s]   [lam] seen=140 | old-grid lam=1000    acc 0.8192 | wide-grid lam=1000    acc 0.8192 | free +0.0000
+[  307.6s]   [A_plus_aug40 t=6] seen=140  acc 0.8192
+[  307.6s]   [A_plus_aug40 t=7] backbone FROZEN (freeze_after=0) — no training
+[  322.6s]   [lam] seen=160 | old-grid lam=1000    acc 0.8077 | wide-grid lam=1000    acc 0.8077 | free +0.0000
+[  322.6s]   [A_plus_aug40 t=7] seen=160  acc 0.8077
+[  322.6s]   [A_plus_aug40 t=8] backbone FROZEN (freeze_after=0) — no training
+[  338.7s]   [lam] seen=180 | old-grid lam=1000    acc 0.7974 | wide-grid lam=1000    acc 0.7974 | free +0.0000
+[  338.7s]   [A_plus_aug40 t=8] seen=180  acc 0.7974
+[  338.7s]   [A_plus_aug40 t=9] backbone FROZEN (freeze_after=0) — no training
+[  355.5s]   [lam] seen=200 | old-grid lam=1000    acc 0.7897 | wide-grid lam=1000    acc 0.7897 | free +0.0000
+[  355.5s]   [A_plus_aug40 t=9] seen=200  acc 0.7897
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: A_plus_aug40, measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+        A_plus_aug40   0.7897   0.8413 |   +0.0000  +0.0000 |       +0.0507
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7897   0.8413   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: A-last > 0.7897 or A-avg > 0.8413 with ZERO stored images (A_plus_aug40, measured THIS backbone).
+================================================================================================

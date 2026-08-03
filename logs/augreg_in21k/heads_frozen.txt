@@ -1,0 +1,71 @@
+### heads_frozen
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env FEATS=frozen python -u exp9_heads.py
+### started: 2026-08-01T23:01:11-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.2s] [ImageNet-R] train 24000 test 6000 classes 200 | per-class 39..343 (imbalance 8.8x)
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   51.3s] features (24000, 768) / (6000, 768)
+[   51.5s]          ncm 0.5293   [0s]
+[   52.7s]        ridge 0.6902   [1s]
+[   54.0s]    ridge_bal 0.6898   [1s]
+[   71.2s]    c1_nonneg 0.4103   [17s]
+[  150.1s]     built 2000 rays over 200 classes
+[  150.8s]    c2_collab 0.4528   [80s]
+[  151.0s]   c3_conefeat 0.6500   [0s]
+[  153.4s]   c4_nn_lowrank 0.2317   [2s]
+[  193.0s]   c5_simplex 0.4500   [40s]
+[  210.8s]   c6_nn_excl 0.4103   [18s]
+[  210.8s]     c7_polar 0.2345   [0s]
+[  211.1s]       c8_soc 0.4443   [0s]
+[  214.6s]   c9_copositive 0.6333   [3s]
+[  216.1s]          lda 0.6720   [1s]
+[  326.7s]        fecam 0.4268   [111s]
+[  328.5s]        probe 0.5503   [2s]
+[  330.0s]     probe_rp 0.6932   [2s]
+
+==============================================================================
+EXP9 — head comparison on FIXED frozen features (vit_base_patch16_224.augreg_in21k)
+==============================================================================
+    probe_rp   0.6932   vs ridge +0.0030
+       ridge   0.6902   vs ridge +0.0000
+   ridge_bal   0.6898   vs ridge -0.0003
+         lda   0.6720   vs ridge -0.0182
+ c3_conefeat   0.6500   vs ridge -0.0402
+c9_copositive   0.6333   vs ridge -0.0568
+       probe   0.5503   vs ridge -0.1398
+         ncm   0.5293   vs ridge -0.1608
+   c2_collab   0.4528   vs ridge -0.2373
+  c5_simplex   0.4500   vs ridge -0.2402
+      c8_soc   0.4443   vs ridge -0.2458
+       fecam   0.4268   vs ridge -0.2633
+   c1_nonneg   0.4103   vs ridge -0.2798
+  c6_nn_excl   0.4103   vs ridge -0.2798
+    c7_polar   0.2345   vs ridge -0.4557
+c4_nn_lowrank   0.2317   vs ridge -0.4585
+------------------------------------------------------------------------------
+OBJECTIVE test (probe - ridge): -0.1398
+  >> +0.01  -> least-squares-to-one-hot is costing accuracy EVERYWHERE; a better
+              head raises the ceiling too and the 0.82/0.84 targets get easier
+  ~  0      -> the head is not the bottleneck; stop here
+IMBALANCE test (ridge_bal - ridge): -0.0003  (free if positive)
+
+CONE HEADS vs ridge:
+      c3_conefeat   0.6500  -0.0402
+    c9_copositive   0.6333  -0.0568
+        c2_collab   0.4528  -0.2373
+       c5_simplex   0.4500  -0.2402
+           c8_soc   0.4443  -0.2458
+        c1_nonneg   0.4103  -0.2798
+       c6_nn_excl   0.4103  -0.2798
+         c7_polar   0.2345  -0.4557
+    c4_nn_lowrank   0.2317  -0.4585
+  best cone head: c3_conefeat 0.6500  vs ridge -0.0402
+  NOTE (1)(4)(5)(6) are CONSTRAINED versions of the same discriminative solve, so
+  they can only win by REGULARISING -- the unconstrained ridge puts ~50% of its
+  mass on negative weights, so the constraint binds hard. (2)(3)(7)(8) are
+  membership/basis scores, the family that has lost every prior head-to-head.
+==============================================================================
+### finished: 2026-08-01T23:06:48-07:00  [OK]

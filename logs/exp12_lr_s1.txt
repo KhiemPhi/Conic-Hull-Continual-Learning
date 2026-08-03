@@ -1,0 +1,35 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    2.6s] stage 'lr': 3 configs, M_RP=[10000, 3000]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[    9.3s]   [augreg_in21k_ep40_lr0.0001_aug1_s1] training task 0 (2299 imgs)
+[  218.2s]   [augreg_in21k_ep40_lr0.0001_aug1_s1] task-0 train acc 0.968 -> frozen
+[  266.2s]   -> augreg_in21k   ep40  lr0.0001  A-last 0.8027  A-avg 0.8552  [264s]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  273.6s]   [augreg_in21k_ep40_lr0.0003_aug1_s1] training task 0 (2299 imgs)
+[  503.1s]   [augreg_in21k_ep40_lr0.0003_aug1_s1] task-0 train acc 0.983 -> frozen
+[  552.0s]   -> augreg_in21k   ep40  lr0.0003  A-last 0.8090  A-avg 0.8609  [286s]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  557.1s]   [augreg_in21k_ep40_lr0.001_aug1_s1] training task 0 (2299 imgs)
+[  793.6s]   [augreg_in21k_ep40_lr0.001_aug1_s1] task-0 train acc 0.989 -> frozen
+[  842.7s]   -> augreg_in21k   ep40  lr0.001   A-last 0.7985  A-avg 0.8559  [291s]
+
+================================================================================================================
+EXP12 [lr] — zero-memory levers on A_plus   (ImageNet-R, 10 tasks, AUG=1)
+deltas are vs THIS run's baseline: augreg_in21k ep40 lr0.0001 = 0.8027/0.8552
+context only, do not diff against these: exp8 A_plus_aug40 0.8027/0.8552 | GR-LoRA 0.8209/0.8620 | MACIL 0.8182/0.8576
+================================================================================================================
+checkpoint        ep      lr A-last@10000  A-avg@10000  A-last@3000   A-avg@3000   dA-last   dA-avg
+augreg_in21k      40  0.0003       0.8090       0.8609       0.7875       0.8470   +0.0063  +0.0057
+augreg_in21k      40  0.0001       0.8027       0.8552       0.7823       0.8424   +0.0000  +0.0000
+augreg_in21k      40   0.001       0.7985       0.8559       0.7767       0.8414   -0.0042  +0.0007
+================================================================================================================
+wrote exp12_free_points_lr_s1.json

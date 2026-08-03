@@ -1,0 +1,52 @@
+### cone_lam100
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env VARIANTS=cone_accum LAM1=100 GRAD_CLIP=1.0 python -u exp8_combined.py
+### started: 2026-08-01T10:26:42-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.7s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=100.0 lam2=1.0 lam3=0.1
+[    5.2s] === cone_accum  (cone=100.0, maha=0.0, distill=0.0, stats=accum, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   55.2s]   [cone_accum t=0] train 0.740 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[   66.5s]   [cone_accum t=0] seen= 20  acc 0.8891
+[  122.8s]   [cone_accum t=1] train 0.763 | cone 1.486e-04 maha 0.000e+00 distill 0.000e+00
+[  136.8s]   [cone_accum t=1] seen= 40  acc 0.8721
+[  179.0s]   [cone_accum t=2] train 0.709 | cone 1.184e-04 maha 0.000e+00 distill 0.000e+00
+[  190.2s]   [cone_accum t=2] seen= 60  acc 0.8408
+[  240.9s]   [cone_accum t=3] train 0.694 | cone 8.916e-05 maha 0.000e+00 distill 0.000e+00
+[  255.5s]   [cone_accum t=3] seen= 80  acc 0.8228
+[  303.3s]   [cone_accum t=4] train 0.763 | cone 7.633e-05 maha 0.000e+00 distill 0.000e+00
+[  317.5s]   [cone_accum t=4] seen=100  acc 0.7887
+[  364.1s]   [cone_accum t=5] train 0.798 | cone 8.164e-05 maha 0.000e+00 distill 0.000e+00
+[  378.8s]   [cone_accum t=5] seen=120  acc 0.7447
+[  426.9s]   [cone_accum t=6] train 0.860 | cone 8.140e-05 maha 0.000e+00 distill 0.000e+00
+[  443.2s]   [cone_accum t=6] seen=140  acc 0.7235
+[  491.9s]   [cone_accum t=7] train 0.826 | cone 7.525e-05 maha 0.000e+00 distill 0.000e+00
+[  509.7s]   [cone_accum t=7] seen=160  acc 0.6923
+[  555.3s]   [cone_accum t=8] train 0.832 | cone 5.426e-05 maha 0.000e+00 distill 0.000e+00
+[  576.1s]   [cone_accum t=8] seen=180  acc 0.6788
+[  629.4s]   [cone_accum t=9] train 0.845 | cone 4.595e-05 maha 0.000e+00 distill 0.000e+00
+[  652.4s]   [cone_accum t=9] seen=200  acc 0.6510
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+          cone_accum   0.6510   0.7704 |   -0.0953  -0.0338 |       -0.0880
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7463   0.8042   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: any variant > 0.7858 with ZERO stored images.
+================================================================================================
+### finished: 2026-08-01T10:37:42-07:00  [OK]

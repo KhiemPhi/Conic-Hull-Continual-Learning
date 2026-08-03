@@ -1,0 +1,80 @@
+### np_kfac_trans
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env PEN_MODE=kfac BANK_MODE=transport TAG=kfactrans VARIANTS=full_accum python -u exp8_combined.py
+### started: 2026-08-01T20:12:55-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    5.2s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    5.6s] === full_accum_kfactrans  (cone=1.0, maha=1.0, distill=0.1, stats=accum, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   55.3s]   [full_accum_kfactrans t=0] train 0.740 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[   60.4s]   [full_accum_kfactrans t=0] K-FAC: energy kept A 0.671 (m=64) x G 0.643 (m_out=64) = 0.432
+[   69.1s]   [full_accum_kfactrans t=0] seen= 20  acc 0.8891
+[   75.4s]   [full_accum_kfactrans t=1] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2366, 768)
+[  136.5s]   [full_accum_kfactrans t=1] train 0.746 | cone 2.355e-10 maha 2.479e-02 distill 1.005e+01
+[  145.5s]   [full_accum_kfactrans t=1] bank transported into the current frame (24 layers)
+[  146.6s]   [full_accum_kfactrans t=1] K-FAC: energy kept A 0.664 (m=64) x G 0.639 (m_out=64) = 0.424
+[  156.5s]   [full_accum_kfactrans t=1] seen= 40  acc 0.8667
+[  161.0s]   [full_accum_kfactrans t=2] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2097, 768)
+[  214.3s]   [full_accum_kfactrans t=2] train 0.692 | cone 2.867e-10 maha 2.822e-02 distill 1.237e+01
+[  222.5s]   [full_accum_kfactrans t=2] bank transported into the current frame (24 layers)
+[  223.6s]   [full_accum_kfactrans t=2] K-FAC: energy kept A 0.661 (m=64) x G 0.641 (m_out=64) = 0.423
+[  231.8s]   [full_accum_kfactrans t=2] seen= 60  acc 0.8402
+[  237.4s]   [full_accum_kfactrans t=3] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2256, 768)
+[  292.6s]   [full_accum_kfactrans t=3] train 0.601 | cone 4.846e-10 maha 3.443e-02 distill 1.117e+01
+[  301.0s]   [full_accum_kfactrans t=3] bank transported into the current frame (24 layers)
+[  302.1s]   [full_accum_kfactrans t=3] K-FAC: energy kept A 0.660 (m=64) x G 0.637 (m_out=64) = 0.421
+[  312.4s]   [full_accum_kfactrans t=3] seen= 80  acc 0.8182
+[  318.5s]   [full_accum_kfactrans t=4] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2603, 768)
+[  378.5s]   [full_accum_kfactrans t=4] train 0.701 | cone 1.137e-09 maha 2.899e-02 distill 1.268e+01
+[  386.7s]   [full_accum_kfactrans t=4] bank transported into the current frame (24 layers)
+[  387.8s]   [full_accum_kfactrans t=4] K-FAC: energy kept A 0.660 (m=64) x G 0.647 (m_out=64) = 0.427
+[  399.5s]   [full_accum_kfactrans t=4] seen=100  acc 0.7971
+[  404.8s]   [full_accum_kfactrans t=5] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2427, 768)
+[  462.6s]   [full_accum_kfactrans t=5] train 0.702 | cone 1.081e-09 maha 3.948e-02 distill 1.091e+01
+[  470.9s]   [full_accum_kfactrans t=5] bank transported into the current frame (24 layers)
+[  472.0s]   [full_accum_kfactrans t=5] K-FAC: energy kept A 0.659 (m=64) x G 0.636 (m_out=64) = 0.419
+[  483.8s]   [full_accum_kfactrans t=5] seen=120  acc 0.7842
+[  489.3s]   [full_accum_kfactrans t=6] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2394, 768)
+[  545.0s]   [full_accum_kfactrans t=6] train 0.746 | cone 8.594e-10 maha 4.031e-02 distill 1.103e+01
+[  553.3s]   [full_accum_kfactrans t=6] bank transported into the current frame (24 layers)
+[  554.4s]   [full_accum_kfactrans t=6] K-FAC: energy kept A 0.659 (m=64) x G 0.647 (m_out=64) = 0.427
+[  566.8s]   [full_accum_kfactrans t=6] seen=140  acc 0.7807
+[  572.2s]   [full_accum_kfactrans t=7] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2601, 768)
+[  631.3s]   [full_accum_kfactrans t=7] train 0.726 | cone 9.748e-10 maha 3.006e-02 distill 8.015e+00
+[  639.7s]   [full_accum_kfactrans t=7] bank transported into the current frame (24 layers)
+[  640.8s]   [full_accum_kfactrans t=7] K-FAC: energy kept A 0.660 (m=64) x G 0.651 (m_out=64) = 0.429
+[  656.0s]   [full_accum_kfactrans t=7] seen=160  acc 0.7622
+[  662.2s]   [full_accum_kfactrans t=8] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2523, 768)
+[  722.8s]   [full_accum_kfactrans t=8] train 0.709 | cone 1.205e-09 maha 5.134e-02 distill 7.644e+00
+[  731.8s]   [full_accum_kfactrans t=8] bank transported into the current frame (24 layers)
+[  732.9s]   [full_accum_kfactrans t=8] K-FAC: energy kept A 0.660 (m=64) x G 0.670 (m_out=64) = 0.442
+[  748.7s]   [full_accum_kfactrans t=8] seen=180  acc 0.7523
+[  754.6s]   [full_accum_kfactrans t=9] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2557, 768)
+[  815.1s]   [full_accum_kfactrans t=9] train 0.752 | cone 1.884e-09 maha 4.345e-02 distill 8.419e+00
+[  823.3s]   [full_accum_kfactrans t=9] bank transported into the current frame (24 layers)
+[  824.4s]   [full_accum_kfactrans t=9] K-FAC: energy kept A 0.660 (m=64) x G 0.647 (m_out=64) = 0.427
+[  840.0s]   [full_accum_kfactrans t=9] seen=200  acc 0.7458
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+full_accum_kfactrans   0.7458   0.8036 |   -0.0005  -0.0006 |       +0.0068
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7463   0.8042   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: A-last > 0.7463 or A-avg > 0.8042 with ZERO stored images (measured THIS backbone).
+================================================================================================
+### finished: 2026-08-01T20:27:02-07:00  [OK]

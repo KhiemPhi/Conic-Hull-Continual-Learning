@@ -1,0 +1,11 @@
+### forensics:seqce  variant=null_baseline seed=0
+
+[    5.0s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    5.5s] === null_baseline_ff  (cone=0.0, maha=0.0, distill=0.0, stats=recompute, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  232.6s]   [null_baseline_ff t=0] train 0.955 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00 anticollapse 0.000e+00
+[  253.4s]   [null_baseline_ff t=0] seen= 20  acc 0.9109
+[  482.6s]   [null_baseline_ff t=1] train 0.970 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00 anticollapse 0.000e+00
+[  505.1s]   [null_baseline_ff t=1] seen= 40  acc 0.8685

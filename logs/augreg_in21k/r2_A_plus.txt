@@ -1,0 +1,52 @@
+### r2_A_plus
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env AUG=1 EPOCHS=40 TAG=aug40 VARIANTS=A_plus python -u exp8_combined.py
+### started: 2026-08-01T18:09:17-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.4s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    4.8s] === A_plus_aug40  (cone=0.0, maha=0.0, distill=0.0, stats=accum, freeze_after=0) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  218.2s]   [A_plus_aug40 t=0] train 0.955 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[  227.0s]   [A_plus_aug40 t=0] seen= 20  acc 0.9109
+[  227.0s]   [A_plus_aug40 t=1] backbone FROZEN (freeze_after=0) — no training
+[  237.8s]   [A_plus_aug40 t=1] seen= 40  acc 0.8973
+[  237.8s]   [A_plus_aug40 t=2] backbone FROZEN (freeze_after=0) — no training
+[  246.3s]   [A_plus_aug40 t=2] seen= 60  acc 0.8750
+[  246.3s]   [A_plus_aug40 t=3] backbone FROZEN (freeze_after=0) — no training
+[  256.6s]   [A_plus_aug40 t=3] seen= 80  acc 0.8532
+[  256.6s]   [A_plus_aug40 t=4] backbone FROZEN (freeze_after=0) — no training
+[  268.0s]   [A_plus_aug40 t=4] seen=100  acc 0.8358
+[  268.0s]   [A_plus_aug40 t=5] backbone FROZEN (freeze_after=0) — no training
+[  279.7s]   [A_plus_aug40 t=5] seen=120  acc 0.8270
+[  279.7s]   [A_plus_aug40 t=6] backbone FROZEN (freeze_after=0) — no training
+[  291.6s]   [A_plus_aug40 t=6] seen=140  acc 0.8192
+[  291.6s]   [A_plus_aug40 t=7] backbone FROZEN (freeze_after=0) — no training
+[  306.2s]   [A_plus_aug40 t=7] seen=160  acc 0.8077
+[  306.2s]   [A_plus_aug40 t=8] backbone FROZEN (freeze_after=0) — no training
+[  321.3s]   [A_plus_aug40 t=8] seen=180  acc 0.7974
+[  321.3s]   [A_plus_aug40 t=9] backbone FROZEN (freeze_after=0) — no training
+[  336.4s]   [A_plus_aug40 t=9] seen=200  acc 0.7897
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+        A_plus_aug40   0.7897   0.8413 |   +0.0433  +0.0371 |       +0.0507  *** BEATS BAR ***
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7463   0.8042   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: A-last > 0.7463 or A-avg > 0.8042 with ZERO stored images (measured THIS backbone).
+================================================================================================
+### finished: 2026-08-01T18:15:00-07:00  [OK]

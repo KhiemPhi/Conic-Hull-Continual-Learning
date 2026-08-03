@@ -1,0 +1,6 @@
+[    3.2s] features from cache exp10_feats_IMAGENETR_augreg_in21k.npz  train (24000, 768) test (6000, 768)
+[    4.0s] IMAGENETR: 200 classes, d=768, train 24000, test 6000
+[    4.1s] frozen NCM: overall acc 0.5293 | per-class err mean 0.455 sd 0.175
+[    4.1s] controls: rho(nn_angle) +0.361  rho(dist_only) +0.330 -> best control +0.361
+[  265.6s]   M=all (med 112)  N=1  rho_aniso +0.543 rho_iso +0.584 lift +0.182  CV 0.042  ovl 1.000  free 0.001  [261s]
+[  520.2s]   M=all (med 112)  N=2  rho_aniso +0.456 rho_iso +0.452 lift +0.095  CV 0.057  ovl 1.000  free 0.005  [255s]

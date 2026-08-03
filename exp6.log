@@ -1,0 +1,11 @@
+[    5.7s] [ImageNet-R] train 24000 test 6000 classes 200 | 10x20 | m_eig=64 lam1=1.0
+[    6.2s] === VARIANT base  (lam1=0.0, virtual=none) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+[   55.5s]   [base t=0] train-acc 0.799  cone-pen 0.0000
+[   63.8s]   [base t=0] seen= 20  acc 0.8851
+[  111.7s]   [base t=1] train-acc 0.904  cone-pen 0.0000
+[  122.1s]   [base t=1] seen= 40  acc 0.4973
+[  162.1s]   [base t=2] train-acc 0.864  cone-pen 0.0000
+[  170.5s]   [base t=2] seen= 60  acc 0.2780

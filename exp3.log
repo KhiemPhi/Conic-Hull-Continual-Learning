@@ -1,0 +1,35 @@
+[clip] splice_out/cifar100_clip.npz  (50000, 512)
+
+=== building hulls: 100 fine + 20 coarse (K=20, tau=p10) ===
+  done
+
+=== A. does cone(fine) sit inside cone(its superclass)? ===
+  containment fine->coarse  0.9017
+  containment coarse->fine  0.4396
+  ASYMMETRY (order signal)  +0.4621
+
+=== B. CONTROL — unrelated (fine, coarse) pairs ===
+  containment fine->UNRELATED coarse 0.2116
+  containment UNRELATED coarse->fine 0.0481
+  ASYMMETRY (should be ~0)           +0.1635
+
+=== C. ANTISYMMETRY — sibling fine classes (neither should contain the other) ===
+  mean sibling containment 0.3273  (want LOW; high => cones over-cover)
+
+=== D. TRANSITIVITY — fine ⊆ coarse and coarse ⊆ ALL implies fine ⊆ ALL ===
+  fine  -> ALL  0.9114
+  coarse-> ALL  0.9134   (both should be HIGH if the order is coherent)
+
+============================================================================================
+EXP3 — conic order / entailment structure (clip, CIFAR-100 hierarchy)
+============================================================================================
+  real   pairs: fine->coarse 0.9017 | coarse->fine 0.4396 | asym +0.4621
+  control pairs: fine->coarse 0.2116 | coarse->fine 0.0481 | asym +0.1635
+  sibling containment 0.3273 | fine->ALL 0.9114 coarse->ALL 0.9134
+--------------------------------------------------------------------------------------------
+WIN CONDITION: real asymmetry >> control asymmetry (~0), sibling containment LOW,
+and transitivity holds. That would mean a semantic PARTIAL ORDER already exists,
+unsupervised, in pretrained feature space — readable with conic geometry alone.
+FAILURE MODE to watch: if containment is ~1.0 everywhere the cones over-cover
+(K rays spanning <=K of D dims) — lower PCT or raise K_RAYS and re-run.
+============================================================================================

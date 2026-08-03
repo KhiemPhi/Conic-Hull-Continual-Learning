@@ -1,0 +1,57 @@
+### exp3b_order_baselines
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: python -u exp3b_order_baselines.py
+### started: 2026-08-01T10:48:40-07:00
+
+[    0.6s] [clip] splice_out/cifar100_clip.npz  (50000, 512)  K=20  tau=p10
+[    0.6s] === primitive: ball ===
+[    0.9s]   ball: 100 fine regions built (0.3s)
+[    1.3s]   ball: 20 coarse regions built (0.7s)
+[    1.4s]   ball: containment 25/100 fine classes (0.7s)
+[    1.5s]   ball: containment 50/100 fine classes (0.8s)
+[    1.5s]   ball: containment 75/100 fine classes (0.9s)
+[    1.6s]   ball: containment 100/100 fine classes (1.0s)
+[    1.8s]   ball: own 0.9021 unrel 0.2124 GAP +0.6897 | AUROC 0.9644 top1 0.9700 | rev 0.4300 sib 0.3156
+[    1.8s] === primitive: multiproto ===
+[   18.4s]   multiproto: 100 fine regions built (16.6s)
+[   28.9s]   multiproto: 20 coarse regions built (27.1s)
+[   29.1s]   multiproto: containment 25/100 fine classes (27.3s)
+[   29.2s]   multiproto: containment 50/100 fine classes (27.4s)
+[   29.3s]   multiproto: containment 75/100 fine classes (27.5s)
+[   29.4s]   multiproto: containment 100/100 fine classes (27.7s)
+[   30.1s]   multiproto: own 0.9149 unrel 0.0927 GAP +0.8222 | AUROC 0.9965 top1 1.0000 | rev 0.3941 sib 0.2616
+[   30.1s] === primitive: subspace ===
+[   33.1s]   subspace: 100 fine regions built (3.0s)
+[   36.6s]   subspace: 20 coarse regions built (6.6s)
+[   37.3s]   subspace: containment 25/100 fine classes (7.2s)
+[   37.9s]   subspace: containment 50/100 fine classes (7.8s)
+[   38.5s]   subspace: containment 75/100 fine classes (8.4s)
+[   39.1s]   subspace: containment 100/100 fine classes (9.0s)
+[   41.8s]   subspace: own 0.9099 unrel 0.0786 GAP +0.8313 | AUROC 0.9949 top1 1.0000 | rev 0.4015 sib 0.2664
+[   41.8s] === primitive: cone ===
+[   97.2s]   cone: 100 fine regions built (55.5s)
+[  116.0s]   cone: 20 coarse regions built (74.2s)
+[  117.5s]   cone: containment 25/100 fine classes (75.7s)
+[  118.9s]   cone: containment 50/100 fine classes (77.1s)
+[  120.4s]   cone: containment 75/100 fine classes (78.6s)
+[  122.0s]   cone: containment 100/100 fine classes (80.2s)
+[  125.2s]   cone: own 0.9011 unrel 0.2282 GAP +0.6729 | AUROC 0.9584 top1 0.9300 | rev 0.4414 sib 0.3297
+
+========================================================================================================
+EXP3b — is the semantic order CONE-SPECIFIC?  (clip, CIFAR-100, K=20, tau=p10)
+========================================================================================================
+  primitive | fine->own fine->unrel   SEM GAP |   AUROC   top-1  meanRank | coarse->fine  sibling
+--------------------------------------------------------------------------------------------------------
+       ball |    0.9021      0.2124   +0.6897 |  0.9644  0.9700      1.04 |       0.4300   0.3156
+ multiproto |    0.9149      0.0927   +0.8222 |  0.9965  1.0000      1.00 |       0.3941   0.2616
+   subspace |    0.9099      0.0786   +0.8313 |  0.9949  1.0000      1.00 |       0.4015   0.2664
+       cone |    0.9011      0.2282   +0.6729 |  0.9584  0.9300      1.12 |       0.4414   0.3297  <- claim
+--------------------------------------------------------------------------------------------------------
+cone AUROC   0.9584  vs best non-conic (multiproto) 0.9965   delta -0.0381
+cone SEM GAP +0.6729  vs best non-conic (subspace) +0.8313   delta -0.1584
+
+=> CONE LOSES to a simpler region primitive. Report the winner instead.
+========================================================================================================
+NOTE: AUROC/top-1 are threshold-free (no tau), so they are the primary numbers;
+SEM GAP depends on the p10 calibration. All primitives share fit/holdout/tau protocol.
+### finished: 2026-08-01T10:50:49-07:00  [OK]

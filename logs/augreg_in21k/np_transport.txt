@@ -1,0 +1,80 @@
+### np_transport
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env BANK_MODE=transport TAG=trans VARIANTS=full_accum python -u exp8_combined.py
+### started: 2026-08-01T19:32:02-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.3s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    4.9s] === full_accum_trans  (cone=1.0, maha=1.0, distill=0.1, stats=accum, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   56.4s]   [full_accum_trans t=0] train 0.740 | cone 0.000e+00 maha 0.000e+00 distill 0.000e+00
+[   59.6s]   [full_accum_trans t=0] bank updated (total, transport); energy kept 0.671
+[   68.3s]   [full_accum_trans t=0] seen= 20  acc 0.8891
+[   75.0s]   [full_accum_trans t=1] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2366, 768)
+[  136.1s]   [full_accum_trans t=1] train 0.730 | cone 2.181e-02 maha 2.183e-02 distill 9.896e+00
+[  144.1s]   [full_accum_trans t=1] bank transported into the current frame (24 layers)
+[  144.4s]   [full_accum_trans t=1] bank updated (total, transport); energy kept 0.664
+[  155.9s]   [full_accum_trans t=1] seen= 40  acc 0.8667
+[  160.5s]   [full_accum_trans t=2] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2097, 768)
+[  211.4s]   [full_accum_trans t=2] train 0.684 | cone 2.606e-02 maha 2.498e-02 distill 1.329e+01
+[  218.1s]   [full_accum_trans t=2] bank transported into the current frame (24 layers)
+[  218.3s]   [full_accum_trans t=2] bank updated (total, transport); energy kept 0.661
+[  226.5s]   [full_accum_trans t=2] seen= 60  acc 0.8402
+[  231.9s]   [full_accum_trans t=3] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2256, 768)
+[  285.1s]   [full_accum_trans t=3] train 0.590 | cone 3.345e-02 maha 2.344e-02 distill 1.233e+01
+[  291.9s]   [full_accum_trans t=3] bank transported into the current frame (24 layers)
+[  292.2s]   [full_accum_trans t=3] bank updated (total, transport); energy kept 0.660
+[  302.4s]   [full_accum_trans t=3] seen= 80  acc 0.8196
+[  308.0s]   [full_accum_trans t=4] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2603, 768)
+[  367.6s]   [full_accum_trans t=4] train 0.692 | cone 3.565e-02 maha 2.086e-02 distill 1.255e+01
+[  375.0s]   [full_accum_trans t=4] bank transported into the current frame (24 layers)
+[  375.2s]   [full_accum_trans t=4] bank updated (total, transport); energy kept 0.659
+[  387.6s]   [full_accum_trans t=4] seen=100  acc 0.7971
+[  393.4s]   [full_accum_trans t=5] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2427, 768)
+[  453.4s]   [full_accum_trans t=5] train 0.690 | cone 3.737e-02 maha 2.727e-02 distill 8.922e+00
+[  460.9s]   [full_accum_trans t=5] bank transported into the current frame (24 layers)
+[  461.2s]   [full_accum_trans t=5] bank updated (total, transport); energy kept 0.659
+[  473.7s]   [full_accum_trans t=5] seen=120  acc 0.7859
+[  480.4s]   [full_accum_trans t=6] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2394, 768)
+[  538.9s]   [full_accum_trans t=6] train 0.730 | cone 3.833e-02 maha 2.581e-02 distill 1.029e+01
+[  546.4s]   [full_accum_trans t=6] bank transported into the current frame (24 layers)
+[  546.7s]   [full_accum_trans t=6] bank updated (total, transport); energy kept 0.659
+[  560.0s]   [full_accum_trans t=6] seen=140  acc 0.7809
+[  566.3s]   [full_accum_trans t=7] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2601, 768)
+[  629.0s]   [full_accum_trans t=7] train 0.710 | cone 4.000e-02 maha 2.111e-02 distill 8.265e+00
+[  636.6s]   [full_accum_trans t=7] bank transported into the current frame (24 layers)
+[  636.9s]   [full_accum_trans t=7] bank updated (total, transport); energy kept 0.660
+[  652.3s]   [full_accum_trans t=7] seen=160  acc 0.7639
+[  658.0s]   [full_accum_trans t=8] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2523, 768)
+[  715.4s]   [full_accum_trans t=8] train 0.681 | cone 4.221e-02 maha 3.085e-02 distill 7.768e+00
+[  723.0s]   [full_accum_trans t=8] bank transported into the current frame (24 layers)
+[  723.3s]   [full_accum_trans t=8] bank updated (total, transport); energy kept 0.660
+[  738.4s]   [full_accum_trans t=8] seen=180  acc 0.7568
+[  744.6s]   [full_accum_trans t=9] Mahalanobis: 20 class Sigma^-1/2 (shrink=0.1), cache (2557, 768)
+[  806.0s]   [full_accum_trans t=9] train 0.727 | cone 4.485e-02 maha 2.584e-02 distill 9.081e+00
+[  813.8s]   [full_accum_trans t=9] bank transported into the current frame (24 layers)
+[  814.0s]   [full_accum_trans t=9] bank updated (total, transport); energy kept 0.660
+[  829.3s]   [full_accum_trans t=9] seen=200  acc 0.7493
+
+====================================================================================================
+EXP8 — combined ZERO-IMAGE objective (Split-ImageNet-R)
+backbone: vit_base_patch16_224.augreg_in21k
+bar source: measured THIS backbone
+====================================================================================================
+             variant   A-last    A-avg |   dA-last   dA-avg |  vs prev best
+    full_accum_trans   0.7493   0.8049 |   +0.0030  +0.0007 |       +0.0103  *** BEATS BAR ***
+------------------------------------------------------------------------------------------------
+         seqCE+synth   0.6557   no relational loss
+       seqGram+synth   0.7390   prev best — used 20 IMAGES/class
+            A_frozen   0.6867   floor
+    A+ first-session   0.7463   0.8042   <- THE BAR (both metrics)
+       joint ceiling   0.8355
+     cone_only accum   0.7065   0.8232   prior accum run (A-avg only -0.008 from the bar)
+------------------------------------------------------------------------------------------------
+
+WIN: A-last > 0.7463 or A-avg > 0.8042 with ZERO stored images (measured THIS backbone).
+================================================================================================
+### finished: 2026-08-01T19:45:58-07:00  [OK]

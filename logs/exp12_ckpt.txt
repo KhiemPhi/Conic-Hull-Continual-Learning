@@ -1,0 +1,75 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    2.6s] stage 'ckpt': 2 configs, M_RP=[10000, 3000]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[    9.0s]   [augreg_in21k_ep40_lr0.0001_aug1_s0] training task 0 (2176 imgs)
+[  222.7s]   [augreg_in21k_ep40_lr0.0001_aug1_s0] task-0 train acc 0.955 -> frozen
+[  271.1s]   -> augreg_in21k   ep40  lr0.0001  A-last 0.7897  A-avg 0.8413  [268s]
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/timm/vit_base_patch16_224.orig_in21k/resolve/main/model.safetensors
+Retrying in 1s [Retry 1/5].
+Traceback (most recent call last):
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp12_free_points.py", line 305, in <module>
+    rows, out = run_configs(cfgs, stage)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp12_free_points.py", line 248, in run_configs
+    Ftr, Fte = aplus_features(model_name, ep, lr)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp12_free_points.py", line 143, in aplus_features
+    model = load_backbone(model_name, pretrained=True, num_classes=0, device=DEV,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/backbone.py", line 676, in load_backbone
+    model = timm.create_model(model_name, pretrained=pretrained,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/timm/models/_factory.py", line 138, in create_model
+    model = create_fn(
+            ^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/timm/models/vision_transformer.py", line 3193, in vit_base_patch16_224
+    model = _create_vision_transformer('vit_base_patch16_224', pretrained=pretrained, **dict(model_args, **kwargs))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/timm/models/vision_transformer.py", line 3093, in _create_vision_transformer
+    return build_model_with_cfg(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/timm/models/_builder.py", line 457, in build_model_with_cfg
+    load_pretrained(
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/timm/models/_builder.py", line 226, in load_pretrained
+    state_dict = load_state_dict_from_hf(pretrained_loc, weights_only=True, cache_dir=cache_dir)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/timm/models/_hub.py", line 227, in load_state_dict_from_hf
+    cached_safe_file = hf_hub_download(
+                       ^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1013, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1147, in _hf_hub_download_to_cache_dir
+    _get_metadata_or_catch_error(
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1712, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1620, in get_hf_file_metadata
+    response = _httpx_follow_relative_redirects_with_backoff(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 719, in _httpx_follow_relative_redirects_with_backoff
+    response = http_backoff(
+               ^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 596, in http_backoff
+    return next(
+           ^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 504, in _http_backoff_base
+    response = client.request(method=method, url=url, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/httpx/_client.py", line 901, in send
+    raise RuntimeError("Cannot send a request, as the client has been closed.")
+RuntimeError: Cannot send a request, as the client has been closed.

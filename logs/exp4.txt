@@ -1,0 +1,77 @@
+[adapters] 10 x 1,769,472 params
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+[cone] extreme-ray adapters (of 10): [0, 3, 4, 5, 9]
+
+=== coordinate ascent: SIGNED (task arithmetic) ===
+    init 0.5433
+    round 0 coord 0: val 0.6400 alpha=[-0.5  0.   0.   0.   0.   0.   0.   0.   0.   1. ]
+    round 0 coord 1: val 0.6400 alpha=[-0.5  0.   0.   0.   0.   0.   0.   0.   0.   1. ]
+    round 0 coord 2: val 0.6440 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.    1.  ]
+    round 0 coord 3: val 0.6440 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.    1.  ]
+    round 0 coord 4: val 0.6440 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.    1.  ]
+    round 0 coord 5: val 0.6440 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.    1.  ]
+    round 0 coord 6: val 0.6440 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.    1.  ]
+    round 0 coord 7: val 0.6440 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.    1.  ]
+    round 0 coord 8: val 0.6440 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.    1.  ]
+    round 0 coord 9: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 0: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 1: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 2: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 3: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 4: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 5: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 6: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 7: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 8: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+    round 1 coord 9: val 0.7320 alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+
+=== coordinate ascent: CONIC (alpha >= 0) ===
+    init 0.5433
+    round 0 coord 0: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 1: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 2: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 3: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 4: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 5: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 6: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 7: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 8: val 0.5433 alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    round 0 coord 9: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 0: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 1: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 2: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 3: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 4: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 5: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 6: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 7: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 8: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+    round 1 coord 9: val 0.7013 alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+
+=== final evaluation on the FULL test set (all 200 classes) ===
+        last_only acc 0.5377  neg-mass +0.00  alpha=[0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+          uniform acc 0.6893  neg-mass +0.00  alpha=[0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1]
+    conic_extreme acc 0.6920  neg-mass +0.00  alpha=[0.2 0.  0.  0.2 0.2 0.2 0.  0.  0.  0.2]
+    signed_search acc 0.7188  neg-mass -1.00  alpha=[-0.5   0.   -0.25  0.    0.    0.    0.    0.    0.   -0.25]
+     conic_search acc 0.7028  neg-mass +0.00  alpha=[0.   0.   0.   0.   0.   0.   0.   0.   0.   0.75]
+
+============================================================================================
+EXP4 — non-negative (conic) vs signed model merging, Split-ImageNet-R, 200-way NCM
+============================================================================================
+  signed_search   0.7188   neg-mass -1.00
+   conic_search   0.7028   neg-mass +0.00
+  conic_extreme   0.6920   neg-mass +0.00
+        uniform   0.6893   neg-mass +0.00
+      last_only   0.5377   neg-mass +0.00
+--------------------------------------------------------------------------------------------
+conic_search - signed_search = -0.0160   <- does forbidding subtraction HELP?
+conic_search - uniform       = +0.0135
+conic_extreme (5 adapters) - uniform (10) = +0.0027   <- do extreme rays SPAN the family?
+
+WIN CONDITION: conic >= signed (no destructive interference) AND conic_extreme
+matches uniform with fewer adapters (a storage/compute win from spanning).
+NOTE: if signed_search picks ~no negative mass on its own (neg-mass ~ 0), the
+constraint is vacuous here and the comparison is uninformative — report that.
+============================================================================================

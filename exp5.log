@@ -1,0 +1,63 @@
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+[lora] 1,769,472 params -> JL sketch to 512
+
+=== Q1: is the per-task gradient set cone-shaped / low-dimensional? ===
+  task 0: n=24 eff-rank 21.89 | pairwise cos mean +0.127 min -0.177 | frac<0 0.083
+  task 1: n=24 eff-rank 18.25 | pairwise cos mean +0.356 min +0.130 | frac<0 0.000
+  task 2: n=24 eff-rank 18.49 | pairwise cos mean +0.327 min +0.010 | frac<0 0.000
+  task 3: n=24 eff-rank 17.81 | pairwise cos mean +0.374 min +0.115 | frac<0 0.000
+  task 4: n=24 eff-rank 18.90 | pairwise cos mean +0.295 min -0.018 | frac<0 0.004
+  task 5: n=24 eff-rank 17.79 | pairwise cos mean +0.356 min -0.004 | frac<0 0.004
+  task 6: n=24 eff-rank 17.83 | pairwise cos mean +0.344 min +0.078 | frac<0 0.000
+  task 7: n=24 eff-rank 18.66 | pairwise cos mean +0.322 min -0.105 | frac<0 0.004
+  task 8: n=24 eff-rank 12.20 | pairwise cos mean +0.640 min +0.324 | frac<0 0.000
+  task 9: n=24 eff-rank 17.49 | pairwise cos mean +0.374 min +0.067 | frac<0 0.000
+
+=== Q2: which K-sized memory best predicts conflict with an OLD task? ===
+  pair 0->1 done
+  pair 1->2 done
+  pair 2->3 done
+  pair 3->4 done
+  pair 4->5 done
+  pair 5->6 done
+  pair 6->7 done
+  pair 7->8 done
+  pair 8->9 done
+
+============================================================================================
+EXP5 — conic hull of GRADIENTS (ImageNet-R, LoRA grads, JL-sketched)
+============================================================================================
+  K      memory  corr w/ true conflict    abs err
+  1        mean                 1.0000     0.0250
+  1      random                 0.5710     0.0459
+  1      kmeans                 1.0000     0.0250
+  1   cone_rays                 0.3284     0.0544
+
+  3        mean                 1.0000     0.0250
+  3      random                 0.7566     0.0281
+  3      kmeans                 0.9835     0.0176
+  3   cone_rays                 0.7899     0.0212
+
+  5        mean                 1.0000     0.0250
+  5      random                 0.9169     0.0159
+  5      kmeans                 0.9820     0.0130
+  5   cone_rays                 0.8955     0.0131
+
+ 10        mean                 1.0000     0.0250
+ 10      random                 0.9371     0.0105
+ 10      kmeans                 0.9851     0.0073
+ 10   cone_rays                 0.9602     0.0109
+
+--------------------------------------------------------------------------------------------
+mean corr by memory: {'mean': np.float64(1.0), 'random': np.float64(0.7954), 'kmeans': np.float64(0.9877), 'cone_rays': np.float64(0.7435)}
+cone_rays - kmeans = -0.2441   <- rays vs centroids at matched budget
+cone_rays - mean   = -0.2565   <- is ANY structure better than the mean gradient?
+
+WIN CONDITION: cone_rays beats mean AND kmeans. That would say the conflict set has
+genuine conic structure a few extreme directions capture — i.e. GEM could store K
+directions instead of exemplars. If 'mean' wins again, gradient space behaves like
+feature space and the cone line is closed everywhere.
+Q1 READ: eff-rank << n and frac(cos<0) > 0 => a real, low-dimensional conflict cone.
+============================================================================================

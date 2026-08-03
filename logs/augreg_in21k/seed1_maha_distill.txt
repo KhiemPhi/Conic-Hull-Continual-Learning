@@ -1,0 +1,37 @@
+### seed1_maha_distill
+### model=vit_base_patch16_224.augreg_in21k
+### cmd: env SEED=1 AUG=1 EPOCHS=40 TAG=aug40 VARIANTS=maha_distill_accum python -u exp8_combined.py
+### started: 2026-08-02T13:26:35-07:00
+
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.2s] [ImageNet-R] train 24000 test 6000 | 10x20 | lam1=1.0 lam2=1.0 lam3=0.1
+[    4.6s] === maha_distill_accum_aug40  (cone=0.0, maha=1.0, distill=0.1, stats=accum, freeze_after=None) ===
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+Traceback (most recent call last):
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp8_combined.py", line 754, in <module>
+    results[v + TAG] = run(v + TAG, *VAR[v])
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp8_combined.py", line 569, in run
+    for x, lab, ridx in loader:
+                        ^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 708, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1458, in _next_data
+    idx, data = self._get_data()
+                ^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1410, in _get_data
+    success, data = self._try_get_data()
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1251, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/fbcode/platform010/lib/python3.12/queue.py", line 180, in get
+    self.not_empty.wait(remaining)
+  File "/usr/local/fbcode/platform010/lib/python3.12/threading.py", line 359, in wait
+    gotit = waiter.acquire(True, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
