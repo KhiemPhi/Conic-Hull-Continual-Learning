@@ -101,8 +101,13 @@ XCE_SCALE = float(os.environ.get("XCE_SCALE", 16.0))
 N_PROBE = 512
 SPLIT_SEED = 1993
 REPO = os.path.dirname(os.path.abspath(__file__))
+# Bump when the METHOD changes. v1 = learnable per-task head (degenerate: random-head noise
+# at small ep, and a learnable current row that shunted the cross-task gradient away from
+# phi). v2 = fixed cosine head for t>0, seeded-before-backbone. Without this the resume logic
+# happily reports v1 rows next to v2 rows in the same table.
+METHOD_VERSION = "v2"
 OUT = os.path.join(REPO,
-                   f"exp18_aplusplus_{DS}_T{T}_s{SEED}"
+                   f"exp18_aplusplus_{METHOD_VERSION}_{DS}_T{T}_s{SEED}"
                    + (f"_{XCE}" if XCE != "none" else "") + ".json")
 
 _cfg = resolve_model_data_config(timm.create_model(MODEL, pretrained=False, num_classes=0))
@@ -254,12 +259,17 @@ def solve_eval(G, C, Zv, yv, Zt, yt, seen):
 def run(gamma):
     sched = [epochs_at(t, gamma) for t in range(T)]
     log(f"=== gamma={gamma:g}  epoch schedule {sched}  (total extra {sum(sched[1:])})")
+    # Seed BEFORE load_backbone. inject_lora draws lora_A from the global torch RNG, so
+    # seeding afterwards leaves the initialisation at the mercy of whatever consumed the
+    # stream earlier -- which differs between the first and second gamma in a single process,
+    # and differs again between exp12/exp16/exp18. That is worth ~0.5 A-Last and it destroys
+    # the pairing this sweep depends on: every arm must start from the SAME backbone.
+    torch.manual_seed(SEED)
+    np.random.seed(SEED)
     model = load_backbone(MODEL, pretrained=True, num_classes=0, device=DEV, lora_rank=32,
                           lora_alpha=4.0, lora_config="task_shared")
     freeze_non_lora(model)
     lp = list(get_lora_params(model))
-    torch.manual_seed(SEED)
-    np.random.seed(SEED)
 
     G = torch.zeros(M_RP, M_RP, device=DEV, dtype=torch.float64)
     C = torch.zeros(M_RP, N_CLS, device=DEV, dtype=torch.float64)
@@ -273,38 +283,55 @@ def run(gamma):
         use_xce = (XCE == "proto" and t > 0 and len(PROTO) > 0 and ep > 0)
         if ep > 0:
             lr_t = LR if t == 0 else LR_LATER
-            if use_xce:
-                # rows: [frozen old prototypes | learnable current classes]. Current rows are
-                # initialised from CURRENT-frame class means, not randomly -- otherwise the
-                # old rows are meaningful while the new ones are noise and the early
-                # cross-task gradient is measuring initialisation, not geometry.
-                old_c = sorted(PROTO.keys())
-                Zi = un(extract(model, TR_EV, FIT[t]))
-                yi = YTR[FIT[t]]
-                cur_init = un(np.stack([Zi[yi == c].mean(0) for c in cls]))
-                W_old = torch.tensor(np.stack([PROTO[c] for c in old_c]),
-                                     device=DEV, dtype=torch.float32)
-                W_cur = nn.Parameter(torch.tensor(cur_init, device=DEV, dtype=torch.float32))
-                pos = {c: i for i, c in enumerate(old_c + [int(c) for c in cls])}
-                head_params = [W_cur]
-
-                def logit_fn(f):
-                    W = torch.cat([W_old, W_cur], 0)
-                    return XCE_SCALE * (Fn.normalize(f, dim=1) @ Fn.normalize(W, dim=1).T)
-                remap = pos
-            else:
-                head = nn.Linear(768, CPT).to(DEV)   # cpt-way CE over the current task only
+            if t == 0:
+                # UNCHANGED from A_plus: learnable linear head. Task 0 must stay bit-identical
+                # or gamma=0 stops reproducing the exp16 reference and there is no baseline.
+                head = nn.Linear(768, CPT).to(DEV)
                 remap = {int(c): i for i, c in enumerate(cls)}
                 head_params = list(head.parameters())
 
                 def logit_fn(f):
                     return head(f)
+            else:
+                # LATER TASKS: FIXED cosine head, NOTHING learnable but the LoRA params.
+                # Two degeneracies this removes, both of which made the gamma sweep measure
+                # the wrong thing:
+                #   (a) a freshly RANDOM linear head + fresh Adam state means that at ep=1-2
+                #       (~17 steps) the backbone is chasing a classifier that has not learned
+                #       anything yet -- "train a little" became "inject a little noise",
+                #       which corrupts exactly the small-gamma regime this sweep exists for.
+                #   (b) with XCE=proto, a LEARNABLE current-class row is a shunt: CE over all
+                #       seen classes is minimised more cheaply by moving W_cur away from the
+                #       frozen W_old than by moving phi. The cross-task pressure never
+                #       reached the representation.
+                # Fixing every row makes the loss meaningful from step 1 and sends every
+                # gradient into phi, which is what "adapt the backbone a bit" was meant to be.
+                Zi = un(extract(model, TR_EV, FIT[t]))
+                yi = YTR[FIT[t]]
+                W_cur = torch.tensor(un(np.stack([Zi[yi == c].mean(0) for c in cls])),
+                                     device=DEV, dtype=torch.float32)
+                if use_xce:
+                    old_c = sorted(PROTO.keys())
+                    W_old = torch.tensor(np.stack([PROTO[c] for c in old_c]),
+                                         device=DEV, dtype=torch.float32)
+                    Wfix = torch.cat([W_old, W_cur], 0)
+                    remap = {c: i for i, c in enumerate(old_c + [int(c) for c in cls])}
+                else:
+                    Wfix = W_cur
+                    remap = {int(c): i for i, c in enumerate(cls)}
+                Wfix = Fn.normalize(Wfix, dim=1).detach()
+                head_params = []
+
+                def logit_fn(f, _W=Wfix):
+                    return XCE_SCALE * (Fn.normalize(f, dim=1) @ _W.T)
             opt = torch.optim.AdamW(lp + head_params, lr=lr_t, weight_decay=1e-4)
             sch = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=max(ep, 1))
             ce = nn.CrossEntropyLoss()
-            if use_xce:
-                log(f"    [t={t}] cross-task CE over {len(remap)} seen classes "
-                    f"({len(PROTO)} frozen prototypes, scale={XCE_SCALE:g})")
+            if t > 0:
+                log(f"    [t={t}] FIXED cosine head over {len(remap)} classes "
+                    + (f"({len(PROTO)} frozen old prototypes + {len(cls)} current means, "
+                       f"cross-task)" if use_xce else f"({len(cls)} current means, "
+                       f"current-task only)") + f"  scale={XCE_SCALE:g}, 0 learnable rows")
             ld = DataLoader(Subset(TR_AUG, FIT[t].tolist()), batch_size=BS, shuffle=True,
                             num_workers=8, pin_memory=True)
             ok = tot = 1
@@ -356,10 +383,12 @@ def run(gamma):
             ao = solve_eval(Go, Co, np.concatenate(vZ), np.concatenate(vy),
                             Zte, YTE[te], seen)
             orcs.append(ao)
-            log(f"  [g={gamma:g} t={t}] ep={ep:<3d} tr={tr_acc:.3f} drift={drift:.4f} "
+            ts = f"{tr_acc:.3f}" if ep > 0 else " -- "
+            log(f"  [g={gamma:g} t={t}] ep={ep:<3d} tr={ts} drift={drift:.4f} "
                 f"seen={len(seen):3d} acc {a:.4f} | oracle {ao:.4f} ({a-ao:+.4f})")
         else:
-            log(f"  [g={gamma:g} t={t}] ep={ep:<3d} tr={tr_acc:.3f} drift={drift:.4f} "
+            ts = f"{tr_acc:.3f}" if ep > 0 else " -- "
+            log(f"  [g={gamma:g} t={t}] ep={ep:<3d} tr={ts} drift={drift:.4f} "
                 f"seen={len(seen):3d} acc {a:.4f}")
     del model, G, C
     torch.cuda.empty_cache()
@@ -401,6 +430,9 @@ for k in sorted(res, key=float):
 print("-" * W)
 print("gamma=0 IS A_plus (0 epochs for every t>=1) and is the in-run reference.")
 print("drift = mean cos(phi_t, phi_0) on a fixed 512-image probe; 1.0 = frozen.")
+print("READ 'oracle' FIRST: for gamma>0 the accum head sums Gram matrices computed under")
+print("      DIFFERENT backbones, so 'A-Last' conflates backbone change with head incoherence.")
+print("      'oracle' rebuilds the head in the current frame and is the clean backbone read.")
 print("READ: if 'oracle' RISES with gamma while 'A-Last' falls, tiny adaptation improved the")
 print("      BACKBONE and only the head needs refreshing -> that is exp15's exemplars, not a")
 print("      reason to stop adapting. If oracle falls too, the adaptation itself is harmful.")

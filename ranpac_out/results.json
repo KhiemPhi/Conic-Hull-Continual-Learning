@@ -1,0 +1,33 @@
+{
+  "aidA": {
+    "256": {
+      "random_avg": 87.24854761904763,
+      "random_last": 80.57,
+      "extremeray_avg": 89.36194444444445,
+      "extremeray_last": 82.89999999999999
+    },
+    "512": {
+      "random_avg": 89.39354761904761,
+      "random_last": 83.39999999999999,
+      "extremeray_avg": 90.45618650793651,
+      "extremeray_last": 84.78
+    },
+    "1024": {
+      "random_avg": 90.9165873015873,
+      "random_last": 85.34,
+      "extremeray_avg": 91.01300396825398,
+      "extremeray_last": 85.57000000000001
+    },
+    "2048": {
+      "random_avg": 91.53698015873016,
+      "random_last": 86.89,
+      "extremeray_avg": 91.27704365079366,
+      "extremeray_last": 86.06
+    }
+  },
+  "aidB": {
+    "RanPAC-maxscore": 0.9109559399999999,
+    "NCM-dist": 0.86072226,
+    "hull-residual": 0.8480457800000001
+  }
+}

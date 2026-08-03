@@ -1,0 +1,65 @@
+[    7.0s] ### CIFAR100: 100 classes, train 50000, test 10000
+[    7.0s]   skip CIFAR100|10|0 (done)
+[    7.0s]   skip CIFAR100|10|1 (done)
+[    7.0s]   skip CIFAR100|10|2 (done)
+[    7.0s]   skip CIFAR100|20|0 (done)
+[    7.0s]   skip CIFAR100|20|1 (done)
+[    7.0s]   skip CIFAR100|20|2 (done)
+[    7.0s]   skip CIFAR100|50|0 (done)
+[    7.0s]   skip CIFAR100|50|1 (done)
+[    7.0s]   skip CIFAR100|50|2 (done)
+[    8.9s] ### IMAGENETR: 200 classes, train 24000, test 6000
+[    8.9s]   skip IMAGENETR|10|0 (done)
+[    8.9s]   skip IMAGENETR|10|1 (done)
+[    8.9s]   skip IMAGENETR|10|2 (done)
+[    8.9s]   skip IMAGENETR|20|0 (done)
+[    8.9s]   skip IMAGENETR|20|1 (done)
+[    8.9s]   skip IMAGENETR|20|2 (done)
+[    8.9s]   skip IMAGENETR|50|0 (done)
+[    8.9s]   skip IMAGENETR|50|1 (done)
+[    8.9s]   skip IMAGENETR|50|2 (done)
+[   10.3s] ### IMAGENETA: 200 classes, train 6000, test 1500
+[   10.3s]   skip IMAGENETA|10|0 (done)
+[   10.3s]   skip IMAGENETA|10|1 (done)
+[   10.3s]   skip IMAGENETA|10|2 (done)
+[   10.3s]   skip IMAGENETA|20|0 (done)
+[   10.3s]   skip IMAGENETA|20|1 (done)
+[   10.3s]   skip IMAGENETA|20|2 (done)
+[   10.3s]   skip IMAGENETA|50|0 (done)
+[   10.3s]   skip IMAGENETA|50|1 (done)
+[   10.3s]   skip IMAGENETA|50|2 (done)
+[   11.8s] ### CUB200: 200 classes, train 5994, test 5794
+[   11.8s]   skip CUB200|10|0 (done)
+[   11.8s]   skip CUB200|10|1 (done)
+[   11.8s]   skip CUB200|10|2 (done)
+[   11.8s]   skip CUB200|20|0 (done)
+[   11.8s]   skip CUB200|20|1 (done)
+[   11.8s]   skip CUB200|20|2 (done)
+[   11.8s]   skip CUB200|50|0 (done)
+[   11.8s]   skip CUB200|50|1 (done)
+[   11.8s]   skip CUB200|50|2 (done)
+
+======================================================================================================================
+EXP16 — A_plus full table   (vit_base_patch16_224.augreg_in21k, ep40 lr0.0003 AUG=1 TARGET_ACC=0.98)
+A_plus = adapt task 0 with the tuned recipe, then FREEZE. Zero stored per-class state; the compared methods store 473 MB.
+======================================================================================================================
+dataset       T  cpt seeds |   A-Last (mean+-sd)   A-Avg (mean+-sd) |         GR-LoRA          MACIL |    dLast   task0
+CIFAR100     10   10     3 |        92.55+-0.13        95.13+-0.48  |     91.97/94.65    91.86/94.44 |    +0.58   0.994 *
+CIFAR100     20    5     3 |        92.38+-0.39        94.96+-0.26  |     91.46/94.41    90.31/93.47 |    +0.92   0.998 *
+CIFAR100     50    2     3 |        90.31+-0.21        93.92+-0.56  |     90.03/93.38    85.09/90.89 |    +0.28   0.998 *
+IMAGENETR    10   20     3 |        80.41+-0.11        85.31+-0.58  |     82.09/86.20    81.82/85.76 |    -1.68   0.986  
+IMAGENETR    20   10     3 |        79.51+-0.07        84.79+-0.50  |     80.23/85.05    79.46/84.25 |    -0.72   0.991  
+IMAGENETR    50    4     3 |        76.56+-0.98        82.48+-1.16  |     76.74/82.64    70.10/77.47 |    -0.18   0.995  
+IMAGENETA    10   20     3 |        60.16+-1.85        68.39+-2.97  |     63.60/70.24    63.15/70.54 |    -3.44   0.991  
+IMAGENETA    20   10     3 |        57.09+-1.78        66.26+-4.35  |     62.37/69.30    59.40/67.79 |    -5.28   0.978  
+IMAGENETA    50    4     3 |        54.96+-0.36        64.54+-2.76  |     59.71/67.23    47.86/59.96 |    -4.75   0.958  
+CUB200       10   20     3 |        90.00+-0.14        93.04+-0.85  |     89.91/93.85    90.23/93.78 |    +0.09   0.987 *
+CUB200       20   10     3 |        89.22+-0.37        92.89+-0.96  |     89.76/94.08    88.63/93.52 |    -0.54   0.994  
+CUB200       50    4     3 |        88.47+-0.36        92.78+-1.07  |     89.68/93.94    82.06/91.04 |    -1.21   0.997  
+----------------------------------------------------------------------------------------------------------------------
+dLast = ours - GR-LoRA A-Last.  '*' = beats GR-LoRA on either metric.
+task0 = mean task-0 TRAIN accuracy. exp12's fit curve peaks at ~0.98; cells far from
+        that are cells where the ImageNet-R-tuned lr3e-4 did NOT transfer, and they
+        should be re-run with TARGET_ACC=0.98 rather than reported as-is.
+======================================================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp16_full_table_augreg_in21k.json
