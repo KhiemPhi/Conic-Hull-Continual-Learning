@@ -1,0 +1,714 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.72in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+
+\newcommand{\cone}{\operatorname{cone}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\erank}{\operatorname{erank}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bq}{\mathbf{q}}
+\newcommand{\bv}{\mathbf{v}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bV}{\mathbf{V}}
+\newcommand{\bW}{\mathbf{W}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\good}[1]{\textcolor{black}{\textbf{#1}}}
+
+\title{\bf The Best Possible Raw Conic Classifier\\for Class-Incremental Learning}
+\author{Khiem Dinh Phi}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A conic read-out models each class as a polyhedral cone $C_c=\{\bV_c^{\!\top}\bw:\bw\ge0\}$
+and scores a query by $\lVert\Pi_{C_c}\bq\rVert$. It is an attractive
+class-incremental primitive: it is fitted per class, so it never revisits a past
+image; it is a strict generalisation of multi-prototype matching; and unlike a
+discriminative head it produces an absolute, not relative, membership score.
+This report asks how far a \emph{raw} conic classifier---no fusion with a
+discriminative head, no post-hoc calibration---can be pushed, and settles the
+attribution for every design axis in the family. On ImageNet-R $T{=}10$ the best
+raw cone reaches $\mathbf{80.07}$ A-Last against a RanPAC bar of $80.28$, a
+deficit of $0.21$, from $71.02$ for a plain nearest-class-mean. The gain
+decomposes as: the tied within-class metric $+6.65$, the conic rule over
+whitened prototypes $+0.25$, \emph{discriminative} generator selection (oriented
+PCA against foreign material) $+1.58$, and size-adaptive per-class ray budgets
+$+0.57$. The value of non-negativity is
+\emph{atom-dependent} and its mechanism is tail-driven: at k-means atoms an
+unconstrained rank-$R$ subspace ties the cone ($78.02$ vs $77.92$), but at the
+discriminative atoms the method actually uses the cone wins by $+0.60$
+($79.77$ vs $79.17$). Averaged over all classes the constraint is
+\emph{anti}-discriminative---it shaves $0.0245$ off the true class against
+$0.0144$ off a random foreign one---yet against the single \emph{top competing}
+class, the pair that decides, the sign reverses to $+0.0074$ ($+6.6\%$ of the
+decision margin), rescuing $196$ top-1 contests and breaking $91$. Two further
+findings are negative. (i) The residual deficit is a capacity mismatch, not
+geometry: binned by class size, the raw cone beats RanPAC by $+14.23$ on classes
+with under 50 training rows and loses by $-6.24$ on classes with over 200.
+(ii) The cone already wins outright in the small-sample regime---$+1.86$ A-Last
+on ImageNet-A at $R{=}4$.
+We give the full recipe, the ledger of what each component is worth, and the
+list of mechanisms that were tried and failed.
+\end{abstract}
+
+\section{Setting and protocol}
+
+A ViT-B/16 encoder $\phi:\mathcal{X}\to\R^{768}$
+(\texttt{vit\_base\_patch16\_224.augreg\_in21k}) is adapted with LoRA on the
+first task only and then frozen; all later tasks contribute features and
+statistics but no gradients. This is the A\textsuperscript{+} first-session
+adaptation recipe. Write $\bx=\phi(\cdot)/\lVert\phi(\cdot)\rVert$. For each
+class $c$ the read-out stores a small set of vectors $\bV_c$ and produces a
+score $s_c(\bq)$; prediction is $\arg\max_{c\in\text{seen}}s_c(\bq)$.
+
+Because the backbone is frozen after task $0$, per-class objects fitted at a
+class's birth stage remain valid for the rest of the run, and final-stage
+accuracy over all classes \emph{is} A-Last exactly. Read-out ablations are
+therefore roughly $10\times$ cheaper than a full staged replay, which is what
+makes the sweep in this report affordable.
+
+Unless stated otherwise every number is ImageNet-R, $T{=}10$, seed $0$, A-Last
+in per cent, with RanPAC on the same features as the bar ($80.28$ A-Last,
+$85.13$ A-Avg). \textbf{Seeds are discussed in \S\ref{sec:limits} and are the
+main threat to everything below.}
+
+\paragraph{What ``raw'' excludes.} No fusion with RanPAC, no per-class score
+calibration, no test-time adaptation. This restriction is deliberate: $\beta$
+selection in a cone/RanPAC fusion was measured to swing a headline by $0.77$
+under a $0.09$ perturbation of the features, which is larger than most effects
+studied here. Fusion results are reported in \S\ref{sec:fusion} as a ceiling,
+not as the method.
+
+\section{The object and its score}
+
+\subsection{One rule, four names}
+Given unit generators $\bV=[\bv_1,\dots,\bv_R]^{\!\top}$, the conic hull is
+\begin{equation}
+C(\bV)=\Big\{\textstyle\sum_r\lambda_r\bv_r:\lambda_r\ge0\Big\}
+      =\{\bV^{\!\top}\bw:\bw\ge0\}.
+\end{equation}
+For unit $\bq$, Moreau's decomposition gives
+$\langle\bq,\Pi_C\bq\rangle=\lVert\Pi_C\bq\rVert^2$, hence
+\begin{equation}
+s(\bq)=\cos\angle(\bq,\Pi_C\bq)=\lVert\Pi_C\bq\rVert,
+\label{eq:score}
+\end{equation}
+the exact analogue of a subspace read-out's $\lVert P\bq\rVert$ with the
+projection taken onto a cone. Equation~\eqref{eq:score} implies that the
+``residual coverage'' score $\cos\cdot\lVert\mathrm{rec}\rVert$ equals
+$\cos^2$, and that the ``angular'' score $1-\tfrac{2}{\pi}\arccos\cos$ and the
+``NNLS residual'' score $1-\tfrac12\sqrt{2-2\cos}$ are monotone in $\cos$. All
+four induce identical rankings. Empirically they agree to four decimal places
+(\texttt{exp17}: $88.36/88.36/88.36$ on CIFAR-100 $T{=}10$; only the
+covariance-reweighted variant differs, at $88.18$). Treating them as separate
+arms measures one quantity repeatedly.
+
+\subsection{Nesting: the cone contains multi-prototype}
+Restricting $\bw$ to its $k$ largest-cosine coordinates gives
+$C_1\subseteq C_2\subseteq\cdots\subseteq C_R$ with $s_k$ nondecreasing in $k$.
+At $k{=}1$ the score reduces \emph{exactly} to $\max_r\langle\bq,\bv_r\rangle$.
+The conic hull is therefore a one-parameter generalisation of multi-prototype
+matching with hard nearest-prototype as its degenerate member. This identity is
+also the cheapest available correctness assertion, and it matters: our NNLS
+solver once ran one of five hundred FISTA iterations for its entire history
+because a convergence test compared a tensor with itself. Every conic score
+produced before the fix was the one-step approximation
+$\bw=\eta\,\mathrm{relu}(\bV\bq)$. On one cell the corrected solver moves
+near-OOD AUROC from $0.622$ to $0.847$ (\texttt{exp20}, iteration sweep
+$1/2/5/25/100/500 \to 0.622/0.676/0.789/0.846/0.847/0.847$), and it reverses the
+sign of the ray-budget trend. \emph{At $k_{\text{local}}{=}1$ the conic score
+must equal max-cosine bit-for-bit}; assert it.
+
+\subsection{Storage and what is legal}
+The read-out stores $R_c$ unit vectors per class plus one shared $d\times d$
+within-class scatter. At $R{=}32$ that is $32\cdot768\cdot200=4.9$M floats
+($19.7$\,MB), against RanPAC's $10000\cdot200=2.0$M ($8$\,MB): the cone already
+has $2.5\times$ more parameters and still loses. \textbf{The deficit is not
+capacity in the parameter-count sense; it is what those parameters are fitted
+to.} No past image is ever revisited. When a class is born it may see: its own
+rows, the rows of the other classes arriving in the same task, and the stored
+generators of every past class.
+
+\section{The design space}
+
+Six axes are separable and were measured separately. In rough order of what
+they turned out to be worth:
+\begin{enumerate}\itemsep1pt
+\item \textbf{Metric} --- the space generators are fitted and scored in.
+\item \textbf{Generator selection} --- which $R$ directions represent a class.
+\item \textbf{Discrimination} --- whether selection sees other classes.
+\item \textbf{Allocation} --- how many rays each class gets.
+\item \textbf{Constraint} --- $\bw\ge0$ versus alternatives.
+\item \textbf{Calibration} --- correcting cone-size bias post hoc.
+\end{enumerate}
+
+\subsection{Axis 1: the metric ($+6.65$)}
+Let $\Sigma$ be the pooled within-class scatter. It is \emph{additive across
+classes} and therefore accumulates task by task with no stored samples, exactly
+as RanPAC's Gram matrix does. With $\bW=\operatorname{chol}(\Sigma^{-1})$ we fit
+and score in $\bx\mapsto\bW^{\!\top}\bx/\lVert\cdot\rVert$. Generators are built
+in the birth-time whitened space, mapped back through $\bW_{\text{birth}}^{-1}$
+and stored there; at any later stage they are re-metricated as
+$\widehat{\bV\bW_t}$. Storage stays at $R_c$ vectors per class, no past sample
+is revisited, and the approximation is empirically lossless---an oracle that
+refits past classes from raw rows gains $+0.05$.
+
+This axis alone lifts nearest-class-mean from $71.02$ to $77.67$. It is by a
+wide margin the largest lever, and it is not conic at all.
+
+Its regularisation is saturated. Sweeping the shrinkage $\delta$ in
+$\Sigma+\delta\,\tfrac{\operatorname{tr}\Sigma}{d}I$ over four orders of
+magnitude moves the cone by $0.45$ ($79.32$--$79.77$); Ledoit--Wolf
+independently selects $\delta{=}0.0094$ and $\delta{=}0.1$ scores within $0.03$
+of it (\texttt{exp34}: $79.67$ vs $79.70$). There are no points left in this
+knob. The LDA extension---adding the between-class scatter
+$\bS_b=\sum_c n_c(\bmu_c-\bar\bmu)(\bmu_c-\bar\bmu)^{\!\top}$, which is also
+computable from stored means with zero images---is structurally starved in CIL:
+$\operatorname{rank}\bS_b\le n_{\text{seen}}-1$, so at stage $0$ with 20 classes
+it offers at most 19 dimensions.
+
+\subsection{Axis 2: generator selection ($+0.25$, but $+61.8$ against the wrong choice)}
+
+Both classical choices are the same constrained factorisation with different
+solutions. Write $\bV=\mathbf{G}\bX$ with $\mathbf{G}\ge0$,
+$\mathbf{G}\mathbf{1}=\mathbf{1}$:
+\begin{itemize}\itemsep1pt
+\item \textbf{SPA / separable NMF.} $\mathbf{g}_r=\mathbf{e}_{i_r}$: each
+generator \emph{is} a data point, chosen greedily by maximum residual norm
+(equivalently QR with column pivoting). Under separability this provably
+recovers the true extremal rays.
+\item \textbf{$k$-means / convex NMF.} $\mathbf{g}_r$ is the uniform
+distribution on a cluster: each generator is a convex combination of data
+points.
+\end{itemize}
+SPA sits at a vertex of the constraint set and $k$-means at a barycentre; they
+optimise outward extent versus central representativeness. A centroid averages
+$n/R$ samples and has variance $\sigma^2R/n$; an SPA ray is a single
+sample---and specifically the argmax over $n$ residual norms, so its noise lies
+in the upper tail. At $n\approx100$, $R{=}4$ the variance ratio exceeds
+$25\times$ before the selection bias.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lcc}
+\toprule
+generators & classifier & near-OOD \\
+\midrule
+random ($R$ data points) & 54.85 & 0.806 \\
+SPA (extremal)           & 36.15 & 0.756 \\
+$k$-means (centroids)    & \good{74.25} & 0.844 \\
+convex-NMF (learned)     & 73.80 & 0.841 \\
+archetypal               & 73.97 & 0.840 \\
+\bottomrule
+\end{tabular}
+\caption{Generator choice, ImageNet-R, $R{=}4$, matched budget
+(\texttt{exp26}). SPA loses to \emph{random} by 18.7 points. Convex-NMF drives
+reconstruction error 7.5\% \emph{below} its $k$-means initialisation and still
+loses the task: reconstruction is the wrong objective.}
+\label{tab:gens}
+\end{table}
+
+Table~\ref{tab:gens} is the largest measured effect anywhere in this line of
+work ($36.15\to74.25$ at $R{=}4$; $11.60\to73.43$ at $R{=}2$). The lesson is not
+that $k$-means is good---it is that \emph{containment is the wrong target}.
+Adding a generator can only enlarge the cone, so a containment-optimal set
+maximises coverage, which is precisely the property that destroys discrimination
+when the score is a distance to that set. SPA optimises coverage; $k$-means does
+not. Three learned dictionaries (convex-NMF, archetypal analysis, and a
+gradient-fitted variant) all land within $0.5$ of $k$-means, which says the
+reconstruction objective is exhausted.
+
+\paragraph{Naming.} The resulting object is still a conic hull---$C(\bV)$ is
+closed under positive scaling, convex, polyhedral and pointed---but it is the
+conic hull \emph{of the dictionary}, not of the class:
+$C(\bV_{k\text{-means}})\subsetneq\conv\text{-}\cone(\bX)$ and
+$\bX\not\subseteq C(\bV_{k\text{-means}})$. Non-negativity of the coefficients
+is preserved; containment of the class is not, and neither is the separability
+recovery guarantee. ``A polyhedral cone spanned by $R$ learned generators'' is
+the honest phrase; ``conic hull'' unqualified will be read as $\cone(\bX)$ and
+imports containment intuitions that no longer hold.
+
+\subsection{Axis 3: discrimination in the construction ($+1.58$)}
+\label{sec:opca}
+
+Both incumbents are \emph{blind to other classes}. A per-class generative fit
+cannot make its score class-selective, which is exactly the observed deficit:
+$k$-means cone accuracy falls from $79.50$ at $R{=}4$ to $77.92$ at $R{=}32$,
+below a plain whitened class mean, because adding rays raises $s_c$ for foreign
+queries as fast as for own-class ones. The fix is to put foreign information
+into the construction. The objective is
+\begin{equation}
+\max_{\bV}\ \sum_{\bx\in X_c}\lVert\Pi_{C(\bV)}\bx\rVert^2
+\;-\;\gamma\sum_{\mathbf{a}\in F}\lVert\Pi_{C(\bV)}\mathbf{a}\rVert^2 ,
+\label{eq:disc}
+\end{equation}
+where $F$ is the foreign material legally available at class $c$'s birth: the
+fit rows of the other classes in the current task plus the stored rays of every
+past class, capped at $F_{\max}{=}2000$ by random subsample. Never a past image.
+
+Since $\mathbb{E}\lVert P\bq\rVert^2=\operatorname{tr}(P^{\!\top}\bS P)$,
+relaxing $\Pi_C$ to an orthogonal projector makes \eqref{eq:disc} exactly the
+top-$R$ eigenproblem of $\bS_c-\gamma\bS_F$. This is \textbf{oriented PCA}
+(oPCA): take the top-$R$ eigenvectors of $\bS_c-\gamma\bS_F$, run $k$-means
+inside that subspace, and lift the centroids back. It is closed form, one
+eigendecomposition per class, and strictly sharper than a global LDA metric:
+LDA finds directions separating all classes \emph{on average}; this finds
+directions where class $c$ specifically differs from everyone else.
+
+Two alternatives were run as controls. \emph{Discriminative $k$-means} (dkm)
+runs ordinary $k$-means in the metric $(I+\gamma\bS_F)^{-1/2}$, which shrinks
+directions foreign material occupies. \emph{Conic matching pursuit} (mp)
+exploits the fact that adding a unit ray $\bv$ to a cone with residual $r$
+changes the score by exactly the column-generation reduced cost
+$\Delta\lVert\Pi\rVert^2=(\bv^{\!\top}r)_+^2$, and iterates the one-sided fixed
+point $\bv\leftarrow\widehat{\sum_{S}r_\bx-\gamma\sum_{S'}r_\mathbf{a}}$ over
+active sets $S=\{\bx:\bv\cdot r_\bx>0\}$. Dropping the $(\cdot)_+$ would turn
+this into an eigenproblem, which is wrong for a cone twice over: eigenvectors
+are sign-ambiguous and two-sided.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lccc}
+\toprule
+construction & $\gamma{=}0$ & $\gamma{=}0.25$ & $\gamma{=}0.5$ \\
+\midrule
+oPCA & 78.98 & 79.38 & \good{79.77} \\
+dkm  & 77.92 & 78.48 & 77.97 \\
+\midrule
+\multicolumn{2}{l}{[$k$-means, $=$ dkm $\gamma{=}0$]} & \multicolumn{2}{r}{77.92} \\
+\multicolumn{2}{l}{[whitened NCM]} & \multicolumn{2}{r}{77.67} \\
+\multicolumn{2}{l}{[RanPAC bar]} & \multicolumn{2}{r}{80.28} \\
+\bottomrule
+\end{tabular}
+\caption{Discriminative construction, ImageNet-R $T{=}10$ s0, $R{=}32$, raw cone
+A-Last (\texttt{exp39}). oPCA decomposes into $+1.06$ for restricting $k$-means
+to the class's own principal subspace and a further $+0.79$ for the foreign
+term. dkm is flat: shrinking a \emph{metric} is a weaker intervention than
+choosing a \emph{subspace}.}
+\label{tab:opca}
+\end{table}
+
+Table~\ref{tab:opca} is the central positive result. Two caveats are load
+bearing. First, the arms are \emph{asymmetric}: later classes avoid earlier
+ones, earlier ones never adapt. Within-task negatives make it work from task
+$0$, but the effect should---and does---grow with task index, so A-Last is the
+honest column and A-Avg flatters it. Second, an independent run of the same
+configuration in \texttt{exp41} reads $79.50$ rather than $79.77$ for
+oPCA $\gamma{=}0.5$, $R{=}32$; the two files differ in how the foreign pool is
+subsampled. We therefore quote \emph{within-file} deltas throughout and treat
+$\pm0.3$ as the implementation-level noise floor on a single cell.
+
+\subsection{Axis 4: allocation ($+0.57$)}
+\label{sec:alloc}
+
+Every $R$ sweep before this one was global, which conflates two regimes.
+ImageNet-R fit rows run $35$ to $308$ per class, an $8.8\times$ imbalance, and
+$24.5\%$ of classes have fewer than 64 rows, so at $R{=}64$ a quarter of the
+arms silently clamp and the budget is not matched. Setting
+\begin{equation}
+R_c=\operatorname{clip}(n_c/K,\;R_{\min},\;R_{\max})
+\end{equation}
+removes an arbitrary constant rather than adding a mechanism.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lccc}
+\toprule
+allocation & rays/cls & A-Last & A-Avg \\
+\midrule
+fixed $R{=}32$              & 32.0 & 79.50 & 84.90 \\
+$K{=}2$                     & 51.3 & 79.63 & 84.55 \\
+$K{=}3$                     & 34.1 & 79.90 & 84.79 \\
+$K{=}5$                     & 20.3 & 79.92 & 84.70 \\
+$K{=}8$                     & 13.0 & 79.67 & 84.66 \\
+$K{=}12$                    & \phantom{0}9.7 & 79.70 & 84.72 \\
+$K{=}5$, $R_{\min}{=}24$    & 26.5 & \good{80.07} & 84.88 \\
+$K{=}5$, $R_{\min}{=}32$    & 32.9 & 79.83 & 84.98 \\
+$K{=}4$, $R_{\min}{=}32$    & 34.6 & 79.78 & 84.82 \\
+\midrule
+RanPAC bar                  & ---  & 80.28 & 85.13 \\
+\bottomrule
+\end{tabular}
+\caption{Per-class ray budgets, oPCA $\gamma{=}0.5$, $R\in[8,128]$
+(\texttt{exp41}). The best cell uses \emph{fewer} rays than fixed $R{=}32$
+($0.84\times$ storage) and scores $+0.57$ higher. The curve is flat between
+$K{=}3$ and $K{=}12$---a $3.5\times$ range in mean rays for $0.25$ of
+accuracy---so the mechanism is the \emph{floor} $R_{\min}$, not the slope.}
+\label{tab:alloc}
+\end{table}
+
+The most useful reading of Table~\ref{tab:alloc} is the insensitivity. Between
+$9.7$ and $34.1$ mean rays per class the answer moves by a quarter of a point.
+A conic read-out on these features is not starved for generators; it is starved
+for the \emph{right} generators, which is why axis 3 outperforms axis 4 by
+$3\times$.
+
+\subsection{Axis 5: the constraint is atom-dependent and tail-driven}
+\label{sec:constraint}
+
+Identical atoms, identical metric, identical score functional---only the
+constraint on $\bw$ varies. A rank-$R$ subspace costs exactly the same $Rd$
+floats, so \texttt{sub} isolates non-negativity and nothing else.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lcccc}
+\toprule
+atoms & sub & cone & simplex & cone$-$sub \\
+\midrule
+$k$-means, $R{=}32$      & \good{78.02} & 77.92 & 77.30 & $-0.10$ \\
+oPCA $\gamma{=}0.5$, $k5m24$ & 79.17 & \good{79.77} & 79.57 & \good{$+0.60$} \\
+\bottomrule
+\end{tabular}
+\caption{Region primitive at matched storage, ImageNet-R $T{=}10$ s0. Row 1 is
+\texttt{exp38}; row 2 is \texttt{exp45}, which reproduces row 1 exactly before
+switching atoms. \emph{The sign of the constraint's value depends on the
+generator set}, and the published cell used the $k$-means atoms the method
+subsequently abandoned (\S\ref{sec:opca}, \S\ref{sec:alloc}).}
+\label{tab:constraint}
+\end{table}
+
+Row 1 is also weaker than a single number suggests: across the 10 stages of that
+same run the cone beats the subspace on $7$ of them (mean $+0.18$, mid-run
+stages 2--8 $+0.37$, sign test $p{=}0.17$), and A-Last is the one stage that
+favours \texttt{sub}. The cone leads on A-Avg, $83.28$ to $83.10$.
+
+\paragraph{The constraint is always active.} A natural explanation for a null
+result---that the unconstrained solution is already non-negative, so the two
+primitives are the same object---is false. At oPCA atoms the constraint binds on
+$100.0\%$ of query--class pairs, and $43.7\%$ of the unconstrained
+least-squares coefficient mass on the \emph{true} class is negative
+(\texttt{exp45}). A query from class $c$ is emphatically not a non-negative
+combination of class $c$'s own generators.
+
+\paragraph{Why it helps despite hurting on average.} Define
+$\mathrm{gap}(\bq,\bV)=\lVert P_{\mathrm{span}\bV}\bq\rVert-\lVert\Pi_{C(\bV)}\bq\rVert\ge0$,
+the amount the constraint removes. Averaged over random foreign classes the
+differential runs the \emph{wrong} way: $0.0245$ is removed from the true class
+against $0.0144$ from a foreign one, $-9.0\%$ of the mean decision margin.
+
+That mean is dominated by classes that were never in the running. Restricting to
+the one foreign class that actually competes---the top-scoring non-true class,
+selected under the \emph{subspace} ranking so the comparator is chosen
+independently of the constraint being tested---the sign reverses: the runner-up
+loses $0.0319$ against the true class's $0.0245$, a differential of
+$\mathbf{+0.0074}$, or $+6.6\%$ of the margin. Counted as decisions, the
+constraint rescues $196$ true-vs-runner-up contests and breaks $91$.
+\textbf{Non-negativity is a tail mechanism: it is a net cost on the average class
+and a net gain on the contested one.} This is consistent with \texttt{exp40}'s
+finding that confusion is extremely concentrated ($29.3\%$ of a class's errors
+go to one confuser, median 4 confusers out of 199).
+
+\paragraph{A counterweight that still stands.} On \emph{near-OOD}, the conic
+coefficient carries no signal beyond the residual norm. Decompose the score into
+$r_\perp=\lVert\bq-\Pi_C\bq\rVert$ and the ``conic-ness'' $\nu$, the fraction of
+unconstrained coefficient mass surviving the projection. $r_\perp$ alone gives
+AUROC $0.966$ and $\nu$ alone $0.720$ at $R{=}4$, but $\nu$ \emph{conditioned}
+on $r_\perp$ gives $0.602$, and a cross-validated classifier on $(r_\perp,\nu)$
+beats one on $r_\perp$ alone by $-0.0008$ (\texttt{exp23}, 40 cells; negative at
+$R{=}4,8,16$). The constraint earns its place in the closed-set argmax, not in
+the open-set score.
+
+\paragraph{The larger effect is still softness, not sign.} Cone versus
+\emph{hard nearest-prototype}---the $k{=}1$ member of its own nesting---is an
+order of magnitude bigger than cone versus subspace, and grows with $R$:
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lccc}
+\toprule
+$R$ & max-cosine (pm) & conic (NNLS) & $\Delta$ \\
+\midrule
+4  & 78.85 & 79.50 & $+0.65$ \\
+16 & 77.17 & 78.78 & $+1.61$ \\
+64 & 73.47 & 78.02 & \good{$+4.55$} \\
+\bottomrule
+\end{tabular}
+\caption{Soft conic mixture versus hard nearest-prototype at identical
+$k$-means atoms (\texttt{exp35}). Multi-prototype \emph{degrades} with more
+atoms; the cone does not. The conic rule is an \emph{aggregator} that makes a
+noisy atom set usable, not a better class descriptor.}
+\label{tab:rule}
+\end{table}
+
+Tables~\ref{tab:constraint} and~\ref{tab:rule} together give the correct
+mechanistic statement, in two parts. \textbf{Most of the conic read-out's value
+is soft aggregation over many atoms} ($+4.55$ at $R{=}64$ over hard
+nearest-prototype), which a subspace read-out would also capture.
+\textbf{Non-negativity adds a smaller, genuinely conic increment ($+0.60$) that
+appears only once the atoms are discriminative, and it acts on contested pairs
+rather than on the average class.} The two are separable and were conflated in
+an earlier draft of this report, which quoted the $k$-means cell as though it
+settled the question.
+
+\subsection{Axis 6: calibration fails}
+
+$\lVert\Pi_C\bq\rVert$ grows with a cone's solid angle, so a class with more
+spread data scores higher on \emph{every} query. RanPAC's least-squares fit
+calibrates this away for free; the cone has no such mechanism. The bias is real
+and measurable: the correlation between a class's cone width and its
+over-prediction ratio (times predicted / times true) is $+0.395$
+(\texttt{exp40}).
+
+Correcting it makes things worse. Subtracting the class's mean score on foreign
+stored rays ($s_c\leftarrow s_c-\mu_{\text{bg},c}$, recomputed every stage, so
+drift-free) costs $1.57$ at fixed $R{=}32$ and $2.57$ at $K{=}5$
+(\texttt{exp41}: $79.50\to77.93$, $79.92\to77.35$). Dividing additionally by a
+per-class $\sigma$ estimated from birth-time validation rows is catastrophic
+($90.9\to59.8$ on the cell where it was first tried). The bias exists but it is
+apparently \emph{informative}: wide cones belong to classes that genuinely
+occupy more of the space, and flattening that removes signal along with bias.
+
+Pruning old classes' rays---the natural storage-side companion---is likewise
+monotonically harmful: dropping to $0.9$ and $0.8$ of each class's energy costs
+$1.39$ and $3.53$ respectively (\texttt{exp42}, $79.92\to78.53\to76.38$).
+
+\section{The recipe}
+
+\begin{algorithm}[t]
+\small
+\caption{Best raw conic classifier (oPCA-$k5m24$)}
+\label{alg:recipe}
+\begin{algorithmic}[1]
+\State \textbf{state:} scatter $\Sigma\!\leftarrow\!0$, count $n\!\leftarrow\!0$,
+       rays $\{\bV_c\}$
+\For{task $t=0,\dots,T-1$}
+  \For{class $c$ in task $t$}
+    \State $\Sigma \mathrel{+}= X_c^{\!\top}X_c$ (row-centred), $n\mathrel{+}=|X_c|$
+  \EndFor
+  \State $\bar\Sigma \leftarrow \Sigma/n + \delta\tfrac{\operatorname{tr}}{d}I$,
+         \ $\delta{=}0.03$
+  \State $\bW_t \leftarrow \operatorname{chol}(\bar\Sigma^{-1})$
+  \For{class $c$ in task $t$}
+    \State $X_w \leftarrow \widehat{X_c\bW_t}$
+    \State $F \leftarrow$ other classes' rows in task $t$ \ $\cup$ \ stored rays
+           of past classes, subsampled to $2000$; $F_w\leftarrow\widehat{F\bW_t}$
+    \State $R_c \leftarrow \operatorname{clip}(|X_c|/5,\,24,\,128)$
+    \State $\bU \leftarrow$ top-$R_c$ eigvecs of
+           $\bS_{X_w}-0.5\,\bS_{F_w}$ \Comment{oPCA}
+    \State $\bV_c \leftarrow \widehat{\,k\text{-means}_{R_c}(X_w\bU)\,\bU^{\!\top}\bW_t^{-1}}$
+  \EndFor
+  \State \textbf{predict} $\arg\max_c\lVert\Pi_{C(\widehat{\bV_c\bW_t})}\widehat{\bq\bW_t}\rVert$
+         \Comment{FISTA NNLS, 500 iters}
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:recipe} is the whole method. It stores $R_c$ unit vectors per
+class ($26.5$ on average, $0.84\times$ the fixed-$R{=}32$ budget) plus one
+$768\times768$ scatter, revisits no past image, and has three hyperparameters
+($\delta$, $\gamma$, $K$) of which only $\gamma$ matters.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lrr}
+\toprule
+read-out & A-Last & $\Delta$ \\
+\midrule
+NCM (raw cosine)                       & 71.02 & --- \\
+\quad$+$ tied within-class whitening   & 77.67 & $+6.65$ \\
+\quad$+$ $k$-means conic hull, $R{=}32$& 77.92 & $+0.25$ \\
+\quad$+$ oriented PCA, $\gamma{=}0.5$  & 79.50 & $+1.58$ \\
+\quad$+$ adaptive $R_c$ ($K{=}5$, $R_{\min}{=}24$)
+                                       & \good{80.07} & $+0.57$ \\
+\midrule
+RanPAC (bar)                           & 80.28 & $-0.21$ \\
+oracle selector (cone $\vee$ RanPAC)   & 83.42 & \\
+\bottomrule
+\end{tabular}
+\caption{The ledger. ImageNet-R $T{=}10$, seed 0. The metric is $73\%$ of the
+total gain and is not conic; the conic rule at fixed atoms is $3\%$;
+discriminative selection is $17\%$; allocation is $6\%$.}
+\label{tab:ledger}
+\end{table}
+
+\section{Where the remaining 0.21 lives}
+
+\texttt{exp40} scores only the final stage (the whitener and generators still
+accumulate over all $T$ stages, so the state is correct) and runs five
+diagnostics.
+
+\paragraph{The deficit is a capacity mismatch, not geometry.} Binning the final
+stage by fit rows per class:
+
+\begin{table}[h]\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+fit rows & $n$ test & cone & RanPAC & gap \\
+\midrule
+0--50    & \phantom{0}239 & 71.97 & 57.74 & \good{$+14.23$} \\
+50--100  & 1559 & 78.58 & 75.63 & $+2.95$ \\
+100--200 & 3433 & 80.31 & 82.61 & $-2.30$ \\
+200+     & \phantom{0}769 & 80.10 & 86.35 & $-6.24$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Both extremes are $\sim4.5\sigma$. The cone crushes RanPAC where the
+ridge column is starved and underfits, and loses where RanPAC's shared Gram
+keeps exploiting samples the cone's $R_c$ rays have saturated on. The $0.21$
+aggregate is the residue of two large opposite effects.
+
+\paragraph{Recency is not the problem.} Accuracy by birth task shows no trend,
+which re-confirms at $R{=}32$ that the birth-metric-plus-re-metrication scheme
+is lossless.
+
+\paragraph{Errors are near-misses.} On errors, the median rank of the true class
+among all seen classes is $5$; $32.2\%$ of errors are rank $2$ and $55.1\%$ are
+within rank $5$. Margin-level fixes are therefore not hopeless in principle.
+
+\paragraph{Confusion is extremely concentrated.} $29.3\%$ of a class's errors go
+to its single top confuser and $61.3\%$ to its top three; the median number of
+distinct wrong classes per true class is $4$ out of $199$. This is the sharpest
+open lead. The oPCA criterion of \S\ref{sec:opca} provably optimises the gap
+between own-class and \emph{average} foreign score, but a classification error
+happens when \emph{one} foreign class beats the true one. Pooling $\bS_F$
+uniformly gives each of the four real confusers $\sim1/200$ of the weight,
+diluting the only mechanism that has ever worked by $\sim50\times$. Weighting
+$\bS_F$ by a birth-time confusability estimate
+$o(c,c')=\mathbb{E}_{\bx\in X_c}\max_{f\in\text{material}(c')}\langle\bx,f\rangle$
+is the obvious next experiment; a per-class-uniform arm is needed in between,
+because the foreign pool is inhomogeneous (current-task classes contribute
+$\sim2160$ raw rows while each past class contributes $\sim26$ rays, a mix that
+drifts from $100\%$ rows at task $0$ to $27\%$ at task $9$). This is implemented
+in \texttt{exp43} and \textbf{not yet run}.
+
+\section{The fusion ceiling, and why it is not the method}
+\label{sec:fusion}
+
+The $2\times2$ of (cone right/wrong) $\times$ (RanPAC right/wrong) at the final
+stage is $\{$both $4607$, cone-only $188$, RanPAC-only $210$, neither $995\}$,
+so a per-query oracle selector reaches $83.42$ against RanPAC's $80.28$: the
+two channels are genuinely complementary, and the complementarity \emph{grows}
+over stages while their score correlation \emph{falls} from $0.81$ to $0.50$.
+
+That headroom is not extractable. Three structurally different combiners---a
+global $\beta$, a per-sample gate, and an EMA-anchored $\beta$---land within
+$0.25$ of one another and capture $8$--$26\%$ of the oracle, reaching $81.03$
+A-Last / $85.99$ A-Avg at $R{=}64$ (\texttt{exp35}). Notably the conic rule's
+\emph{fused} value also scales with rays ($+0.08/+0.45/+0.75$ over fused
+multi-prototype at $R{=}4/16/64$), mirroring Table~\ref{tab:rule}. We report
+these numbers for completeness and exclude them from the method: a fused
+headline moves by $0.77$ under a $0.09$ feature perturbation through $\beta$
+selection alone, which makes it useless as an attribution instrument.
+
+\section{Negative results}
+
+\paragraph{Lifting the cone.} RanPAC's random ReLU projection is worth $+9.26$
+over NCM---larger than every other component combined---and every cone above
+operates \emph{beneath} it. Moving generators and NNLS into
+$\mathrm{relu}(\phi P)$ gains nothing ($-0.07$ for the cone, $+0.20$ for
+max-cosine on ImageNet-R; $53.93\to53.87$ on ImageNet-A). The reason is
+measurable: the lift \emph{doubles} mean pairwise cosine, $0.207\to0.429$, and
+does not improve with $M$ ($0.4285$ at $M{=}2000$, $0.4289$ at $M{=}10000$).
+Crowding every point into the non-negative orthant is harmless to a ridge, which
+can build discriminative directions anywhere, and harmful to any reader that
+sees only angles. The lift belongs to the ridge, not to the representation.
+
+\paragraph{The $H$-representation.} Replacing the generator description with a
+facet description fixes the monotonicity of coverage in $R$ but fails three
+pre-registered gates. The decisive one is aggregation: min-over-facets
+($L^\infty$) $<$ softmin $<$ sum-of-squares ($L^2$), monotone in \emph{how
+little the rule resembles a conjunction}. Conic membership \emph{is} a
+conjunction, so the conic reading is structurally locked into the worst pooling.
+
+\paragraph{Multi-layer features.} Concatenating or pooling intermediate ViT
+blocks strictly hurts every arm (\texttt{exp37}: \texttt{cls} $80.37$,
+\texttt{cls+gap} $80.08$, multi-layer \texttt{cls} $79.77$, multi-layer
+\texttt{gap} $77.20$). The final CLS token is the right read-out point.
+
+\paragraph{Test-time adaptation.} Transductive refinement of the cone using the
+test batch moves nothing: mean-shift $79.80\to79.77$, residual-shift
+$79.80\to79.80$, and $\pm0.02$ for multi-prototype. Ray pruning during TTA costs
+$1.35$ for the cone and $1.15$ for multi-prototype.
+
+\paragraph{Between-class subspace overlap is not the failure mode.}
+\texttt{exp29} correlates per-class error against candidate geometric
+quantities. Between-class subspace affinity does not predict it
+($\rho={+}0.037$ at rank 32; every trivial control, including sample count at
+$\rho={-}0.347$, predicts better). \emph{Within}-class coverage does: the mean
+own-subspace energy $\lVert P_c\bq\rVert$ of a class's held-out rows has
+$\rho={-}0.585$ and strengthens with rank. \textbf{Classes fail because their
+own test rows fall outside their own training span---not because classes
+collide.} This is the diagnostic that motivates \texttt{exp44}, an effective-rank
+shaping loss on task 0 ($L=\mathrm{CE}+\lambda_w\,\overline{\erank(\bS_c)}
+-\lambda_p\,\erank(\bS_{\text{pool}})$, with the pooled term required because
+the head whitens by $\bS_w$ and would otherwise destroy any uniformly low-rank
+structure). Feature caches exist; \textbf{results do not yet}.
+
+\section{The regime where the raw cone already wins}
+
+Everything above is ImageNet-R, which has $108$ fit rows per class on average.
+The class-size table predicts that the cone should win outright on datasets that
+sit in its left-hand bins, and it does. On ImageNet-A ($\sim18$ rows/class) at
+$R{=}4$ with a task-0 whitener, the raw cone scores $57.13$ A-Last against
+RanPAC's $55.27$ (\texttt{exp33}), a $+1.86$ win with no fusion and no
+calibration; the max-cosine arm on the same atoms scores $52.53$, so the conic
+rule contributes $+4.60$ of it. CUB-200 ($\sim27$ rows/class) is the other
+predicted cell.
+
+This is the honest positioning of the primitive. A per-class generative region
+model is not a better classifier than a jointly fitted discriminative head when
+data is plentiful---it is naive Bayes against LDA, and it loses for the usual
+reason. It is a better classifier when the discriminative head cannot estimate
+its own parameters, which in class-incremental learning is the common case at
+the tail of the class distribution and the whole case on few-shot benchmarks.
+
+\section{Limitations}
+\label{sec:limits}
+
+\paragraph{Seeds.} \emph{Every read-out number in this report is seed 0 only.}
+RanPAC alone spans $80.28/80.55/80.38$ A-Last across three seeds on ImageNet-R
+$T{=}10$---a $0.27$ range, the same order as the allocation effect
+(\S\ref{sec:alloc} $=+0.57$) and larger than the final deficit ($0.21$). The
+oPCA effect ($+1.58$) is the only single-axis result comfortably outside seed
+noise. No other claim here should be treated as established until it is seeded.
+
+\paragraph{One cell.} Almost every ablation is ImageNet-R $T{=}10$. The
+allocation, calibration, pruning and constraint results have not been rerun at
+$T{=}20/50$ or on CIFAR-100, CUB-200, ImageNet-A. The $\pm0.3$ cross-file
+discrepancy documented in \S\ref{sec:opca} bounds how much a single cell can be
+trusted.
+
+\paragraph{Contaminated reference columns.} An earlier NCM implementation read
+class means off the first arm's generators, which made the NCM column vary with
+$R$ ($76.72/78.02/78.57/78.85$ at $R{=}4/16/32/64$---a quantity that cannot
+depend on $R$). \texttt{exp39} onward computes a true class mean. Any NCM
+number quoted from \texttt{exp35} or earlier is unreliable; the $77.67$ used in
+Table~\ref{tab:ledger} is the corrected one.
+
+\paragraph{Scope.} One backbone, one adaptation recipe. The geometric claims
+concern pre-trained ViT features in this regime and should not be read as claims
+about conic parameterisations generally.
+
+\section{Conclusion}
+
+The best raw conic classifier we can build reaches $80.07$ A-Last on
+ImageNet-R $T{=}10$ against a RanPAC bar of $80.28$, from $71.02$ for
+nearest-class-mean, storing $26.5$ vectors per class and revisiting no image.
+The recipe is short: whiten by the accumulated tied within-class scatter, choose
+generators by oriented PCA against the legally available foreign material
+($\gamma{=}0.5$), allocate $R_c\propto n_c$ with a floor of 24, and score with a
+properly converged NNLS projection.
+
+The attribution is less flattering than the headline. Of the $9.05$ points, the
+metric is $6.65$ and is not conic; discriminative \emph{selection} is $1.58$;
+the conic \emph{rule} at fixed $k$-means atoms is $0.25$, of which
+non-negativity contributes nothing at those atoms and $+0.60$ at the
+discriminative ones. What survives as a genuine property of
+the primitive is narrower and, we think, more useful: a soft mixture read-out
+degrades gracefully in the number of atoms where hard nearest-prototype
+collapses ($+4.55$ at $R{=}64$), it produces an absolute membership score, and
+it beats a discriminative head precisely where that head runs out of samples
+($+14.23$ below 50 rows per class, $+1.86$ overall on ImageNet-A). The remaining
+$0.21$ on ImageNet-R is not a geometry problem; it is a capacity mismatch on
+large classes, and the concentration of confusions---four confusers out of
+199---says the next thing to try is a confusability-weighted $\bS_F$, not
+another region primitive.
+
+\end{document}

@@ -1,0 +1,41 @@
+[    0.0s] === CUB200|10|0|base|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[  284.5s]     cone 89.04  sub 88.90  ranpac 90.13  margin +1.267  err_to_nn 86.9%  nn_cos 0.890
+[  284.5s] === CUB200|10|0|d1|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[  557.2s]     cone 88.97  sub 88.83  ranpac 90.13  margin +2.207  err_to_nn 85.6%  nn_cos 0.655
+[  557.2s] === CUB200|10|0|d2|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[  835.5s]     cone 88.70  sub 88.45  ranpac 90.13  margin +2.456  err_to_nn 83.5%  nn_cos 0.629
+[  835.6s] === CUB200|10|0|d4|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 1158.2s]     cone 87.47  sub 87.31  ranpac 90.13  margin +2.744  err_to_nn 77.3%  nn_cos 0.590
+[ 1158.2s] === CUB200|10|0|d8|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 1446.3s]     cone 86.57  sub 86.21  ranpac 90.13  margin +2.974  err_to_nn 75.4%  nn_cos 0.536
+[ 1446.3s] === CUB200|10|0|l5|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 1726.8s]     cone 88.21  sub 88.19  ranpac 90.13  margin +1.294  err_to_nn 82.7%  nn_cos 0.890
+[ 1726.8s] === CUB200|10|0|l10|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).

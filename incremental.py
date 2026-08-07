@@ -3904,7 +3904,7 @@ def train_incremental_pipeline_replay(
     epochs_per_stage=10,
     alpha=0.1,
     distill_weight=10.0,
-    min_delta=0.001,
+    min_delta=1e-15,
     patience=3,
     batch_size=128,
     reserved_space=True,
@@ -4523,7 +4523,10 @@ def train_incremental_pipeline_replay(
         _cos_geo = cos_from_deg(geo_margin_deg)
 
         # Set tqdm total to max_epochs, but we will break out of it early
-        epoch_iterator = tqdm(range(epochs_per_stage), desc=f"Stage {current_stage_idx}", unit="ep")
+        if current_stage_idx == 0:
+            epoch_iterator = tqdm(range(epochs_per_stage), desc=f"Stage {current_stage_idx}", unit="ep")
+        else:
+            epoch_iterator = tqdm(range(0), desc=f"Stage {current_stage_idx}", unit="ep")
 
         for epoch in epoch_iterator:
             backbone.train()
@@ -5002,17 +5005,17 @@ def train_incremental_pipeline_replay(
             epoch_iterator.set_postfix(postfix)
 
             # --- Early Stopping Check ---
-            if avg_loss < best_loss - min_delta:
-                best_loss = avg_loss
-                patience_counter = 0
-                # If you wanted to save the absolute best weights, you would do `torch.save` here
-            else:
-                patience_counter += 1
+            # if avg_loss < best_loss - min_delta:
+            #     best_loss = avg_loss
+            #     patience_counter = 0
+            #     # If you wanted to save the absolute best weights, you would do `torch.save` here
+            # else:
+            #     patience_counter += 1
 
-            if patience_counter >= patience:
-                tqdm.write(f"  -> Early stopping triggered at epoch {epoch+1} (Best Loss: {best_loss:.4f})")
-                epoch_iterator.close() # Close the progress bar cleanly
-                break
+            # if patience_counter >= patience:
+            #     tqdm.write(f"  -> Early stopping triggered at epoch {epoch+1} (Best Loss: {best_loss:.4f})")
+            #     epoch_iterator.close() # Close the progress bar cleanly
+            #     break
 
         # ── Analytical Classifier Head Correction ────────────────────────────────
         # After backbone training the feature space has drifted.  We estimate the

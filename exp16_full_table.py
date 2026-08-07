@@ -76,6 +76,14 @@ TASKCOUNTS = [int(t) for t in os.environ.get("TASKS", "10,20,50").split(",")]
 EPOCHS = int(os.environ.get("EPOCHS", 40))
 LR = float(os.environ.get("LR", 3e-4))
 TARGET_ACC = float(os.environ.get("TARGET_ACC", 0.0))   # >0 => early-stop task 0 on train acc
+# Per-dataset epoch override, e.g. EPOCHS_DS=IMAGENETA:150 . ImageNet-A task 0 is 96-480
+# images and never reaches TARGET_ACC in 40 epochs, so its two worst cells were UNDER-fit.
+# NOTE this is not just a ceiling: EPOCHS is also the cosine T_max, so a different epoch
+# budget is a different LR schedule and therefore a different recipe, not "the same recipe
+# for longer". That is deliberate here -- lr3e-4/ep40 was tuned on ImageNet-R and the whole
+# point is that it did not transfer -- but it must be reported as its own recipe.
+EPOCHS_DS = {k: int(v) for k, v in
+             (p.split(":") for p in os.environ.get("EPOCHS_DS", "").split(",") if ":" in p)}
 BS, GRAD_CLIP = 128, 1.0
 AUG = int(os.environ.get("AUG", 1))
 M_RP = int(os.environ.get("MRP", 10000))
@@ -101,6 +109,26 @@ REF = {
     ("CUB200", 20): {"GR-LoRA": (89.76, 94.08), "MACIL": (88.63, 93.52)},
     ("CUB200", 50): {"GR-LoRA": (89.68, 93.94), "MACIL": (82.06, 91.04)},
 }
+
+def epochs_for(ds):
+    return EPOCHS_DS.get(ds, EPOCHS)
+
+
+def recipe_tag(ds):
+    """The recipe identity. THE RESULTS KEY MUST CARRY THIS.
+
+    Bug this fixes: the results key used to be f"{ds}|{T}|{seed}" while the FEATURE cache
+    filename carried ep/lr/aug/ta. So a run with a different recipe found the old cell
+    already present, logged 'skip (done)', and re-printed the OLD numbers under the NEW
+    recipe's header. logs/exp16_target98.txt is exactly that: all 36 cells skipped, so the
+    TARGET_ACC=0.98 result -- the one this file's docstring calls the distinguishing result
+    against ADAM/APER -- was never actually measured.
+    """
+    t = f"ep{epochs_for(ds)}_lr{LR:g}_aug{AUG}"
+    if TARGET_ACC > 0:
+        t += f"_ta{TARGET_ACC:g}"
+    return t
+
 
 _cfg = resolve_model_data_config(timm.create_model(MODEL, pretrained=False, num_classes=0))
 TF_EVAL = create_transform(**_cfg, is_training=False)
@@ -197,15 +225,15 @@ def extract(model, ds, rows=None):
 
 # ------------------------------------------------------------------ A_plus
 def aplus_features(ds_name, T, seed, tr_aug, tr_ev, ytr, te_ev, n_cls):
-    """Train task 0 with the tuned recipe, FREEZE, return (Ftr, Fte, task0_train_acc)."""
+    """Train task 0 with the tuned recipe, FREEZE, return (Ftr, Fte, acc0, epochs_used)."""
     cpt = n_cls // T
-    tag = f"{ds_name}_T{T}_s{seed}_ep{EPOCHS}_lr{LR:g}_aug{AUG}"
-    if TARGET_ACC > 0:
-        tag += f"_ta{TARGET_ACC:g}"
+    nep = epochs_for(ds_name)
+    tag = f"{ds_name}_T{T}_s{seed}_{recipe_tag(ds_name)}"
     cache = os.path.join(REPO, f"exp16_feats_{tag}_{MODEL.split('.')[-1]}.npz")
     if os.path.exists(cache):
         z = np.load(cache)
-        return z["Ftr"], z["Fte"], float(z["acc0"])
+        return z["Ftr"], z["Fte"], float(z["acc0"]), int(z["ep_used"]) if "ep_used" in z \
+            else nep
 
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -220,12 +248,12 @@ def aplus_features(ds_name, T, seed, tr_aug, tr_ev, ytr, te_ev, n_cls):
     lp = list(get_lora_params(model))
     head = nn.Linear(model.num_features, cpt).to(DEV)
     opt = torch.optim.AdamW(lp + list(head.parameters()), lr=LR, weight_decay=1e-4)
-    sch = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=EPOCHS)
+    sch = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=nep)
     ce = nn.CrossEntropyLoss()
     ld = DataLoader(Subset(tr_aug, idx.tolist()), batch_size=BS, shuffle=True,
                     num_workers=8, pin_memory=True)
-    acc0 = 0.0
-    for ep in range(EPOCHS):
+    acc0, ep_used = 0.0, nep
+    for ep in range(nep):
         model.train()
         ok = tot = 0
         for x, lab in ld:
@@ -245,13 +273,18 @@ def aplus_features(ds_name, T, seed, tr_aug, tr_ev, ytr, te_ev, n_cls):
         # exp12's fit curve peaks at ~0.98 task-0 train accuracy; TARGET_ACC turns that
         # observation into the stopping rule instead of tuning lr/epochs per dataset.
         if TARGET_ACC > 0 and acc0 >= TARGET_ACC:
-            log(f"    early-stopped at epoch {ep+1}/{EPOCHS} (train acc {acc0:.3f})")
+            ep_used = ep + 1
+            log(f"    early-stopped at epoch {ep_used}/{nep} (train acc {acc0:.3f})")
             break
+    else:
+        if TARGET_ACC > 0:
+            log(f"    NEVER REACHED TARGET {TARGET_ACC:g} in {nep} epochs "
+                f"(train acc {acc0:.3f}) -- this cell is UNDER-fit, raise EPOCHS_DS")
     Ftr, Fte = extract(model, tr_ev), extract(model, te_ev)
     del model
     torch.cuda.empty_cache()
-    np.savez(cache, Ftr=Ftr, Fte=Fte, acc0=np.array(acc0))
-    return Ftr, Fte, acc0
+    np.savez(cache, Ftr=Ftr, Fte=Fte, acc0=np.array(acc0), ep_used=np.array(ep_used))
+    return Ftr, Fte, acc0, ep_used
 
 
 # ------------------------------------------------------------------ RanPAC replay
@@ -318,52 +351,60 @@ if not REPORT_ONLY:
                 log(f"  skip T={T}: {n_cls} not divisible")
                 continue
             for seed in SEEDS:
-                key = f"{ds_name}|{T}|{seed}"
+                key = f"{ds_name}|{T}|{seed}|{recipe_tag(ds_name)}"
                 if key in res:
                     log(f"  skip {key} (done)")
                     continue
                 t0 = time.time()
-                Ftr, Fte, acc0 = aplus_features(ds_name, T, seed, tr_aug, tr_ev, ytr,
-                                                te_ev, n_cls)
+                Ftr, Fte, acc0, ep_used = aplus_features(ds_name, T, seed, tr_aug, tr_ev,
+                                                         ytr, te_ev, n_cls)
                 accs = replay(Ftr, ytr, Fte, yte, T, seed, n_cls)
                 res[key] = {"A_last": accs[-1], "A_avg": float(np.mean(accs)),
-                            "acc0": acc0, "accs": accs, "n_cls": n_cls, "cpt": n_cls // T}
+                            "acc0": acc0, "ep_used": ep_used, "accs": accs,
+                            "n_cls": n_cls, "cpt": n_cls // T}
                 json.dump(res, open(OUT, "w"), indent=2)
-                log(f"  {key:26s} A-Last {accs[-1]*100:6.2f}  A-Avg "
-                    f"{np.mean(accs)*100:6.2f}  task0-acc {acc0:.3f}  "
+                log(f"  {key:44s} A-Last {accs[-1]*100:6.2f}  A-Avg "
+                    f"{np.mean(accs)*100:6.2f}  task0-acc {acc0:.3f}  ep {ep_used}  "
                     f"[{time.time()-t0:.0f}s]")
 
 # ------------------------------------------------------------------ report
-W = 118
-print("\n" + "=" * W)
-print(f"EXP16 — A_plus full table   ({MODEL}, ep{EPOCHS} lr{LR:g} AUG={AUG}"
-      + (f" TARGET_ACC={TARGET_ACC:g}" if TARGET_ACC > 0 else "") + ")")
-print(f"A_plus = adapt task 0 with the tuned recipe, then FREEZE. Zero stored per-class "
-      f"state; the compared methods store 473 MB.")
-print("=" * W)
-print(f"{'dataset':<11}{'T':>4}{'cpt':>5}{'seeds':>6} | {'A-Last (mean+-sd)':>19}"
-      f"{'A-Avg (mean+-sd)':>19} | {'GR-LoRA':>15}{'MACIL':>15} | {'dLast':>8}{'task0':>8}")
-for ds_name in DATASETS:
-    for T in TASKCOUNTS:
-        ks = [f"{ds_name}|{T}|{s}" for s in SEEDS if f"{ds_name}|{T}|{s}" in res]
-        if not ks:
-            continue
-        la = np.array([res[k]["A_last"] for k in ks]) * 100
-        av = np.array([res[k]["A_avg"] for k in ks]) * 100
-        a0 = np.mean([res[k]["acc0"] for k in ks])
-        ref = REF.get((ds_name, T), {})
-        g, m = ref.get("GR-LoRA"), ref.get("MACIL")
-        dl = la.mean() - g[0] if g else float("nan")
-        win = " *" if (g and (la.mean() > g[0] or av.mean() > g[1])) else "  "
-        print(f"{ds_name:<11}{T:>4}{res[ks[0]]['cpt']:>5}{len(ks):>6} | "
-              f"{la.mean():>12.2f}+-{la.std():<5.2f}{av.mean():>12.2f}+-{av.std():<5.2f} | "
-              f"{(f'{g[0]:.2f}/{g[1]:.2f}' if g else '-'):>15}"
-              f"{(f'{m[0]:.2f}/{m[1]:.2f}' if m else '-'):>15} | "
-              f"{dl:>+8.2f}{a0:>8.3f}{win}")
-print("-" * W)
+# One block per RECIPE present in the JSON, so fixed-schedule and target-0.98 sit side by
+# side instead of one silently masquerading as the other.
+W = 126
+TAGS = sorted({k.split("|")[3] for k in res if len(k.split("|")) == 4})
+for tag in TAGS:
+    print("\n" + "=" * W)
+    print(f"EXP16 — A_plus full table   ({MODEL})   RECIPE: {tag}")
+    print("A_plus = adapt task 0 with the tuned recipe, then FREEZE. Zero stored per-class "
+          "state; the compared methods store 473 MB.")
+    print("=" * W)
+    print(f"{'dataset':<11}{'T':>4}{'cpt':>5}{'seeds':>6} | {'A-Last (mean+-sd)':>19}"
+          f"{'A-Avg (mean+-sd)':>19} | {'GR-LoRA':>15}{'MACIL':>15} | "
+          f"{'dLast':>8}{'task0':>8}{'ep':>5}")
+    for ds_name in DATASETS:
+        for T in TASKCOUNTS:
+            ks = [f"{ds_name}|{T}|{s}|{tag}" for s in SEEDS
+                  if f"{ds_name}|{T}|{s}|{tag}" in res]
+            if not ks:
+                continue
+            la = np.array([res[k]["A_last"] for k in ks]) * 100
+            av = np.array([res[k]["A_avg"] for k in ks]) * 100
+            a0 = np.mean([res[k]["acc0"] for k in ks])
+            ep = np.mean([res[k].get("ep_used", float("nan")) for k in ks])
+            ref = REF.get((ds_name, T), {})
+            g, m = ref.get("GR-LoRA"), ref.get("MACIL")
+            dl = la.mean() - g[0] if g else float("nan")
+            win = " *" if (g and (la.mean() > g[0] or av.mean() > g[1])) else "  "
+            print(f"{ds_name:<11}{T:>4}{res[ks[0]]['cpt']:>5}{len(ks):>6} | "
+                  f"{la.mean():>12.2f}+-{la.std():<5.2f}"
+                  f"{av.mean():>12.2f}+-{av.std():<5.2f} | "
+                  f"{(f'{g[0]:.2f}/{g[1]:.2f}' if g else '-'):>15}"
+                  f"{(f'{m[0]:.2f}/{m[1]:.2f}' if m else '-'):>15} | "
+                  f"{dl:>+8.2f}{a0:>8.3f}{ep:>5.0f}{win}")
+    print("-" * W)
 print("dLast = ours - GR-LoRA A-Last.  '*' = beats GR-LoRA on either metric.")
-print("task0 = mean task-0 TRAIN accuracy. exp12's fit curve peaks at ~0.98; cells far from")
-print("        that are cells where the ImageNet-R-tuned lr3e-4 did NOT transfer, and they")
-print("        should be re-run with TARGET_ACC=0.98 rather than reported as-is.")
+print("task0 = mean task-0 TRAIN accuracy, ep = mean epochs actually used.")
+print("Under TARGET_ACC, task0 well BELOW the target means the cell never converged and is")
+print("        UNDER-fit -- raise EPOCHS_DS for that dataset; it is not a method result.")
 print("=" * W)
 print(f"wrote {OUT}")

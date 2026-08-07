@@ -1,0 +1,37 @@
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    1.5s] IMAGENETR: 200 classes, 6000 test, imgs/class min 39 med 112
+[   45.0s]   R=1   ncm 71.43  multiproto 71.43  cone_km 71.43  cone_spa 71.43  protomaha 77.73
+[  242.5s]   R=2   ncm 71.43  multiproto 72.00  cone_km 73.43  cone_spa 11.60  protomaha 79.30
+[  445.1s]   R=4   ncm 71.43  multiproto 72.73  cone_km 74.12  cone_spa 29.25  protomaha 78.53
+[  674.0s]   R=8   ncm 71.43  multiproto 73.50  cone_km 75.13  cone_spa 51.27  protomaha 78.53
+[  902.0s]   R=16  ncm 71.43  multiproto 72.73  cone_km 76.20  cone_spa 66.70  protomaha 77.07
+[ 1185.9s]   R=32  ncm 71.43  multiproto 73.40  cone_km 76.08  cone_spa 70.62  protomaha 75.95
+
+========================================================================================
+EXP21 — classifier accuracy at a matched per-class budget of R vectors
+========================================================================================
+
+--- CUB200
+   R          ncm   multiproto      cone_km     cone_spa    protomaha  cone_km-mproto
+   1        88.30        88.30        88.30        88.30        89.23           +0.00
+   2        88.30        88.73        89.16        67.67        89.02           +0.43
+   4        88.30        88.06        88.75        82.22        88.70           +0.69
+   8        88.30        87.42        88.94        86.80        88.13           +1.52
+  16        88.30        86.76        89.13        87.28        87.14           +2.36
+
+--- IMAGENETR
+   R          ncm   multiproto      cone_km     cone_spa    protomaha  cone_km-mproto
+   1        71.43        71.43        71.43        71.43        77.73           +0.00
+   2        71.43        72.00        73.43        11.60        79.30           +1.43
+   4        71.43        72.73        74.12        29.25        78.53           +1.38
+   8        71.43        73.50        75.13        51.27        78.53           +1.63
+  16        71.43        72.73        76.20        66.70        77.07           +3.47
+  32        71.43        73.40        76.08        70.62        75.95           +2.68
+
+----------------------------------------------------------------------------------------
+cone_km vs multiproto = the scoring rule at IDENTICAL atoms (the decisive column).
+cone_spa vs cone_km   = the atoms at an identical rule.
+protomaha             = multiproto's atoms under a tied-whitened metric.
+========================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp21_cone_vs_multiproto.json

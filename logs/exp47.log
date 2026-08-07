@@ -1,0 +1,42 @@
+[    0.0s] === IMAGENETR|10|0|base+reaim_g0+reaim+reaim_l+oracle|g0.5_rg0.5|k5m24_L2|f2000|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[   21.8s]     s0: ranpac 93.07  base 90.50  reaim_g0 90.50  reaim 90.50  reaim_l 90.50  oracle 90.50
+[   75.1s]     s1: ranpac 90.00  base 90.09  reaim_g0 90.09  reaim 89.28  reaim_l 90.09  oracle 89.64
+[  145.7s]     s2: ranpac 88.93  base 88.62  reaim_g0 88.62  reaim 85.39  reaim_l 87.62  oracle 88.43
+[  250.4s]     s3: ranpac 86.38  base 86.47  reaim_g0 86.47  reaim 80.76  reaim_l 83.57  oracle 86.19
+[  401.8s]     s4: ranpac 84.66  base 84.52  reaim_g0 84.52  reaim 78.73  reaim_l 80.96  oracle 84.24
+[  554.0s]     s5: ranpac 83.10  base 83.16  reaim_g0 83.16  reaim 76.14  reaim_l 78.30  oracle 83.10
+[  794.5s]     s6: ranpac 82.70  base 82.72  reaim_g0 82.72  reaim 74.24  reaim_l 76.13  oracle 82.86
+[ 1082.3s]     s7: ranpac 81.44  base 81.29  reaim_g0 81.29  reaim 71.58  reaim_l 73.17  oracle 81.35
+[ 1423.6s]     s8: ranpac 80.78  base 80.43  reaim_g0 80.43  reaim 69.02  reaim_l 70.80  oracle 80.45
+[ 1863.4s]     s9: ranpac 80.28  base 79.77  reaim_g0 79.77  reaim 66.53  reaim_l 67.88  oracle 79.82
+
+====================================================================================
+EXP47 — retroactive re-aim: can an old cone learn to avoid a new class?
+====================================================================================
+
+--- IMAGENETR|10|0|base+reaim_g0+reaim+reaim_l+oracle|g0.5_rg0.5|k5m24_L2|f2000|v1
+  arm            A-Last    A-Avg    rays   vs base
+  base            79.77    84.76    26.5     +0.00
+  reaim_g0        79.77    84.76    26.5     +0.00
+  reaim           66.53    78.22    26.5    -13.23
+  reaim_l         67.88    79.90    26.5    -11.88
+  oracle          79.82    84.66    26.5     +0.05
+  [ranpac]        80.28    85.13
+
+  CEILING      oracle - base   = +0.05
+  TRUE EFFECT  reaim - reaim_g0 = -13.23
+  RAW          reaim - base     = -13.23
+
+------------------------------------------------------------------------------------
+READ `oracle - base` FIRST. It uses past images and is not a method; it is the
+   ceiling. The legal arms are restricted to span(V_o) and cannot exceed it.
+`reaim - reaim_g0` is the only honest effect size. reaim_g0 re-solves and
+   re-clusters WITHOUT looking at other classes, so it absorbs the reshuffling
+   noise that re-aiming would otherwise get credit for.
+base MUST reproduce exp41's k5m24 (IMAGENETR T=10 s0: 80.07, 26.5 rays).
+====================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp47_retro_reaim_augreg_in21k.json

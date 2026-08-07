@@ -1,0 +1,101 @@
+[    0.0s] skip IMAGENETR|10|0|signal|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+
+============================================================================================
+EXP38 — fair-comparison suite (RAW arms only; no fusion, so beta never enters)
+============================================================================================
+
+--- IMAGENETR|10|0|constraint|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+  sub                78.02   83.10
+  cone               77.92   83.28
+  sparse             77.92   83.26
+  simplex            77.30   82.63
+  NON-NEGATIVITY  cone - sub    = -0.10   (identical R*d storage)
+
+--- IMAGENETR|10|0|signal|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+  rp_ridge           80.28   85.13
+  cone               77.92   83.28
+  rp_ncm             70.58   77.83
+  rp_diag            65.03   74.48
+
+  FAIR RULE GAP   cone - rp_ncm  = +7.33   (same budget, same information)
+  PRICE OF GENERATIVE  rp_ridge - rp_ncm = +9.70
+
+--------------------------------------------------------------------------------------------
+rp_ridge must reproduce the exp16 bar (ImageNet-R T=10 s0 R=32: 80.28) whenever
+   NROWS=0; if it does not, the replay is broken and no row means anything.
+FAIR RULE GAP is the headline: cone vs a generative head on the SAME lifted
+   features with the SAME per-class-only information. The old cone-vs-rp_ridge
+   comparison was naive-Bayes vs LDA and always flattered RanPAC.
+NON-NEGATIVITY is the foundational test: `sub` is a rank-R subspace at IDENTICAL
+   R*d storage, so cone - sub isolates w>=0 and nothing else. <= 0 means the
+   conic parameterisation earns nothing over a plain span.
+LDA is rank-limited to n_seen-1, so early stages are structurally starved. That is
+   a real property of LDA in CIL, not an artifact -- read A-Avg, not just A-Last.
+Sweep NROWS=5,10,20,50,0 for the regime axis. CUB200 has 27 rows/class and
+   ImageNet-A 18, so the low-NROWS rows predict those datasets directly.
+============================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp38_fair_cone_augreg_in21k.json
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    2.5s] === IMAGENETR|10|0|opca|g0.5|s0.03|v1
+[   75.1s]   [opca] stage 0 accumulated
+[  117.9s]   [opca] stage 1 accumulated
+[  153.8s]   [opca] stage 2 accumulated
+[  180.3s]   [opca] stage 3 accumulated
+[  192.1s]   [opca] stage 4 accumulated
+[  202.7s]   [opca] stage 5 accumulated
+[  229.3s]   [opca] stage 6 accumulated
+[  243.7s]   [opca] stage 7 accumulated
+[  261.7s]   [opca] stage 8 accumulated
+[  274.5s]   [opca] stage 9 accumulated
+[  623.0s]   [opca] scored, mean rays 27.0
+[  623.1s] === IMAGENETR|10|0|km32|g0.5|s0.03|v1
+[  630.7s]   [km32] stage 0 accumulated
+[  637.7s]   [km32] stage 1 accumulated
+[  652.6s]   [km32] stage 2 accumulated
+[  660.9s]   [km32] stage 3 accumulated
+[  669.6s]   [km32] stage 4 accumulated
+[  682.2s]   [km32] stage 5 accumulated
+[  690.3s]   [km32] stage 6 accumulated
+[  699.4s]   [km32] stage 7 accumulated
+[  708.7s]   [km32] stage 8 accumulated
+[  714.2s]   [km32] stage 9 accumulated
+[ 1106.0s]   [km32] scored, mean rays 32.0
+
+==============================================================================
+EXP45 — is the non-negativity constraint ACTIVE, and is it DIFFERENTIAL?
+==============================================================================
+
+--- IMAGENETR|10|0|km32|g0.5|s0.03|v1   (32.0 rays/class)
+  accuracy    sub 78.02   cone 77.92   simplex 77.30   |  cone-sub -0.10
+  gap         own 0.01494   foreign 0.01289   |  differential -0.00205
+  inactive    own 0.0%   foreign 0.0%
+  neg mass    own 28.9%   foreign 26.2%
+  margin      0.08519   |  differential/margin -0.024
+  CONTESTED   own 0.01494   runner-up 0.01717   |  differential +0.00223  (+0.026 margins)
+  top-1 pair  rescued 100   broken 75   |  net +25
+  argmax      disagree 5.75%   cone right 76   sub right 82
+
+--- IMAGENETR|10|0|opca|g0.5|s0.03|v1   (27.0 rays/class)
+  accuracy    sub 79.17   cone 79.77   simplex 79.57   |  cone-sub +0.60
+  gap         own 0.02452   foreign 0.01439   |  differential -0.01013
+  inactive    own 0.0%   foreign 0.0%
+  neg mass    own 43.7%   foreign 41.9%
+  margin      0.11219   |  differential/margin -0.090
+  CONTESTED   own 0.02452   runner-up 0.03190   |  differential +0.00738  (+0.066 margins)
+  top-1 pair  rescued 196   broken 91   |  net +105
+  argmax      disagree 8.82%   cone right 141   sub right 105
+
+------------------------------------------------------------------------------
+READ `inactive` FIRST. If the constraint is inactive on most (q,c) pairs the
+   cone IS the subspace there and no accuracy comparison between them measures
+   anything -- exp38's -0.10 would be a null result, not a negative one.
+`differential` is the only quantity that can change an argmax: a constraint that
+   shaves the same amount off every class is a constant. Read it against
+   `margin`; differential/margin is the fraction of a decision it can move.
+`disagree` bounds the whole question empirically: sub and cone can differ on at
+   most that many queries, so |cone-sub| accuracy is capped by it.
+==============================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp45_constraint_active_augreg_in21k.json

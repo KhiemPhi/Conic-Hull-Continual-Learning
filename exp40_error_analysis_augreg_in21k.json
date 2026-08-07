@@ -1,0 +1,21 @@
+{
+  "method": "opca",
+  "gamma": 0.5,
+  "rmode": "k5",
+  "rays_mean": 21.205,
+  "conf_top1": 0.2929460580912863,
+  "conf_top3": 0.6132780082987552,
+  "cone": 0.7991666666666667,
+  "ranpac": 0.8028333333333333,
+  "oracle": 0.8341666666666666,
+  "cell": {
+    "both": 4607,
+    "cone_only": 188,
+    "ranpac_only": 210,
+    "neither": 995
+  },
+  "corr_width_overpred": 0.39488981487167596,
+  "err_rank_median": 5.0,
+  "err_top2": 0.3219917012448133,
+  "err_top5": 0.5510373443983403
+}

@@ -1,0 +1,230 @@
+[    0.0s] === CIFAR100|10|0|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[   72.7s]     s0: k5m24 99.50  k5m8 99.50
+[  138.2s]     s1: k5m24 97.95  k5m8 97.90
+[  255.5s]     s2: k5m24 96.83  k5m8 96.83
+[  304.7s]     s3: k5m24 95.85  k5m8 96.03
+[  349.7s]     s4: k5m24 94.04  k5m8 94.14
+[  406.4s]     s5: k5m24 93.70  k5m8 93.73
+[  482.4s]     s6: k5m24 93.66  k5m8 93.59
+[  572.1s]     s7: k5m24 93.00  k5m8 93.04
+[  693.4s]     s8: k5m24 92.93  k5m8 92.87
+[  824.9s]     s9: k5m24 92.65  k5m8 92.66
+[  824.9s] === CIFAR100|10|1|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[  846.9s]     s0: k5m24 99.10  k5m8 99.10
+[  906.6s]     s1: k5m24 98.45  k5m8 98.40
+[  976.9s]     s2: k5m24 97.63  k5m8 97.60
+[ 1062.7s]     s3: k5m24 96.75  k5m8 96.67
+[ 1193.1s]     s4: k5m24 95.62  k5m8 95.56
+[ 1257.2s]     s5: k5m24 94.82  k5m8 94.88
+[ 1326.3s]     s6: k5m24 94.41  k5m8 94.49
+[ 1412.5s]     s7: k5m24 93.86  k5m8 93.89
+[ 1526.7s]     s8: k5m24 92.97  k5m8 93.01
+[ 1684.0s]     s9: k5m24 92.78  k5m8 92.74
+[ 1684.0s] === CIFAR100|10|2|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 1805.3s]     s0: k5m24 95.80  k5m8 95.80
+[ 1948.0s]     s1: k5m24 95.45  k5m8 95.50
+[ 2064.6s]     s2: k5m24 95.40  k5m8 95.47
+[ 2170.6s]     s3: k5m24 95.10  k5m8 95.10
+[ 2294.3s]     s4: k5m24 94.58  k5m8 94.64
+[ 2444.3s]     s5: k5m24 93.92  k5m8 93.97
+[ 2565.5s]     s6: k5m24 93.99  k5m8 93.97
+[ 2732.3s]     s7: k5m24 93.36  k5m8 93.46
+[ 2958.4s]     s8: k5m24 92.70  k5m8 92.83
+[ 3147.1s]     s9: k5m24 92.33  k5m8 92.47
+[ 3147.2s] === IMAGENETR|10|0|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[ 3193.6s]     s0: k5m24 90.50  k5m8 91.09
+[ 3227.3s]     s1: k5m24 90.45  k5m8 90.27
+[ 3280.9s]     s2: k5m24 88.50  k5m8 88.43
+[ 3344.4s]     s3: k5m24 86.42  k5m8 85.96
+[ 3409.3s]     s4: k5m24 84.34  k5m8 84.73
+[ 3498.2s]     s5: k5m24 83.16  k5m8 83.10
+[ 3718.8s]     s6: k5m24 82.82  k5m8 82.57
+[ 3968.7s]     s7: k5m24 81.46  k5m8 81.44
+[ 4156.6s]     s8: k5m24 80.58  k5m8 80.65
+[ 4366.1s]     s9: k5m24 80.05  k5m8 80.03
+[ 4366.1s] === IMAGENETR|10|1|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[ 4418.9s]     s0: k5m24 95.68  k5m8 95.32
+[ 4517.8s]     s1: k5m24 90.74  k5m8 89.99
+[ 4650.2s]     s2: k5m24 88.93  k5m8 88.45
+[ 4795.1s]     s3: k5m24 86.57  k5m8 86.97
+[ 4867.3s]     s4: k5m24 84.35  k5m8 85.02
+[ 4944.3s]     s5: k5m24 83.31  k5m8 83.25
+[ 5077.1s]     s6: k5m24 83.00  k5m8 82.85
+[ 5214.4s]     s7: k5m24 81.94  k5m8 81.98
+[ 5355.5s]     s8: k5m24 80.77  k5m8 80.95
+[ 5651.6s]     s9: k5m24 80.68  k5m8 80.30
+[ 5651.6s] === IMAGENETR|10|2|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[ 5726.9s]     s0: k5m24 88.81  k5m8 89.10
+[ 5783.7s]     s1: k5m24 87.31  k5m8 86.76
+[ 5831.0s]     s2: k5m24 86.08  k5m8 85.64
+[ 5897.6s]     s3: k5m24 85.04  k5m8 85.08
+[ 5994.8s]     s4: k5m24 84.64  k5m8 84.54
+[ 6098.7s]     s5: k5m24 83.62  k5m8 83.34
+[ 6231.8s]     s6: k5m24 83.25  k5m8 83.11
+[ 6452.1s]     s7: k5m24 82.50  k5m8 82.44
+[ 6757.9s]     s8: k5m24 81.24  k5m8 81.20
+[ 7543.5s]     s9: k5m24 80.58  k5m8 80.62
+[ 7543.5s] === IMAGENETA|10|0|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[ 7573.5s]     s0: k5m24 76.09  k5m8 76.09
+[ 7621.6s]     s1: k5m24 70.67  k5m8 70.67
+[ 7661.6s]     s2: k5m24 67.42  k5m8 66.29
+[ 7717.9s]     s3: k5m24 62.47  k5m8 63.54
+[ 7788.4s]     s4: k5m24 63.91  k5m8 65.36
+[ 7855.4s]     s5: k5m24 62.64  k5m8 63.24
+[ 7912.8s]     s6: k5m24 62.68  k5m8 62.88
+[ 7976.1s]     s7: k5m24 61.67  k5m8 61.50
+[ 8048.0s]     s8: k5m24 61.56  k5m8 61.19
+[ 8218.6s]     s9: k5m24 61.00  k5m8 59.87
+[ 8218.6s] === IMAGENETA|10|1|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[ 8335.2s]     s0: k5m24 81.05  k5m8 81.05
+[ 8401.5s]     s1: k5m24 77.81  k5m8 78.11
+[ 8456.1s]     s2: k5m24 76.10  k5m8 78.01
+[ 8498.7s]     s3: k5m24 74.45  k5m8 74.29
+[ 8547.7s]     s4: k5m24 72.74  k5m8 73.50
+[ 8609.0s]     s5: k5m24 69.82  k5m8 70.57
+[ 8671.6s]     s6: k5m24 67.47  k5m8 68.69
+[ 8733.3s]     s7: k5m24 65.47  k5m8 65.89
+[ 8800.7s]     s8: k5m24 63.99  k5m8 64.37
+[ 8878.1s]     s9: k5m24 62.07  k5m8 62.73
+[ 8878.1s] === IMAGENETA|10|2|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[ 8925.3s]     s0: k5m24 75.86  k5m8 75.86
+[ 9046.2s]     s1: k5m24 68.18  k5m8 69.01
+[ 9139.0s]     s2: k5m24 68.21  k5m8 69.76
+[ 9186.2s]     s3: k5m24 67.34  k5m8 66.84
+[ 9247.0s]     s4: k5m24 64.57  k5m8 64.84
+[ 9307.5s]     s5: k5m24 63.12  k5m8 63.45
+[ 9365.6s]     s6: k5m24 61.63  k5m8 61.53
+[ 9439.8s]     s7: k5m24 60.65  k5m8 60.91
+[ 9512.0s]     s8: k5m24 59.10  k5m8 59.69
+[ 9624.3s]     s9: k5m24 58.20  k5m8 58.33
+[ 9624.3s] === CUB200|10|0|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 9674.5s]     s0: k5m24 99.32  k5m8 99.32
+[ 9715.6s]     s1: k5m24 98.46  k5m8 98.54
+[ 9768.3s]     s2: k5m24 95.71  k5m8 95.59
+[ 9837.9s]     s3: k5m24 93.97  k5m8 94.31
+[10004.6s]     s4: k5m24 93.64  k5m8 93.57
+[10125.2s]     s5: k5m24 92.17  k5m8 91.94
+[10235.8s]     s6: k5m24 92.07  k5m8 91.90
+[10385.0s]     s7: k5m24 90.95  k5m8 90.97
+[10535.8s]     s8: k5m24 89.50  k5m8 89.63
+[10732.4s]     s9: k5m24 88.78  k5m8 89.04
+[10732.5s] === CUB200|10|1|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[10943.1s]     s0: k5m24 96.31  k5m8 96.31
+[11059.9s]     s1: k5m24 95.29  k5m8 95.46
+[11113.9s]     s2: k5m24 93.85  k5m8 94.02
+[11172.5s]     s3: k5m24 93.18  k5m8 93.13
+[11251.8s]     s4: k5m24 90.64  k5m8 90.53
+[11344.5s]     s5: k5m24 90.98  k5m8 91.15
+[11455.4s]     s6: k5m24 89.96  k5m8 90.08
+[11601.1s]     s7: k5m24 90.02  k5m8 90.05
+[11887.9s]     s8: k5m24 89.48  k5m8 89.48
+[12134.5s]     s9: k5m24 88.73  k5m8 88.70
+[12134.6s] === CUB200|10|2|k5m24+k5m8|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[12192.5s]     s0: k5m24 96.64  k5m8 96.64
+[12230.8s]     s1: k5m24 95.14  k5m8 95.23
+[12279.0s]     s2: k5m24 93.40  k5m8 93.63
+[12328.8s]     s3: k5m24 92.25  k5m8 92.38
+[12411.5s]     s4: k5m24 91.03  k5m8 91.23
+[12494.7s]     s5: k5m24 90.90  k5m8 91.21
+[12623.0s]     s6: k5m24 90.69  k5m8 90.84
+[12848.2s]     s7: k5m24 90.14  k5m8 90.22
+[13013.9s]     s8: k5m24 89.16  k5m8 89.19
+[13203.7s]     s9: k5m24 89.30  k5m8 89.14
+
+================================================================================================
+EXP49 — best raw cone across datasets and seeds (self-consistent negatives)
+================================================================================================
+
+  dataset      T seed     arm   rays  clamp    cone  ranpac   delta  A-Avg d
+  CIFAR100    10    0   k5m24   89.6     0%   92.65   92.60   +0.05    -0.13
+  CIFAR100    10    1   k5m24   89.6     0%   92.78   92.69   +0.09    -0.08
+  CIFAR100    10    2   k5m24   89.6     0%   92.33   92.37   -0.04    -0.28
+  CIFAR100    10    0    k5m8   89.6     0%   92.66   92.60   +0.06    -0.11
+  CIFAR100    10    1    k5m8   89.6     0%   92.74   92.69   +0.05    -0.08
+  CIFAR100    10    2    k5m8   89.6     0%   92.47   92.37   +0.10    -0.22
+  CUB200      10    0   k5m24   24.0     2%   88.78   90.13   -1.35    -0.75
+  CUB200      10    1   k5m24   24.0     1%   88.73   90.08   -1.35    -0.90
+  CUB200      10    2   k5m24   24.0     0%   89.30   89.80   -0.50    -0.32
+  CUB200      10    0    k5m8    8.0     0%   89.04   90.13   -1.09    -0.72
+  CUB200      10    1    k5m8    8.0     0%   88.70   90.08   -1.38    -0.85
+  CUB200      10    2    k5m8    8.0     0%   89.14   89.80   -0.66    -0.22
+  IMAGENETA   10    0   k5m24   15.9    60%   61.00   59.53   +1.47    -0.80
+  IMAGENETA   10    1   k5m24   17.2    60%   62.07   62.67   -0.60    -1.45
+  IMAGENETA   10    2   k5m24   16.5    60%   58.20   58.27   -0.07    -2.13
+  IMAGENETA   10    0    k5m8    8.3    14%   59.87   59.53   +0.33    -0.75
+  IMAGENETA   10    1    k5m8    8.6    15%   62.73   62.67   +0.07    -0.83
+  IMAGENETA   10    2    k5m8    8.4    13%   58.33   58.27   +0.07    -1.79
+  IMAGENETR   10    0   k5m24   26.5     0%   79.78   80.28   -0.50    -0.35
+  IMAGENETR   10    0   k5m24   26.5     0%   80.05   80.28   -0.23    -0.31
+  IMAGENETR   10    1   k5m24   27.4     0%   80.68   80.55   +0.13    -0.49
+  IMAGENETR   10    2   k5m24   27.2     0%   80.58   80.38   +0.20    -0.40
+  IMAGENETR   10    0    k5m8   20.3     0%   80.03   80.28   -0.25    -0.31
+  IMAGENETR   10    1    k5m8   21.2     0%   80.30   80.55   -0.25    -0.58
+  IMAGENETR   10    2    k5m8   21.8     0%   80.62   80.38   +0.23    -0.52
+
+  PAIRED delta (cone - ranpac), same features & splits -- seed noise cancels
+  dataset         arm   n     mean      sd     min     max   wins
+  CIFAR100      k5m24   3    +0.03    0.07   -0.04   +0.09   2/3
+  CIFAR100       k5m8   3    +0.07    0.03   +0.05   +0.10   3/3
+  CUB200        k5m24   3    -1.06    0.49   -1.35   -0.50   0/3
+  CUB200         k5m8   3    -1.04    0.36   -1.38   -0.66   0/3
+  IMAGENETA     k5m24   3    +0.27    1.07   -0.60   +1.47   1/3
+  IMAGENETA      k5m8   3    +0.16    0.15   +0.07   +0.33   3/3
+  IMAGENETR     k5m24   4    -0.10    0.33   -0.50   +0.20   2/4
+  IMAGENETR      k5m8   3    -0.09    0.28   -0.25   +0.23   1/3
+  ALL                  25    -0.22    0.63   -1.38   +1.47  12/25
+
+  best cell: IMAGENETA T=10 seed 0 k5m24  cone 61.00 vs ranpac 59.53  (+1.47)
+  ^ this is the MAX OF 25 DRAWS and is biased upward by roughly the seed
+    spread. Quote the paired mean, not this cell.
+
+------------------------------------------------------------------------------------------------
+SANITY: IMAGENETR T=10 s0 k5m24 should read ~79.77, NOT 80.07. exp41's 80.07
+   used another arm's stored rays as negatives; see the module docstring.
+`clamp` is the fraction of classes where R_c exceeded the class's fit rows, so
+   k-means was asked for more centroids than it had points. Above ~50% the arm
+   is degenerate and its number describes the clamp, not the allocation rule.
+================================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp49_seed_grid_augreg_in21k.json

@@ -8,9 +8,24 @@ build_class_conic_hulls — fits one hull per class.
 import numpy as np
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple, Union
-from sklearn.decomposition import PCA
+import warnings
+
+from sklearn.decomposition import PCA, TruncatedSVD
 from sklearn.preprocessing import normalize
 from tqdm import tqdm
+
+
+def _project_simplex(Z):
+    """Row-wise Euclidean projection onto {w >= 0, sum w = 1} (Duchi et al., 2008)."""
+    import torch
+    K = Z.shape[1]
+    U, _ = torch.sort(Z, dim=1, descending=True)
+    css = U.cumsum(1) - 1.0
+    ind = torch.arange(1, K + 1, device=Z.device, dtype=Z.dtype)
+    cond = U - css / ind > 0
+    rho = cond.to(Z.dtype).cumsum(1).argmax(1)
+    theta = css.gather(1, rho.unsqueeze(1)) / (rho + 1).unsqueeze(1).to(Z.dtype)
+    return (Z - theta).clamp_(min=0)
 
 
 class ConicHull:
@@ -39,13 +54,56 @@ class ConicHull:
     def __init__(self, n_rays: int = 50, use_pca: bool = True, pca_dim: int = 64,
                  k_local: Optional[int] = None,
                  ray_diversity: str = "hybrid",
-                 spa_oversample: int = 3):
+                 spa_oversample: int = 3,
+                 nnls_iters: int = 500,
+                 nnls_tol: float = 1e-7,
+                 center: bool = False,
+                 random_state: int = 0,
+                 ray_init: str = "kmeans",
+                 whiten: Optional[np.ndarray] = None,
+                 nnls_l2: float = 0.0,
+                 nnls_l1: float = 0.0,
+                 constraint: str = "cone"):
         self.n_rays          = n_rays
         self.use_pca         = use_pca
         self.pca_dim         = pca_dim
         self.k_local         = k_local
-        self.ray_diversity   = ray_diversity   # "spa" | "fps" | "hybrid"
+        self.ray_diversity   = ray_diversity   # "spa" | "fps" | "hybrid" (ray_init="spa")
         self.spa_oversample  = spa_oversample  # multiplier for hybrid/fps candidate pool
+        # WHERE THE GENERATORS COME FROM -- the largest single lever measured (exp21):
+        # on ImageNet-R at R=2, SPA generators score 11.60% and k-means centroids 73.43%.
+        # SPA solves NMF separability: it returns simplex VERTICES, i.e. deliberately the
+        # most atypical samples, which is the worst possible summary of where mass lives.
+        # A cone's generators need not be data points, so use denoised ones by default.
+        #   "kmeans" k-means centroids (default)   "spa"/"hybrid"/"fps" legacy selection
+        self.ray_init        = ray_init
+        # Optional (D,D) map applied to rows before fitting AND scoring, e.g. a tied
+        # Sigma^{-1/2}. Whitening alone is worth +6.3 on ImageNet-R (exp21 protomaha), more
+        # than any conic choice; a tied whitener stays estimable when per-class does not.
+        # Must be supplied by the caller -- a per-class hull cannot see a tied covariance.
+        self.whiten          = whiten
+        # Regularised NNLS:  min_{w>=0} .5||Rw-q||^2 + .5*l2||w||^2 + l1*||w||_1
+        # Unregularised NNLS over correlated generators is unstable; l1 also gives a
+        # sparsity dial spanning the tight end (best for OOD) and the expressive end.
+        self.nnls_l2         = nnls_l2
+        self.nnls_l1         = nnls_l1
+        # "cone" = w>=0 (conic hull).  "simplex" = w>=0, sum w = 1 (CONVEX hull), which is
+        # scale-free and better matched to unit-norm rows.
+        self.constraint      = constraint
+        # nnls_iters=1 reproduces the pre-2026-08 behaviour EXACTLY (see
+        # _reconstruct_gpu_fast): the convergence test compared a tensor with itself, so
+        # FISTA always broke at iteration 0 and every GPU hull score in this repo was the
+        # one-step approximation w = lr*relu(R^T q) rather than an NNLS solution. Kept as an
+        # option purely so old numbers can be reproduced and diffed, never for new results.
+        self.nnls_iters      = nnls_iters
+        self.nnls_tol        = nnls_tol
+        # A conic hull is anchored at the ORIGIN. sklearn PCA centres (on unit-norm ViT rows
+        # the mean has norm ~0.86), so SPA used to select extremes about the CENTROID rather
+        # than extremal rays of the cone. Uncentred TruncatedSVD preserves the origin, which
+        # is also the setting SPA's separability argument is stated in. center=True restores
+        # the old (incorrect for cones) behaviour.
+        self.center          = center
+        self.random_state    = random_state
 
         # ── cached GPU reconstruction factors ─────────────────────────────────
         # R_t (K,D), Gram H = R_t R_tᵀ (K,K) and the FISTA step size lr depend
@@ -74,6 +132,15 @@ class ConicHull:
 
     # ── fitting ──────────────────────────────────────────────────────────────
 
+    def _prep(self, X: np.ndarray) -> np.ndarray:
+        """Rows -> the space the hull lives in. If `whiten` is set the same (D,D) map is
+        applied at fit AND score time and the rays are stored WHITENED, so the object stays
+        self-consistent and callers never have to remember to transform queries."""
+        X = np.asarray(X, np.float32)
+        if self.whiten is not None:
+            X = X @ np.asarray(self.whiten, np.float32)
+        return normalize(X, axis=1)
+
     def fit(self, X: np.ndarray) -> "ConicHull":
         """
         Find the extreme rays from feature matrix X (N, D).
@@ -93,21 +160,57 @@ class ConicHull:
         "hybrid" : (default) oversample with SPA, then FPS on candidates.
                    Combines extremity (SPA) with angular diversity (FPS).
         """
-        X_norm = normalize(X, axis=1)
+        X_norm = self._prep(X)
+        n, d = X_norm.shape
 
-        if self.use_pca and X_norm.shape[1] > self.pca_dim:
-            self.pca_ = PCA(n_components=self.pca_dim)
-            X_proc    = self.pca_.fit_transform(X_norm)
-        else:
-            X_proc = X_norm
+        # ── generators: k-means centroids by default (see ray_init in __init__) ──────
+        if (self.ray_init or "kmeans").lower() == "kmeans":
+            from sklearn.cluster import KMeans
+            k = int(np.clip(self.n_rays, 1, n))
+            self.extreme_rays_ = normalize(
+                X_norm.mean(0, keepdims=True) if k == 1 else
+                KMeans(k, n_init=4, random_state=self.random_state)
+                .fit(X_norm).cluster_centers_, axis=1)
+            self.extreme_rays_index = None      # centroids are not data rows
+            return self
 
         mode = (self.ray_diversity or "hybrid").lower()
+
+        # SPA in a k-dimensional space can produce at most k independent picks: after k
+        # projections the residual is numerically zero and every further argmax is over
+        # float noise. The hybrid path asks for spa_oversample * n_rays candidates, so with
+        # the old defaults (n_rays=50, pca_dim=64, oversample=3) 86 of 150 candidates -- 57%
+        # -- were noise, and FPS then chose the final rays from that pool. Size the working
+        # space to the candidate pool instead of silently degenerating.
+        cap = max(min(d, n) - 1, 2)
+        pdim = int(min(max(self.pca_dim, self.n_rays * self.spa_oversample), cap))
+        work_dim = d if (not self.use_pca or d <= pdim) else pdim
+        # HARD guard, not a warning: picks beyond the working rank come from a
+        # numerically-zero residual, i.e. argmax over float noise. Shrink the oversample
+        # first (it only widens the candidate pool), then n_rays, and record the clamp.
+        ov = int(max(1, min(self.spa_oversample, work_dim // max(self.n_rays, 1))))
+        n_rays = int(max(1, min(self.n_rays, work_dim // ov)))
+        self.clamped_ = None
+        if (ov, n_rays) != (self.spa_oversample, self.n_rays):
+            self.clamped_ = dict(n_rays=(self.n_rays, n_rays),
+                                 oversample=(self.spa_oversample, ov), work_dim=work_dim)
+        mode = mode if ov > 1 else ("spa" if mode == "hybrid" else mode)
+
+        if self.use_pca and d > pdim:
+            self.pca_ = (PCA(n_components=pdim, random_state=self.random_state)
+                         if self.center else
+                         TruncatedSVD(n_components=pdim, random_state=self.random_state))
+            X_proc = self.pca_.fit_transform(X_norm)
+        else:
+            self.pca_ = None
+            X_proc = X_norm
+
         if mode == "spa":
-            indices = self._robust_density_spa(X_proc, self.n_rays)
+            indices = self._robust_density_spa(X_proc, n_rays)
         elif mode == "fps":
-            indices = self._fps_inlier(X_proc, self.n_rays)
+            indices = self._fps_inlier(X_proc, n_rays)
         else:  # hybrid
-            indices = self._hybrid_spa_fps(X_proc, self.n_rays, self.spa_oversample)
+            indices = self._hybrid_spa_fps(X_proc, n_rays, ov)
 
         self.extreme_rays_      = X_norm[indices]   # setter clears the GPU cache
         self.extreme_rays_index = indices
@@ -319,8 +422,7 @@ class ConicHull:
         -------
         np.ndarray of shape (N_queries, n_rays) — the NNLS weight vectors
         """
-        queries_norm = normalize(queries, axis=1)          # (N, D)
-        return self._reconstruct_norm(queries_norm, k_local=k_local)
+        return self._reconstruct_norm(self._prep(queries), k_local=k_local)
 
     def _reconstruct_norm(self, queries_norm: np.ndarray,
                           k_local: Optional[int] = None) -> np.ndarray:
@@ -355,71 +457,9 @@ class ConicHull:
             return False
 
 
-    def _reconstruct_gpu(self,
-        queries_norm: np.ndarray,
-        R:            np.ndarray,
-        lr:           float = 1e-2,
-        max_iter:     int   = 2_000,
-        tol:          float = 1e-7,
-        batch_size:   int   = 4_096,
-    ) -> np.ndarray:
-        """
-        Batched projected gradient descent on GPU.
+    # _reconstruct_gpu (a second, unused 2000-iteration PGD path carrying the same
+    # convergence-test bug) was deleted 2026-08: one solver, one place to be wrong.
 
-        min_{W ≥ 0}  ‖W R^T − Q‖²_F
-
-        Gradient w.r.t W:  2 (W R^T − Q) R   → shape (N, K)
-        Projection:        clamp(W, min=0)
-
-        Armijo-style step size is estimated once on a small probe batch
-        so lr is self-tuning regardless of the ray matrix conditioning.
-        """
-        import torch
-
-        device = torch.device("cuda")
-        dtype  = torch.float32
-
-        R_t  = torch.tensor(R.T, dtype=dtype, device=device)   # (K, D)
-        Q_all = torch.tensor(queries_norm, dtype=dtype, device=device)  # (N, D)
-
-        # ── auto step-size via Lipschitz constant: L = λ_max(R R^T) ─────────────
-        # power iteration is fast and avoids a full SVD
-        with torch.no_grad():
-            RRt   = R_t @ R_t.T                         # (K, K)
-            v     = torch.randn(RRt.shape[0], device=device, dtype=dtype)
-            v     = v / v.norm()
-            for _ in range(50):                          # ~50 iters is enough
-                v = RRt @ v
-                v = v / v.norm()
-            L  = (v @ RRt @ v).item()                   # largest eigenvalue
-            lr = 1.0 / (L + 1e-8)
-
-        N, K    = Q_all.shape[0], R_t.shape[0]
-        W_out   = torch.zeros(N, K, dtype=dtype)        # collect results on CPU
-
-        for start in range(0, N, batch_size):
-            Q = Q_all[start : start + batch_size]       # (B, D)
-            B = Q.shape[0]
-
-            W = torch.zeros(B, K, dtype=dtype, device=device, requires_grad=False)
-
-            prev_loss = float("inf")
-            for _ in range(max_iter):
-                residual = W @ R_t - Q                  # (B, D)
-                grad     = residual @ R_t.T             # (B, K)  = dL/dW
-                W        = (W - lr * grad).clamp_(min=0)
-
-                # convergence check every 100 steps (cheap)
-                if _ % 100 == 0:
-                    loss = residual.pow(2).sum().item()
-                    if abs(prev_loss - loss) < tol * (1 + abs(prev_loss)):
-                        break
-                    prev_loss = loss
-
-            W_out[start : start + batch_size] = W.cpu()
-
-        return W_out.numpy()
-    
     def _gpu_factors(self, R: np.ndarray, device, dtype):
         """Return cached (R_t, H, lr) for this hull's fixed ray dictionary.
 
@@ -438,7 +478,8 @@ class ConicHull:
         with torch.autocast(device_type=_dt, enabled=False), torch.no_grad():
             R_t = torch.as_tensor(R.T, dtype=dtype, device=device)   # (K, D)
             H   = R_t @ R_t.T                                          # (K, K) — fp32, not bf16
-            v = torch.randn(H.shape[0], device=device, dtype=dtype)
+            g = torch.Generator(device=device).manual_seed(0)
+            v = torch.randn(H.shape[0], device=device, dtype=dtype, generator=g)
             v = v / v.norm()
             for _ in range(50):                                   # power iteration
                 v = H @ v
@@ -452,8 +493,8 @@ class ConicHull:
     def _reconstruct_gpu_fast(self,
         queries_norm: np.ndarray,
         R:            np.ndarray,
-        max_iter:     int            = 500,
-        tol:          float          = 1e-7,
+        max_iter:     Optional[int]   = None,
+        tol:          Optional[float] = None,
         batch_size:   int            = 4_096,
         k_local:      Optional[int]  = None,
     ) -> np.ndarray:
@@ -462,6 +503,8 @@ class ConicHull:
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         dtype  = torch.float32
+        max_iter = getattr(self, "nnls_iters", 500) if max_iter is None else max_iter
+        tol      = getattr(self, "nnls_tol", 1e-7) if tol is None else tol
 
         # R_t / H / lr are constant for a fitted hull → fetch from cache.
         R_t, H, lr = self._gpu_factors(R, device, dtype)
@@ -492,22 +535,33 @@ class ConicHull:
             Y = torch.zeros(B, K, dtype=dtype, device=device)
             t = 1.0
 
+            l2 = float(getattr(self, "nnls_l2", 0.0))
+            l1 = float(getattr(self, "nnls_l1", 0.0))
+            simplex = str(getattr(self, "constraint", "cone")).lower() == "simplex"
+            step = lr if l2 <= 0 else 1.0 / (1.0 / lr + l2)
+
             for i in range(max_iter):
-                grad   = Y @ H - C
-                W_next = (Y - lr * grad).clamp_(min=0)
+                W_prev = W
+                G_ = Y @ H - C + (l2 * Y if l2 > 0 else 0.0)
+                Z = Y - step * G_
+                if simplex:
+                    W = _project_simplex(Z)             # w >= 0, sum w = 1 -> CONVEX hull
+                else:
+                    W = (Z - step * l1).clamp_(min=0) if l1 > 0 else Z.clamp_(min=0)
                 if mask is not None:
-                    W_next = W_next * mask              # zero out non-local rays
+                    W = W * mask                        # zero out non-local rays
 
                 t_next   = (1.0 + math.sqrt(1.0 + 4.0 * t**2)) / 2.0
-                momentum = (t - 1.0) / t_next
-                Y = W_next + momentum * (W_next - W)
-                W = W_next
+                Y = W + ((t - 1.0) / t_next) * (W - W_prev)
                 t = t_next
 
-                if i % 50 == 0:
+                # Convergence is measured against the PREVIOUS iterate. The original wrote
+                # `W = W_next` and then tested `norm(W_next - W)` -- a tensor against
+                # itself -- which is identically 0, so the loop always broke at i=0 and the
+                # "NNLS reconstruction" was really one projected-gradient step from zero.
+                if i and i % 10 == 0:
                     with torch.no_grad():
-                        W_change = torch.norm(W_next - W) / (torch.norm(W) + 1e-8)
-                        if W_change < tol:
+                        if torch.norm(W - W_prev) / (torch.norm(W_prev) + 1e-8) < tol:
                             break
 
             W_out[start : start + batch_size] = W.cpu()
@@ -561,7 +615,7 @@ class ConicHull:
 
         Returns np.ndarray of shape (N_queries,) in (-1, 1].
         """
-        q_n           = normalize(queries, axis=1)          # normalise once …
+        q_n           = self._prep(queries)   # whitened+unit (see _prep)
         weights       = self._reconstruct_norm(q_n)         # … reuse for the NNLS
         reconstructed = weights @ self.extreme_rays_
         r_n           = normalize(reconstructed, axis=1)
@@ -578,12 +632,12 @@ class ConicHull:
 
         Returns np.ndarray in [0, 1] (roughly).
         """
-        weights       = self.reconstruct(queries)
+        weights       = self._reconstruct_norm(self._prep(queries))
         reconstructed = weights @ self.extreme_rays_
-        q_n           = normalize(queries,       axis=1)
+        q_n           = self._prep(queries)
         r_n           = normalize(reconstructed, axis=1)
         cos_sim       = np.clip(np.sum(q_n * r_n, axis=1), -1.0, 1.0)
-        q_norm        = np.linalg.norm(queries,       axis=1)
+        q_norm        = 1.0
         r_norm        = np.linalg.norm(reconstructed, axis=1)
         coverage      = np.clip(r_norm / (q_norm + 1e-8), 0.0, 1.0)
         return cos_sim * coverage
@@ -597,9 +651,9 @@ class ConicHull:
 
         Returns np.ndarray in [-1, 1].
         """
-        weights       = self.reconstruct(queries)
+        weights       = self._reconstruct_norm(self._prep(queries))
         reconstructed = weights @ self.extreme_rays_
-        q_n           = normalize(queries,       axis=1)
+        q_n           = self._prep(queries)
         r_n           = normalize(reconstructed, axis=1)
         cos_sim       = np.clip(np.sum(q_n * r_n, axis=1), -1.0, 1.0)
         angle         = np.arccos(cos_sim)               # [0, π]
@@ -615,8 +669,8 @@ class ConicHull:
 
         Returns np.ndarray in [0, 1].
         """
-        queries_norm  = normalize(queries, axis=1)
-        weights       = self.reconstruct(queries)
+        queries_norm  = self._prep(queries)
+        weights       = self._reconstruct_norm(self._prep(queries))
         reconstructed = weights @ self.extreme_rays_
         r_n           = normalize(reconstructed, axis=1)
         residuals     = np.linalg.norm(queries_norm - r_n, axis=1)  # [0, 2]
@@ -632,9 +686,9 @@ class ConicHull:
 
         Returns np.ndarray in [0, 1] (roughly).
         """
-        weights       = self.reconstruct(queries)
+        weights       = self._reconstruct_norm(self._prep(queries))
         reconstructed = weights @ self.extreme_rays_
-        q_n           = normalize(queries,       axis=1)
+        q_n           = self._prep(queries)
         r_n           = normalize(reconstructed, axis=1)
         cos_sim       = np.clip(np.sum(q_n * r_n, axis=1), -1.0, 1.0)
         w_sum         = weights.sum(axis=1) + 1e-8
@@ -645,10 +699,10 @@ class ConicHull:
         return cos_sim * (0.5 + 0.5 * uniformity)
 
     def score_all(self, queries: np.ndarray) -> dict:
-        weights       = self.reconstruct(queries)           # (N, K)
+        weights       = self._reconstruct_norm(self._prep(queries))           # (N, K)
         reconstructed = weights @ self.extreme_rays_        # (N, D)
 
-        q_norm = np.linalg.norm(queries,       axis=1, keepdims=True)  # (N,1)
+        q_norm = 1.0
         r_norm = np.linalg.norm(reconstructed, axis=1, keepdims=True)
 
         q_n = queries       / (q_norm + 1e-8)

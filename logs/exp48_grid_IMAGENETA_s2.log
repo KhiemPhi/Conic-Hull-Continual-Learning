@@ -1,0 +1,31 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  679.2s]   [ce] task 0 done
+[  911.3s]   [ce] task 1 done
+[ 1278.9s]   [ce] task 2 done
+[ 1589.5s]   [ce] task 3 done
+[ 1789.6s]   [ce] task 4 done
+[ 2035.3s]   [ce] task 5 done
+[ 2351.6s]   [ce] task 6 done
+[ 2574.9s]   [ce] task 7 done
+[ 2881.0s]   [ce] task 8 done
+[ 3090.2s]   [ce] task 9 done
+[ 3103.0s]   trained IMAGENETA_T10_s2_ce_e40-15_lr0.0003_lam1_P8K12s8R4_t0.1_w20
+[ 3103.0s] === IMAGENETA|10|2|ce|final|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
+Traceback (most recent call last):
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp48_conic_feature_loss.py", line 467, in <module>
+    allres[key] = evaluate(a, b, ytr, yte, n_cls)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp48_conic_feature_loss.py", line 424, in evaluate
+    tcol = np.array([col[int(y)] for y in yte])
+                     ~~~^^^^^^^^
+KeyError: 50

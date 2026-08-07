@@ -8,9 +8,9 @@ def demo():
         dataset_name="CIFAR100",
         model_name="vit_base_patch16_224.augreg2_in21k_ft_in1k",
         classes_per_stage=10,
-        epochs_per_stage=10,
+        epochs_per_stage=40,
         batch_size=256,
-        learning_rate=1e-4,
+        learning_rate=3e-4,
         # Gaussian-replay head: a normalized-linear classifier retrained over ALL
         # seen classes each task on samples ~ N(mu_c, Sigma_c) (SLCA/MACIL-style).
         # This debiases the head (the part that forgets fastest); the conic hull is

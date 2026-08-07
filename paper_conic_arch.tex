@@ -1,0 +1,312 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+
+\newcommand{\cone}{\operatorname{cone}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bq}{\mathbf{q}}
+\newcommand{\bv}{\mathbf{v}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bV}{\mathbf{V}}
+\newcommand{\bW}{\mathbf{W}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\caveat}[1]{\textcolor{gray}{\small #1}}
+
+\title{\bf From Conic Hulls to $k$-Means Hulls:\\
+Read-Out Geometry for First-Session Class-Incremental Learning}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+First-session adaptation (FSA) freezes a pre-trained backbone after one task and
+reads it with a light-weight classifier. We ask how much the \emph{read-out} can
+extract, using conic hulls as the vehicle. We show that (i) the classical conic
+hull, whose generators are extremal rays recovered by the Successive Projection
+Algorithm (SPA), is worse than choosing generators uniformly at random; (ii)
+replacing SPA with $k$-means centroids---formally, moving from a separable to a
+convex non-negative factorisation---is worth up to $61.8$ points and is the
+single largest design choice in the family; (iii) the resulting object is still a
+conic hull, but of a learned dictionary rather than of the class, which forfeits
+containment while preserving non-negativity; and (iv) augmenting the generator
+set along the principal directions of \emph{within-class} variation gives a
+further $+0.28$ at matched storage. Composed with a first-session baseline
+(A\textsuperscript{+}) that stores no per-class covariance, the read-out reaches
+$80.05$ on ImageNet-R ($T{=}10$) against a RanPAC bar of $80.28$. We report the
+negative results in full: the metric, not the cone, carries $\sim$85\% of the
+gain; a random-feature lift---worth $+9.26$ to a ridge---\emph{hurts} an angular
+read-out because it doubles mean pairwise cosine; and four of the five scoring
+rules in common use are provably the same rule.
+\end{abstract}
+
+\section{Setting}
+
+A pre-trained encoder $\phi:\mathcal{X}\to\R^{d}$ ($d{=}768$, ViT-B/16) is adapted
+with LoRA on the first task only and then frozen; all later tasks contribute
+features and statistics but no gradients. Write $\bx = \phi(\cdot)/\lVert\phi(\cdot)\rVert
+\in S^{d-1}$. For each class $c$ the read-out stores a small set of vectors and
+produces a score $s_c(\bq)$; prediction is $\arg\max_c s_c(\bq)$.
+
+Because the backbone is frozen, per-class objects fitted at a class's birth stage
+remain valid for the rest of the run, and final-stage accuracy over all classes
+\emph{is} A-Last exactly. This makes read-out ablations roughly $10\times$ cheaper
+than a full staged replay.
+
+\section{The conic hull as a read-out}
+
+\subsection{Object and score}
+Given generators $\bV=[\bv_1,\dots,\bv_R]^{\!\top}$, the conic hull is
+\begin{equation}
+C(\bV) = \Big\{\textstyle\sum_r \lambda_r \bv_r : \lambda_r \ge 0\Big\}
+       = \{\bV^{\!\top}\bw : \bw \ge 0\}.
+\end{equation}
+The score is the cosine to the nearest point of the cone. For unit $\bq$,
+Moreau's decomposition gives $\langle \bq, \Pi_C\bq\rangle = \lVert\Pi_C\bq\rVert^2$,
+hence
+\begin{equation}
+s(\bq) \;=\; \cos\angle\!\big(\bq,\Pi_C\bq\big) \;=\; \lVert \Pi_C \bq \rVert ,
+\label{eq:score}
+\end{equation}
+the exact analogue of a subspace read-out's $\lVert P\bq\rVert$, with the
+projection taken onto a cone rather than a subspace.
+
+\paragraph{Four scoring rules are one rule.}
+Equation~\eqref{eq:score} implies $\lVert\text{rec}\rVert = \cos$, so the
+``residual coverage'' score $\cos\cdot\lVert\text{rec}\rVert$ equals $\cos^2$;
+the ``angular'' score $1-\tfrac{2}{\pi}\arccos\cos$ and the ``NNLS residual''
+score $1-\tfrac12\sqrt{2-2\cos}$ are likewise monotone in $\cos$. All four
+therefore induce \emph{identical} rankings (identical AUROC, identical
+$\arg\max$). Treating them as distinct arms, as is common, measures the same
+quantity repeatedly.
+
+\paragraph{Nesting.} Restricting $\bw$ to its $k$ largest-cosine coordinates gives
+$C_1\subseteq C_2\subseteq\cdots\subseteq C_R$, and $s_k$ is nondecreasing in $k$.
+At $k{=}1$ the score reduces exactly to $\max_r\langle\bq,\bv_r\rangle$: \emph{the
+conic hull is a one-parameter generalisation of multi-prototype matching}, with
+multi-prototype as its degenerate member.
+
+\subsection{Where the generators come from}
+Both classical choices are the same constrained factorisation with different
+solutions. Write the dictionary as $\bV = \mathbf{G}\bX$ with
+$\mathbf{G}\ge 0$, $\mathbf{G}\mathbf{1}=\mathbf{1}$:
+\begin{itemize}\itemsep2pt
+\item \textbf{SPA / separable NMF.} $\mathbf{G}$ restricted to \emph{vertices} of
+the simplex, $\mathbf{g}_r = \mathbf{e}_{i_r}$: each generator \emph{is} a data
+point, selected greedily by maximum residual norm (equivalently, QR with column
+pivoting). Under separability this provably recovers the true extremal rays.
+\item \textbf{$k$-means / convex NMF.} $\mathbf{g}_r$ the uniform distribution on
+a cluster: each generator is a \emph{convex combination} of data points.
+\end{itemize}
+So SPA sits at a vertex of the constraint set and $k$-means at a barycentre. They
+optimise opposite things: outward extent versus central representativeness.
+
+\paragraph{Consequences.} A centroid averages $n/R$ samples and has variance
+$\sigma^2R/n$; an SPA ray is a single sample---and specifically the
+\emph{argmax} over $n$ residual norms, so its noise lies in the upper tail. With
+$n{\approx}100$ and $R{=}4$ the variance ratio exceeds $25\times$ before the
+selection bias.
+
+Empirically (Table~\ref{tab:gens}) SPA is not merely suboptimal: it is worse than
+selecting $R$ data points \emph{uniformly at random}, by 19 points.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lcc}
+\toprule
+generators & classifier & near-OOD \\
+\midrule
+random ($R$ data points) & 0.549 & 0.806 \\
+SPA (extremal)           & \textbf{0.362} & 0.756 \\
+$k$-means (centroids)    & \textbf{0.743} & 0.844 \\
+convex-NMF (learned)     & 0.738 & 0.841 \\
+\bottomrule
+\end{tabular}
+\caption{Generator choice, ImageNet-R, $R{=}4$, matched budget. SPA loses to
+random. Convex-NMF drives reconstruction error 7.5\% \emph{below} its $k$-means
+initialisation and still loses the task: reconstruction is the wrong objective.}
+\label{tab:gens}
+\end{table}
+
+\subsection{What ``$k$-means hull'' means precisely}
+\label{sec:naming}
+The object is still a conic hull---$C(\bV)$ is closed under positive scaling,
+convex, polyhedral, and pointed (all pairwise cosines are positive, so
+$\sum_r\bv_r$ strictly separates)---but it is the conic hull \emph{of the
+dictionary}, not of the class:
+\begin{equation}
+C(\bV_{k\text{-means}}) \;\subsetneq\; \conv\text{-}\cone(\bX), \qquad
+\bX \not\subseteq C(\bV_{k\text{-means}}).
+\end{equation}
+Non-negativity of the coefficients is preserved; \emph{containment} of the class
+is not, and neither is the separability recovery guarantee. We recommend the
+phrase ``a polyhedral cone spanned by $R$ learned generators''; ``conic hull''
+unqualified will be read as $\cone(\bX)$ and imports containment intuitions that
+no longer hold.
+
+Containment is also the wrong target. Adding a generator can only enlarge the
+cone, so a containment-optimal generator set maximises coverage---precisely the
+property that destroys discrimination when the score is a distance to that set.
+SPA optimises coverage; $k$-means does not.
+
+\section{The metric carries most of the gain}
+
+Let $\Sigma$ be the pooled within-class scatter, which is \emph{additive across
+classes} and therefore accumulates task by task with no stored samples, exactly
+as RanPAC's Gram matrix does. With $\bW = \operatorname{chol}(\Sigma^{-1})$ we
+fit and score in $\bx \mapsto \bW^{\!\top}\bx/\lVert\cdot\rVert$.
+
+Generators are built in the birth-time whitened space, mapped back via
+$\bW_{\text{birth}}^{-1}$, and stored there; at any later stage they are
+re-metricated as $\widehat{\bV\bW_t}$. This keeps storage at $R$ vectors per class,
+revisits no past sample, and is empirically \emph{lossless} (an oracle that
+refits past classes from raw rows gains $+0.05$).
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lcc}
+\toprule
+read-out & A-Last & $\Delta$ \\
+\midrule
+NCM                                   & 71.02 & --- \\
+\quad $+$ tied whitening, $R$ protos  & 78.15 & $+7.13$ \\
+\quad $+$ conic mixture               & 79.43 & $+1.28$ \\
+\quad $+$ eigen-augmented generators  & \textbf{80.05} & $+0.28$ \\
+\midrule
+RanPAC (bar)                          & 80.28 & \\
+\bottomrule
+\end{tabular}
+\caption{Decomposition, ImageNet-R $T{=}10$, seed 0, $R{=}4$. The metric is
+$\sim$85\% of the total; the conic rule is $\sim$15\%.}
+\label{tab:decomp}
+\end{table}
+
+\paragraph{The metric's regularisation is saturated.} Sweeping the shrinkage
+$\delta$ in $\Sigma + \delta\,\tfrac{\operatorname{tr}\Sigma}{d}I$ over four
+orders of magnitude moves the cone by $0.45$ (79.32--79.77); Ledoit--Wolf
+independently selects $\delta{=}0.0094$. There are no points left in this knob.
+
+\section{Eigen-augmented generators}
+
+exp29 measures which geometric quantity predicts per-class error. Between-class
+subspace overlap does not ($\rho{=}{+}0.037$ at rank 32; every trivial control,
+including sample count, predicts better). \emph{Within}-class coverage does: the
+mean own-subspace energy $\lVert P_c\bq\rVert$ of a class's held-out rows has
+$\rho={-}0.585$ and strengthens with rank. Classes fail because their own test
+rows fall outside their own training span---not because classes collide.
+
+$k$-means centroids sit at centres of mass and span badly. We therefore augment
+the generator set along the principal directions of within-class variation:
+\begin{equation}
+\bV_c = \widehat{\Big[\,
+\mathbf{m}_1 \cdots \mathbf{m}_{n_k},\;
+\bmu_c \pm \alpha\sqrt{\lambda_j}\,\bv_j \;(j<n_e)\Big]},
+\quad n_k + 2n_e = R,
+\end{equation}
+with $(\bv_j,\lambda_j)$ the top eigenpairs of the within-class scatter in the
+whitened space. Budget is held fixed so the ablation is not confounded with
+generator count.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lcccc}
+\toprule
+split & gens & $\alpha{=}0$ & $\alpha{=}0.5$ & $\alpha{=}1$ \\
+\midrule
+$(4,0)$ centroids only & 4 & 79.77 & --- & --- \\
+$(2,1)$ mixed          & 4 & 79.77 & \textbf{80.05} & 80.02 \\
+\bottomrule
+\end{tabular}
+\caption{Eigen-augmentation, matched budget, ImageNet-R $T{=}10$, seed 0. The
+gain is inverted-U in $\alpha$, so it is not coverage inflation: there is an
+optimum. $\alpha{=}0$ collapses the displaced generators onto $\bmu_c$ and
+reproduces the centroid-only baseline exactly.}
+\label{tab:eigen}
+\end{table}
+
+\section{Composition with A\textsuperscript{+}}
+
+A\textsuperscript{+} adapts LoRA ($1.77$M parameters, $2\%$ of the backbone) on
+task 0 against a discarded linear head, freezes, and reads with RanPAC. It stores
+\emph{no per-class covariance and no exemplars}---$8$\,MB of read-out weights
+against the $473$\,MB of per-class covariance used by the compared methods.
+
+\begin{table}[t]\centering\small
+\begin{tabular}{lrrr}
+\toprule
+ & $T{=}10$ & $T{=}20$ & $T{=}50$ \\
+\midrule
+CIFAR-100   & $\mathbf{+0.58}$ & $\mathbf{+0.92}$ & $\mathbf{+0.28}$ \\
+CUB-200     & $\mathbf{+0.09}$ & $-0.54$ & $-1.21$ \\
+ImageNet-R  & $-1.68$ & $-0.72$ & $-0.18$ \\
+ImageNet-A  & $-3.44$ & $-5.28$ & $-4.75$ \\
+\bottomrule
+\end{tabular}
+\caption{A\textsuperscript{+} A-Last minus GR-LoRA, 3 seeds. Four cells ahead.
+ImageNet-A accounts for 76\% of the total deficit and is unexplained.}
+\label{tab:aplus}
+\end{table}
+
+The read-out and the backbone recipe are close to independent. A $3.75\times$
+change in epoch budget \emph{and} a different LR schedule move ImageNet-A A-Last
+by $0.06$; two separate mechanisms for limiting first-session drift---early
+stopping at a target train accuracy, and a proximal anchor to the pre-trained
+model---each \emph{cost} accuracy ($10/12$ cells worse; $-1.41$ at $\lambda{=}0.1$,
+$-4.25$ at $\lambda{=}0.5$). Whatever first-session adaptation is doing, less of
+it is not better.
+
+\section{What does not work}
+
+\paragraph{Lifting the cone.} RanPAC's random ReLU projection is worth $+9.26$
+over NCM, larger than every other component combined, and every cone above
+operates \emph{beneath} it. Moving generators and NNLS into $\mathrm{relu}(\phi P)$
+gains nothing ($-0.07$ for the cone, $+0.20$ for max-cosine). The reason is
+measurable: the lift \emph{doubles} mean pairwise cosine, $0.207 \to 0.429$, and
+does not improve with $M$ ($0.4285$ at $M{=}2000$, $0.4289$ at $M{=}10000$).
+Crowding every point into the non-negative orthant is harmless to a ridge, which
+can build discriminative directions anywhere, and harmful to any reader that sees
+only angles. \emph{The lift belongs to the ridge, not to the representation.}
+
+\paragraph{The $H$-representation.} Replacing the generator description with a
+facet description fixes the monotonicity of coverage in $R$ but fails three
+pre-registered gates. The decisive one is the aggregation: min-over-facets
+($L^\infty$) $<$ softmin $<$ sum-of-squares ($L^2$), monotone in \emph{how little
+the rule resembles a conjunction}. Conic membership \emph{is} a conjunction, so
+the conic reading is structurally locked into the worst pooling.
+
+\paragraph{Fusion.} Combining the cone with RanPAC captures only $8$--$26\%$ of
+the per-sample oracle headroom, and three structurally different combiners
+(global $\beta$, per-sample gate, EMA-anchored $\beta$) land within $0.25$ of one
+another. The channels are genuinely complementary---the fraction of samples the
+cone gets right and RanPAC does not \emph{grows} $0.79 \to 3.75$ while their
+correlation \emph{falls} $0.81\to0.50$---but that complementarity is not
+extractable from the two score vectors.
+
+\section{Limitations}
+
+\paragraph{Seeds.} Table~\ref{tab:aplus} is three seeds. \emph{Every read-out
+number in this paper is seed 0 only.} RanPAC alone spans $80.28/80.55/80.38$
+across seeds on ImageNet-R $T{=}10$, which is the same order as several reported
+differences. No read-out claim here should be treated as established until it is
+seeded.
+
+\paragraph{A solver defect.} Our NNLS implementation ran one of five hundred
+FISTA iterations for its entire history: the convergence test compared a tensor
+with itself. Every conic score produced before the fix was the one-step
+approximation $\bw = \eta\,\mathrm{relu}(\bV\bq)$. On one cell the corrected
+solver moves near-OOD AUROC from $0.62$ to $0.85$, and it reverses the sign of the
+budget trend. We note this because the class of bug---a silent identity in a
+convergence check---is not detectable from output that looks reasonable, and
+because a single assertion catches it: at $k_{\text{local}}{=}1$ the conic score
+must equal max-cosine \emph{exactly}.
+
+\paragraph{Scope.} One backbone, four datasets, one adaptation recipe. The
+geometric claims concern pre-trained ViT features in this regime and should not
+be read as claims about conic parameterisations generally.
+
+\end{document}

@@ -1,0 +1,107 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  415.0s]   [ce] task 0 done
+[  526.1s]   [ce] task 1 done
+[  628.1s]   [ce] task 2 done
+[  741.2s]   [ce] task 3 done
+[  848.2s]   [ce] task 4 done
+[  967.6s]   [ce] task 5 done
+[ 1069.1s]   [ce] task 6 done
+[ 1172.7s]   [ce] task 7 done
+[ 1283.6s]   [ce] task 8 done
+[ 1388.9s]   [ce] task 9 done
+[ 1408.7s]   trained CUB200_T10_s0_ce_e40-15_lr0.0003_lam1_P8K12s8R4_t0.1_w20
+[ 1408.7s] === CUB200|10|0|ce|final|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2128.0s]   [conic] task 0 done
+[ 2237.1s]   [conic] task 1 done
+[ 2343.6s]   [conic] task 2 done
+[ 2452.0s]   [conic] task 3 done
+[ 2560.9s]   [conic] task 4 done
+[ 2682.7s]   [conic] task 5 done
+[ 2789.5s]   [conic] task 6 done
+[ 2896.6s]   [conic] task 7 done
+[ 3004.3s]   [conic] task 8 done
+[ 3115.0s]   [conic] task 9 done
+[ 3133.9s]   trained CUB200_T10_s0_conic_e40-15_lr0.0003_lam1_P8K12s8R4_t0.1_w20
+[ 3133.9s] === CUB200|10|0|conic|final|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 3752.9s]   [sub] task 0 done
+[ 3854.2s]   [sub] task 1 done
+[ 3951.7s]   [sub] task 2 done
+[ 4056.8s]   [sub] task 3 done
+[ 4151.6s]   [sub] task 4 done
+[ 4248.2s]   [sub] task 5 done
+[ 4350.2s]   [sub] task 6 done
+[ 4450.0s]   [sub] task 7 done
+[ 4551.0s]   [sub] task 8 done
+[ 4647.8s]   [sub] task 9 done
+[ 4665.2s]   trained CUB200_T10_s0_sub_e40-15_lr0.0003_lam1_P8K12s8R4_t0.1_w20
+[ 4665.2s] === CUB200|10|0|sub|final|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 5269.9s]   [ce_conic] task 0 done
+[ 5374.7s]   [ce_conic] task 1 done
+[ 5476.7s]   [ce_conic] task 2 done
+[ 5580.9s]   [ce_conic] task 3 done
+[ 5682.6s]   [ce_conic] task 4 done
+[ 5787.5s]   [ce_conic] task 5 done
+[ 5880.8s]   [ce_conic] task 6 done
+[ 5974.4s]   [ce_conic] task 7 done
+[ 6073.5s]   [ce_conic] task 8 done
+[ 6174.9s]   [ce_conic] task 9 done
+[ 6193.2s]   trained CUB200_T10_s0_ce_conic_e40-15_lr0.0003_lam1_P8K12s8R4_t0.1_w20
+[ 6193.2s] === CUB200|10|0|ce_conic|final|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
+
+================================================================================================
+EXP48 — training phi FOR the conic reader (CUB200, T=10, seed 0)
+================================================================================================
+
+FSA bar (exp16 A_plus + RanPAC): 90.13 / 94.20
+
+  arm|proto               cone   ranpac  cone-rp     sub    negm   gapdiff   erank   er_t0  er_rest
+  ce_conic|final         89.33    89.73    -0.40   89.21   21.1%   +0.0024     2.5     2.4      2.5
+  ce|final               89.01    89.73    -0.72   88.89   19.6%   -0.0020     1.8     1.8      1.8
+  conic|final            88.78    89.58    -0.79   88.89   22.6%   +0.0063     2.5     2.5      2.5
+  sub|final              89.13    89.39    -0.26   89.13   22.4%   +0.0005     2.3     2.3      2.3
+
+------------------------------------------------------------------------------------------------
+`cone-rp` IS THE HEADLINE AND NOTHING ELSE IS. Both columns come from the SAME
+   features, so it is the only comparison the recipe cannot inflate. Comparing
+   a trained arm against the FSA bar is the mistake this project has made three
+   times; the bar line above is context, not a comparator.
+MECHANISM, cheaper than the headline: negm should fall from 43.7%, gapdiff should
+   turn POSITIVE from -0.0101, erank should DROP. Accuracy moving while these do
+   not means the stated mechanism is not what happened.
+`conic` vs `sub` is the training-side test of non-negativity, mirroring exp38's
+   read-out-side cone vs sub (-0.10 at k-means atoms, +0.60 at oPCA atoms).
+TRANSFER: er_t0 vs er_rest. The loss sees cpt classes and serves n_cls; if rank
+   drops only for task-0 classes it overfitted the first session.
+================================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp48_conic_feature_loss_augreg_in21k.json

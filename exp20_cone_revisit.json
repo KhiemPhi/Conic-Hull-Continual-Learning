@@ -1,0 +1,30 @@
+{
+  "CUB200": {
+    "descriptor|cone|legacy": 0.6218703524510458,
+    "descriptor|cone|fixed": 0.8465044473468453,
+    "descriptor|subspace|baseline": 0.948231071367285,
+    "descriptor|kmeans|baseline": 0.9678117313669037,
+    "descriptor|multiproto|baseline": 0.9700557229202814,
+    "descriptor|maha|baseline": 0.9295555513184738,
+    "descriptor|mean|baseline": 0.5813356221518867,
+    "sweep|cone|iters1": 0.6218703524510458,
+    "sweep|cone|iters2": 0.6761512217095353,
+    "sweep|cone|iters5": 0.7886925133944744,
+    "sweep|cone|iters25": 0.8463376122561823,
+    "sweep|cone|iters100": 0.8465034940034701,
+    "sweep|cone|iters500": 0.8465044473468453,
+    "centring|cone|centred": 0.8843036779987414,
+    "centring|cone|uncentred": 0.8465044473468453,
+    "classifier|cone|legacy": 0.8859164653089403,
+    "classifier|cone|fixed": 0.8912668277528478,
+    "classifier|ncm|baseline": 0.8809112875388333,
+    "classifier|ranpac|baseline": 0.896444597859855,
+    "klocal|cone|legacy": 0.8900586813945461,
+    "klocal|cone|fixed": 0.887124611667242,
+    "multicone|cone|legacy": 0.8710735243355195,
+    "multicone|cone|fixed": 0.8703831549879185,
+    "reranker|ranpac|baseline": 0.896444597859855,
+    "reranker|cone|legacy": 0.8886779426993442,
+    "reranker|cone|fixed": 0.8928201587849499
+  }
+}

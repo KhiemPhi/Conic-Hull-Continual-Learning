@@ -1,0 +1,98 @@
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    2.6s] === IMAGENETR|10|0|opcag0.5_k5m24|iso+inspan+outspan+rot|n3|v1
+[    5.9s]   stage 0 accumulated
+[    9.3s]   stage 1 accumulated
+[   12.5s]   stage 2 accumulated
+[   15.9s]   stage 3 accumulated
+[   19.4s]   stage 4 accumulated
+[   23.0s]   stage 5 accumulated
+[   27.0s]   stage 6 accumulated
+[   31.5s]   stage 7 accumulated
+[   34.7s]   stage 8 accumulated
+[   38.4s]   stage 9 accumulated
+[  100.3s]   iso      eps 0     disp 0.0000 | cone 79.77  maxcos 79.17  ncm 77.67
+[  305.5s]   iso      eps 0.05  disp 0.0012 | cone 79.82  maxcos 79.11  ncm 77.47
+[  525.1s]   iso      eps 0.1   disp 0.0050 | cone 79.91  maxcos 79.11  ncm 77.32
+[  746.8s]   iso      eps 0.2   disp 0.0194 | cone 79.89  maxcos 78.79  ncm 75.88
+[  952.6s]   iso      eps 0.4   disp 0.0715 | cone 79.44  maxcos 77.30  ncm 70.66
+[ 1138.7s]   iso      eps 0.8   disp 0.2191 | cone 77.47  maxcos 70.53  ncm 52.59
+[ 1202.9s]   inspan   eps 0     disp 0.0000 | cone 79.77  maxcos 79.17  ncm 77.67
+[ 1394.6s]   inspan   eps 0.05  disp 0.0012 | cone 79.79  maxcos 79.11  ncm 77.67
+[ 1591.3s]   inspan   eps 0.1   disp 0.0048 | cone 79.89  maxcos 79.07  ncm 77.67
+[ 1776.8s]   inspan   eps 0.2   disp 0.0188 | cone 79.98  maxcos 78.83  ncm 77.67
+[ 1966.7s]   inspan   eps 0.4   disp 0.0699 | cone 79.89  maxcos 77.54  ncm 77.67
+[ 2162.9s]   inspan   eps 0.8   disp 0.2199 | cone 79.52  maxcos 72.64  ncm 77.67
+[ 2226.4s]   outspan  eps 0     disp 0.0000 | cone 79.77  maxcos 79.17  ncm 77.67
+[ 2425.2s]   outspan  eps 0.05  disp 0.0012 | cone 79.83  maxcos 79.14  ncm 77.48
+[ 2609.3s]   outspan  eps 0.1   disp 0.0050 | cone 79.92  maxcos 79.09  ncm 77.32
+[ 2796.6s]   outspan  eps 0.2   disp 0.0194 | cone 79.91  maxcos 78.70  ncm 75.93
+[ 2976.0s]   outspan  eps 0.4   disp 0.0715 | cone 79.46  maxcos 77.32  ncm 70.59
+[ 3158.6s]   outspan  eps 0.8   disp 0.2191 | cone 77.43  maxcos 70.67  ncm 52.71
+[ 3210.3s]   rot      eps 0     disp 0.0000 | cone 79.77  maxcos 79.17  ncm 77.67
+[ 3381.9s]   rot      eps 0.05  disp 0.0007 | cone 79.80  maxcos 79.47  ncm 77.83
+[ 3552.4s]   rot      eps 0.1   disp 0.0028 | cone 79.87  maxcos 79.45  ncm 77.65
+[ 3725.8s]   rot      eps 0.2   disp 0.0130 | cone 79.78  maxcos 79.15  ncm 77.23
+[ 3915.5s]   rot      eps 0.4   disp 0.0687 | cone 78.28  maxcos 77.47  ncm 75.30
+[ 4101.3s]   rot      eps 0.8   disp 0.3923 | cone 52.78  maxcos 56.22  ncm 50.67
+
+====================================================================================
+EXP46 — ray-perturbation tolerance: cone vs prototype at MATCHED feature error
+====================================================================================
+
+--- IMAGENETR|10|0|opcag0.5_k5m24|iso+inspan+outspan+rot|n3|v1   (27.0 rays/class)
+
+  iso
+       eps    disp     cone   maxcos      ncm
+         0  0.0000    79.77    79.17    77.67
+      0.05  0.0012    79.82    79.11    77.47
+       0.1  0.0050    79.91    79.11    77.32
+       0.2  0.0194    79.89    78.79    75.88
+       0.4  0.0715    79.44    77.30    70.66
+       0.8  0.2191    77.47    70.53    52.59
+    eps_1pt   cone 0.1222  maxcos 0.0413  ncm 0.0115   |  cone/ncm 10.62x
+
+  inspan
+       eps    disp     cone   maxcos      ncm
+         0  0.0000    79.77    79.17    77.67
+      0.05  0.0012    79.79    79.11    77.67
+       0.1  0.0048    79.89    79.07    77.67
+       0.2  0.0188    79.98    78.83    77.67
+       0.4  0.0699    79.89    77.54    77.67
+       0.8  0.2199    79.52    72.64    77.67
+    eps_1pt   cone >max  maxcos 0.0452  ncm >max
+
+  outspan
+       eps    disp     cone   maxcos      ncm
+         0  0.0000    79.77    79.17    77.67
+      0.05  0.0012    79.83    79.14    77.48
+       0.1  0.0050    79.92    79.09    77.32
+       0.2  0.0194    79.91    78.70    75.93
+       0.4  0.0715    79.46    77.32    70.59
+       0.8  0.2191    77.43    70.67    52.71
+    eps_1pt   cone 0.1219  maxcos 0.0396  ncm 0.0117   |  cone/ncm 10.40x
+
+  rot
+       eps    disp     cone   maxcos      ncm
+         0  0.0000    79.77    79.17    77.67
+      0.05  0.0007    79.80    79.47    77.83
+       0.1  0.0028    79.87    79.45    77.65
+       0.2  0.0130    79.78    79.15    77.23
+       0.4  0.0687    78.28    77.47    75.30
+       0.8  0.3923    52.78    56.22    50.67
+    eps_1pt   cone 0.0508  maxcos 0.0456  ncm 0.0293   |  cone/ncm 1.73x
+
+------------------------------------------------------------------------------------
+GATE: cone eps_1pt / ncm eps_1pt >= 3 on `iso` and `rot` -> the transport arm of
+   exp48 is worth building. Compare eps_1pt against 0.15, the forward-transport
+   error the repo already measured; if cone eps_1pt < 0.15 transport alone cannot
+   carry a cone either and exp48 must rely on the loss, not the map.
+MECHANISM: inspan vs outspan. The invariance argument predicts inspan is nearly
+   free for `cone` and NOT for `ncm` (a single vector has no span to hide in).
+   If inspan == outspan for the cone, the tolerance is not conic in origin and
+   the eps_1pt ratio is measuring ray averaging, which multiproto gets too --
+   read `maxcos` to separate those: it has the same R vectors and no conic rule.
+====================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp46_ray_tolerance_augreg_in21k.json

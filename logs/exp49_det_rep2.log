@@ -1,0 +1,44 @@
+[    0.0s] === IMAGENETR|10|0|k5m24|opcag0.5|R128_f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[   10.5s]     s0: k5m24 90.50
+[   21.8s]     s1: k5m24 90.54
+[   35.2s]     s2: k5m24 88.50
+[   51.5s]     s3: k5m24 86.52
+[   70.3s]     s4: k5m24 84.31
+[   95.7s]     s5: k5m24 83.41
+[  137.5s]     s6: k5m24 82.86
+[  187.9s]     s7: k5m24 81.69
+[  243.8s]     s8: k5m24 80.58
+[  302.2s]     s9: k5m24 80.05
+
+================================================================================================
+EXP49 — best raw cone across datasets and seeds (self-consistent negatives)
+================================================================================================
+
+  dataset      T seed     arm   rays  clamp    cone  ranpac   delta  A-Avg d
+  IMAGENETR   10    0   k5m24   26.5     0%   80.05   80.28   -0.23    -0.24
+
+  PAIRED delta (cone - ranpac), same features & splits -- seed noise cancels
+  dataset         arm   n     mean      sd     min     max   wins
+  IMAGENETR     k5m24   1    -0.23      --   -0.23   -0.23   0/1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/numpy/_core/_methods.py:219: RuntimeWarning: Degrees of freedom <= 0 for slice
+  ret = _var(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/numpy/_core/_methods.py:211: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+  ALL                   1    -0.23     nan   -0.23   -0.23   0/1
+
+  best cell: IMAGENETR T=10 seed 0 k5m24  cone 80.05 vs ranpac 80.28  (-0.23)
+  ^ this is the MAX OF 1 DRAWS and is biased upward by roughly the seed
+    spread. Quote the paired mean, not this cell.
+
+------------------------------------------------------------------------------------------------
+SANITY: IMAGENETR T=10 s0 k5m24 should read ~79.77, NOT 80.07. exp41's 80.07
+   used another arm's stored rays as negatives; see the module docstring.
+`clamp` is the fraction of classes where R_c exceeded the class's fit rows, so
+   k-means was asked for more centroids than it had points. Above ~50% the arm
+   is degenerate and its number describes the clamp, not the allocation rule.
+================================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp49_seed_grid_det_rep2_augreg_in21k.json

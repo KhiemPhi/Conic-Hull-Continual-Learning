@@ -1,0 +1,68 @@
+[    0.0s] === IMAGENETR|10|0|openset+signal|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[   15.9s]     s0: cone 90.30  rp_diag 89.90  rp_ncm 89.50  rp_ridge 93.07  |  os_cone 0.890  os_ranpac 0.926
+[   40.6s]     s1: cone 89.28  rp_diag 85.41  rp_ncm 85.41  rp_ridge 90.00  |  os_cone 0.851  os_ranpac 0.921
+[   72.3s]     s2: cone 86.75  rp_diag 80.53  rp_ncm 83.46  rp_ridge 88.93  |  os_cone 0.822  os_ranpac 0.890
+[   98.9s]     s3: cone 84.45  rp_diag 76.21  rp_ncm 78.88  rp_ridge 86.38  |  os_cone 0.800  os_ranpac 0.873
+[  131.9s]     s4: cone 82.53  rp_diag 72.00  rp_ncm 76.32  rp_ridge 84.66  |  os_cone 0.780  os_ranpac 0.857
+[  171.2s]     s5: cone 81.57  rp_diag 70.72  rp_ncm 74.95  rp_ridge 83.10  |  os_cone 0.765  os_ranpac 0.832
+[  233.4s]     s6: cone 81.31  rp_diag 70.09  rp_ncm 74.50  rp_ridge 82.70  |  os_cone 0.751  os_ranpac 0.822
+[  308.0s]     s7: cone 79.68  rp_diag 68.27  rp_ncm 72.94  rp_ridge 81.44  |  os_cone 0.736  os_ranpac 0.817
+[  390.6s]     s8: cone 79.04  rp_diag 66.68  rp_ncm 71.71  rp_ridge 80.78  |  os_cone 0.735  os_ranpac 0.798
+[  451.2s]     s9: cone 77.92  rp_diag 65.03  rp_ncm 70.58  rp_ridge 80.28  |  os_cone nan  os_ranpac nan
+
+============================================================================================
+EXP38 — fair-comparison suite (RAW arms only; no fusion, so beta never enters)
+============================================================================================
+
+--- IMAGENETR|10|0|constraint|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+  sub                78.02   83.10
+  cone               77.92   83.28
+  sparse             77.92   83.26
+  simplex            77.30   82.63
+  NON-NEGATIVITY  cone - sub    = -0.10   (identical R*d storage)
+
+--- IMAGENETR|10|0|openset+signal|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+  rp_ridge           80.28   85.13
+  cone               77.92   83.28
+  rp_ncm             70.58   77.83
+  rp_diag            65.03   74.48
+  open-set AUROC (seen vs true unknowns, mean over stages):
+    os_cone          0.792
+    os_ranpac        0.860
+
+  FAIR RULE GAP   cone - rp_ncm  = +7.33   (same budget, same information)
+  PRICE OF GENERATIVE  rp_ridge - rp_ncm = +9.70
+
+--- IMAGENETR|10|0|openset|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+  cone               77.92   83.28
+  open-set AUROC (seen vs true unknowns, mean over stages):
+    os_cone          0.792
+
+--- IMAGENETR|10|0|signal|R32_n0_l192_L0.02|m10000_s0.03_i500|v1
+  rp_ridge           80.28   85.13
+  cone               77.92   83.28
+  rp_ncm             70.58   77.83
+  rp_diag            65.03   74.48
+
+  FAIR RULE GAP   cone - rp_ncm  = +7.33   (same budget, same information)
+  PRICE OF GENERATIVE  rp_ridge - rp_ncm = +9.70
+
+--------------------------------------------------------------------------------------------
+rp_ridge must reproduce the exp16 bar (ImageNet-R T=10 s0 R=32: 80.28) whenever
+   NROWS=0; if it does not, the replay is broken and no row means anything.
+FAIR RULE GAP is the headline: cone vs a generative head on the SAME lifted
+   features with the SAME per-class-only information. The old cone-vs-rp_ridge
+   comparison was naive-Bayes vs LDA and always flattered RanPAC.
+NON-NEGATIVITY is the foundational test: `sub` is a rank-R subspace at IDENTICAL
+   R*d storage, so cone - sub isolates w>=0 and nothing else. <= 0 means the
+   conic parameterisation earns nothing over a plain span.
+LDA is rank-limited to n_seen-1, so early stages are structurally starved. That is
+   a real property of LDA in CIL, not an artifact -- read A-Avg, not just A-Last.
+Sweep NROWS=5,10,20,50,0 for the regime axis. CUB200 has 27 rows/class and
+   ImageNet-A 18, so the low-NROWS rows predict those datasets directly.
+============================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp38_fair_cone_augreg_in21k.json

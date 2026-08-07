@@ -1,0 +1,25 @@
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[    1.1s] CUB200: 200 classes, 5794 test, imgs/class min 29 med 30
+[  151.9s]   R=1   ncm 88.30  multiproto 88.30  protomaha 89.23  cone_km 88.30  cone_w 89.23  cone_wsx 89.23  cone_wl1 89.23
+[  627.9s]   R=2   ncm 88.30  multiproto 88.73  protomaha 89.02  cone_km 89.16  cone_w 89.35  cone_wsx 89.25  cone_wl1 89.35
+[ 1164.2s]   R=4   ncm 88.30  multiproto 88.06  protomaha 88.70  cone_km 88.75  cone_w 89.51  cone_wsx 89.35  cone_wl1 89.51
+[ 1718.9s]   R=8   ncm 88.30  multiproto 87.42  protomaha 88.13  cone_km 88.94  cone_w 89.25  cone_wsx 89.13  cone_wl1 89.23
+
+========================================================================================
+EXP21 — classifier accuracy at a matched per-class budget of R vectors
+========================================================================================
+
+--- CUB200
+   R          ncm   multiproto    protomaha      cone_km       cone_w     cone_wsx     cone_wl1  bestcone-pmaha
+   1        88.30        88.30        89.23        88.30        89.23        89.23        89.23           +0.00
+   2        88.30        88.73        89.02        89.16        89.35        89.25        89.35           +0.33
+   4        88.30        88.06        88.70        88.75        89.51        89.35        89.51           +0.81
+   8        88.30        87.42        88.13        88.94        89.25        89.13        89.23           +1.12
+
+----------------------------------------------------------------------------------------
+cone_km vs multiproto = the scoring rule at IDENTICAL atoms (the decisive column).
+cone_spa vs cone_km   = the atoms at an identical rule.
+protomaha             = multiproto's atoms under a tied-whitened metric.
+========================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp21_cone_vs_multiproto.json
