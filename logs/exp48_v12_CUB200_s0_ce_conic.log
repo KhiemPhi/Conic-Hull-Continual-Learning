@@ -1,18 +1,19 @@
-'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
 Retrying in 1s [Retry 1/5].
-Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
-Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
-[    1.6s]   cached IMAGENETA_T10_s1_ce_e40-15_lr0.0003_lam1_P8K12s8R4_t0.1_w20
-[    1.7s] === IMAGENETA|10|1|ce|final|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
-[  538.4s] === IMAGENETA|10|1|ce|drift|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[    1.7s]   cached CUB200_T10_s0_ce_conic_e40-15_lr0.0003_lam1_P8K12s8R4_t0.1_w20
+[    1.8s] skip CUB200|10|0|ce_conic|final|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
+[    1.8s] === CUB200|10|0|ce_conic|drift|e40-15|lam1|P8K12s8R4_t0.1|g0.5_k5m8|v2
 
 ================================================================================================
-EXP48 — training phi FOR the conic reader (IMAGENETA, T=10, seed 1)
+EXP48 — training phi FOR the conic reader (CUB200, T=10, seed 0)
 ================================================================================================
 
-FSA bar (exp16 A_plus + RanPAC): 62.67 / 72.55
+FSA bar (exp16 A_plus + RanPAC): 90.13 / 94.20
 
   arm|proto               cone   ranpac  cone-rp     sub    negm   gapdiff   erank   er_t0  er_rest
+  ce_conic|drift         54.95    59.98    -5.02   54.80   24.6%   +0.0090     2.2     2.2      2.2
   ce_conic|final         89.33    89.73    -0.40   89.21   21.1%   +0.0024     2.5     2.4      2.5
   ce|drift               49.15    56.23    -7.08   49.07   22.8%   -0.0020     1.9     2.0      1.8
   ce|final               89.01    89.73    -0.72   88.89   19.6%   -0.0020     1.8     1.8      1.8
@@ -27,6 +28,7 @@ FSA bar (exp16 A_plus + RanPAC): 62.67 / 72.55
   ce|final               59.20    58.87    +0.33   58.53   22.5%   -0.0055     6.1     6.2      6.1
   ce|drift               11.87    16.80    -4.93   11.80   24.4%   -0.0046     4.7     6.7      4.5
   ce|final               48.73    50.60    -1.87   48.60   19.9%   -0.0031     3.7     3.4      3.7
+  ce|final               57.67    56.80    +0.87   57.20   22.3%   -0.0051     5.0     4.5      5.1
   ce|drift               61.10    61.07    +0.03   59.68   44.5%   -0.0145     4.5     6.2      4.3
   ce|final               82.53    82.87    -0.33   81.72   42.7%   -0.0144     5.7     5.8      5.7
 

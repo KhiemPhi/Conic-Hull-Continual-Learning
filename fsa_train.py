@@ -45,6 +45,7 @@ import timm
 from timm.data import create_transform, resolve_model_data_config
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
+from splits import split_indices
 
 T0 = time.time()
 
@@ -114,7 +115,8 @@ def get_data(name):
         d = load_dataset("axiong/imagenet-r", cache_dir=os.path.join(REPO, "data/hf"))["test"]
         w = np.array(d["wnid"])
         lab = np.searchsorted(np.array(sorted(set(w.tolist()))), w)
-    elif name == "IMAGENETA":
+    elif name in ("IMAGENETA", "IMAGENETAP"):
+        # IMAGENETAP: stratified per-class 80/20. See splits.py and exp16_full_table.get_data.
         d = load_dataset("barkermrl/imagenet-a",
                          cache_dir=os.path.join(REPO, "data/hf"))["train"]
         lab = np.array(d["label"])
@@ -126,11 +128,17 @@ def get_data(name):
         return (HFWrap(tr, np.arange(len(ytr)), ytr, TF_TRAIN),
                 HFWrap(tr, np.arange(len(ytr)), ytr, TF_EVAL), ytr,
                 HFWrap(te, np.arange(len(yte)), yte, TF_EVAL), yte, n)
+    elif name == "CUB200P":
+        # PyCIL / LAMDA-PILOT CUB split: all 11,788 images re-split 80/20 -> 9430 / 2358.
+        # See the long note in exp16_full_table.get_data; kept as a separate dataset name
+        # so no cached CUB200 feature file or results key changes meaning.
+        from datasets import concatenate_datasets
+        dd = load_dataset("Donghyun99/cub-200-2011", cache_dir=os.path.join(REPO, "data/hf"))
+        d = concatenate_datasets([dd["train"], dd["test"]])
+        lab = np.array(d["label"])
     else:
         raise ValueError(name)
-    p = np.random.default_rng(SPLIT_SEED).permutation(len(lab))
-    n_tr = int(0.8 * len(lab))
-    tri, tei = p[:n_tr], p[n_tr:]
+    tri, tei = split_indices(name, lab)
     return (HFWrap(d, tri, lab[tri], TF_TRAIN), HFWrap(d, tri, lab[tri], TF_EVAL), lab[tri],
             HFWrap(d, tei, lab[tei], TF_EVAL), lab[tei], int(lab.max()) + 1)
 

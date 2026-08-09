@@ -39,3 +39,38 @@ Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-
 Retrying in 1s [Retry 1/5].
 Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
 Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 2014.1s]     cone 88.66  sub 88.66  ranpac 90.13  margin +1.304  err_to_nn 84.3%  nn_cos 0.890
+[ 2014.1s] === CUB200|10|0|l25|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 2289.9s]     cone 88.57  sub 88.51  ranpac 90.13  margin +1.301  err_to_nn 84.4%  nn_cos 0.890
+[ 2289.9s] === CUB200|10|0|z|opca_g0.5_k5m8|f2000_s0.03|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 2597.9s]     cone 64.67  sub 64.41  ranpac 90.13  margin +1.358  err_to_nn 39.9%  nn_cos 0.890
+
+========================================================================================================
+EXP50 — crowding fixes: deflate / local negatives / calibrate
+========================================================================================================
+
+  dataset     seed         arm    cone     sub  ranpac    c-rp   c-sub  vs base  margin  err_nn  nn_cos
+  CUB200         0        base   89.04   88.90   90.13   -1.09   +0.14    +0.00  +1.267   86.9%   0.890
+  CUB200         0          d1   88.97   88.83   90.13   -1.16   +0.14    -0.07  +2.207   85.6%   0.655
+  CUB200         0          d2   88.70   88.45   90.13   -1.43   +0.24    -0.35  +2.456   83.5%   0.629
+  CUB200         0          d4   87.47   87.31   90.13   -2.66   +0.16    -1.57  +2.744   77.3%   0.590
+  CUB200         0          d8   86.57   86.21   90.13   -3.56   +0.36    -2.47  +2.974   75.4%   0.536
+  CUB200         0          l5   88.21   88.19   90.13   -1.92   +0.02    -0.83  +1.294   82.7%   0.890
+  CUB200         0         l10   88.66   88.66   90.13   -1.47   +0.00    -0.38  +1.304   84.3%   0.890
+  CUB200         0         l25   88.57   88.51   90.13   -1.55   +0.07    -0.47  +1.301   84.4%   0.890
+  CUB200         0           z   64.67   64.41   90.13  -25.46   +0.26   -24.37  +1.358   39.9%   0.890
+
+  `vs base` is the fix's effect. `c-sub` is whether it is about CONES: an arm
+     that lifts cone and sub equally is better preprocessing, not a better cone.
+  `err_nn` is the share of errors landing on the nearest class -- the crowding
+     signature. An arm that raises accuracy without lowering it did not decrowd.
+========================================================================================================
+[ 2597.9s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp50_crowding_augreg_in21k.json

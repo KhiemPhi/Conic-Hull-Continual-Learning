@@ -72,6 +72,31 @@ ARMS
               that expectation is why the control runs alongside rather than after.
     ce_conic  CE + LAM * conic. Hedge against the conic loss alone being too weak a
               training signal early, when P classes give few negatives.
+    ce_conic2 ce_conic with three defects of the v1 episode repaired. Same objective, same
+              batch geometry, same step count -- so ce_conic2 - ce_conic attributes the
+              difference to the episode, not to a change of budget.
+                1. SUPPORT/QUERY SPLIT. v1 drew two independent permutations, so the query
+                   set was not the complement of the support set: at K_ROW=12, N_SUP=8,
+                   2.66 of the 4 query rows per class were also support rows (measured).
+                   Those rows are averaged into their own class's generators and are inside
+                   the cone by construction, so ~67% of the query signal was near-vacuous
+                   -- the same defect the discarded "sample z from C_o" term had. v2 draws
+                   once and takes the exact complement.
+                2. GENERATORS. v1 built rays as R_EP arbitrary interleaved group means of
+                   the support, in the full whitened space, blind to other classes. That is
+                   approximately the PRE-exp39 cone. The read-out this loss exists to serve
+                   uses b_opca: k-means inside the top-R eigenspace of S_c - GAMMA*S_F. v2
+                   matches it (see _gens_opca). Ray selection is the largest measured lever
+                   in this project (spa 36.15 vs kmeans 74.25 at R=4, exp26), so training
+                   for the wrong ray set is not a detail.
+                3. WHITENER. v1 used an EMA at 0.95, which over ~90 steps/stage has an
+                   effective window of ~20 steps and therefore tracks the CURRENT task. The
+                   read-out uses a pooled scatter accumulated over every class seen so far
+                   and never decayed. v2 accumulates. The docstring's own premise is that
+                   train and test share a geometry; an EMA does not.
+              NOT changed, deliberately, so the comparison stays attributable: ray COUNT
+              (still R_EP, vs rays_for(n) at read-out), and the absence of cross-stage
+              negatives (episodes still draw only from the current task).
 
 WHERE TO LOOK
     CUB-200, not ImageNet-R. exp49 found the cone ties on CIFAR-100 / ImageNet-R /
@@ -154,6 +179,7 @@ WHITEN_EVERY = int(os.environ.get("WHITEN_EVERY", 20))
 EMA = float(os.environ.get("EMA", 0.95))
 GAMMA = float(os.environ.get("GAMMA", 0.5))
 KVAL = float(os.environ.get("KVAL", 5))
+KM_ITERS = int(os.environ.get("KM_ITERS", 5))    # Lloyd steps in the v2 episode k-means
 RMIN = int(os.environ.get("RMIN", 8))
 RMAX = int(os.environ.get("RMAX", 128))
 F_MAX = int(os.environ.get("F_MAX", 2000))
@@ -165,7 +191,8 @@ SHRINK = float(os.environ.get("SHRINK", 3e-2))
 # written once, so they are safe to share.
 OUT = os.path.join(REPO,
                    f"exp48_conic_feature_loss{os.environ.get('SUFFIX', '')}_{TAG}.json")
-assert all(a in ("ce", "conic", "sub", "ce_conic") for a in ARMS), f"bad arm in {ARMS}"
+assert all(a in ("ce", "conic", "sub", "ce_conic", "ce_conic2")
+           for a in ARMS), f"bad arm in {ARMS}"
 un = X.un
 
 
@@ -198,36 +225,92 @@ def cone_energy(V, Q, iters=NNLS_TRAIN):
     return 2.0 * (proj * Q).sum(1) - (proj * proj).sum(1)
 
 
+def _gens_opca(sup, foreign, R, gen):
+    """v2 generators, matched to the read-out's b_opca: k-means inside the top-R eigenspace
+    of S_c - GAMMA*S_F, lifted back to the whitened space.
+
+    DIFFERENTIABILITY, by the same trick cone_energy uses for the NNLS weights: the
+    subspace V and the cluster ASSIGNMENT are chosen under no_grad and detached -- they are
+    geometry choices, like the whitener -- and the centroids are then recomputed as means
+    of the assigned support rows with the gradient attached. So dV/dphi flows through the
+    averaging, exactly as dE/dV flows through w*.detach() @ V. The docstring's claim that
+    "k-means is not differentiable" is true of the assignment and false of the centroid,
+    and only the centroid needs a gradient.
+
+    The eigenproblem is solved inside the support's OWN SPAN (rank <= N_SUP). That is exact
+    for every direction a centroid can occupy -- centroids are means of support rows, so
+    they lie in that span -- and turns a 768x768 eigh into an N_SUP x N_SUP one.
+    """
+    with torch.no_grad():
+        Xs = sup.detach()
+        Q, _ = torch.linalg.qr(Xs.T)                              # (d, ns) span basis
+        Zs = Xs @ Q
+        M = (Zs.T @ Zs) / len(Zs)
+        if len(foreign):
+            Zf = foreign.detach() @ Q
+            M = M - GAMMA * (Zf.T @ Zf) / len(Zf)
+        k = int(min(R, M.shape[0]))
+        V = Q @ torch.linalg.eigh(M)[1].flip(-1)[:, :k]           # (d, k), descending
+        Z = Fn.normalize(Xs @ V, dim=1)
+        C = Z[torch.randperm(len(Z), generator=gen, device=Z.device)[:k]].clone()
+        for _ in range(KM_ITERS):                                 # spherical k-means
+            a = (Z @ C.T).argmax(1)
+            for j in range(k):
+                m = a == j
+                if bool(m.any()):
+                    C[j] = Fn.normalize(Z[m].mean(0), dim=0)
+        assign = (Z @ C.T).argmax(1)
+    g = [sup[assign == j].mean(0) for j in range(k) if bool((assign == j).any())]
+    return Fn.normalize(torch.stack(g), dim=1)
+
+
 def episode_logits(fw, y, kind, gen):
     """Split each class into support/query, build the class object from the SUPPORT, score
     every row against every class object. Returns (logits over local class index, query
-    mask, local->global label map)."""
-    classes = [int(c) for c in y.unique()]
-    objs, gmap = [], []
-    for c in classes:
+    mask, local->global label map).
+
+    kind: "sub" / "cone" reproduce the v1 episode BIT FOR BIT, including its two-draw
+    support/query split -- the v1 arms have cached features and must stay reproducible.
+    "cone2" is the repaired episode: one draw, exact complement, b_opca-matched rays."""
+    legacy = kind in ("sub", "cone")
+    splits, gmap = [], []
+    for c in [int(v) for v in y.unique()]:
         idx = (y == c).nonzero(as_tuple=True)[0]
         if len(idx) < N_SUP + 1:
             continue
         perm = idx[torch.randperm(len(idx), generator=gen, device=fw.device)]
-        sup = perm[:N_SUP]
+        splits.append((c, perm[:N_SUP], perm[N_SUP:]))
+        gmap.append(c)
+    if not splits:
+        return None, None, None
+
+    objs = []
+    for c, sup, _ in splits:
         if kind == "sub":
             B, _ = torch.linalg.qr(fw[sup].T)                 # (d, N_SUP) orthonormal
             objs.append(("sub", B))
-        else:
-            # Differentiable centroid-like generators: partition the support into R_EP
-            # groups and average each. k-means is not differentiable, and using raw support
-            # rows as rays reproduces the `random generators` arm that exp26 measured at
-            # 54.85 against k-means 74.25 -- the worst available choice.
+        elif kind == "cone":
+            # v1: partition the support into R_EP interleaved groups and average each.
+            # Kept verbatim -- see the ce_conic2 note in the module docstring for why this
+            # is the wrong ray set and what replaces it.
             g = torch.stack([fw[sup[i::R_EP]].mean(0) for i in range(min(R_EP, len(sup)))])
             objs.append(("cone", Fn.normalize(g, dim=1)))
-        gmap.append(c)
-    if not objs:
-        return None, None, None
+        else:
+            # Foreign material is every row in the episode from another class -- the same
+            # legal set the read-out uses at birth (other classes of the current task).
+            objs.append(("cone", _gens_opca(fw[sup], fw[y != c],
+                                            min(R_EP, len(sup)), gen)))
+
     is_q = torch.zeros(len(fw), dtype=torch.bool, device=fw.device)
-    for c in gmap:
-        idx = (y == c).nonzero(as_tuple=True)[0]
-        perm = idx[torch.randperm(len(idx), generator=gen, device=fw.device)]
-        is_q[perm[N_SUP:]] = True
+    if legacy:
+        for c in gmap:            # v1's SECOND, independent draw -- the ~67% query leak
+            idx = (y == c).nonzero(as_tuple=True)[0]
+            perm = idx[torch.randperm(len(idx), generator=gen, device=fw.device)]
+            is_q[perm[N_SUP:]] = True
+    else:
+        for _, _, qry in splits:
+            is_q[qry] = True
+
     cols = []
     for kindc, O in objs:
         cols.append(torch.linalg.norm(fw @ O, dim=1) if kindc == "sub"
@@ -245,8 +328,12 @@ def snapshot(model):
 
 # ------------------------------------------------------------------ training
 def train(arm):
+    v2 = arm.endswith("2")
     tag = (f"{DS}_T{T}_s{SEED}_{arm}_e{EPOCHS_T0}-{EPOCHS_T}_lr{LR:g}_lam{LAM:g}"
            f"_P{P_CLS}K{K_ROW}s{N_SUP}R{R_EP}_t{TAU:g}_w{WHITEN_EVERY}")
+    # v2's episode depends on GAMMA and KM_ITERS; v1's does not. Suffix only the v2 arms so
+    # every existing v1 cache still hits.
+    tag += f"_g{GAMMA:g}km{KM_ITERS}" if v2 else ""
     cache = os.path.join(REPO, f"exp48_feats_{tag}_{TAG}.npz")
     if os.path.exists(cache):
         z = np.load(cache)
@@ -268,6 +355,8 @@ def train(arm):
     gen = torch.Generator(device=DEV).manual_seed(SEED)
 
     Sig = torch.eye(d, device=DEV, dtype=torch.float64)      # EMA within-class scatter
+    Sacc = torch.zeros(d, d, device=DEV, dtype=torch.float64)  # v2: cumulative, undecayed
+    nacc = 0
     Wh = torch.eye(d, device=DEV)                            # its Cholesky whitener
     ON_tr = np.zeros((len(ytr), d), np.float32)
     ON_te = np.zeros((len(yte), d), np.float32)
@@ -310,8 +399,15 @@ def train(arm):
                         z = f[yb == c].double()
                         z = z - z.mean(0, keepdim=True)
                         S += z.T @ z
-                    S = S / max(len(f), 1)
-                    Sig = EMA * Sig + (1 - EMA) * S
+                    if v2:
+                        # The read-out pools scatter over every class seen so far and never
+                        # decays it (see evaluate: `scatter += Xc.T @ Xc`). Match that.
+                        Sacc += S
+                        nacc += max(len(f), 1)
+                        Sig = Sacc / nacc
+                    else:
+                        S = S / max(len(f), 1)
+                        Sig = EMA * Sig + (1 - EMA) * S
                     if step % WHITEN_EVERY == 0:
                         Sr = Sig + SHRINK * torch.trace(Sig) / d * torch.eye(
                             d, device=DEV, dtype=torch.float64)
@@ -320,17 +416,17 @@ def train(arm):
                 step += 1
 
                 loss = torch.zeros((), device=DEV)
-                if arm in ("ce", "ce_conic"):
+                if arm in ("ce", "ce_conic", "ce_conic2"):
                     loss = loss + ce(head(f), torch.tensor(
                         [remap[int(v)] for v in yb.tolist()], device=DEV))
-                if arm in ("conic", "sub", "ce_conic"):
+                if arm in ("conic", "sub", "ce_conic", "ce_conic2"):
                     fw = Fn.normalize(f @ Wh, dim=1)
-                    kind = "sub" if arm == "sub" else "cone"
+                    kind = "sub" if arm == "sub" else ("cone2" if v2 else "cone")
                     lg, is_q, gmap = episode_logits(fw, yb, kind, gen)
                     if lg is not None and bool(is_q.any()):
                         loc = {c: i for i, c in enumerate(gmap)}
                         tgt = torch.tensor([loc[int(v)] for v in yb.tolist()], device=DEV)
-                        lam = LAM if arm == "ce_conic" else 1.0
+                        lam = LAM if arm in ("ce_conic", "ce_conic2") else 1.0
                         loss = loss + lam * ce(lg[is_q], tgt[is_q])
 
                 opt.zero_grad()

@@ -65,6 +65,7 @@ import numpy as np
 import torch
 
 from conic_hull import ConicHull
+from splits import split_indices
 
 T0 = time.time()
 
@@ -115,19 +116,26 @@ def get_labels(ds):
         dd = load_dataset("Donghyun99/cub-200-2011", cache_dir=os.path.join(REPO, "data/hf"))
         ytr, yte = np.array(dd["train"]["label"]), np.array(dd["test"]["label"])
         return ytr, yte, int(max(ytr.max(), yte.max())) + 1
-    if ds == "IMAGENETR":
+    if ds == "CUB200P":
+        # PyCIL / LAMDA-PILOT CUB split: all 11,788 images re-split 80/20 -> 9430 / 2358,
+        # against CUB200's official 5994 / 5794. See exp16_full_table.get_data for why this
+        # is a separate dataset name rather than a redefinition of CUB200.
+        from datasets import concatenate_datasets
+        dd = load_dataset("Donghyun99/cub-200-2011", cache_dir=os.path.join(REPO, "data/hf"))
+        lab = np.array(concatenate_datasets([dd["train"], dd["test"]])["label"])
+    elif ds == "IMAGENETR":
         d = load_dataset("axiong/imagenet-r", cache_dir=os.path.join(REPO, "data/hf"))["test"]
         w = np.array(d["wnid"])
         lab = np.searchsorted(np.array(sorted(set(w.tolist()))), w)
-    elif ds == "IMAGENETA":
+    elif ds in ("IMAGENETA", "IMAGENETAP"):
+        # IMAGENETAP: stratified per-class 80/20. See splits.py and exp16_full_table.get_data.
         d = load_dataset("barkermrl/imagenet-a",
                          cache_dir=os.path.join(REPO, "data/hf"))["train"]
         lab = np.array(d["label"])
     else:
         raise ValueError(ds)
-    p = np.random.default_rng(SPLIT_SEED).permutation(len(lab))
-    n = int(0.8 * len(lab))
-    return lab[p[:n]], lab[p[n:]], int(lab.max()) + 1
+    tri, tei = split_indices(ds, lab)
+    return lab[tri], lab[tei], int(lab.max()) + 1
 
 
 def adapted_features(ds):

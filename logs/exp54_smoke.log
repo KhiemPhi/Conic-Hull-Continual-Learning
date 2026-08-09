@@ -1,0 +1,72 @@
+[    0.0s] === IMAGENETAP|10|0|f32|cone+sub|opcag0.5|R128_f2000_s0.03_i500|np2|m10000|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[    9.8s]     s0: rp 75.00  f32[cone 75.00/74.04 sub 75.00/74.04]  stack_f32 74.04(v73.8)
+[   20.7s]     s1: rp 68.75  f32[cone 71.88/71.88 sub 71.43/71.43]  stack_f32 71.88(v73.0)
+[   33.3s]     s2: rp 67.89  f32[cone 67.89/67.04 sub 67.89/66.76]  stack_f32 67.04(v68.1)
+[   48.2s]     s3: rp 66.67  f32[cone 66.67/66.67 sub 66.25/65.83]  stack_f32 66.67(v69.5)
+[   65.6s]     s4: rp 67.53  f32[cone 68.11/68.11 sub 67.82/67.82]  stack_f32 67.68(v68.6)
+[   84.8s]     s5: rp 65.62  f32[cone 65.14/65.14 sub 65.38/65.50]  stack_f32 65.75(v66.6)
+[  106.5s]     s6: rp 64.87  f32[cone 65.77/65.77 sub 65.57/65.57]  stack_f32 66.07(v65.9)
+[  131.6s]     s7: rp 63.20  f32[cone 64.21/64.21 sub 63.62/63.54]  stack_f32 64.21(v64.1)
+[  161.5s]     s8: rp 63.20  f32[cone 64.15/64.30 sub 64.15/63.78]  stack_f32 64.30(v62.6)
+[  195.3s]     s9: rp 61.53  f32[cone 63.87/63.87 sub 63.13/63.13]  stack_f32 63.80(v60.7)
+
+========================================================================================================
+EXP54 — joint multi-rule stack and a repaired beta search
+========================================================================================================
+
+arms ['f32']  rules ['cone', 'sub']  N_PASS 2  cells 1
+
+--------------------------------------------------------------------------------------------------------
+OVERFITTING CHECK — read this before the accuracy tables
+--------------------------------------------------------------------------------------------------------
+  ds          arm               val     test   val-test   (a large positive gap means the weights fit the val split, not the problem)
+  IMAGENETAP  stack_f32 s0    67.29    67.14       0.15
+
+--------------------------------------------------------------------------------------------------------
+A-Last — mean over seeds
+--------------------------------------------------------------------------------------------------------
+  ds                  ranpac     fuse_cone      fuse_sub    fuse2_cone     fuse2_sub     stack_f32      SOTA  best-SOTA
+  IMAGENETAP           61.53         63.87         63.13         63.87         63.13         63.80     63.60      +0.27
+
+  PAIRED vs f32|fuse_cone (exp52's best single arm)
+  contrast                       mean       sd    wins   per-dataset
+  fuse2_cone - fuse_cone        +0.00      nan    0/1     IMAGENETAP+0.00
+  fuse2_sub - fuse_cone         -0.73      nan    0/1     IMAGENETAP-0.73
+  stack_f32 - fuse_cone         -0.07      nan    0/1     IMAGENETAP-0.07
+
+--------------------------------------------------------------------------------------------------------
+A-Avg — mean over seeds
+--------------------------------------------------------------------------------------------------------
+  ds                  ranpac     fuse_cone      fuse_sub    fuse2_cone     fuse2_sub     stack_f32      SOTA  best-SOTA
+  IMAGENETAP           66.43         67.27         67.02         67.10         66.74         67.14     70.24      -2.97
+
+  PAIRED vs f32|fuse_cone (exp52's best single arm)
+  contrast                       mean       sd    wins   per-dataset
+  fuse2_cone - fuse_cone        -0.17      nan    0/1     IMAGENETAP-0.17
+  fuse2_sub - fuse_cone         -0.53      nan    0/1     IMAGENETAP-0.53
+  stack_f32 - fuse_cone         -0.13      nan    0/1     IMAGENETAP-0.13
+
+--------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  0. THE OVERFITTING TABLE FIRST. stack_all fits 6 weights on a val split that is 10% of the
+     classes seen so far -- ~40 rows at stage 0 on IMAGENETAP. If val-test is large and
+     stack_all < stack_f32 on test, the component count is the cause and the fix is fewer
+     components, not a better optimiser.
+  1. `fuse2_cone - fuse_cone` isolates the beta repair ALONE. Expected small (+0.05-ish):
+     s0 was pinned at exactly +0.00 across all four datasets by the tie-to-zero bug, and
+     recovering one stage of ten is worth about that much on A-Avg.
+  2. `stack_f32 - fuse_cone` is the actual proposal. IF IT IS <= 0 ON IMAGENETR A-AVG, the
+     three rules are redundant given RanPAC, exp52's ensembling reading does not extend to
+     stacking, and Tier 1 is finished -- the rest of the deficit is features.
+  3. `best - SOTA` is context, not a result. Our RanPAC base is already ahead on CIFAR100 and
+     behind by 0.74-1.58 A-Avg elsewhere; the read-out was measured to have ~+0.27 of
+     headroom on IMAGENETR and ~0 on CUB200P, so only IMAGENETR can flip here.
+  4. `_w` records the chosen weights per stage. A component whose weight is 0 at every stage
+     contributed nothing and should be dropped from the stack rather than reported as part
+     of it.
+========================================================================================================
+[  195.3s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp54_stack_smoke_augreg_in21k.json

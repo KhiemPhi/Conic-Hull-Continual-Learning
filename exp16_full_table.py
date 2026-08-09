@@ -60,6 +60,7 @@ import timm
 from timm.data import create_transform, resolve_model_data_config
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
+from splits import split_indices
 
 T0 = time.time()
 
@@ -183,7 +184,13 @@ def get_data(name):
         w = np.array(d["wnid"])
         lab = np.searchsorted(np.array(sorted(set(w.tolist()))), w)
         single = True
-    elif name == "IMAGENETA":
+    elif name in ("IMAGENETA", "IMAGENETAP"):
+        # IMAGENETAP is the SAME images under a STRATIFIED per-class 80/20 rather than a
+        # global one. ImageNet-A is 7500 images over 200 classes with per-class totals from
+        # 3 to 100, and a global cut leaves 4 CLASSES WITH ZERO TEST IMAGES plus one with a
+        # single train row -- columns that can never be scored but can still fire false
+        # positives, and the source of the "N seen classes have NO rays" warnings. See
+        # splits.py. Separate dataset name, for the same reason as CUB200P.
         d = load_dataset("barkermrl/imagenet-a",
                          cache_dir=os.path.join(REPO, "data/hf"))["train"]
         lab = np.array(d["label"]); single = True
@@ -196,12 +203,27 @@ def get_data(name):
         return (HFWrap(tr, np.arange(len(ytr)), ytr, TF_TRAIN),
                 HFWrap(tr, np.arange(len(ytr)), ytr, TF_EVAL), ytr,
                 HFWrap(te, np.arange(len(yte)), yte, TF_EVAL), yte, n)
+    elif name == "CUB200P":
+        # CUB under the PyCIL / LAMDA-PILOT convention: ALL 11,788 images re-split 80/20 at
+        # SPLIT_SEED -> 9430 train / 2358 test. `CUB200` above uses the OFFICIAL CUB split,
+        # 5994 / 5794, which is a different benchmark: after the read-out's 10% val carve it
+        # fits on 5,395 images (27/class) against the published protocol's 9,430 (47/class),
+        # i.e. 57% of the data, while testing on a 2.5x larger test set. Every published
+        # PTM-CIL CUB number is on THIS split, so `CUB200` cells are not comparable to them.
+        #
+        # This is a SEPARATE dataset name on purpose. Feature caches and every results key
+        # in the repo are keyed by dataset name; redefining CUB200 in place would silently
+        # change the meaning of numbers already sitting in exp48/49/50/52's JSONs.
+        from datasets import concatenate_datasets
+        dd = load_dataset("Donghyun99/cub-200-2011",
+                          cache_dir=os.path.join(REPO, "data/hf"))
+        d = concatenate_datasets([dd["train"], dd["test"]])
+        lab = np.array(d["label"])
+        single = True
     else:
         raise ValueError(name)
 
-    p = np.random.default_rng(SPLIT_SEED).permutation(len(lab))
-    n_tr = int(0.8 * len(lab))
-    tri, tei = p[:n_tr], p[n_tr:]
+    tri, tei = split_indices(name, lab)
     n = int(lab.max()) + 1
     return (HFWrap(d, tri, lab[tri], TF_TRAIN), HFWrap(d, tri, lab[tri], TF_EVAL), lab[tri],
             HFWrap(d, tei, lab[tei], TF_EVAL), lab[tei], n)

@@ -1,0 +1,67 @@
+[    0.0s] === IMAGENETAP|10|0|q32+m32|ep40_lr0.0003_a4|m10000|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  103.3s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=20) task0 train acc 0.986
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[  120.6s]     member q32      A-Last 61.53  A-Avg 66.43
+[  124.2s]     member m32      A-Last 57.47  A-Avg 62.99
+[  128.1s]     concat   (1536d) A-Last 61.00  A-Avg 66.34
+[  128.1s]     ensemble           A-Last 61.07  A-Avg 66.77
+[  128.1s]     VERIFY ok: member q32 reproduces the exp16 bar
+
+====================================================================================================
+EXP55 — LoRA member diversity (RanPAC only; no cones, no fusion, no beta)
+====================================================================================================
+
+members ['q32', 'm32']   cells 1
+
+----------------------------------------------------------------------------------------------------
+PRECONDITION — is there anything to ensemble? (read before accuracy)
+----------------------------------------------------------------------------------------------------
+  ds          pair                disagree   errcorr  both_wrong
+  IMAGENETAP  q32|m32                25.1%      0.76       34.7%
+
+  ds            best single    ORACLE   headroom   <- headroom is the CEILING for ANY combination rule
+  IMAGENETAP          61.53     65.27       3.73
+
+----------------------------------------------------------------------------------------------------
+A-Last — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds                   q32         m32      concat    ensemble   concat-q32   GR-LoRA
+  IMAGENETAP         61.53       57.47       61.00       61.07        -0.53     63.60
+
+----------------------------------------------------------------------------------------------------
+A-Avg — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds                   q32         m32      concat    ensemble   concat-q32   GR-LoRA
+  IMAGENETAP         66.43       62.99       66.34       66.77        -0.09     70.24
+
+----------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. PRECONDITION FIRST. `headroom` = ORACLE - best_single is the ceiling for ANY combiner:
+     it is the accuracy of an oracle that picks a correct member whenever one exists. A
+     headroom near zero means the members are redundant and NO fusion recovers anything --
+     the answer is then harsher diversity (bagging, disjoint target modules, different
+     ranks) or a different mechanism entirely, NOT a cleverer combination rule. That is
+     exactly the trap exp54 fell into at the rule level.
+  2. `disagree` near 0 with `errcorr` near 1 means the members are the same network wearing
+     different hats. Expected for members differing only by init, which is precisely why the
+     default member set varies TARGET MODULES instead.
+  3. `concat - q32` is the Tier 2 verdict. Our IMAGENETR base deficit is -0.89 A-Avg, so
+     under about +0.5 means concatenation does not close it and nothing built on top will.
+  4. `ensemble` vs `concat` separates the two mechanisms: score averaging tests
+     decorrelation, concatenation tests representational richness. They can disagree, and
+     which one wins says what the members are actually contributing.
+  5. Members are NOT expected to be individually equal. `m32` adapting only the MLP may well
+     be worse alone than `q32`; a worse-but-decorrelated member is useful and that is the
+     whole premise. Judge members by the diversity table, not by their solo accuracy.
+====================================================================================================
+[  128.1s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp55_lora_diversity_smoke_augreg_in21k.json
