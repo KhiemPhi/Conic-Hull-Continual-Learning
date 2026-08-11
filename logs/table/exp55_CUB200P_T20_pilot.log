@@ -1,0 +1,66 @@
+[    0.0s] === CUB200P|20|0|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  102.8s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=10) task0 train acc 0.994
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  232.9s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=10) task0 train acc 0.996
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  350.5s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=7) task0 train acc 1.000
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  472.7s]     trained member q64 (targets=['attn.qkv', 'attn.proj'] rank=64 bag=1 cls=10) task0 train acc 0.996
+[  502.7s]     member q32      A-Last 89.10  A-Avg 93.18
+[  512.1s]     member m32      A-Last 89.74  A-Avg 93.31
+[  521.6s]     member a16      A-Last 88.55  A-Avg 93.08
+[  529.4s]     member q32b70   A-Last 89.36  A-Avg 93.21
+[  536.9s]     member q64      A-Last 89.91  A-Avg 93.43
+[  549.0s]     concat   (3840d) A-Last 89.78  A-Avg 93.36
+[  549.1s]     ensemble           A-Last 89.65  A-Avg 93.58
+[  549.1s]     VERIFY ok: member q32 reproduces the exp16 bar
+[  549.1s] === CUB200P|20|1|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  656.8s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=10) task0 train acc 0.994
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  794.7s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=10) task0 train acc 0.994
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  912.1s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=7) task0 train acc 0.991
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1034.2s]     trained member q64 (targets=['attn.qkv', 'attn.proj'] rank=64 bag=1 cls=10) task0 train acc 1.000
+[ 1064.3s]     member q32      A-Last 88.85  A-Avg 93.75
+[ 1072.5s]     member m32      A-Last 88.68  A-Avg 93.77
+[ 1080.3s]     member a16      A-Last 89.57  A-Avg 94.07
+[ 1089.2s]     member q32b70   A-Last 89.65  A-Avg 94.02
+[ 1098.6s]     member q64      A-Last 88.51  A-Avg 93.87
+[ 1110.6s]     concat   (3840d) A-Last 89.48  A-Avg 94.06
+[ 1110.7s]     ensemble           A-Last 89.61  A-Avg 94.18
+[ 1110.7s] === CUB200P|20|2|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1214.6s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=10) task0 train acc 0.996
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1341.2s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=10) task0 train acc 0.998
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1477.1s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=7) task0 train acc 1.000
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768

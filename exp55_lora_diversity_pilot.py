@@ -106,7 +106,22 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Subset
 
+# exp19_dataset_hull parses T and SEED as SCALARS at import time:
+#     SEED = int(os.environ.get("SEED", 0))
+# so importing it with SEED=0,1,2 still in the environment raises ValueError before a line of
+# this file runs. exp49/52/53/54 all narrow the environment before the import for exactly
+# this reason; this file originally imported it lazily inside run_cell, which only moved the
+# crash to AFTER the members had been trained. Grid values are captured here and the
+# environment is narrowed to the first element; E.T / E.SEED are reassigned per cell in
+# run_cell, so the scalars left in os.environ are never read again.
+_DS = os.environ.get("DS", "IMAGENETR").split(",")
+_TS = [int(x) for x in os.environ.get("T", "10").split(",")]
+_SEEDS = [int(x) for x in os.environ.get("SEED", "0,1,2").split(",")]
+os.environ["T"], os.environ["SEED"] = str(_TS[0]), str(_SEEDS[0])
+
+import exp19_dataset_hull as E                                         # noqa: E402
 import fsa_train as F                                                  # noqa: E402
+import class_order as CO                                               # noqa: E402
 from backbone import freeze_non_lora, get_lora_params, load_backbone   # noqa: E402
 
 T0 = time.time()
@@ -119,9 +134,7 @@ def log(m):
 REPO = os.path.dirname(os.path.abspath(__file__))
 DEV = "cuda" if torch.cuda.is_available() else "cpu"
 TAG = F.TAG
-DSETS = os.environ.get("DS", "IMAGENETR").split(",")
-TS = [int(x) for x in os.environ.get("T", "10").split(",")]
-SEEDS = [int(x) for x in os.environ.get("SEED", "0,1,2").split(",")]
+DSETS, TS, SEEDS = _DS, _TS, _SEEDS
 MEMBERS = os.environ.get("MEMBERS", "q32,m32,a16").split(",")
 EPOCHS = int(os.environ.get("EPOCHS", 40))
 LR = float(os.environ.get("LR", 3e-4))
@@ -159,8 +172,15 @@ def parse_member(spec):
 
 
 def bar_for(ds, T, seed):
-    v = BAR.get(f"{ds}|{T}|{seed}|ep40_lr0.0003_aug1")
-    assert v is not None, f"no exp16 bar for {ds} T={T} s={seed}"
+    # recipe_tag() now appends the order tag, so exp16's key moves with the class order too.
+    # Hardcoding the legacy recipe here would silently compare a pilot-order run against a
+    # legacy-order bar -- the exact class of mismatch class_order.py exists to prevent.
+    k = f"{ds}|{T}|{seed}|ep40_lr0.0003_aug1{CO.order_tag()}"
+    v = BAR.get(k)
+    assert v is not None, (
+        f"no exp16 bar for {k}. Run "
+        f"`ORDER={CO.mode()} DATASETS={ds} SEEDS={seed} TASKS={T} python -u "
+        f"exp16_full_table.py` first.")
     return v
 
 
@@ -174,16 +194,19 @@ def member_features(ds, T, seed, spec):
     and has no bagging hook -- the same reason get_data is duplicated across exp16/fsa_train,
     and the same hazard, so any change here must be mirrored there."""
     if spec == "q32":
-        f = os.path.join(REPO,
-                         f"exp16_feats_{ds}_T{T}_s{seed}_ep40_lr0.0003_aug1_{TAG}.npz")
+        f = os.path.join(
+            REPO,
+            f"exp16_feats_{ds}_T{T}_s{seed}_ep40_lr0.0003_aug1{CO.order_tag()}_{TAG}.npz")
         assert os.path.exists(f), (
             f"member q32 IS exp16's cache and it is missing: {f}\nRun "
-            f"`DATASETS={ds} SEEDS={seed} TASKS={T} python -u exp16_full_table.py` first.")
+            f"`ORDER={CO.mode()} DATASETS={ds} SEEDS={seed} TASKS={T} python -u "
+            f"exp16_full_table.py` first.")
         z = np.load(f)
         return z["Ftr"], z["Fte"]
 
     cache = os.path.join(
-        REPO, f"exp55_feats_{ds}_T{T}_s{seed}_{spec}_ep{EPOCHS}_lr{LR:g}_{TAG}.npz")
+        REPO, f"exp55_feats_{ds}_T{T}_s{seed}_{spec}_ep{EPOCHS}_lr{LR:g}"
+              f"{CO.order_tag()}_{TAG}.npz")
     if os.path.exists(cache):
         z = np.load(cache)
         log(f"    cached member {spec}")
@@ -197,7 +220,7 @@ def member_features(ds, T, seed, spec):
     # are not solving the same problem and nothing is comparable.
     torch.manual_seed(seed * 1000 + MEMBERS.index(spec))
     np.random.seed(seed)
-    task0 = np.random.default_rng(seed).permutation(n_cls)[:cpt]
+    task0 = CO.class_order(n_cls, seed)[:cpt]
     if bagfrac < 1.0:
         keep = np.random.default_rng(10_000 + seed * 100 + MEMBERS.index(spec)).permutation(
             len(task0))[:max(2, int(round(bagfrac * len(task0))))]
@@ -254,7 +277,7 @@ def ranpac_staged(Z_tr, Z_te, ytr, yte, T, seed, n_cls):
     z-scoring per row first is required because members have different logit scales."""
     d = Z_tr.shape[1]
     cpt = n_cls // T
-    order = np.random.default_rng(seed).permutation(n_cls)
+    order = CO.class_order(n_cls, seed)
     tasks = [order[i * cpt:(i + 1) * cpt] for i in range(T)]
     FIT, VAL = [], []
     for t in range(T):
@@ -313,12 +336,10 @@ def ranpac_staged(Z_tr, Z_te, ytr, yte, T, seed, n_cls):
 
 
 def run_cell(ds, T, seed, verify):
-    ytr, yte, n_cls = None, None, None
     feats = {}
     for spec in MEMBERS:
         Ftr, Fte = member_features(ds, T, seed, spec)
         feats[spec] = (un(Ftr), un(Fte))
-    import exp19_dataset_hull as E
     E.T, E.SEED = T, seed
     ytr, yte, n_cls = E.get_labels(ds)
 
@@ -420,7 +441,7 @@ if __name__ == "__main__":
         for T in TS:
             for seed in SEEDS:
                 key = (f"{ds}|{T}|{seed}|{'+'.join(MEMBERS)}"
-                       f"|ep{EPOCHS}_lr{LR:g}_a{ALPHA:g}|m{M_RP}|v1")
+                       f"|ep{EPOCHS}_lr{LR:g}_a{ALPHA:g}{CO.order_tag()}|m{M_RP}|v1")
                 if key in allres:
                     log(f"skip {key}"); continue
                 log(f"=== {key}")
@@ -429,36 +450,52 @@ if __name__ == "__main__":
                 json.dump(allres, open(OUT, "w"), indent=2)
 
     W = 100
-    cells = {}
+    # THIS FILTER USED TO CHECK ONLY p[3] (the member list) AND KEY ON (ds, seed).
+    # The order tag lives in p[4] and T in p[1], so a pilot-order cell silently OVERWROTE the
+    # legacy cell with the same (ds, seed) and the table averaged 1 pilot seed with 2 legacy
+    # seeds while printing "cells 3". Two different class orders in one mean, invisibly.
+    # Match the recipe+order field EXACTLY and key on (ds, T, seed).
+    recipe = f"ep{EPOCHS}_lr{LR:g}_a{ALPHA:g}{CO.order_tag()}"
+    cells, dropped = {}, 0
     for k, v in allres.items():
         p = k.split("|")
-        if len(p) < 4 or p[3] != "+".join(MEMBERS):
+        if len(p) < 5 or p[3] != "+".join(MEMBERS):
             continue
-        cells[(p[0], int(p[2]))] = v
-    dss = sorted({d0 for d0, _ in cells})
+        if p[4] != recipe:
+            dropped += 1
+            continue
+        cells[(p[0], int(p[1]), int(p[2]))] = v
+    dts = sorted({(d0, t0) for d0, t0, _ in cells})
+
+    def seeds_of(ds, T):
+        return sorted(s for (d0, t0, s) in cells if d0 == ds and t0 == T)
 
     print("\n" + "=" * W)
     print("EXP55 — LoRA member diversity (RanPAC only; no cones, no fusion, no beta)")
     print("=" * W)
-    print(f"\nmembers {MEMBERS}   cells {len(cells)}")
+    print(f"\nmembers {MEMBERS}   recipe {recipe}   ORDER={CO.mode()}   cells {len(cells)}"
+          + (f"   ({dropped} cells in the JSON belong to a DIFFERENT recipe/order and were "
+             f"excluded)" if dropped else ""))
+    for ds, T in dts:
+        print(f"    {ds} T={T}: seeds {seeds_of(ds, T)}")
 
     print(f"\n{'-'*W}\nPRECONDITION — is there anything to ensemble? (read before accuracy)"
           f"\n{'-'*W}")
     print(f"  {'ds':<12}{'pair':<18}{'disagree':>10}{'errcorr':>10}{'both_wrong':>12}")
-    for ds in dss:
-        sd_ = sorted(s for (d0, s) in cells if d0 == ds)
-        pairs = [k for k in cells[(ds, sd_[0])]["_diversity"] if "|" in k]
+    for ds, T in dts:
+        sd_ = seeds_of(ds, T)
+        pairs = [k for k in cells[(ds, T, sd_[0])]["_diversity"] if "|" in k]
         for pr in pairs:
-            dv = [cells[(ds, s)]["_diversity"][pr] for s in sd_]
+            dv = [cells[(ds, T, s)]["_diversity"][pr] for s in sd_]
             print(f"  {ds:<12}{pr:<18}"
                   f"{np.mean([x['disagree'] for x in dv])*100:>9.1f}%"
                   f"{np.mean([x['errcorr'] for x in dv]):>10.2f}"
                   f"{np.mean([x['both_wrong'] for x in dv])*100:>11.1f}%")
     print(f"\n  {'ds':<12}{'best single':>13}{'per-class cv':>14}{'per-class*':>12}"
           f"{'ORACLE':>9}{'cv share':>10}   <- can a PER-CLASS rule reach it?")
-    for ds in dss:
-        sd_ = sorted(s for (d0, s) in cells if d0 == ds)
-        D = [cells[(ds, s)]["_diversity"] for s in sd_]
+    for ds, T in dts:
+        sd_ = seeds_of(ds, T)
+        D = [cells[(ds, T, s)]["_diversity"] for s in sd_]
         bs = np.mean([x["best_single"] for x in D]) * 100
         pcv = np.mean([x["oracle_class_cv"] for x in D]) * 100
         pc = np.mean([x["oracle_class"] for x in D]) * 100
@@ -469,25 +506,39 @@ if __name__ == "__main__":
           " each class and is the realizable number. `cv share` = (cv - best) / (ORACLE -"
           " best).")
     print(f"\n  {'ds':<12}per-class winner counts (which member is best on how many classes)")
-    for ds in dss:
-        sd_ = sorted(s for (d0, s) in cells if d0 == ds)
-        wc = {s: int(np.mean([cells[(ds, sx)]["_diversity"]["winner_counts"][s]
+    for ds, T in dts:
+        sd_ = seeds_of(ds, T)
+        wc = {s: int(np.mean([cells[(ds, T, sx)]["_diversity"]["winner_counts"][s]
                               for sx in sd_])) for s in MEMBERS}
         print(f"  {ds:<12}" + "  ".join(f"{s}:{n}" for s, n in wc.items()))
 
-    SOTA = {"CIFAR100": (91.97, 94.65), "IMAGENETR": (82.09, 86.20),
-            "IMAGENETAP": (63.60, 70.24), "CUB200P": (89.91, 93.85)}
+    # Published GR-LoRA numbers keyed by (dataset, T). SOURCE OF TRUTH IS exp16_full_table.REF
+    # (ICML'26 Tables 1,2,6, ViT-B/16-IN21k, mean of 3 seeds). exp16 keys these as IMAGENETA
+    # and CUB200; here they are mapped onto the PILOT-CORRECTED variants IMAGENETAP / CUB200P,
+    # which are the splits those published numbers actually correspond to -- see
+    # splits.py and the CUB/ImageNet-A note in exp16.get_data. The dict was previously keyed by
+    # DATASET ALONE, which printed the T=10 baseline against every task count.
+    REF = {("CIFAR100", 10): (91.97, 94.65), ("CIFAR100", 20): (91.46, 94.41),
+           ("CIFAR100", 50): (90.03, 93.38),
+           ("IMAGENETR", 10): (82.09, 86.20), ("IMAGENETR", 20): (80.23, 85.05),
+           ("IMAGENETR", 50): (76.74, 82.64),
+           ("IMAGENETAP", 10): (63.60, 70.24), ("IMAGENETAP", 20): (62.37, 69.30),
+           ("IMAGENETAP", 50): (59.71, 67.23),
+           ("CUB200P", 10): (89.91, 93.85), ("CUB200P", 20): (89.76, 94.08),
+           ("CUB200P", 50): (89.68, 93.94)}
     names = MEMBERS + ["concat", "ensemble"]
     for fld, lbl in (("A_last", "A-Last"), ("A_avg", "A-Avg")):
         print(f"\n{'-'*W}\n{lbl} — RanPAC on each feature set, mean over seeds\n{'-'*W}")
-        print(f"  {'ds':<12}" + "".join(f"{n:>12}" for n in names)
-              + f"{'concat-q32':>13}{'GR-LoRA':>10}")
-        for ds in dss:
-            sd_ = sorted(s for (d0, s) in cells if d0 == ds)
-            g = {n: np.mean([cells[(ds, s)][n][fld] for s in sd_]) * 100 for n in names}
-            so = SOTA.get(ds, (float("nan"),) * 2)[0 if fld == "A_last" else 1]
-            print(f"  {ds:<12}" + "".join(f"{g[n]:>12.2f}" for n in names)
-                  + f"{g['concat']-g['q32']:>+13.2f}{so:>10.2f}")
+        print(f"  {'ds':<12}{'T':>4}{'sd':>4}" + "".join(f"{n:>12}" for n in names)
+              + f"{'concat-q32':>13}{'GR-LoRA':>10}{'ens-GR':>9}")
+        for ds, T in dts:
+            sd_ = seeds_of(ds, T)
+            g = {n: np.mean([cells[(ds, T, s)][n][fld] for s in sd_]) * 100 for n in names}
+            so = REF.get((ds, T), (float("nan"),) * 2)[0 if fld == "A_last" else 1]
+            print(f"  {ds:<12}{T:>4}{len(sd_):>4}"
+                  + "".join(f"{g[n]:>12.2f}" for n in names)
+                  + f"{g['concat']-g['q32']:>+13.2f}{so:>10.2f}"
+                  + f"{g['ensemble']-so:>+9.2f}")
 
     print(f"\n{'-'*W}")
     print("""HOW TO READ THIS

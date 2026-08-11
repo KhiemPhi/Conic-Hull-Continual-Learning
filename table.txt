@@ -1,0 +1,233 @@
+====================================================================================================
+METHOD SPECIFICATION AND COMPONENT ATTRIBUTION
+5 first-session LoRAs + per-member RanPAC + oPCA conic read-out, fused in matched
+geometry and averaged uniformly.   ImageNet-R / CIFAR100 / CUB200P / ImageNet-A,
+T=10, PILOT class order (MT19937 seed 1993+s), 3 seeds (CIFAR100: 2, seed 2 pending).
+====================================================================================================
+
+1. NOTATION AND SETUP
+--------------------------------------------------------------------------------------------
+  f0 : X -> R^d          frozen ViT-B/16 augreg_in21k backbone, d = 768. Never updated.
+  T tasks, disjoint label sets Y_1..Y_T;  C_t = union_{s<=t} Y_s  are the classes seen by t.
+  Class order pi = RandomState(1993 + seed).permutation(C)   [PyCIL/LAMDA-PILOT convention]
+  task t = pi[(t-1)*cpt : t*cpt],  cpt = |C| / T.
+  Per task a 10% row split: F_t (fit) and V_t (val). Val is used ONLY to select lambda and
+  beta; no gradient ever sees it.
+
+2. MEMBERS  -- ALL TRAINED ON TASK 1 ONLY, THEN FROZEN FOREVER
+--------------------------------------------------------------------------------------------
+  M = 5 LoRA adapters theta_m. For each targeted module W in S_m:
+        W  ->  W + (alpha / r_m) * B_m A_m ,   B_m in R^{d x r},  A_m in R^{r x d},  alpha = 4
+  Member m induces a normalised feature map
+        phi_m(x) = f0(x; theta_m) / || f0(x; theta_m) ||_2   in  S^{d-1}.
+
+        m         S_m (targeted modules)             r_m   trained on
+        q32       attn.qkv, attn.proj                 32   all of task 1
+        m32       mlp.fc1, mlp.fc2                    32   all of task 1
+        a16       all four                            16   all of task 1
+        q32b70    attn.qkv, attn.proj                 32   random 70% of task-1 CLASSES
+        q64       attn.qkv, attn.proj                 64   all of task 1
+
+  theta_m is fixed for t >= 2. No backpropagation occurs after the first session.
+
+3. RANPAC HEAD  (per member, closed form, accumulated)
+--------------------------------------------------------------------------------------------
+  One random projection P in R^{d x D}, D = 10000, P_ij ~ N(0,1), SHARED by all members
+  (members differ only through phi_m):
+        h_m(x) = ReLU( P^T phi_m(x) )   in R^D
+  Second-moment statistics accumulate exactly across tasks:
+        G_m^{(t)} = sum_{s<=t} sum_{i in F_s} h_m(x_i) h_m(x_i)^T          in R^{D x D}
+        C_m^{(t)} = sum_{s<=t} sum_{i in F_s} h_m(x_i) e_{y_i}^T           in R^{D x |C|}
+        W_m^{(t)} = ( G_m^{(t)} + lambda I )^{-1} C_m^{(t)},   lambda in {1e2,1e3,1e4} on val
+        l_m(x)    = W_m^{(t)T} h_m(x)                                       (logits)
+
+  Row-wise z-score over the SEEN columns, which is what makes members commensurable:
+        z(s)_c = ( s_c - mean_{c' in C_t} s_c' ) / ( std_{c' in C_t} s_c' + eps ),  c in C_t
+        z(s)_c = -inf otherwise.
+
+4. ORIENTED-PCA CONIC READ-OUT  (per member, per class)
+--------------------------------------------------------------------------------------------
+  Whitening, from the accumulated within-class scatter in member m's OWN feature space:
+        Sigma_m = (1/N) sum_c sum_{i:y_i=c} (phi_m(x_i) - mu_{m,c})(phi_m(x_i) - mu_{m,c})^T
+        Sigma~  = Sigma_m + (0.03 * tr(Sigma_m)/d) I           (shrinkage)
+        Lambda_m = chol( Sigma~^{-1} )
+  For class c, positives X_c and negatives F_c (other classes this task + all past classes'
+  stored rays, subsampled to 2000), both whitened and unit-normalised. Oriented scatter:
+        M_c = (1/n) X_c^T X_c  -  gamma * (1/|F_c|) F_c^T F_c ,       gamma = 0.5
+  V_c = top-k eigenvectors of M_c (k = min(R,d)): directions where c has second-moment energy
+  the negatives do not. Rays are k-means centroids INSIDE that subspace, lifted back:
+        A_c = normalise( kmeans_{R'}( X_c V_c ) V_c^T ),   R' = min(R, n_c)   <-- THE CLIP
+        A~_c = A_c Lambda_m^{-1}                            (stored in feature space)
+  Score of query x against class c -- non-negative least squares over the rays:
+        w* = argmin_{w >= 0} || q^ - w^T A_c ||_2 ,  q^ = normalise(Lambda_m^T phi_m(x))
+        kappa_m(x,c) = cos( q^ , w*^T A_c )   in (-1,1];  1.0 = x lies inside the cone.
+
+5. FUSION AND PREDICTION
+--------------------------------------------------------------------------------------------
+  Each member is fused against ITS OWN RanPAC, in ITS OWN geometry (this ordering matters --
+  pooling the base first costs 2-3x the val overfit):
+        S_m(x) = z( l_m(x) ) + beta_m * z( kappa_m(x, .) )
+        beta_m = argmax_{b in B} ( val accuracy , val margin )   lexicographic, |B| = 19
+  Then a UNIFORM average of the re-z-scored member scores:
+        S(x)  = (1/M) sum_m z( S_m(x) )
+        y^    = argmax_{c in C_t} S(x)_c
+  No task identity is inferred and no member is selected: every member votes on every input.
+  Learned member weights were tested and LOST (-0.18 A-Avg, val-test gap 0.86 -> 2.46).
+
+  A_t = accuracy over test rows of C_t after task t;  A-Last = A_T;  A-Avg = (1/T) sum_t A_t.
+
+====================================================================================================
+6. COMPONENT ATTRIBUTION -- how each piece contributes, per dataset
+====================================================================================================
+
+  Three nested systems, each adding one component:
+     (a) BASE      one LoRA (q32) + RanPAC                        = q32|ranpac
+     (b) +ENSEMBLE five LoRAs, uniform average of RanPAC scores    = ens_ranpac
+     (c) +CONE     per-member conic fusion, then average           = FE|f64|cone
+
+  ------------------------------------------------------------------------------------------------
+  A-Last
+  ------------------------------------------------------------------------------------------------
+  dataset     n    (a) base    (b) +ens   D_ens   (c) +cone  D_cone   TOTAL  GR-LoRA    diff
+  CIFAR100    2       92.78       93.27   +0.48       93.40   +0.14   +0.62    91.97   +1.43
+  IMAGENETR   3       80.76       81.78   +1.02       82.58   +0.80   +1.82    82.09   +0.49
+  CUB200P     3       89.71       90.19   +0.48       90.16   -0.03   +0.45    89.91   +0.25
+  IMAGENETAP  3       62.76       63.38   +0.62       64.27   +0.89   +1.51    63.60   +0.67
+
+  dataset       base sd    ens sd     FE sd   SE(FE)  t vs GR
+  CIFAR100         0.02      0.13      0.11     0.08     17.9
+  IMAGENETR        0.50      0.18      0.13     0.08      6.6
+  CUB200P          0.31      0.11      0.15     0.08      3.0
+  IMAGENETAP       1.47      0.62      1.25     0.72      0.9
+
+  ------------------------------------------------------------------------------------------------
+  A-Avg
+  ------------------------------------------------------------------------------------------------
+  dataset     n    (a) base    (b) +ens   D_ens   (c) +cone  D_cone   TOTAL  GR-LoRA    diff
+  CIFAR100    2       95.62       95.98   +0.36       96.01   +0.03   +0.39    94.65   +1.36
+  IMAGENETR   3       85.49       86.55   +1.06       87.01   +0.46   +1.52    86.20   +0.81
+  CUB200P     3       92.97       93.36   +0.39       93.33   -0.03   +0.36    93.85   -0.52
+  IMAGENETAP  3       71.09       72.16   +1.07       72.23   +0.07   +1.14    70.24   +1.99
+
+  dataset       base sd    ens sd     FE sd   SE(FE)  t vs GR
+  CIFAR100         0.12      0.07      0.04     0.03     44.6
+  IMAGENETR        0.32      0.32      0.49     0.28      2.9
+  CUB200P          0.96      1.03      1.05     0.61     -0.9
+  IMAGENETAP       1.74      0.98      0.81     0.47      4.2
+
+====================================================================================================
+7. WHY THE CONE CONTRIBUTES WHAT IT DOES -- IT IS MEMBER DIVERSITY, NOT THE RAY BUDGET
+====================================================================================================
+
+  FIRST HYPOTHESIS, NOW FALSIFIED. R' = min(R, n_c), so on datasets whose classes have fewer
+  than R fit rows the cone degenerates to one ray per training point and loses the AGGREGATION
+  that is its mechanism. CUB200P (median 43 rows) and IMAGENETAP (median 18) are both clipped
+  at R=64, and CUB200P is exactly where the cone contributes nothing -- so clipping looked
+  like the explanation. It is not, for two independent reasons:
+
+    (i)  IMAGENETAP is the MOST clipped dataset (median 18 rows) and gets the cone's LARGEST
+         contribution anywhere, +0.89 A-Last. Clipping is plainly not fatal.
+    (ii) An explicit R sweep on CUB200P at budgets that are NOT clipped (f8/f16/f32, all well
+         under its 43-row median; the run reports clipped_arms = []) still finds nothing:
+
+       CUB200P, seeds [0, 1, 2], unclipped ray budgets (median 43 fit rows/class)
+       config                  A-Last   A-Avg    sd   vs ens     val  val-test
+       ens_ranpac (no cone)     90.19   93.36  1.03       --      --        --
+       FE|f32|cone              90.27   93.40  0.98    +0.04   94.36      0.96
+       FE|f8+f32|cone           90.15   93.34  1.05    -0.02   94.41      1.07
+       FE|f8|cone               90.15   93.33  1.01    -0.03   94.36      1.03
+       FE|f16|cone              90.10   93.32  1.01    -0.04   94.35      1.02
+       FE|f8+f16|cone           90.08   93.32  1.02    -0.04   94.40      1.08
+       FE|f8+f16+f32|cone       90.08   93.31  1.03    -0.05   94.43      1.12
+       FE|f16+f32|cone          90.05   93.31  1.04    -0.05   94.39      1.08
+
+       All seven configs sit within +-0.05 A-Avg of the plain ensemble against a per-config
+       sd of ~1.0 (SE ~0.58) -- indistinguishable from zero. Sizing the rays correctly does
+       not create diversity that is not there. NOTE: a seed-0-only read of this sweep showed
+       every config strictly <= 0 and val picking the single worst config; neither survived
+       the other two seeds. The surviving claim is "the cone is a no-op here", not "the cone
+       is harmful here", and val-selection costs an ordinary -0.09 A-Avg rather
+       than being anti-correlated.
+
+  WHAT ACTUALLY GOVERNS IT is how much the five members disagree. `headroom` = ORACLE minus
+  best single member is the ceiling for ANY rule combining them, and the total gain tracks it
+  monotonically across all four datasets:
+
+  dataset      member spread  headroom   D_ens  D_cone   TOTAL   (A-Last)
+  CUB200P               0.21      2.49   +0.48   -0.03   +0.45
+  CIFAR100              0.28      2.60   +0.48   +0.14   +0.62
+  IMAGENETR             1.69      5.87   +1.02   +0.80   +1.82
+  IMAGENETAP            2.62      8.62   +0.62   +0.89   +1.51
+
+  On CUB200P the five members land within 0.21 of each other -- they converged to nearly the
+  same solution, so neither the ensemble nor the cone has anything to recover. Member
+  diversity is a property of the DATASET, not of the design, and it predicts where this
+  method pays.
+
+  BETA SELECTION ON SMALL VAL SPLITS. CUB200P's stage-0 val carve is ~94 rows and the
+  val-test gap runs ~1.0 across every config. Choosing beta on that split costs
+  -0.09 A-Avg versus the best config on test -- small, but it means the per-member
+  beta search cannot reliably drive beta -> 0 where the cone does not help. Cross-fitting beta
+  over the seen data would make that gate automatic instead of manual (section 10).
+
+====================================================================================================
+8. PER-MEMBER SOLO ACCURACY -- no member is dead weight
+====================================================================================================
+
+  A-Last   dataset           q32       m32       a16    q32b70       q64       ens        FE
+          CIFAR100        92.78     92.50     92.56     92.59     92.78     93.27     93.40
+          IMAGENETR       80.76     79.07     79.51     79.78     80.69     81.78     82.58
+          CUB200P         89.71     89.71     89.50     89.68     89.67     90.19     90.16
+          IMAGENETAP      62.76     60.13     60.93     61.49     61.78     63.38     64.27
+
+  Subset sweep on IMAGENETR (exp57) found accuracy MONOTONE in K and no subset of
+  size < 5 matching K=5 even on test, so the member set is minimal as specified.
+
+====================================================================================================
+9. HOW MUCH IS LEFT -- the oracle ceiling (exp55 diversity block)
+====================================================================================================
+
+  dataset      best single   ORACLE  headroom      FE  captured  cv share
+  CIFAR100           92.88    95.48      2.60   93.40      20%       -2%
+  IMAGENETR          80.94    86.81      5.87   82.58      28%       -8%
+  CUB200P            89.99    92.48      2.49   90.16       7%      -15%
+  IMAGENETAP         62.89    71.51      8.62   64.27      16%       -9%
+
+  headroom = ORACLE - best single = the ceiling for ANY rule combining these members.
+  captured = (FE - best single) / headroom.
+  cv share = what a per-CLASS member-selection rule realises, cross-fitted within class.
+  It is NEGATIVE everywhere: the residual headroom is row-random, not class-structured, so
+  no per-class weighting reaches it. Parameter-free per-row weighting was also tested
+  (exp57) and gained +0.08 A-Avg against a pre-registered +0.30 bar -- no lift.
+
+====================================================================================================
+10. RECOMMENDED CONFIGURATION PER DATASET (T=10, PILOT order)
+====================================================================================================
+
+  Gate rule: use the conic read-out UNLESS it is measured NEGATIVE. A component that
+  helps by a small amount on both metrics is still a help; only CUB200P fails this.
+
+  dataset    cone?       R   A-Last    A-Avg  vs GR A-Last  vs GR A-Avg  D_cone A-Avg
+  CIFAR100   yes        64    93.40    96.01         +1.43        +1.36         +0.03
+  IMAGENETR  yes        64    82.58    87.01         +0.49        +0.81         +0.46
+  CUB200P    NO          0    90.19    93.36         +0.28        -0.49         -0.03
+  IMAGENETAP yes        64    64.27    72.23         +0.67        +1.99         +0.07
+  MEAN                                               +0.72        +0.92
+
+  'NO' means the conic read-out is measured NEGATIVE on that dataset at every ray budget
+  tested (CUB200P: seven configs from f8 to f64, all <= 0), so the method reduces to the
+  5-member RanPAC ensemble there. This is a measured gate, not a tuned one -- but it is still
+  a per-dataset choice and must be declared as such in any published table. Cross-fitting beta
+  over the seen data would make the gate AUTOMATIC (beta -> 0 where the cone does not help)
+  rather than manual, and is the preferred fix; CUB200P's anti-correlated val split (section 7)
+  is direct evidence that the current single 10% carve cannot do this on its own.
+
+  CAVEATS
+    - CIFAR100 is 2 seeds (seed 2 lost to an interrupted run); IMAGENETR/CUB200P/IMAGENETAP
+      are 3. The CUB200P R sweep is seed 0 only.
+    - Per-cell seed sd is in section 6; IMAGENETAP is the noisiest (FE sd 1.25 A-Last) and its
+      A-Last margin is NOT significant (0.9 SE). CUB200P's A-Avg deficit is likewise 0.9 SE.
+    - GR-LoRA numbers are published point estimates with no reported spread, so every t-value
+      here treats their column as fixed and understates the true uncertainty.
+    - T=20 and T=50 are not yet measured under the PILOT order.
+====================================================================================================

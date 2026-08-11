@@ -1,0 +1,114 @@
+[    0.0s] skip IMAGENETR|10|0|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[    0.0s] === IMAGENETR|10|1|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  222.3s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=20) task0 train acc 0.987
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  496.5s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=20) task0 train acc 0.987
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  713.0s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=14) task0 train acc 0.987
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  999.5s]     trained member q64 (targets=['attn.qkv', 'attn.proj'] rank=64 bag=1 cls=20) task0 train acc 0.981
+[ 1044.6s]     member q32      A-Last 81.10  A-Avg 85.23
+[ 1049.5s]     member m32      A-Last 79.40  A-Avg 84.34
+[ 1054.3s]     member a16      A-Last 79.23  A-Avg 84.05
+[ 1059.0s]     member q32b70   A-Last 79.77  A-Avg 84.30
+[ 1063.6s]     member q64      A-Last 80.92  A-Avg 85.65
+[ 1072.4s]     concat   (3840d) A-Last 81.47  A-Avg 85.96
+[ 1072.5s]     ensemble           A-Last 81.97  A-Avg 86.33
+[ 1072.6s]     VERIFY ok: member q32 reproduces the exp16 bar
+[ 1072.6s] === IMAGENETR|10|2|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1329.3s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=20) task0 train acc 0.985
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1613.3s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=20) task0 train acc 0.994
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1851.0s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=14) task0 train acc 0.986
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2128.5s]     trained member q64 (targets=['attn.qkv', 'attn.proj'] rank=64 bag=1 cls=20) task0 train acc 0.986
+[ 2175.1s]     member q32      A-Last 81.00  A-Avg 85.40
+[ 2179.8s]     member m32      A-Last 78.45  A-Avg 83.61
+[ 2184.5s]     member a16      A-Last 79.23  A-Avg 84.63
+[ 2189.3s]     member q32b70   A-Last 79.90  A-Avg 84.51
+[ 2194.0s]     member q64      A-Last 80.42  A-Avg 85.20
+[ 2202.1s]     concat   (3840d) A-Last 81.58  A-Avg 86.24
+[ 2202.2s]     ensemble           A-Last 81.77  A-Avg 86.41
+
+====================================================================================================
+EXP55 — LoRA member diversity (RanPAC only; no cones, no fusion, no beta)
+====================================================================================================
+
+members ['q32', 'm32', 'a16', 'q32b70', 'q64']   recipe ep40_lr0.0003_a4_ordpilot   ORDER=pilot   cells 3   (3 cells in the JSON belong to a DIFFERENT recipe/order and were excluded)
+    IMAGENETR T=10: seeds [0, 1, 2]
+
+----------------------------------------------------------------------------------------------------
+PRECONDITION — is there anything to ensemble? (read before accuracy)
+----------------------------------------------------------------------------------------------------
+  ds          pair                disagree   errcorr  both_wrong
+  IMAGENETR   q32|m32                15.5%      0.75       16.0%
+  IMAGENETR   q32|a16                14.4%      0.77       16.2%
+  IMAGENETR   q32|q32b70             12.1%      0.81       16.7%
+  IMAGENETR   q32|q64                10.6%      0.83       16.7%
+  IMAGENETR   m32|a16                15.4%      0.76       16.8%
+  IMAGENETR   m32|q32b70             15.8%      0.75       16.4%
+  IMAGENETR   m32|q64                15.0%      0.76       16.2%
+  IMAGENETR   a16|q32b70             14.8%      0.77       16.6%
+  IMAGENETR   a16|q64                14.0%      0.78       16.3%
+  IMAGENETR   q32b70|q64             11.3%      0.82       16.9%
+
+  ds            best single  per-class cv  per-class*   ORACLE  cv share   <- can a PER-CLASS rule reach it?
+  IMAGENETR           80.94         80.48       83.53    86.81      -8%
+   * per-class fitted on the rows it scores = upper bound; `cv` cross-fits within each class and is the realizable number. `cv share` = (cv - best) / (ORACLE - best).
+
+  ds          per-class winner counts (which member is best on how many classes)
+  IMAGENETR   q32:96  m32:36  a16:26  q32b70:19  q64:21
+
+----------------------------------------------------------------------------------------------------
+A-Last — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds             T  sd         q32         m32         a16      q32b70         q64      concat    ensemble   concat-q32   GR-LoRA   ens-GR
+  IMAGENETR     10   3       80.76       79.07       79.51       79.78       80.69       81.54       81.78        +0.78     82.09    -0.31
+
+----------------------------------------------------------------------------------------------------
+A-Avg — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds             T  sd         q32         m32         a16      q32b70         q64      concat    ensemble   concat-q32   GR-LoRA   ens-GR
+  IMAGENETR     10   3       85.49       84.37       84.68       84.61       85.52       86.36       86.55        +0.87     86.20    +0.35
+
+----------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. PRECONDITION FIRST. `headroom` = ORACLE - best_single is the ceiling for ANY combiner:
+     it is the accuracy of an oracle that picks a correct member whenever one exists. A
+     headroom near zero means the members are redundant and NO fusion recovers anything --
+     the answer is then harsher diversity (bagging, disjoint target modules, different
+     ranks) or a different mechanism entirely, NOT a cleverer combination rule. That is
+     exactly the trap exp54 fell into at the rule level.
+  2. `disagree` near 0 with `errcorr` near 1 means the members are the same network wearing
+     different hats. Expected for members differing only by init, which is precisely why the
+     default member set varies TARGET MODULES instead.
+  3. `concat - q32` is the Tier 2 verdict. Our IMAGENETR base deficit is -0.89 A-Avg, so
+     under about +0.5 means concatenation does not close it and nothing built on top will.
+  4. `ensemble` vs `concat` separates the two mechanisms: score averaging tests
+     decorrelation, concatenation tests representational richness. They can disagree, and
+     which one wins says what the members are actually contributing.
+  5. Members are NOT expected to be individually equal. `m32` adapting only the MLP may well
+     be worse alone than `q32`; a worse-but-decorrelated member is useful and that is the
+     whole premise. Judge members by the diversity table, not by their solo accuracy.
+====================================================================================================
+[ 2202.3s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp55_lora_diversity_augreg_in21k.json

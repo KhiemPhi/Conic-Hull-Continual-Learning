@@ -35,7 +35,12 @@ PROTOCOL
     alpha4 on attn.qkv+attn.proj, AdamW lr3e-4 wd1e-4 cosine, 40 epochs, RandAug, batch 128;
     RanPAC head M_RP=10000, lambda from {1e2,1e3,1e4} on a 10% per-task val carve-out;
     statistics ACCUMULATED (exactly additive -- verified 2.9e-15 in exp14).
-    Class order = rng(SEED).permutation(n_classes), the PyCIL/LAMDA-PILOT convention.
+    Class order = class_order.py, selected by $ORDER. NOTE: this line used to claim that
+    rng(SEED).permutation(n_classes) WAS "the PyCIL/LAMDA-PILOT convention". It is not --
+    PILOT uses the legacy MT19937 stream (np.random.seed(1993); np.random.permutation(n)),
+    and our PCG64 order overlaps theirs by 3/20, 0/20, 2/20 classes in task 0 at seeds 0/1/2.
+    ORDER=legacy keeps the old behaviour and the old filenames byte for byte; ORDER=pilot is
+    the comparable one. See class_order.py for why the mode reaches the cache filename.
 
 COST  ~5-8 min per config (CIFAR is slowest: 60k images to featurise), 36 configs ~4-6 h.
       Every config is checkpointed to JSON and skipped on resume, so kill it freely.
@@ -61,6 +66,7 @@ from timm.data import create_transform, resolve_model_data_config
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
 from splits import split_indices
+import class_order as CO
 
 T0 = time.time()
 
@@ -128,6 +134,11 @@ def recipe_tag(ds):
     t = f"ep{epochs_for(ds)}_lr{LR:g}_aug{AUG}"
     if TARGET_ACC > 0:
         t += f"_ta{TARGET_ACC:g}"
+    # The class order changes which classes are in task 0, so a cached feature file belongs
+    # to exactly one order. Putting the tag HERE means the cache filename and the results key
+    # pick it up together -- they are both built from recipe_tag, which is the invariant this
+    # function exists to enforce. legacy -> "" so nothing already on disk is renamed.
+    t += CO.order_tag()
     return t
 
 
@@ -259,7 +270,7 @@ def aplus_features(ds_name, T, seed, tr_aug, tr_ev, ytr, te_ev, n_cls):
 
     torch.manual_seed(seed)
     np.random.seed(seed)
-    order = np.random.default_rng(seed).permutation(n_cls)
+    order = CO.class_order(n_cls, seed)
     task0 = order[:cpt]
     idx = np.where(np.isin(ytr, task0))[0]
     remap = {int(c): i for i, c in enumerate(task0)}
@@ -312,7 +323,7 @@ def aplus_features(ds_name, T, seed, tr_aug, tr_ev, ytr, te_ev, n_cls):
 # ------------------------------------------------------------------ RanPAC replay
 def replay(Ftr, ytr, Fte, yte, T, seed, n_cls):
     cpt = n_cls // T
-    order = np.random.default_rng(seed).permutation(n_cls)
+    order = CO.class_order(n_cls, seed)
     tasks = [order[i * cpt:(i + 1) * cpt] for i in range(T)]
     P = torch.randn(Ftr.shape[1], M_RP,
                     generator=torch.Generator().manual_seed(0)).to(DEV)

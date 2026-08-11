@@ -1,0 +1,111 @@
+[    0.0s] === IMAGENETR|10|0|q32+m32+a16+q32b70+q64|f64|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[    2.9s]     VERIFY: exp54 anchor N/A under ORDER=pilot (exp54 is legacy-order only); relying on the exp55 anchor, which is regenerated per order
+[    2.9s]     VERIFY: exp55 ensemble reference loaded
+[    2.9s]     5 members x 1 arms x 1 rules; 1 raysets x 1 rulesets x 1 orders = 1 configs
+[   50.4s]     VERIFY ok at s0: exp55 ensemble 0.960870
+[   50.5s]     s0: q32 94.78  m32 95.22  a16 96.38  q32b70 94.93  q64 95.51  | ens 96.09  bestFE 96.09
+[  119.1s]     s1: q32 91.36  m32 91.58  a16 92.01  q32b70 91.14  q64 91.72  | ens 92.82  bestFE 93.04
+[  213.6s]     s2: q32 88.59  m32 88.24  a16 87.78  q32b70 88.03  q64 88.80  | ens 89.66  bestFE 90.12
+[  335.7s]     s3: q32 87.78  m32 86.50  a16 86.03  q32b70 86.70  q64 86.58  | ens 88.30  bestFE 89.01
+[  488.4s]     s4: q32 85.43  m32 84.41  a16 83.78  q32b70 83.68  q64 83.91  | ens 85.69  bestFE 86.68
+[  655.6s]     s5: q32 83.87  m32 83.10  a16 83.02  q32b70 83.21  q64 83.57  | ens 84.77  bestFE 85.31
+[  912.3s]     s6: q32 82.91  m32 82.01  a16 81.96  q32b70 81.70  q64 82.67  | ens 83.92  bestFE 84.67
+[ 1196.8s]     s7: q32 82.33  m32 80.97  a16 81.64  q32b70 81.04  q64 82.25  | ens 83.60  bestFE 84.11
+[ 1553.7s]     s8: q32 81.31  m32 80.24  a16 80.81  q32b70 80.22  q64 81.49  | ens 82.70  bestFE 83.58
+[ 1961.9s]     s9: q32 80.18  m32 79.35  a16 80.05  q32b70 79.68  q64 80.73  | ens 81.62  bestFE 82.65
+[ 1961.9s]     VERIFY ok over all 10 stages: exp54=SKIPPED  exp55=yes
+[ 1961.9s]     cell took 1962s
+[ 1961.9s] === IMAGENETR|10|1|q32+m32+a16+q32b70+q64|f64|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+[ 1964.4s]     5 members x 1 arms x 1 rules; 1 raysets x 1 rulesets x 1 orders = 1 configs
+[ 2015.7s]     s0: q32 92.67  m32 93.10  a16 92.53  q32b70 91.81  q64 93.82  | ens 93.68  bestFE 93.53
+[ 2088.4s]     s1: q32 89.62  m32 89.08  a16 88.30  q32b70 88.15  q64 89.85  | ens 90.40  bestFE 90.70
+[ 2182.8s]     s2: q32 88.04  m32 87.57  a16 86.40  q32b70 87.14  q64 88.68  | ens 88.84  bestFE 89.15
+[ 2307.8s]     s3: q32 85.86  m32 85.37  a16 85.04  q32b70 85.04  q64 86.68  | ens 87.26  bestFE 87.01
+[ 2449.0s]     s4: q32 85.15  m32 84.18  a16 84.48  q32b70 84.72  q64 86.13  | ens 86.56  bestFE 86.33
+[ 2617.3s]     s5: q32 83.77  m32 82.29  a16 82.99  q32b70 82.91  q64 83.16  | ens 85.05  bestFE 85.08
+[ 2877.0s]     s6: q32 83.15  m32 81.66  a16 81.97  q32b70 82.02  q64 83.56  | ens 83.92  bestFE 84.45
+[ 3180.7s]     s7: q32 81.70  m32 81.01  a16 80.91  q32b70 81.41  q64 82.61  | ens 83.49  bestFE 83.86
+[ 3546.1s]     s8: q32 81.18  m32 79.77  a16 78.68  q32b70 80.01  q64 81.07  | ens 82.13  bestFE 82.76
+[ 3930.1s]     s9: q32 81.10  m32 79.40  a16 79.23  q32b70 79.77  q64 80.92  | ens 81.97  bestFE 82.67
+[ 3930.1s]     cell took 1968s
+[ 3930.1s] === IMAGENETR|10|2|q32+m32+a16+q32b70+q64|f64|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+[ 3932.4s]     5 members x 1 arms x 1 rules; 1 raysets x 1 rulesets x 1 orders = 1 configs
+[ 3987.1s]     s0: q32 94.09  m32 94.41  a16 94.89  q32b70 94.25  q64 93.77  | ens 95.37  bestFE 95.69
+[ 4062.5s]     s1: q32 89.95  m32 89.08  a16 90.57  q32b70 89.87  q64 90.26  | ens 91.04  bestFE 91.59
+[ 4152.2s]     s2: q32 88.30  m32 87.00  a16 88.14  q32b70 87.05  q64 88.25  | ens 89.55  bestFE 89.60
+[ 4274.4s]     s3: q32 86.27  m32 83.44  a16 85.54  q32b70 84.74  q64 86.46  | ens 87.46  bestFE 88.00
+[ 4422.8s]     s4: q32 84.76  m32 82.44  a16 83.83  q32b70 84.56  q64 84.82  | ens 85.82  bestFE 86.38
+[ 4601.3s]     s5: q32 84.13  m32 82.38  a16 82.95  q32b70 83.23  q64 84.22  | ens 84.71  bestFE 85.73
+[ 4856.2s]     s6: q32 82.35  m32 80.32  a16 80.88  q32b70 80.20  q64 81.55  | ens 83.38  bestFE 84.03
+[ 5149.5s]     s7: q32 82.10  m32 79.98  a16 80.95  q32b70 81.23  q64 81.87  | ens 83.08  bestFE 83.52
+[ 5505.6s]     s8: q32 81.02  m32 78.62  a16 79.27  q32b70 80.06  q64 80.38  | ens 81.96  bestFE 82.45
+[ 5897.1s]     s9: q32 81.00  m32 78.45  a16 79.23  q32b70 79.90  q64 80.42  | ens 81.77  bestFE 82.43
+[ 5897.1s]     cell took 1967s
+
+========================================================================================================
+EXP56 — does the cone read-out compose with the LoRA-member ensemble?
+========================================================================================================
+
+members ['q32', 'm32', 'a16', 'q32b70', 'q64']
+arms ['f64']  rules ['cone']  orders ['FE']  raysets all (1)  cells 3
+
+--------------------------------------------------------------------------------------------------------
+SHOPPING PENALTY — read before any accuracy. `sel` picks the config on VAL;
+`oracle` is the max over configs on TEST and is NOT obtainable.
+--------------------------------------------------------------------------------------------------------
+  ds             T order   sel(test)   oracle  penalty  sel val-test                 chosen config
+  IMAGENETR     10 FE          87.01    87.01     0.00         -0.23                      f64|cone
+
+--------------------------------------------------------------------------------------------------------
+A-Last — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  IMAGENETR     10     3    80.76    81.78       nan    82.58     +0.80    82.09    +0.49
+
+--------------------------------------------------------------------------------------------------------
+A-Avg — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  IMAGENETR     10     3    85.49    86.55       nan    87.01     +0.46    86.20    +0.81
+
+--------------------------------------------------------------------------------------------------------
+RAY-BUDGET SWEEP — single budgets, min to max. Does the cone's known
+monotonicity in R SURVIVE member averaging, or does the ensemble substitute for rays?
+--------------------------------------------------------------------------------------------------------
+  IMAGENETR T=10 (cpt=20)   fit rows/class 33-315 (median 100.0)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64           +0.77    +0.80
+
+--------------------------------------------------------------------------------------------------------
+PRE-REGISTERED TEST — sel_FE vs ens_ranpac, IMAGENETR A-Last, per T
+--------------------------------------------------------------------------------------------------------
+  T=10  ens_ranpac 81.78   sel_FE 82.58   delta +0.80   (predicted ~+0.38, FALSIFIED IF > +0.70)  -> FALSIFIED: levers INDEPENDENT
+
+--------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  0. SHOPPING PENALTY FIRST. This file evaluates up to ~1300 configs per cell. `oracle` is the
+     max over them on TEST and is not obtainable by any deployable system; `sel` picks on VAL
+     and is the only honest number. A large penalty means the sweep found noise, and a large
+     `sel val-test` means even the val-selected config overfits the split.
+  1. THE PRE-REGISTERED TEST is sel_FE - ens_ranpac on IMAGENETR A-Last. exp52's decomposition
+     says +0.30 (rays) + 0.08 (non-negativity) ~ +0.38 should survive and the +0.74 linear-
+     combination piece should NOT, because the member ensemble already bought it. Above +0.70
+     that reading is dead and the levers are independent.
+  2. EF/JT ISOLATE WHERE THE AVERAGING HAPPENS -- they do NOT test exp55's oracle_class_cv
+     (see the EF note in the header; none of these orderings weights members per class). The
+     informative column for them is `sel val-test`, NOT accuracy. Measured on the f32 control:
+     FE 0.86, EF 1.98, JT 2.37 -- the overfitting order is the exact inverse of the accuracy
+     order. FE fuses each member's cone against THAT member's own RanPAC in matched geometry
+     and renormalises before averaging; EF and JT fuse against a POOLED base and pay 2-3x the
+     val overfit for it. Treat a future EF/JT win as suspect until its gap matches FE's.
+  3. THE RAY SWEEP IS THE MECHANISM READ. exp53 found the fused gain monotone in R because the
+     cone is an AGGREGATOR of noisy atom sets. A member ensemble is also an aggregator. If the
+     substitution reading is right, the `q32 alone` column stays monotone in R while the FE/EF
+     columns FLATTEN -- the ensemble has already done the aggregating. A still-monotone FE
+     column would mean rays contribute something averaging cannot.
+  4. JT bounds FE and EF from above and is the most likely to overfit; believe it only if its
+     val-test gap is comparable to FE's. Configs above JT_MAX components are skipped and the
+     count is recorded in _meta, never silently dropped.
+========================================================================================================
+[ 5897.1s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp56_ray_ensemble_table_augreg_in21k.json
