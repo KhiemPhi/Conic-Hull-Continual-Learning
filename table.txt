@@ -231,3 +231,123 @@ T=10, PILOT class order (MT19937 seed 1993+s), 3 seeds (CIFAR100: 2, seed 2 pend
       here treats their column as fixed and understates the true uncertainty.
     - T=20 and T=50 are not yet measured under the PILOT order.
 ====================================================================================================
+
+====================================================================================================
+11. MEMORY AND COMPUTE vs GR-LoRA
+====================================================================================================
+
+  All counts are parameter/element counts; MB assumes float32 unless stated. ViT-B/16 (86M,
+  frozen) is common to both and excluded. C = 200 classes, T = 10 tasks, d = 768, L = 12
+  blocks, M = 5 members, R = 64 rays, D = 10000 RanPAC features.
+
+11.1 ADAPTER PARAMETERS
+--------------------------------------------------------------------------------------------
+  OURS -- five heterogeneous first-session LoRAs, count is FIXED in T:
+      q32      qkv+proj               r=32     1.77 M
+      m32      fc1+fc2                r=32     2.95 M
+      a16      qkv+proj+fc1+fc2       r=16     2.36 M
+      q32b70   qkv+proj               r=32     1.77 M
+      q64      qkv+proj               r=64     3.54 M
+      TOTAL                                   12.39 M
+
+  GR-LoRA -- k and v only, but DOUBLED (shared {A,B} + task-specific {A_fit,B_fit}) and one
+  new set PER TASK, so the count is LINEAR in T:
+      per task  = L * 4 pairs * 2 * d * r = 73728r
+      x T = 10   = 737280r
+      r = 64  ->   47.19 M      r = 32 -> 23.59 M      r = 16 -> 11.80 M
+  Their rank is NOT verified from the paper or the config we have; the model signature
+  defaults to 64. At r=64 we use ~3.8x fewer adapter parameters, at r=16 we use ~1.1x MORE.
+  THIS COMPARISON IS UNRESOLVED UNTIL THEIR CONFIG IS READ.
+
+11.2 PERSISTENT STATE DURING CONTINUAL LEARNING  (what must survive to accept task t+1)
+--------------------------------------------------------------------------------------------
+  OURS                                        elements        MB
+    LoRA adapters                                 12.39 M        50
+    RanPAC Gram G_m (5 x D x D, float64)         500.00 M      4000
+    RanPAC C_m / solved W_m                       10.00 M        40
+    cone rays (5 x R x d x C)                     49.15 M       197
+    whiteners (5 x d x d)                          2.95 M        12
+    TOTAL                                                      4298 MB
+
+  GR-LoRA                                     elements        MB
+    LoRA adapters (r=64, T=10)                    47.19 M       189
+    per-task classifier heads                      0.15 M         1
+    class prototypes + FULL covariances          118.27 M       473
+    TOTAL                                                       662 MB
+
+  WE ARE 6.5x WORSE HERE, and it is one term: the RanPAC Gram G_m is D x D = 1e8
+  elements PER MEMBER and must persist to keep accumulating. In float64 that is 4.0 GB.
+  Storing G in float32 halves it to 2.0 GB; it is the single largest lever available and has
+  not been tested for numerical impact on the ridge solve.
+
+11.3 DEPLOYED FOOTPRINT  (frozen model, no further tasks)
+--------------------------------------------------------------------------------------------
+    OURS     LoRA 50 + RanPAC W 40 + cones 197 + whiteners 12          =   298 MB
+    GR-LoRA  LoRA 189 + heads 1 (covariances are TRAINING-ONLY, discardable)  =   189 MB
+
+  We are 1.6x LARGER deployed, dominated by the cone rays (197 MB = R*d per class per
+  member). An earlier note in this project compared our cones against their 473 MB of
+  covariances; that was wrong -- their covariances exist only to synthesise features for
+  classifier alignment during training and need not ship.
+  The RanPAC projection P (31 MB) is regenerable from manual_seed(0) and is not counted.
+
+11.4 INFERENCE COST PER TEST IMAGE  -- MEASURED ON THIS BOX, NOT ESTIMATED
+--------------------------------------------------------------------------------------------
+    ViT-B/16 fp32 forward, CUDA, bs=64         3.17 ms / image
+    cone_score, R=64, 500 NNLS iters,
+      single-thread NumPy on CPU              0.037 ms / (query, class, member)
+    OURS      5 x backbone                      15.86 ms
+              5 x 200 x cone score              37.20 ms   <-- DOMINATES
+              RanPAC projection + solve        ~0.02 ms
+              TOTAL                             53.06 ms
+    GR-LoRA   T x backbone (entropy select)     31.72 ms
+
+  AS IMPLEMENTED WE ARE 1.7x SLOWER AT T=10, not faster. Every earlier claim in this
+  project that we are "cheaper at inference" counted only the backbone passes and treated the
+  conic read-out as free. It is not: it is 2.3x the cost of the five backbone passes.
+
+  TWO THINGS THAT REDEEM IT, AND ONE THAT DOES NOT
+    (a) SCALING. Our cost is CONSTANT in T (it scales with C and M, not with tasks); theirs is
+        LINEAR in T because Eq. 8 evaluates every task-specific module. Crossover is at
+        T ~ 17: at T=10 they are cheaper, at T=20 we are (53 ms vs 63 ms),
+        at T=50 we are far cheaper (53 ms vs 159 ms).
+    (b) THE MEASUREMENT IS UNOPTIMISED. cone_score is single-threaded NumPy on CPU while the
+        backbone is fp32 on GPU. A batched GPU NNLS, or fewer than 500 iterations, would move
+        this a lot. The number above is what the current code does, not a lower bound.
+    (c) WHAT DOES NOT HELP: reducing R. Measured 32.7 / 43.8 / 41.6 / 37.2 / 57.2 us at
+        R = 8 / 16 / 32 / 64 / 128 -- nearly flat, because the 500 fixed iterations dominate,
+        not the ray count. Cutting members would help linearly, but exp57 measured accuracy
+        MONOTONE in K with no subset of size < 5 matching K=5.
+
+11.5 TRAINING COST
+--------------------------------------------------------------------------------------------
+    OURS      5 LoRA trainings, ALL on task 1, mutually independent -> embarrassingly
+              parallel. Zero backpropagation for tasks 2..T. Per task thereafter: one feature
+              extraction pass per member, a rank-D ridge solve, and the cone builds.
+    GR-LoRA   T sequential LoRA trainings (cannot be parallelised -- task t needs the residual
+              subspace of tasks 1..t-1), each with LMS doubling the forward cost, plus a
+              20-epoch classifier-alignment loop on synthesised features after every task.
+
+    Wall-clock from this project's own runs (IMAGENETR T=10, 3 seeds, one box):
+      our member training  ~3300 s      our read-out (RanPAC + cones + fusion)  ~5900 s
+    GR-LoRA has not been run here, so no head-to-head training number exists.
+
+11.6 SUMMARY -- WHERE WE ACTUALLY WIN AND LOSE
+--------------------------------------------------------------------------------------------
+    WIN   adapter parameters IF their rank is 64      (12.4 M vs 47.2 M)
+    WIN   training structure: parallel, first-session only, no backprop after task 1
+    WIN   inference scaling: constant in T vs linear in T (crossover T ~ 17)
+    LOSE  persistent memory during CL          (4.3 GB vs 0.66 GB) -- the RanPAC Gram
+    LOSE  deployed footprint                   (298 MB vs 189 MB) -- the cone rays
+    LOSE  inference wall-clock at T=10         (53 ms vs 32 ms) -- the NNLS
+
+11.7 UNVERIFIED -- DO NOT PUBLISH THESE WITHOUT CLOSING THEM
+--------------------------------------------------------------------------------------------
+    - GR-LoRA's LoRA rank. Everything in 11.1/11.2/11.3 for their column assumes r=64 from the
+      model signature. At r=16 the adapter comparison REVERSES.
+    - Whether their reported wall-clock reflects the T-pass entropy selection in interface().
+    - Our cone cost is one implementation of NNLS on CPU. A GPU/batched version must be timed
+      before 11.4 is quoted as a property of the METHOD rather than of this code.
+    - The backbone number is fp32 on this box; both columns scale together, so the RATIO is
+      more robust than the absolute milliseconds.
+====================================================================================================
