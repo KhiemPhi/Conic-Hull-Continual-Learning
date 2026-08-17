@@ -28,7 +28,7 @@ from timm.data import resolve_model_data_config, create_transform
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
 
-SEED = 0
+SEED = int(os.environ.get("SEED", 0))   # was hardcoded 0; seeds now env-driven
 torch.manual_seed(SEED); np.random.seed(SEED)
 DEV = "cuda"
 MODEL = "vit_base_patch16_224.augreg2_in21k_ft_in1k"
@@ -200,7 +200,7 @@ for t in range(N_TASKS):
           f"gram {gram_corr:.2f} | SEEN froz {seen_frozen:.3f} stale {seen_stale:.3f} "
           f"transp {seen_transport:.3f} orac {seen_oracle:.3f}")
 
-np.savez(f"crux_relational_lam{LAM:g}.npz", **{k: np.array(v) for k, v in hist.items()})
+np.savez(f"crux_relational_lam{LAM:g}_s{SEED}.npz", **{k: np.array(v) for k, v in hist.items()})
 print("\n" + "=" * 72)
 print(f"FINAL (lambda={LAM:g}, 100-way):  frozen {hist['seen_frozen'][-1]:.4f} | "
       f"stale {hist['seen_stale'][-1]:.4f} | transport {hist['seen_transport'][-1]:.4f} | "

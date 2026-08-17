@@ -19,6 +19,7 @@ If cohort stale ~ oracle and rigidity stays high across 10 steps -> coherent-rot
 thesis holds, drift correction is cheap/unnecessary. If they diverge with depth ->
 idea 1 (rigid-constrained transport) is a real, needed method.
 """
+import os
 import numpy as np
 import torch
 import torch.nn as nn
@@ -32,7 +33,7 @@ import matplotlib.pyplot as plt
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
 
-SEED = 0
+SEED = int(os.environ.get("SEED", 0))   # was hardcoded 0; seeds now env-driven
 torch.manual_seed(SEED); np.random.seed(SEED)
 DEV = "cuda"
 MODEL = "vit_base_patch16_224.augreg2_in21k_ft_in1k"  # orig_in21k CDN blocked; same arch/norm
@@ -187,7 +188,7 @@ for t in range(N_TASKS):
           f"orac {seen_oracle:.3f}")
 
 # ============================ REPORT + PLOT ================================
-np.savez("crux_sweep_hist.npz", **{k: np.array(v) for k, v in hist.items()},
+np.savez(f"crux_sweep_hist_s{SEED}.npz", **{k: np.array(v) for k, v in hist.items()},
          order=ORDER)
 steps = np.arange(1, N_TASKS + 1)
 print("\n" + "=" * 72)
@@ -224,4 +225,4 @@ ax[1, 1].plot(steps, hist["seen_oracle"], "^-", label="adapt + oracle refit")
 ax[1, 1].set_title("Running seen-way CIL accuracy")
 ax[1, 1].set_xlabel("tasks trained"); ax[1, 1].set_ylabel("accuracy"); ax[1, 1].legend()
 plt.tight_layout(); plt.savefig("crux_sweep.png", dpi=110)
-print("saved crux_sweep.png and crux_sweep_hist.npz")
+print(f"saved crux_sweep.png and crux_sweep_hist_s{SEED}.npz")

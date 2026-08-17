@@ -1,0 +1,71 @@
+[    0.0s] === IMAGENETR|10|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[    4.7s]     VERIFY: exp56 FE|f64|cone reference loaded
+[   75.1s]     s0: ens 96.09  FE-cone 96.09  FE-sub 96.09  FE-pm 96.23
+[  185.4s]     s1: ens 92.82  FE-cone 93.04  FE-sub 92.82  FE-pm 92.67
+[  342.4s]     s2: ens 89.66  FE-cone 90.12  FE-sub 90.12  FE-pm 89.71
+[  536.2s]     s3: ens 88.30  FE-cone 89.01  FE-sub 88.65  FE-pm 88.38
+[  780.1s]     s4: ens 85.69  FE-cone 86.68  FE-sub 86.12  FE-pm 85.82
+[ 1070.5s]     s5: ens 84.77  FE-cone 85.31  FE-sub 85.23  FE-pm 84.63
+[ 1521.5s]     s6: ens 83.92  FE-cone 84.67  FE-sub 84.27  FE-pm 84.13
+[ 1949.1s]     s7: ens 83.60  FE-cone 84.11  FE-sub 83.74  FE-pm 83.26
+[ 2454.3s]     s8: ens 82.70  FE-cone 83.58  FE-sub 83.36  FE-pm 82.61
+[ 3112.2s]     s9: ens 81.62  FE-cone 82.65  FE-sub 82.50  FE-pm 81.82
+[ 3112.3s]     cell took 3112s
+
+============================================================================================================
+EXP66 CONTROL BATTERY -- arm f64 FIXED on every cell (C3), rules ['cone', 'sub', 'pm'] (C2), 13 member subsets (C5)
+============================================================================================================
+
+cells 1   verified against exp56: 1/1   members ['q32', 'm32', 'a16', 'q32b70', 'q64']
+
+------------------------------------------------------------------------------------------------------------
+C2 RULE CONTROL -- same rays, same storage, full member set.
+   cone = non-negative combination | sub = SVD span (non-negativity DROPPED) | pm = max single ray
+------------------------------------------------------------------------------------------------------------
+  ds            T  n   ens_ranpac      FE-cone       FE-sub        FE-pm  d(cone-ens)   d(sub-ens)    d(pm-ens)
+  IMAGENETR    10  1        81.62        82.65        82.50        81.82        +1.03        +0.88        +0.20
+
+  cone - sub, mean over 1 cells: +0.150 (min +0.150, max +0.150)
+  READ: if this is inside seed noise, the gain is the SPAN of the rays, not the conic
+        combination, and the paper should not be about cones.
+
+------------------------------------------------------------------------------------------------------------
+C5 MEMBER ABLATION -- A-Last, rule = cone
+------------------------------------------------------------------------------------------------------------
+
+  IMAGENETR T=10   (seeds [0])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             80.18       81.27     -1.38
+    single:m32             79.35       80.88     -1.77
+    single:a16             80.05       81.38     -1.27
+    single:q32b70          79.68       81.13     -1.52
+    single:q64             80.73       81.75     -0.90
+    nested:M2              81.63       82.33     -0.32
+    nested:M3              81.63       82.57     -0.08
+    nested:M4              81.60       82.55     -0.10
+    loo:-q32               81.45       82.57     -0.08
+    loo:-m32               81.60       82.55     -0.10
+    loo:-a16               81.53       82.58     -0.07
+    loo:-q32b70            81.80       82.50     -0.15
+    full                   81.62       82.65     +0.00
+
+------------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  C2 is the decisive one. cone/sub/pm store the SAME rays at the SAME cost; only the scoring
+     rule differs. A cone-sub gap inside seed noise means the read-out is a low-rank region
+     score and "conic" is decoration. That outcome is the PRIOR here, not a surprise -- see
+     cone-is-dead-weight-final and nonneg-space-hypothesis-falsified.
+  C3 there is exactly one arm in this file and it was fixed before the run. Any table built
+     from it is free of the per-cell selection in results.txt. Cells where the arm CLIPS
+     (rays_for(ARM, median) >= median) are flagged in _meta and must be reported as such.
+  C5 read `nested:Mk` for saturation and `loo:-m` for attribution. If nested:M3 ~= full, the
+     method is 40% cheaper than published and that is a result, not a concession. If every
+     loo row is ~= full, no single member matters and the diversity story is about the
+     ENSEMBLE, not the members -- which C1 (seed-only ensemble) then has to rule out.
+  NONE of this addresses "is it just ensembling?" -- that is C1 and it needs new training.
+============================================================================================================
+[ 3112.3s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp66_controls_smoke_augreg_in21k.json

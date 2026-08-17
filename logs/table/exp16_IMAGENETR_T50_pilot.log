@@ -1,0 +1,51 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[    3.6s] ### IMAGENETR: 200 classes, train 24000, test 6000
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  183.0s]   IMAGENETR|50|0|ep40_lr0.0003_aug1_ordpilot   A-Last  76.42  A-Avg  82.48  task0-acc 1.000  ep 40  [179s]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  350.4s]   IMAGENETR|50|1|ep40_lr0.0003_aug1_ordpilot   A-Last  76.15  A-Avg  81.50  task0-acc 0.996  ep 40  [167s]
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  526.3s]   IMAGENETR|50|2|ep40_lr0.0003_aug1_ordpilot   A-Last  74.65  A-Avg  80.95  task0-acc 0.985  ep 40  [176s]
+
+==============================================================================================================================
+EXP16 — A_plus full table   (vit_base_patch16_224.augreg_in21k)   RECIPE: ep150_lr0.0003_aug1_ta0.98
+A_plus = adapt task 0 with the tuned recipe, then FREEZE. Zero stored per-class state; the compared methods store 473 MB.
+==============================================================================================================================
+dataset       T  cpt seeds |   A-Last (mean+-sd)   A-Avg (mean+-sd) |         GR-LoRA          MACIL |    dLast   task0   ep
+------------------------------------------------------------------------------------------------------------------------------
+
+==============================================================================================================================
+EXP16 — A_plus full table   (vit_base_patch16_224.augreg_in21k)   RECIPE: ep40_lr0.0003_aug1
+A_plus = adapt task 0 with the tuned recipe, then FREEZE. Zero stored per-class state; the compared methods store 473 MB.
+==============================================================================================================================
+dataset       T  cpt seeds |   A-Last (mean+-sd)   A-Avg (mean+-sd) |         GR-LoRA          MACIL |    dLast   task0   ep
+IMAGENETR    50    4     3 |        76.56+-0.98        82.48+-1.16  |     76.74/82.64    70.10/77.47 |    -0.18   0.995  nan  
+------------------------------------------------------------------------------------------------------------------------------
+
+==============================================================================================================================
+EXP16 — A_plus full table   (vit_base_patch16_224.augreg_in21k)   RECIPE: ep40_lr0.0003_aug1_ordpilot
+A_plus = adapt task 0 with the tuned recipe, then FREEZE. Zero stored per-class state; the compared methods store 473 MB.
+==============================================================================================================================
+dataset       T  cpt seeds |   A-Last (mean+-sd)   A-Avg (mean+-sd) |         GR-LoRA          MACIL |    dLast   task0   ep
+IMAGENETR    50    4     3 |        75.74+-0.78        81.65+-0.63  |     76.74/82.64    70.10/77.47 |    -1.00   0.994   40  
+------------------------------------------------------------------------------------------------------------------------------
+
+==============================================================================================================================
+EXP16 — A_plus full table   (vit_base_patch16_224.augreg_in21k)   RECIPE: ep40_lr0.0003_aug1_ta0.98
+A_plus = adapt task 0 with the tuned recipe, then FREEZE. Zero stored per-class state; the compared methods store 473 MB.
+==============================================================================================================================
+dataset       T  cpt seeds |   A-Last (mean+-sd)   A-Avg (mean+-sd) |         GR-LoRA          MACIL |    dLast   task0   ep
+IMAGENETR    50    4     3 |        75.23+-1.60        81.32+-1.60  |     76.74/82.64    70.10/77.47 |    -1.51   0.986   11  
+------------------------------------------------------------------------------------------------------------------------------
+dLast = ours - GR-LoRA A-Last.  '*' = beats GR-LoRA on either metric.
+task0 = mean task-0 TRAIN accuracy, ep = mean epochs actually used.
+Under TARGET_ACC, task0 well BELOW the target means the cell never converged and is
+        UNDER-fit -- raise EPOCHS_DS for that dataset; it is not a method result.
+==============================================================================================================================
+wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp16_full_table_augreg_in21k.json

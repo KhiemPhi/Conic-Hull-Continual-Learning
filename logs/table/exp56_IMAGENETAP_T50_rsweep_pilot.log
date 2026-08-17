@@ -1,0 +1,249 @@
+[    0.0s] === IMAGENETAP|50|0|q32+m32+a16+q32b70+q64|f8+f16|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[    2.8s]     VERIFY: exp54 anchor N/A under ORDER=pilot (exp54 is legacy-order only); relying on the exp55 anchor, which is regenerated per order
+[    2.8s]     VERIFY: exp55 ensemble reference loaded
+[    2.8s]     5 members x 2 arms x 1 rules; 3 raysets x 1 rulesets x 1 orders = 3 configs
+[   18.9s]     VERIFY ok at s0: exp55 ensemble 0.948718
+[   18.9s]     s0: q32 94.87  m32 92.31  a16 94.87  q32b70 94.87  q64 97.44  | ens 94.87  bestFE 94.87
+[   44.8s]     s1: q32 85.71  m32 85.71  a16 87.50  q32b70 85.71  q64 87.50  | ens 85.71  bestFE 85.71
+[   75.8s]     s2: q32 83.53  m32 88.24  a16 84.71  q32b70 83.53  q64 84.71  | ens 85.88  bestFE 84.71
+[  127.0s]     s3: q32 84.67  m32 85.33  a16 86.00  q32b70 84.00  q64 86.67  | ens 85.33  bestFE 86.00
+[  184.1s]     s4: q32 83.80  m32 81.01  a16 82.12  q32b70 82.68  q64 83.24  | ens 82.68  bestFE 82.68
+[  239.0s]     s5: q32 80.00  m32 79.56  a16 77.78  q32b70 80.44  q64 81.78  | ens 80.44  bestFE 80.89
+[  295.6s]     s6: q32 77.74  m32 77.74  a16 79.25  q32b70 77.74  q64 80.00  | ens 80.38  bestFE 79.25
+[  360.4s]     s7: q32 76.04  m32 79.17  a16 75.00  q32b70 76.04  q64 78.12  | ens 78.47  bestFE 78.47
+[  442.7s]     s8: q32 75.38  m32 76.90  a16 73.86  q32b70 73.86  q64 75.08  | ens 76.29  bestFE 77.20
+[  513.4s]     s9: q32 74.18  m32 75.54  a16 73.64  q32b70 73.91  q64 75.27  | ens 75.54  bestFE 75.82
+[  589.8s]     s10: q32 74.49  m32 75.00  a16 74.23  q32b70 72.96  q64 73.21  | ens 75.51  bestFE 75.51
+[  673.3s]     s11: q32 69.44  m32 72.22  a16 71.76  q32b70 72.22  q64 72.69  | ens 73.84  bestFE 75.23
+[  772.5s]     s12: q32 70.99  m32 73.41  a16 72.31  q32b70 72.75  q64 73.41  | ens 74.29  bestFE 74.29
+[  883.7s]     s13: q32 72.54  m32 72.96  a16 72.54  q32b70 71.91  q64 72.96  | ens 73.58  bestFE 74.21
+[  983.4s]     s14: q32 69.03  m32 72.27  a16 71.26  q32b70 70.45  q64 70.24  | ens 72.27  bestFE 72.87
+[ 1096.5s]     s15: q32 69.59  m32 71.83  a16 71.08  q32b70 70.34  q64 71.08  | ens 72.39  bestFE 72.57
+[ 1206.8s]     s16: q32 69.88  m32 71.05  a16 71.21  q32b70 69.72  q64 69.72  | ens 72.38  bestFE 73.21
+[ 1326.2s]     s17: q32 69.32  m32 71.07  a16 71.22  q32b70 68.68  q64 69.95  | ens 71.86  bestFE 72.18
+[ 1462.6s]     s18: q32 69.15  m32 70.94  a16 70.79  q32b70 70.04  q64 69.30  | ens 70.94  bestFE 72.58
+[ 1592.4s]     s19: q32 67.53  m32 68.82  a16 69.54  q32b70 68.25  q64 67.67  | ens 69.68  bestFE 70.40
+[ 1734.2s]     s20: q32 67.03  m32 68.68  a16 69.09  q32b70 68.41  q64 67.58  | ens 69.64  bestFE 70.33
+[ 1880.0s]     s21: q32 65.67  m32 66.45  a16 68.54  q32b70 66.97  q64 66.97  | ens 68.54  bestFE 69.06
+[ 2028.5s]     s22: q32 65.72  m32 66.49  a16 68.43  q32b70 66.49  q64 66.36  | ens 67.92  bestFE 68.82
+[ 2181.9s]     s23: q32 64.96  m32 65.33  a16 66.96  q32b70 65.83  q64 65.58  | ens 67.21  bestFE 68.84
+[ 2323.7s]     s24: q32 64.22  m32 64.82  a16 66.51  q32b70 65.54  q64 64.82  | ens 66.87  bestFE 67.11
+[ 2481.8s]     s25: q32 63.73  m32 64.55  a16 66.31  q32b70 65.14  q64 63.15  | ens 65.85  bestFE 67.49
+[ 2650.0s]     s26: q32 63.38  m32 63.50  a16 65.93  q32b70 64.77  q64 64.89  | ens 65.47  bestFE 67.21
+[ 2821.0s]     s27: q32 63.09  m32 63.42  a16 65.88  q32b70 64.09  q64 64.21  | ens 65.55  bestFE 67.34
+[ 3008.0s]     s28: q32 62.33  m32 65.20  a16 65.09  q32b70 63.22  q64 63.66  | ens 64.98  bestFE 66.52
+[ 3188.7s]     s29: q32 62.68  m32 65.18  a16 65.59  q32b70 61.33  q64 63.51  | ens 65.18  bestFE 66.74
+[ 3368.2s]     s30: q32 62.50  m32 64.92  a16 64.72  q32b70 62.70  q64 63.61  | ens 64.62  bestFE 66.03
+[ 3579.4s]     s31: q32 61.68  m32 63.86  a16 63.96  q32b70 62.18  q64 62.87  | ens 63.86  bestFE 65.15
+[ 3777.2s]     s32: q32 61.79  m32 64.04  a16 63.74  q32b70 62.09  q64 62.87  | ens 63.94  bestFE 65.30
+[ 3984.6s]     s33: q32 60.66  m32 63.19  a16 63.94  q32b70 61.41  q64 62.54  | ens 63.66  bestFE 65.26
+[ 4198.2s]     s34: q32 60.84  m32 63.21  a16 64.12  q32b70 60.66  q64 61.38  | ens 63.84  bestFE 65.48
+[ 4415.0s]     s35: q32 61.23  m32 63.26  a16 63.96  q32b70 61.15  q64 62.03  | ens 63.70  bestFE 65.11
+[ 4645.7s]     s36: q32 60.75  m32 62.65  a16 63.17  q32b70 60.75  q64 61.18  | ens 63.00  bestFE 64.99
+[ 4880.4s]     s37: q32 60.43  m32 62.27  a16 62.85  q32b70 60.10  q64 60.52  | ens 62.77  bestFE 64.36
+[ 5119.6s]     s38: q32 60.15  m32 61.88  a16 62.46  q32b70 59.98  q64 60.15  | ens 62.46  bestFE 64.11
+[ 5345.4s]     s39: q32 59.97  m32 61.84  a16 62.57  q32b70 59.80  q64 60.05  | ens 62.65  bestFE 64.04
+[ 5595.1s]     s40: q32 59.19  m32 61.81  a16 61.73  q32b70 59.59  q64 59.75  | ens 61.49  bestFE 62.92
+[ 5845.6s]     s41: q32 58.76  m32 61.54  a16 60.85  q32b70 59.00  q64 58.92  | ens 61.08  bestFE 62.32
+[ 6092.8s]     s42: q32 57.91  m32 60.33  a16 60.11  q32b70 57.91  q64 58.36  | ens 60.03  bestFE 63.06
+[ 6345.0s]     s43: q32 57.46  m32 59.70  a16 59.48  q32b70 56.12  q64 57.61  | ens 59.55  bestFE 62.31
+[ 6613.0s]     s44: q32 56.63  m32 58.75  a16 58.97  q32b70 57.22  q64 57.43  | ens 58.97  bestFE 62.10
+[ 6901.5s]     s45: q32 56.90  m32 58.90  a16 58.83  q32b70 56.97  q64 57.40  | ens 58.97  bestFE 62.76
+[ 7171.7s]     s46: q32 56.84  m32 58.26  a16 58.54  q32b70 56.77  q64 57.12  | ens 58.75  bestFE 61.87
+[ 7453.1s]     s47: q32 56.73  m32 58.32  a16 58.67  q32b70 55.41  q64 57.21  | ens 59.08  bestFE 62.48
+[ 7755.5s]     s48: q32 56.23  m32 58.08  a16 58.22  q32b70 56.44  q64 56.78  | ens 58.97  bestFE 61.44
+[ 8043.5s]     s49: q32 56.53  m32 58.20  a16 58.20  q32b70 56.60  q64 56.93  | ens 58.47  bestFE 61.47
+[ 8043.5s]     VERIFY ok over all 50 stages: exp54=SKIPPED  exp55=yes
+[ 8043.5s]     cell took 8044s
+[ 8043.6s] === IMAGENETAP|50|1|q32+m32+a16+q32b70+q64|f8+f16|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[ 8045.2s]     5 members x 2 arms x 1 rules; 3 raysets x 1 rulesets x 1 orders = 3 configs
+[ 8061.1s]     s0: q32 97.87  m32 97.87  a16 97.87  q32b70 97.87  q64 95.74  | ens 97.87  bestFE 97.87
+[ 8083.4s]     s1: q32 96.83  m32 96.83  a16 96.83  q32b70 95.24  q64 93.65  | ens 96.83  bestFE 96.83
+[ 8113.3s]     s2: q32 90.32  m32 92.47  a16 91.40  q32b70 90.32  q64 91.40  | ens 92.47  bestFE 91.40
+[ 8147.0s]     s3: q32 85.71  m32 84.76  a16 85.71  q32b70 83.81  q64 85.71  | ens 86.67  bestFE 83.81
+[ 8190.1s]     s4: q32 86.33  m32 84.89  a16 86.33  q32b70 84.89  q64 84.89  | ens 86.33  bestFE 84.89
+[ 8240.8s]     s5: q32 83.78  m32 83.11  a16 81.76  q32b70 81.76  q64 81.76  | ens 83.78  bestFE 83.78
+[ 8304.1s]     s6: q32 84.36  m32 81.01  a16 79.33  q32b70 80.45  q64 80.45  | ens 81.56  bestFE 83.24
+[ 8369.4s]     s7: q32 82.30  m32 79.43  a16 80.38  q32b70 79.90  q64 79.90  | ens 80.86  bestFE 81.34
+[ 8455.9s]     s8: q32 81.50  m32 79.13  a16 79.13  q32b70 79.53  q64 79.53  | ens 80.31  bestFE 80.31
+[ 8541.1s]     s9: q32 78.60  m32 78.23  a16 77.12  q32b70 78.97  q64 77.86  | ens 77.86  bestFE 78.60
+[ 8622.0s]     s10: q32 78.83  m32 75.57  a16 74.92  q32b70 78.18  q64 75.24  | ens 78.50  bestFE 78.18
+[ 8699.4s]     s11: q32 77.10  m32 73.62  a16 75.94  q32b70 75.94  q64 75.65  | ens 76.52  bestFE 77.97
+[ 8802.9s]     s12: q32 74.54  m32 71.62  a16 74.80  q32b70 72.68  q64 72.94  | ens 75.33  bestFE 76.39
+[ 8909.1s]     s13: q32 75.00  m32 72.20  a16 74.30  q32b70 71.26  q64 71.96  | ens 74.77  bestFE 75.70
+[ 9011.8s]     s14: q32 72.95  m32 71.36  a16 73.41  q32b70 70.23  q64 70.91  | ens 73.18  bestFE 74.32
+[ 9114.4s]     s15: q32 72.38  m32 70.24  a16 71.73  q32b70 69.16  q64 70.66  | ens 73.02  bestFE 73.45
+[ 9211.9s]     s16: q32 72.15  m32 68.09  a16 72.15  q32b70 69.72  q64 68.29  | ens 72.97  bestFE 74.19
+[ 9325.4s]     s17: q32 71.89  m32 68.49  a16 73.21  q32b70 69.06  q64 69.62  | ens 71.70  bestFE 74.91
+[ 9441.0s]     s18: q32 71.08  m32 67.20  a16 72.84  q32b70 67.90  q64 68.61  | ens 71.25  bestFE 73.54
+[ 9565.0s]     s19: q32 69.00  m32 65.17  a16 68.67  q32b70 66.33  q64 66.83  | ens 69.33  bestFE 71.83
+[ 9701.1s]     s20: q32 68.52  m32 64.27  a16 68.03  q32b70 65.25  q64 66.23  | ens 68.68  bestFE 70.64
+[ 9839.0s]     s21: q32 67.88  m32 63.92  a16 69.30  q32b70 65.03  q64 65.51  | ens 67.88  bestFE 69.78
+[ 9978.6s]     s22: q32 67.94  m32 62.96  a16 67.94  q32b70 63.84  q64 63.69  | ens 67.06  bestFE 68.52
+[10150.5s]     s23: q32 66.01  m32 63.48  a16 69.24  q32b70 63.48  q64 64.33  | ens 67.13  bestFE 68.68
+[10304.8s]     s24: q32 67.47  m32 62.90  a16 68.55  q32b70 63.17  q64 64.25  | ens 66.67  bestFE 68.15
+[10464.7s]     s25: q32 66.41  m32 62.53  a16 67.57  q32b70 64.08  q64 62.40  | ens 66.15  bestFE 68.35
+[10636.3s]     s26: q32 65.36  m32 60.15  a16 67.13  q32b70 63.20  q64 61.55  | ens 65.23  bestFE 68.02
+[10809.4s]     s27: q32 64.99  m32 60.47  a16 66.59  q32b70 62.06  q64 62.67  | ens 65.36  bestFE 67.56
+[10972.9s]     s28: q32 63.88  m32 58.42  a16 65.39  q32b70 61.44  q64 62.02  | ens 65.16  bestFE 66.55
+[11147.2s]     s29: q32 62.73  m32 58.14  a16 65.37  q32b70 61.35  q64 62.04  | ens 64.91  bestFE 66.28
+[11339.4s]     s30: q32 62.89  m32 58.76  a16 65.29  q32b70 61.04  q64 61.15  | ens 64.74  bestFE 66.27
+[11536.3s]     s31: q32 62.95  m32 59.55  a16 64.97  q32b70 61.46  q64 61.68  | ens 64.12  bestFE 66.03
+[11723.3s]     s32: q32 62.55  m32 59.02  a16 64.73  q32b70 60.06  q64 61.10  | ens 63.38  bestFE 65.35
+[11935.5s]     s33: q32 63.40  m32 58.34  a16 64.31  q32b70 60.47  q64 61.48  | ens 63.80  bestFE 65.93
+[12141.2s]     s34: q32 63.02  m32 58.78  a16 64.00  q32b70 59.86  q64 59.27  | ens 63.41  bestFE 64.20
+[12367.3s]     s35: q32 62.11  m32 57.78  a16 62.68  q32b70 58.81  q64 59.38  | ens 62.30  bestFE 63.34
+[12593.4s]     s36: q32 61.78  m32 57.70  a16 62.41  q32b70 58.70  q64 59.51  | ens 61.78  bestFE 63.50
+[12814.6s]     s37: q32 61.73  m32 57.44  a16 62.17  q32b70 58.49  q64 58.67  | ens 61.56  bestFE 62.78
+[13063.8s]     s38: q32 61.96  m32 57.61  a16 62.79  q32b70 59.78  q64 58.86  | ens 62.29  bestFE 63.80
+[13301.0s]     s39: q32 61.67  m32 57.17  a16 62.08  q32b70 59.10  q64 58.70  | ens 61.59  bestFE 63.37
+[13559.9s]     s40: q32 61.01  m32 56.67  a16 61.88  q32b70 58.72  q64 58.25  | ens 61.09  bestFE 63.06
+[13808.3s]     s41: q32 60.83  m32 56.52  a16 59.29  q32b70 58.21  q64 57.59  | ens 60.60  bestFE 62.91
+[14062.2s]     s42: q32 60.34  m32 55.98  a16 61.15  q32b70 57.98  q64 57.39  | ens 59.90  bestFE 62.26
+[14341.8s]     s43: q32 59.81  m32 55.80  a16 61.05  q32b70 57.70  q64 57.04  | ens 59.74  bestFE 62.00
+[14616.0s]     s44: q32 59.35  m32 55.25  a16 60.50  q32b70 57.27  q64 56.91  | ens 59.57  bestFE 61.51
+[14907.4s]     s45: q32 58.59  m32 54.90  a16 59.73  q32b70 57.03  q64 56.25  | ens 58.88  bestFE 61.08
+[15189.3s]     s46: q32 58.59  m32 55.00  a16 59.51  q32b70 57.11  q64 56.55  | ens 58.87  bestFE 60.92
+[15477.5s]     s47: q32 59.13  m32 54.61  a16 59.74  q32b70 56.73  q64 56.53  | ens 58.71  bestFE 60.77
+[15777.0s]     s48: q32 58.47  m32 54.64  a16 59.34  q32b70 56.12  q64 56.12  | ens 58.47  bestFE 60.82
+[16074.7s]     s49: q32 58.33  m32 54.40  a16 58.80  q32b70 55.60  q64 55.67  | ens 58.13  bestFE 60.47
+[16074.7s]     cell took 8031s
+[16074.8s] === IMAGENETAP|50|2|q32+m32+a16+q32b70+q64|f8+f16|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[16076.4s]     5 members x 2 arms x 1 rules; 3 raysets x 1 rulesets x 1 orders = 3 configs
+[16093.8s]     s0: q32 77.78  m32 72.22  a16 77.78  q32b70 88.89  q64 77.78  | ens 77.78  bestFE 77.78
+[16116.4s]     s1: q32 76.92  m32 69.23  a16 71.79  q32b70 76.92  q64 66.67  | ens 71.79  bestFE 74.36
+[16146.6s]     s2: q32 78.87  m32 77.46  a16 76.06  q32b70 78.87  q64 80.28  | ens 80.28  bestFE 80.28
+[16196.5s]     s3: q32 76.61  m32 79.03  a16 78.23  q32b70 79.03  q64 79.03  | ens 79.84  bestFE 79.84
+[16255.1s]     s4: q32 82.28  m32 82.91  a16 79.75  q32b70 82.28  q64 82.28  | ens 83.54  bestFE 81.65
+[16312.3s]     s5: q32 77.11  m32 76.12  a16 73.13  q32b70 75.62  q64 76.12  | ens 78.11  bestFE 77.11
+[16366.6s]     s6: q32 75.21  m32 76.92  a16 73.93  q32b70 76.92  q64 75.21  | ens 76.92  bestFE 77.78
+[16423.4s]     s7: q32 72.87  m32 75.71  a16 69.64  q32b70 75.30  q64 73.68  | ens 73.68  bestFE 73.28
+[16487.6s]     s8: q32 73.23  m32 75.84  a16 72.49  q32b70 73.98  q64 73.61  | ens 74.35  bestFE 73.61
+[16560.6s]     s9: q32 69.81  m32 70.78  a16 68.83  q32b70 71.43  q64 70.45  | ens 70.78  bestFE 71.75
+[16635.9s]     s10: q32 69.55  m32 71.94  a16 67.76  q32b70 67.76  q64 69.55  | ens 71.64  bestFE 70.75
+[16716.0s]     s11: q32 72.24  m32 71.21  a16 65.30  q32b70 71.47  q64 71.47  | ens 73.01  bestFE 71.98
+[16799.6s]     s12: q32 70.62  m32 70.62  a16 64.69  q32b70 68.15  q64 67.16  | ens 71.85  bestFE 71.85
+[16884.7s]     s13: q32 69.32  m32 69.32  a16 64.64  q32b70 69.79  q64 68.15  | ens 70.02  bestFE 70.49
+[16975.4s]     s14: q32 67.35  m32 68.03  a16 67.35  q32b70 68.93  q64 68.03  | ens 70.07  bestFE 70.07
+[17067.6s]     s15: q32 69.30  m32 68.02  a16 67.16  q32b70 68.87  q64 67.80  | ens 69.51  bestFE 70.58
+[17167.0s]     s16: q32 66.87  m32 66.07  a16 64.07  q32b70 66.27  q64 65.87  | ens 67.66  bestFE 68.26
+[17267.3s]     s17: q32 65.52  m32 64.37  a16 63.22  q32b70 65.13  q64 65.13  | ens 66.09  bestFE 67.82
+[17377.4s]     s18: q32 63.86  m32 64.04  a16 62.97  q32b70 64.22  q64 64.40  | ens 65.12  bestFE 66.73
+[17485.6s]     s19: q32 61.25  m32 62.63  a16 61.07  q32b70 62.28  q64 62.46  | ens 63.49  bestFE 64.36
+[17603.2s]     s20: q32 62.56  m32 63.38  a16 60.59  q32b70 62.23  q64 62.56  | ens 63.05  bestFE 64.70
+[17740.0s]     s21: q32 61.33  m32 63.29  a16 58.91  q32b70 62.08  q64 62.39  | ens 62.24  bestFE 64.80
+[17870.3s]     s22: q32 61.11  m32 62.22  a16 59.17  q32b70 58.06  q64 60.69  | ens 61.53  bestFE 63.61
+[18002.2s]     s23: q32 61.21  m32 61.74  a16 59.19  q32b70 59.87  q64 60.81  | ens 61.61  bestFE 63.62
+[18151.0s]     s24: q32 61.14  m32 61.14  a16 59.72  q32b70 59.97  q64 60.23  | ens 61.27  bestFE 63.21
+[18305.0s]     s25: q32 61.86  m32 61.02  a16 60.17  q32b70 60.90  q64 60.53  | ens 61.99  bestFE 64.41
+[18463.2s]     s26: q32 61.08  m32 60.96  a16 59.67  q32b70 60.26  q64 60.14  | ens 61.55  bestFE 64.01
+[18623.4s]     s27: q32 59.91  m32 59.79  a16 59.34  q32b70 59.79  q64 59.34  | ens 60.14  bestFE 62.98
+[18785.9s]     s28: q32 59.15  m32 60.27  a16 59.37  q32b70 59.37  q64 59.37  | ens 60.27  bestFE 62.63
+[18940.7s]     s29: q32 60.21  m32 61.18  a16 57.33  q32b70 60.00  q64 60.11  | ens 61.07  bestFE 63.32
+[19131.7s]     s30: q32 60.37  m32 60.79  a16 57.47  q32b70 60.17  q64 59.85  | ens 60.89  bestFE 63.49
+[19326.9s]     s31: q32 59.92  m32 60.32  a16 56.98  q32b70 59.72  q64 59.21  | ens 60.63  bestFE 63.77
+[19565.3s]     s32: q32 59.49  m32 59.58  a16 56.62  q32b70 59.39  q64 58.99  | ens 60.08  bestFE 62.15
+[19767.3s]     s33: q32 58.90  m32 59.19  a16 56.21  q32b70 58.71  q64 58.61  | ens 59.48  bestFE 62.37
+[19952.7s]     s34: q32 58.00  m32 58.46  a16 55.78  q32b70 57.72  q64 58.00  | ens 58.65  bestFE 62.26
+[20158.6s]     s35: q32 57.22  m32 57.95  a16 55.12  q32b70 57.04  q64 57.77  | ens 58.41  bestFE 61.70
+[20350.6s]     s36: q32 56.91  m32 57.81  a16 57.45  q32b70 57.18  q64 57.18  | ens 57.63  bestFE 61.34
+[20555.6s]     s37: q32 56.13  m32 57.25  a16 56.04  q32b70 56.13  q64 56.13  | ens 56.30  bestFE 59.86
+[20771.9s]     s38: q32 55.54  m32 56.64  a16 55.88  q32b70 55.96  q64 56.05  | ens 56.22  bestFE 59.71
+[21001.7s]     s39: q32 55.79  m32 56.71  a16 55.96  q32b70 56.54  q64 56.29  | ens 56.54  bestFE 60.18
+[21245.9s]     s40: q32 55.77  m32 56.57  a16 55.45  q32b70 55.77  q64 55.93  | ens 56.49  bestFE 60.50
+[21475.7s]     s41: q32 55.50  m32 56.45  a16 55.66  q32b70 55.58  q64 56.14  | ens 56.61  bestFE 60.41
+[21721.0s]     s42: q32 55.53  m32 56.63  a16 55.61  q32b70 55.53  q64 55.92  | ens 56.63  bestFE 60.16
+[21968.4s]     s43: q32 55.44  m32 55.89  a16 55.13  q32b70 55.74  q64 55.67  | ens 56.12  bestFE 59.70
+[22235.7s]     s44: q32 55.13  m32 55.58  a16 54.83  q32b70 55.43  q64 55.66  | ens 55.96  bestFE 59.28
+[22493.1s]     s45: q32 54.52  m32 55.03  a16 54.81  q32b70 54.88  q64 55.10  | ens 55.61  bestFE 58.75
+[22761.4s]     s46: q32 54.02  m32 54.59  a16 54.09  q32b70 54.59  q64 54.38  | ens 55.24  bestFE 58.39
+[23039.9s]     s47: q32 54.29  m32 54.71  a16 54.50  q32b70 55.47  q64 54.99  | ens 55.61  bestFE 58.66
+[23326.4s]     s48: q32 54.04  m32 54.51  a16 54.18  q32b70 54.85  q64 54.79  | ens 55.40  bestFE 58.18
+[23622.1s]     s49: q32 53.80  m32 53.80  a16 53.73  q32b70 54.40  q64 54.40  | ens 55.20  bestFE 58.13
+[23622.1s]     cell took 7547s
+
+========================================================================================================
+EXP56 — does the cone read-out compose with the LoRA-member ensemble?
+========================================================================================================
+
+members ['q32', 'm32', 'a16', 'q32b70', 'q64']
+arms ['f8', 'f16']  rules ['cone']  orders ['FE']  raysets all (3)  cells 6
+
+--------------------------------------------------------------------------------------------------------
+SHOPPING PENALTY — read before any accuracy. `sel` picks the config on VAL;
+`oracle` is the max over configs on TEST and is NOT obtainable.
+--------------------------------------------------------------------------------------------------------
+  ds             T order   sel(test)   oracle  penalty  sel val-test                 chosen config
+  IMAGENETAP    20 FE          70.33    70.33     0.00         -2.81                   f8+f16|cone
+  IMAGENETAP    50 FE          69.02    69.02     0.00         -1.67                   f8+f16|cone
+
+--------------------------------------------------------------------------------------------------------
+A-Last — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  IMAGENETAP    20     3    59.11    59.73       nan    61.91     +2.18    62.37    -0.46
+  IMAGENETAP    50     3    56.22    57.27       nan    59.78     +2.51    59.71    +0.07
+
+--------------------------------------------------------------------------------------------------------
+A-Avg — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  IMAGENETAP    20     3    68.33    69.14       nan    70.33     +1.19    69.30    +1.03
+  IMAGENETAP    50     3    66.66    67.68       nan    69.02     +1.34    67.23    +1.79
+
+--------------------------------------------------------------------------------------------------------
+RAY-BUDGET SWEEP — single budgets, min to max. Does the cone's known
+monotonicity in R SURVIVE member averaging, or does the ensemble substitute for rays?
+--------------------------------------------------------------------------------------------------------
+  IMAGENETAP T=20 (cpt=10)   fit rows/class 2-75 (median 18.5)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f8            +1.87    +2.20
+    f16           +1.58    +1.67
+  IMAGENETAP T=50 (cpt=4)   fit rows/class 2-75 (median 19.0)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f8            +3.38    +2.56
+    f16           +2.67    +2.20
+
+--------------------------------------------------------------------------------------------------------
+PRE-REGISTERED TEST — sel_FE vs ens_ranpac, IMAGENETR A-Last, per T
+--------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  0. SHOPPING PENALTY FIRST. This file evaluates up to ~1300 configs per cell. `oracle` is the
+     max over them on TEST and is not obtainable by any deployable system; `sel` picks on VAL
+     and is the only honest number. A large penalty means the sweep found noise, and a large
+     `sel val-test` means even the val-selected config overfits the split.
+  1. THE PRE-REGISTERED TEST is sel_FE - ens_ranpac on IMAGENETR A-Last. exp52's decomposition
+     says +0.30 (rays) + 0.08 (non-negativity) ~ +0.38 should survive and the +0.74 linear-
+     combination piece should NOT, because the member ensemble already bought it. Above +0.70
+     that reading is dead and the levers are independent.
+  2. EF/JT ISOLATE WHERE THE AVERAGING HAPPENS -- they do NOT test exp55's oracle_class_cv
+     (see the EF note in the header; none of these orderings weights members per class). The
+     informative column for them is `sel val-test`, NOT accuracy. Measured on the f32 control:
+     FE 0.86, EF 1.98, JT 2.37 -- the overfitting order is the exact inverse of the accuracy
+     order. FE fuses each member's cone against THAT member's own RanPAC in matched geometry
+     and renormalises before averaging; EF and JT fuse against a POOLED base and pay 2-3x the
+     val overfit for it. Treat a future EF/JT win as suspect until its gap matches FE's.
+  3. THE RAY SWEEP IS THE MECHANISM READ. exp53 found the fused gain monotone in R because the
+     cone is an AGGREGATOR of noisy atom sets. A member ensemble is also an aggregator. If the
+     substitution reading is right, the `q32 alone` column stays monotone in R while the FE/EF
+     columns FLATTEN -- the ensemble has already done the aggregating. A still-monotone FE
+     column would mean rays contribute something averaging cannot.
+  4. JT bounds FE and EF from above and is the most likely to overfit; believe it only if its
+     val-test gap is comparable to FE's. Configs above JT_MAX components are skipped and the
+     count is recorded in _meta, never silently dropped.
+========================================================================================================
+[23622.1s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp56_ray_ensemble_rsweep_augreg_in21k.json

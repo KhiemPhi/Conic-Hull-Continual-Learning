@@ -1,0 +1,76 @@
+{
+  "IMAGENETR|10|0|r32|attn.qkv+attn.proj_ordpilot": {
+    "stages": [
+      {
+        "task": 0,
+        "n_img": 2803,
+        "epochs": 40,
+        "train_acc": 0.9903674634320371,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 1,
+        "n_img": 2519,
+        "epochs": 20,
+        "train_acc": 0.9690353314807463,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 2,
+        "n_img": 2350,
+        "epochs": 20,
+        "train_acc": 0.9668085106382979,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 3,
+        "n_img": 2316,
+        "epochs": 20,
+        "train_acc": 0.9676165803108808,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 4,
+        "n_img": 2134,
+        "epochs": 20,
+        "train_acc": 0.9639175257731959,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 5,
+        "n_img": 2702,
+        "epochs": 20,
+        "train_acc": 0.9681717246484086,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 6,
+        "n_img": 2109,
+        "epochs": 20,
+        "train_acc": 0.9696538643907064,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 7,
+        "n_img": 2846,
+        "epochs": 20,
+        "train_acc": 0.9722417427969079,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 8,
+        "n_img": 1921,
+        "epochs": 20,
+        "train_acc": 0.9526288391462779,
+        "trainable_M": 1.769472
+      },
+      {
+        "task": 9,
+        "n_img": 2300,
+        "epochs": 20,
+        "train_acc": 0.9726086956521739,
+        "trainable_M": 1.769472
+      }
+    ]
+  }
+}

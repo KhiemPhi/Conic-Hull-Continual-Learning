@@ -1,0 +1,68 @@
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+=== phi_0 anchor frame ===
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg2_in21k_ft_in1k'  pretrained=True  device=cuda  feature_dim=768
+
+[t=1] seen=20  gamma=19.5deg  (budget gamma/2=9.8deg)
+   per-sample cos 0.7954 ( 37.3deg) | PROTOTYPE cos 0.9186 ( 23.3deg)  EXCEEDS BUDGET
+   error is 31.7% systematic / 68.3% random | CKA 0.8433 | proto-Gram corr 0.7851
+   acc  oracleF/oracleP 0.9325 | recovF/oracleP 0.6110 | oracleF/recovP 0.9020 | recovF/recovP 0.8685
+
+[t=2] seen=30  gamma=15.9deg  (budget gamma/2=8.0deg)
+   per-sample cos 0.8432 ( 32.5deg) | PROTOTYPE cos 0.9515 ( 17.9deg)  EXCEEDS BUDGET
+   error is 26.0% systematic / 74.0% random | CKA 0.8456 | proto-Gram corr 0.8180
+   acc  oracleF/oracleP 0.9070 | recovF/oracleP 0.6920 | oracleF/recovP 0.8340 | recovF/recovP 0.8647
+
+[t=3] seen=40  gamma=13.9deg  (budget gamma/2=7.0deg)
+   per-sample cos 0.8636 ( 30.3deg) | PROTOTYPE cos 0.9649 ( 15.2deg)  EXCEEDS BUDGET
+   error is 22.3% systematic / 77.7% random | CKA 0.8757 | proto-Gram corr 0.9043
+   acc  oracleF/oracleP 0.8808 | recovF/oracleP 0.7510 | oracleF/recovP 0.8425 | recovF/recovP 0.8575
+
+[t=4] seen=50  gamma=10.6deg  (budget gamma/2=5.3deg)
+   per-sample cos 0.8851 ( 27.7deg) | PROTOTYPE cos 0.9792 ( 11.7deg)  EXCEEDS BUDGET
+   error is 16.1% systematic / 83.9% random | CKA 0.8924 | proto-Gram corr 0.9556
+   acc  oracleF/oracleP 0.8254 | recovF/oracleP 0.7732 | oracleF/recovP 0.7818 | recovF/recovP 0.8144
+
+[t=5] seen=60  gamma=10.7deg  (budget gamma/2=5.3deg)
+   per-sample cos 0.8652 ( 30.1deg) | PROTOTYPE cos 0.9700 ( 14.1deg)  EXCEEDS BUDGET
+   error is 19.8% systematic / 80.2% random | CKA 0.8804 | proto-Gram corr 0.9489
+   acc  oracleF/oracleP 0.8228 | recovF/oracleP 0.7362 | oracleF/recovP 0.7847 | recovF/recovP 0.8188
+
+[t=6] seen=70  gamma=9.9deg  (budget gamma/2=4.9deg)
+   per-sample cos 0.8764 ( 28.8deg) | PROTOTYPE cos 0.9769 ( 12.3deg)  EXCEEDS BUDGET
+   error is 17.2% systematic / 82.8% random | CKA 0.8792 | proto-Gram corr 0.9441
+   acc  oracleF/oracleP 0.8057 | recovF/oracleP 0.7456 | oracleF/recovP 0.7461 | recovF/recovP 0.7987
+
+[t=7] seen=80  gamma=10.4deg  (budget gamma/2=5.2deg)
+   per-sample cos 0.8738 ( 29.1deg) | PROTOTYPE cos 0.9777 ( 12.1deg)  EXCEEDS BUDGET
+   error is 16.3% systematic / 83.7% random | CKA 0.8669 | proto-Gram corr 0.9526
+   acc  oracleF/oracleP 0.7661 | recovF/oracleP 0.7059 | oracleF/recovP 0.7064 | recovF/recovP 0.7685
+
+[t=8] seen=90  gamma=10.3deg  (budget gamma/2=5.2deg)
+   per-sample cos 0.8623 ( 30.4deg) | PROTOTYPE cos 0.9736 ( 13.2deg)  EXCEEDS BUDGET
+   error is 17.4% systematic / 82.6% random | CKA 0.8566 | proto-Gram corr 0.9510
+   acc  oracleF/oracleP 0.7722 | recovF/oracleP 0.6960 | oracleF/recovP 0.6930 | recovF/recovP 0.7666
+
+[t=9] seen=100  gamma=9.1deg  (budget gamma/2=4.6deg)
+   per-sample cos 0.8805 ( 28.3deg) | PROTOTYPE cos 0.9782 ( 12.0deg)  EXCEEDS BUDGET
+   error is 16.8% systematic / 83.2% random | CKA 0.8632 | proto-Gram corr 0.9625
+   acc  oracleF/oracleP 0.7299 | recovF/oracleP 0.6698 | oracleF/recovP 0.6534 | recovF/recovP 0.7225
+
+============================================================================================
+ t  persampl  protoDeg   gam/2   %sys     CKA  gramCor   or/or  rec/or  or/rec rec/rec
+ 1     37.3d     23.3d    9.8d  31.7%  0.8433   0.7851  0.9325  0.6110  0.9020  0.8685
+ 2     32.5d     17.9d    8.0d  26.0%  0.8456   0.8180  0.9070  0.6920  0.8340  0.8647
+ 3     30.3d     15.2d    7.0d  22.3%  0.8757   0.9043  0.8808  0.7510  0.8425  0.8575
+ 4     27.7d     11.7d    5.3d  16.1%  0.8924   0.9556  0.8254  0.7732  0.7818  0.8144
+ 5     30.1d     14.1d    5.3d  19.8%  0.8804   0.9489  0.8228  0.7362  0.7847  0.8188
+ 6     28.8d     12.3d    4.9d  17.2%  0.8792   0.9441  0.8057  0.7456  0.7461  0.7987
+ 7     29.1d     12.1d    5.2d  16.3%  0.8669   0.9526  0.7661  0.7059  0.7064  0.7685
+ 8     30.4d     13.2d    5.2d  17.4%  0.8566   0.9510  0.7722  0.6960  0.6930  0.7666
+ 9     28.3d     12.0d    4.6d  16.8%  0.8632   0.9625  0.7299  0.6698  0.6534  0.7225
+============================================================================================
+or/or = oracle feats+protos (ceiling) | rec/rec = recovered world self-consistent
+If rec/rec >> or/rec: recovered space is COHERENT but MISALIGNED (frame error).
+If proto_deg > gamma/2: prototypes land inside a neighbour's territory.

@@ -1,0 +1,274 @@
++ source /home/khiemphi/venvs/ml_env/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ case "$(uname)" in
++++ uname
+++ export VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ _OLD_VIRTUAL_PATH=/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ PATH=/home/khiemphi/venvs/ml_env/bin:/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ export PATH
+++ VIRTUAL_ENV_PROMPT='(ml_env) '
+++ export VIRTUAL_ENV_PROMPT
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='((ml_env) ) '
+++ export PS1
+++ hash -r
++ cd /home/khiemphi/Conic-Hull-Continual-Learning
++ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 ORDER=pilot
++ OMP_NUM_THREADS=1
++ MKL_NUM_THREADS=1
++ ORDER=pilot
++ export http_proxy=http://fwdproxy:8080 https_proxy=http://fwdproxy:8080
++ http_proxy=http://fwdproxy:8080
++ https_proxy=http://fwdproxy:8080
++ export HF_HUB_DISABLE_XET=1
++ HF_HUB_DISABLE_XET=1
++ M=q32,q32v1,q32v2,q32v3,q32v4
++ retry 4 train env DS=IMAGENETR T=10 SEED=0,1,2 MEMBERS=q32,q32v1,q32v2,q32v3,q32v4 python -u exp55_lora_diversity_pilot.py
++ local n=4 label=train
++ shift 2
+++ seq 1 4
++ for i in $(seq 1 "$n")
++ echo '[chain] train attempt 1/4'
+[chain] train attempt 1/4
++ env DS=IMAGENETR T=10 SEED=0,1,2 MEMBERS=q32,q32v1,q32v2,q32v3,q32v4 python -u exp55_lora_diversity_pilot.py
+[    0.0s] === IMAGENETR|10|0|q32+q32v1+q32v2+q32v3+q32v4|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[    0.2s]     cached member q32v1
+[    0.5s]     cached member q32v2
+[    0.8s]     cached member q32v3
+[    1.0s]     cached member q32v4
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[    8.0s]     member q32      A-Last 80.18  A-Avg 85.85
+[   12.7s]     member q32v1    A-Last 80.55  A-Avg 85.77
+[   17.4s]     member q32v2    A-Last 80.80  A-Avg 85.79
+[   22.2s]     member q32v3    A-Last 80.75  A-Avg 85.70
+[   26.9s]     member q32v4    A-Last 80.53  A-Avg 85.83
+[   35.9s]     concat   (3840d) A-Last 81.57  A-Avg 86.46
+[   36.0s]     ensemble           A-Last 81.70  A-Avg 86.70
+[   36.2s] === IMAGENETR|10|1|q32+q32v1+q32v2+q32v3+q32v4|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  286.3s]     trained member q32v1 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.982
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  635.2s]     trained member q32v2 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.985
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  932.3s]     trained member q32v3 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.986
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1198.0s]     trained member q32v4 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.985
+[ 1245.9s]     member q32      A-Last 81.10  A-Avg 85.23
+[ 1250.7s]     member q32v1    A-Last 80.43  A-Avg 84.91
+[ 1255.5s]     member q32v2    A-Last 80.90  A-Avg 85.32
+[ 1260.2s]     member q32v3    A-Last 80.95  A-Avg 85.39
+[ 1265.2s]     member q32v4    A-Last 80.28  A-Avg 84.83
+[ 1275.3s]     concat   (3840d) A-Last 81.68  A-Avg 85.96
+[ 1275.4s]     ensemble           A-Last 81.63  A-Avg 86.10
+[ 1275.6s] === IMAGENETR|10|2|q32+q32v1+q32v2+q32v3+q32v4|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1526.4s]     trained member q32v1 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.984
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1829.6s]     trained member q32v2 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.984
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2136.3s]     trained member q32v3 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.986
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2433.7s]     trained member q32v4 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=1 cls=20) task0 train acc 0.985
+[ 2483.0s]     member q32      A-Last 81.00  A-Avg 85.40
+[ 2487.8s]     member q32v1    A-Last 81.30  A-Avg 85.96
+[ 2492.7s]     member q32v2    A-Last 80.45  A-Avg 85.11
+[ 2497.8s]     member q32v3    A-Last 80.43  A-Avg 85.65
+[ 2502.5s]     member q32v4    A-Last 80.80  A-Avg 85.52
+[ 2511.0s]     concat   (3840d) A-Last 81.13  A-Avg 85.99
+[ 2511.1s]     ensemble           A-Last 81.78  A-Avg 86.25
+
+====================================================================================================
+EXP55 — LoRA member diversity (RanPAC only; no cones, no fusion, no beta)
+====================================================================================================
+
+members ['q32', 'q32v1', 'q32v2', 'q32v3', 'q32v4']   recipe ep40_lr0.0003_a4_ordpilot   ORDER=pilot   cells 3
+    IMAGENETR T=10: seeds [0, 1, 2]
+
+----------------------------------------------------------------------------------------------------
+PRECONDITION — is there anything to ensemble? (read before accuracy)
+----------------------------------------------------------------------------------------------------
+  ds          pair                disagree   errcorr  both_wrong
+  IMAGENETR   q32|q32v1              10.7%      0.83       16.6%
+  IMAGENETR   q32|q32v2              11.0%      0.83       16.6%
+  IMAGENETR   q32|q32v3              11.4%      0.82       16.5%
+  IMAGENETR   q32|q32v4              10.8%      0.82       16.6%
+  IMAGENETR   q32v1|q32v2            10.5%      0.83       16.6%
+  IMAGENETR   q32v1|q32v3            10.9%      0.83       16.6%
+  IMAGENETR   q32v1|q32v4            10.0%      0.84       16.8%
+  IMAGENETR   q32v2|q32v3            11.0%      0.82       16.5%
+  IMAGENETR   q32v2|q32v4            10.4%      0.83       16.7%
+  IMAGENETR   q32v3|q32v4            11.0%      0.82       16.6%
+
+  ds            best single  per-class cv  per-class*   ORACLE  cv share   <- can a PER-CLASS rule reach it?
+  IMAGENETR           81.07         80.64       83.62    86.02      -9%
+   * per-class fitted on the rows it scores = upper bound; `cv` cross-fits within each class and is the realizable number. `cv share` = (cv - best) / (ORACLE - best).
+
+  ds          per-class winner counts (which member is best on how many classes)
+  IMAGENETR   q32:96  q32v1:39  q32v2:24  q32v3:23  q32v4:16
+
+----------------------------------------------------------------------------------------------------
+A-Last — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds             T  sd         q32       q32v1       q32v2       q32v3       q32v4      concat    ensemble   concat-q32   GR-LoRA   ens-GR
+  IMAGENETR     10   3       80.76       80.76       80.72       80.71       80.54       81.46       81.71        +0.70     82.09    -0.38
+
+----------------------------------------------------------------------------------------------------
+A-Avg — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds             T  sd         q32       q32v1       q32v2       q32v3       q32v4      concat    ensemble   concat-q32   GR-LoRA   ens-GR
+  IMAGENETR     10   3       85.49       85.55       85.40       85.58       85.39       86.14       86.35        +0.64     86.20    +0.15
+
+----------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. PRECONDITION FIRST. `headroom` = ORACLE - best_single is the ceiling for ANY combiner:
+     it is the accuracy of an oracle that picks a correct member whenever one exists. A
+     headroom near zero means the members are redundant and NO fusion recovers anything --
+     the answer is then harsher diversity (bagging, disjoint target modules, different
+     ranks) or a different mechanism entirely, NOT a cleverer combination rule. That is
+     exactly the trap exp54 fell into at the rule level.
+  2. `disagree` near 0 with `errcorr` near 1 means the members are the same network wearing
+     different hats. Expected for members differing only by init, which is precisely why the
+     default member set varies TARGET MODULES instead.
+  3. `concat - q32` is the Tier 2 verdict. Our IMAGENETR base deficit is -0.89 A-Avg, so
+     under about +0.5 means concatenation does not close it and nothing built on top will.
+  4. `ensemble` vs `concat` separates the two mechanisms: score averaging tests
+     decorrelation, concatenation tests representational richness. They can disagree, and
+     which one wins says what the members are actually contributing.
+  5. Members are NOT expected to be individually equal. `m32` adapting only the MLP may well
+     be worse alone than `q32`; a worse-but-decorrelated member is useful and that is the
+     whole premise. Judge members by the diversity table, not by their solo accuracy.
+====================================================================================================
+[ 2511.2s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp55_lora_diversity_augreg_in21k.json
++ echo '[chain] train OK'
+[chain] train OK
++ return 0
++ retry 3 score env DS=IMAGENETR T=10 SEED=0,1,2 MEMBERS=q32,q32v1,q32v2,q32v3,q32v4 SUFFIX=_c1 VERIFY=0 python -u exp66_controls.py
++ local n=3 label=score
++ shift 2
+++ seq 1 3
++ for i in $(seq 1 "$n")
++ echo '[chain] score attempt 1/3'
+[chain] score attempt 1/3
++ env DS=IMAGENETR T=10 SEED=0,1,2 MEMBERS=q32,q32v1,q32v2,q32v3,q32v4 SUFFIX=_c1 VERIFY=0 python -u exp66_controls.py
+[    0.0s] === IMAGENETR|10|0|q32+q32v1+q32v2+q32v3+q32v4|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[   59.3s]     s0: ens 95.36  FE-cone 95.36  FE-sub 95.36  FE-pm 95.36
+[  136.6s]     s1: ens 92.89  FE-cone 92.82  FE-sub 92.89  FE-pm 92.60
+[  246.0s]     s2: ens 89.82  FE-cone 90.02  FE-sub 89.71  FE-pm 89.77
+[  376.0s]     s3: ens 88.14  FE-cone 88.42  FE-sub 88.30  FE-pm 88.26
+[  553.0s]     s4: ens 85.49  FE-cone 86.25  FE-sub 85.86  FE-pm 85.69
+[  749.8s]     s5: ens 84.49  FE-cone 85.07  FE-sub 84.66  FE-pm 84.55
+[ 1050.1s]     s6: ens 83.71  FE-cone 84.29  FE-sub 84.18  FE-pm 83.94
+[ 1393.8s]     s7: ens 83.00  FE-cone 83.54  FE-sub 83.58  FE-pm 83.06
+[ 1790.2s]     s8: ens 82.35  FE-cone 82.94  FE-sub 82.87  FE-pm 82.21
+[ 2244.6s]     s9: ens 81.70  FE-cone 82.38  FE-sub 82.22  FE-pm 81.63
+[ 2244.6s]     cell took 2245s
+[ 2244.6s] === IMAGENETR|10|1|q32+q32v1+q32v2+q32v3+q32v4|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+[ 2307.2s]     s0: ens 93.82  FE-cone 93.97  FE-sub 93.82  FE-pm 93.68
+[ 2385.2s]     s1: ens 89.85  FE-cone 90.32  FE-sub 90.32  FE-pm 89.70
+[ 2499.6s]     s2: ens 88.73  FE-cone 88.78  FE-sub 89.10  FE-pm 88.73
+[ 2634.5s]     s3: ens 87.26  FE-cone 87.14  FE-sub 87.26  FE-pm 87.09
+[ 2799.4s]     s4: ens 86.19  FE-cone 86.46  FE-sub 86.53  FE-pm 86.19
+[ 3002.3s]     s5: ens 84.55  FE-cone 85.27  FE-sub 84.88  FE-pm 84.63
+[ 3295.7s]     s6: ens 83.87  FE-cone 84.45  FE-sub 84.04  FE-pm 83.80
+[ 3641.4s]     s7: ens 83.22  FE-cone 83.86  FE-sub 83.53  FE-pm 83.38
+[ 4054.0s]     s8: ens 81.89  FE-cone 82.63  FE-sub 82.45  FE-pm 81.85
+[ 4505.6s]     s9: ens 81.63  FE-cone 82.38  FE-sub 82.12  FE-pm 81.82
+[ 4505.6s]     cell took 2261s
+[ 4505.6s] === IMAGENETR|10|2|q32+q32v1+q32v2+q32v3+q32v4|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+[ 4572.4s]     s0: ens 94.89  FE-cone 94.89  FE-sub 95.37  FE-pm 94.89
+[ 4650.9s]     s1: ens 91.59  FE-cone 91.67  FE-sub 91.67  FE-pm 91.59
+[ 4758.2s]     s2: ens 89.34  FE-cone 89.81  FE-sub 89.55  FE-pm 89.34
+[ 4889.7s]     s3: ens 87.08  FE-cone 87.81  FE-sub 87.73  FE-pm 87.12
+[ 5055.2s]     s4: ens 85.59  FE-cone 86.55  FE-sub 85.92  FE-pm 85.59
+[ 5271.5s]     s5: ens 84.71  FE-cone 85.92  FE-sub 85.29  FE-pm 84.71
+[ 5566.9s]     s6: ens 83.04  FE-cone 83.86  FE-sub 83.36  FE-pm 83.04
+[ 5915.1s]     s7: ens 82.67  FE-cone 83.67  FE-sub 83.22  FE-pm 82.91
+[ 6307.5s]     s8: ens 81.77  FE-cone 82.60  FE-sub 82.04  FE-pm 81.74
+[ 6767.1s]     s9: ens 81.78  FE-cone 82.52  FE-sub 82.05  FE-pm 81.67
+[ 6767.1s]     cell took 2261s
+
+============================================================================================================
+EXP66 CONTROL BATTERY -- arm f64 FIXED on every cell (C3), rules ['cone', 'sub', 'pm'] (C2), 13 member subsets (C5)
+============================================================================================================
+
+cells 3   verified against exp56: 0/3   members ['q32', 'q32v1', 'q32v2', 'q32v3', 'q32v4']
+
+------------------------------------------------------------------------------------------------------------
+C2 RULE CONTROL -- same rays, same storage, full member set.
+   cone = non-negative combination | sub = SVD span (non-negativity DROPPED) | pm = max single ray
+------------------------------------------------------------------------------------------------------------
+  ds            T  n   ens_ranpac      FE-cone       FE-sub        FE-pm  d(cone-ens)   d(sub-ens)    d(pm-ens)
+  IMAGENETR    10  3        81.71        82.43        82.13        81.71        +0.72        +0.42        +0.00
+
+  cone - sub, mean over 1 cells: +0.300 (min +0.300, max +0.300)
+  READ: if this is inside seed noise, the gain is the SPAN of the rays, not the conic
+        combination, and the paper should not be about cones.
+
+------------------------------------------------------------------------------------------------------------
+C5 MEMBER ABLATION -- A-Last, rule = cone
+------------------------------------------------------------------------------------------------------------
+
+  IMAGENETR T=10   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             80.76       81.53     -0.90
+    single:q32v1           80.76       81.73     -0.69
+    single:q32v2           80.72       81.83     -0.59
+    single:q32v3           80.71       81.82     -0.61
+    single:q32v4           80.54       81.56     -0.87
+    nested:M2              81.34       82.19     -0.23
+    nested:M3              81.62       82.29     -0.14
+    nested:M4              81.67       82.47     +0.04
+    loo:-q32               81.64       82.51     +0.08
+    loo:-q32v1             81.56       82.44     +0.02
+    loo:-q32v2             81.62       82.34     -0.09
+    loo:-q32v3             81.58       82.29     -0.14
+    full                   81.71       82.43     +0.00
+
+------------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  C2 is the decisive one. cone/sub/pm store the SAME rays at the SAME cost; only the scoring
+     rule differs. A cone-sub gap inside seed noise means the read-out is a low-rank region
+     score and "conic" is decoration. That outcome is the PRIOR here, not a surprise -- see
+     cone-is-dead-weight-final and nonneg-space-hypothesis-falsified.
+  C3 there is exactly one arm in this file and it was fixed before the run. Any table built
+     from it is free of the per-cell selection in results.txt. Cells where the arm CLIPS
+     (rays_for(ARM, median) >= median) are flagged in _meta and must be reported as such.
+  C5 read `nested:Mk` for saturation and `loo:-m` for attribution. If nested:M3 ~= full, the
+     method is 40% cheaper than published and that is a result, not a concession. If every
+     loo row is ~= full, no single member matters and the diversity story is about the
+     ENSEMBLE, not the members -- which C1 (seed-only ensemble) then has to rule out.
+  NONE of this addresses "is it just ensembling?" -- that is C1 and it needs new training.
+============================================================================================================
+[ 6767.1s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp66_controls_c1_augreg_in21k.json
++ echo '[chain] score OK'
+[chain] score OK
++ return 0
++ echo C1_DONE
+C1_DONE

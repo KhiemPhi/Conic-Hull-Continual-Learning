@@ -1,0 +1,169 @@
+[    0.0s] === CUB200P|20|0|q32+m32+a16+q32b70+q64|f8+f16+f32|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[    3.6s]     VERIFY: exp54 anchor N/A under ORDER=pilot (exp54 is legacy-order only); relying on the exp55 anchor, which is regenerated per order
+[    3.6s]     VERIFY: exp55 ensemble reference loaded
+[    3.6s]     5 members x 3 arms x 1 rules; 7 raysets x 1 rulesets x 1 orders = 7 configs
+[   56.7s]     VERIFY ok at s0: exp55 ensemble 0.991870
+[   56.9s]     s0: q32 99.19  m32 99.19  a16 99.19  q32b70 99.19  q64 99.19  | ens 99.19  bestFE 99.19
+[  156.2s]     s1: q32 97.87  m32 98.30  a16 97.87  q32b70 97.87  q64 98.30  | ens 98.30  bestFE 98.30
+[  278.5s]     s2: q32 97.08  m32 97.08  a16 97.96  q32b70 97.67  q64 97.08  | ens 97.67  bestFE 97.67
+[  421.3s]     s3: q32 97.41  m32 97.19  a16 97.41  q32b70 96.76  q64 97.19  | ens 97.41  bestFE 97.41
+[  589.4s]     s4: q32 95.85  m32 96.02  a16 96.54  q32b70 96.02  q64 96.54  | ens 96.71  bestFE 96.71
+[  804.5s]     s5: q32 94.65  m32 94.93  a16 94.93  q32b70 94.65  q64 95.22  | ens 95.51  bestFE 95.51
+[ 1061.8s]     s6: q32 92.23  m32 94.08  a16 92.60  q32b70 93.22  q64 93.59  | ens 93.71  bestFE 93.71
+[ 1326.1s]     s7: q32 94.05  m32 93.94  a16 93.62  q32b70 93.30  q64 94.05  | ens 93.84  bestFE 93.94
+[ 1646.7s]     s8: q32 94.20  m32 94.10  a16 93.91  q32b70 93.82  q64 94.01  | ens 94.01  bestFE 94.10
+[ 1992.5s]     s9: q32 93.28  m32 93.20  a16 92.42  q32b70 93.28  q64 93.11  | ens 93.37  bestFE 93.37
+[ 2360.1s]     s10: q32 93.28  m32 93.20  a16 92.50  q32b70 93.12  q64 93.28  | ens 93.44  bestFE 93.44
+[ 2770.4s]     s11: q32 92.24  m32 91.81  a16 91.74  q32b70 92.09  q64 92.52  | ens 92.66  bestFE 92.66
+[ 3221.4s]     s12: q32 90.97  m32 90.91  a16 91.56  q32b70 91.30  q64 90.71  | ens 91.43  bestFE 91.50
+[ 3743.9s]     s13: q32 91.50  m32 90.84  a16 91.69  q32b70 91.20  q64 90.90  | ens 91.63  bestFE 91.63
+[ 4282.3s]     s14: q32 91.04  m32 90.30  a16 91.04  q32b70 90.70  q64 90.93  | ens 91.22  bestFE 91.33
+[ 4862.4s]     s15: q32 90.44  m32 90.97  a16 89.58  q32b70 90.70  q64 90.81  | ens 90.92  bestFE 91.03
+[ 5478.7s]     s16: q32 89.91  m32 90.41  a16 89.41  q32b70 90.31  q64 90.61  | ens 90.51  bestFE 90.61
+[ 6128.2s]     s17: q32 89.87  m32 90.11  a16 90.20  q32b70 90.06  q64 90.53  | ens 90.44  bestFE 90.63
+[ 6807.6s]     s18: q32 89.46  m32 89.91  a16 88.96  q32b70 89.64  q64 90.13  | ens 90.00  bestFE 90.09
+[ 7521.0s]     s19: q32 89.10  m32 89.74  a16 88.55  q32b70 89.36  q64 89.91  | ens 89.65  bestFE 89.57
+[ 7521.0s]     VERIFY ok over all 20 stages: exp54=SKIPPED  exp55=yes
+[ 7521.0s]     cell took 7521s
+[ 7521.0s] === CUB200P|20|1|q32+m32+a16+q32b70+q64|f8+f16+f32|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[ 7523.1s]     5 members x 3 arms x 1 rules; 7 raysets x 1 rulesets x 1 orders = 7 configs
+[ 7572.7s]     s0: q32 99.20  m32 100.00  a16 99.20  q32b70 99.20  q64 100.00  | ens 99.20  bestFE 99.20
+[ 7666.0s]     s1: q32 99.12  m32 98.24  a16 99.12  q32b70 99.12  q64 98.68  | ens 98.68  bestFE 99.12
+[ 7786.9s]     s2: q32 98.55  m32 97.97  a16 98.55  q32b70 98.26  q64 98.55  | ens 98.55  bestFE 98.55
+[ 7949.0s]     s3: q32 98.31  m32 97.89  a16 97.68  q32b70 98.31  q64 98.10  | ens 98.10  bestFE 98.10
+[ 8135.4s]     s4: q32 96.86  m32 96.69  a16 97.36  q32b70 97.02  q64 97.19  | ens 97.36  bestFE 97.52
+[ 8364.8s]     s5: q32 96.24  m32 96.38  a16 96.52  q32b70 96.38  q64 96.80  | ens 96.80  bestFE 96.94
+[ 8615.2s]     s6: q32 94.15  m32 93.91  a16 94.99  q32b70 94.51  q64 94.99  | ens 94.87  bestFE 94.99
+[ 8896.2s]     s7: q32 94.33  m32 94.12  a16 94.86  q32b70 94.86  q64 94.86  | ens 94.86  bestFE 94.96
+[ 9234.6s]     s8: q32 94.45  m32 94.26  a16 94.83  q32b70 94.92  q64 94.73  | ens 95.11  bestFE 95.01
+[ 9585.8s]     s9: q32 94.03  m32 93.95  a16 94.54  q32b70 94.29  q64 94.20  | ens 94.54  bestFE 94.71
+[ 9968.4s]     s10: q32 93.92  m32 93.60  a16 94.07  q32b70 93.99  q64 94.15  | ens 94.23  bestFE 94.31
+[10390.4s]     s11: q32 93.63  m32 93.70  a16 93.84  q32b70 93.77  q64 94.05  | ens 94.05  bestFE 94.05
+[10831.1s]     s12: q32 92.20  m32 92.40  a16 92.80  q32b70 92.40  q64 92.53  | ens 92.73  bestFE 92.86
+[11324.0s]     s13: q32 92.04  m32 92.17  a16 92.47  q32b70 92.23  q64 92.04  | ens 92.66  bestFE 92.72
+[11873.0s]     s14: q32 91.40  m32 91.57  a16 91.45  q32b70 91.45  q64 90.82  | ens 91.51  bestFE 91.74
+[12458.3s]     s15: q32 89.77  m32 90.63  a16 90.20  q32b70 90.52  q64 90.20  | ens 90.36  bestFE 90.85
+[13080.0s]     s16: q32 89.64  m32 90.35  a16 89.99  q32b70 90.35  q64 89.34  | ens 90.40  bestFE 90.70
+[13740.7s]     s17: q32 89.50  m32 90.26  a16 89.98  q32b70 90.26  q64 89.27  | ens 90.35  bestFE 90.50
+[14395.7s]     s18: q32 88.77  m32 88.68  a16 89.49  q32b70 88.86  q64 88.46  | ens 89.66  bestFE 89.66
+[15124.2s]     s19: q32 88.85  m32 88.68  a16 89.57  q32b70 89.65  q64 88.51  | ens 89.61  bestFE 89.69
+[15124.2s]     cell took 7603s
+[15124.3s] === CUB200P|20|2|q32+m32+a16+q32b70+q64|f8+f16+f32|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[15126.2s]     5 members x 3 arms x 1 rules; 7 raysets x 1 rulesets x 1 orders = 7 configs
+[15188.5s]     s0: q32 98.54  m32 99.27  a16 97.81  q32b70 98.54  q64 98.54  | ens 98.54  bestFE 98.54
+[15278.7s]     s1: q32 95.92  m32 95.10  a16 96.33  q32b70 93.47  q64 96.33  | ens 96.33  bestFE 96.33
+[15385.7s]     s2: q32 96.16  m32 93.70  a16 95.62  q32b70 93.42  q64 95.89  | ens 95.62  bestFE 95.89
+[15531.2s]     s3: q32 92.93  m32 93.14  a16 92.93  q32b70 92.93  q64 93.97  | ens 93.76  bestFE 93.97
+[15700.8s]     s4: q32 92.70  m32 93.20  a16 93.03  q32b70 93.03  q64 93.86  | ens 93.03  bestFE 93.53
+[15925.0s]     s5: q32 93.37  m32 92.52  a16 92.10  q32b70 91.96  q64 93.37  | ens 92.81  bestFE 92.95
+[16177.3s]     s6: q32 93.72  m32 92.63  a16 91.91  q32b70 92.15  q64 93.00  | ens 92.75  bestFE 93.00
+[16468.5s]     s7: q32 92.96  m32 92.02  a16 91.81  q32b70 92.02  q64 92.96  | ens 93.07  bestFE 93.49
+[16760.2s]     s8: q32 93.12  m32 92.74  a16 91.16  q32b70 92.47  q64 92.56  | ens 92.93  bestFE 92.84
+[17098.0s]     s9: q32 92.91  m32 92.49  a16 92.74  q32b70 92.49  q64 92.74  | ens 93.08  bestFE 93.00
+[17460.0s]     s10: q32 91.46  m32 91.92  a16 91.39  q32b70 91.62  q64 91.92  | ens 92.07  bestFE 92.53
+[17858.0s]     s11: q32 90.68  m32 90.96  a16 90.82  q32b70 90.40  q64 89.85  | ens 90.96  bestFE 92.00
+[18289.0s]     s12: q32 90.75  m32 90.43  a16 90.69  q32b70 91.33  q64 91.07  | ens 91.01  bestFE 91.59
+[18766.4s]     s13: q32 91.30  m32 90.77  a16 90.65  q32b70 90.95  q64 89.99  | ens 91.13  bestFE 91.42
+[19250.5s]     s14: q32 90.68  m32 89.91  a16 89.79  q32b70 90.35  q64 90.63  | ens 90.24  bestFE 90.96
+[19809.2s]     s15: q32 89.98  m32 89.72  a16 89.93  q32b70 89.93  q64 89.88  | ens 90.04  bestFE 90.19
+[20383.5s]     s16: q32 89.88  m32 89.78  a16 90.12  q32b70 90.02  q64 89.83  | ens 90.12  bestFE 90.12
+[21010.5s]     s17: q32 89.91  m32 89.63  a16 89.81  q32b70 89.72  q64 89.63  | ens 89.81  bestFE 90.23
+[21673.4s]     s18: q32 89.73  m32 89.55  a16 89.46  q32b70 89.73  q64 89.87  | ens 89.69  bestFE 90.09
+[22384.1s]     s19: q32 89.86  m32 89.82  a16 89.48  q32b70 89.65  q64 89.74  | ens 89.65  bestFE 90.42
+[22384.1s]     cell took 7260s
+
+========================================================================================================
+EXP56 — does the cone read-out compose with the LoRA-member ensemble?
+========================================================================================================
+
+members ['q32', 'm32', 'a16', 'q32b70', 'q64']
+arms ['f8', 'f16', 'f32']  rules ['cone']  orders ['FE']  raysets all (7)  cells 9
+
+--------------------------------------------------------------------------------------------------------
+SHOPPING PENALTY — read before any accuracy. `sel` picks the config on VAL;
+`oracle` is the max over configs on TEST and is NOT obtainable.
+--------------------------------------------------------------------------------------------------------
+  ds             T order   sel(test)   oracle  penalty  sel val-test                 chosen config
+  CUB200P       10 FE          93.31    93.40     0.09          1.12               f8+f16+f32|cone
+  CUB200P       20 FE          93.44    93.46     0.01          0.62               f8+f16+f32|cone
+  IMAGENETAP    10 FE          73.02    73.08     0.06         -0.69               f8+f16+f32|cone
+
+--------------------------------------------------------------------------------------------------------
+A-Last — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  CUB200P       10     3    89.71    90.19     89.71    90.08     -0.11    89.91    +0.17
+  CUB200P       20     3    89.27    89.64     89.57    89.89     +0.25    89.76    +0.13
+  IMAGENETAP    10     3    62.76    63.38     64.53    65.53     +2.16    63.60    +1.93
+
+--------------------------------------------------------------------------------------------------------
+A-Avg — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  CUB200P       10     3    92.97    93.36     92.98    93.31     -0.05    93.85    -0.54
+  CUB200P       20     3    93.09    93.36     93.17    93.44     +0.08    94.08    -0.64
+  IMAGENETAP    10     3    71.09    72.16     71.74    73.02     +0.86    70.24    +2.78
+
+--------------------------------------------------------------------------------------------------------
+RAY-BUDGET SWEEP — single budgets, min to max. Does the cone's known
+monotonicity in R SURVIVE member averaging, or does the ensemble substitute for rays?
+--------------------------------------------------------------------------------------------------------
+  CUB200P T=10 (cpt=20)   fit rows/class 30-53 (median 43.0)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f8            +0.17    -0.04
+    f16           +0.16    -0.08
+    f32           +0.00    +0.08
+  CUB200P T=20 (cpt=10)   fit rows/class 26-52 (median 43.0)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f8            +0.10    +0.23
+    f16           +0.04    +0.18
+    f32           +0.30    +0.11
+  IMAGENETAP T=10 (cpt=20)   fit rows/class 1-75 (median 18.0)   CLIPPED ARMS ['f32']: k=min(R, n_rows), so these are 'one ray per point' at a DIFFERENT R per class, not a fixed budget
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f8            +1.67    +1.93
+    f16           +1.96    +1.87
+    f32*          +1.78    +1.11
+
+--------------------------------------------------------------------------------------------------------
+PRE-REGISTERED TEST — sel_FE vs ens_ranpac, IMAGENETR A-Last, per T
+--------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  0. SHOPPING PENALTY FIRST. This file evaluates up to ~1300 configs per cell. `oracle` is the
+     max over them on TEST and is not obtainable by any deployable system; `sel` picks on VAL
+     and is the only honest number. A large penalty means the sweep found noise, and a large
+     `sel val-test` means even the val-selected config overfits the split.
+  1. THE PRE-REGISTERED TEST is sel_FE - ens_ranpac on IMAGENETR A-Last. exp52's decomposition
+     says +0.30 (rays) + 0.08 (non-negativity) ~ +0.38 should survive and the +0.74 linear-
+     combination piece should NOT, because the member ensemble already bought it. Above +0.70
+     that reading is dead and the levers are independent.
+  2. EF/JT ISOLATE WHERE THE AVERAGING HAPPENS -- they do NOT test exp55's oracle_class_cv
+     (see the EF note in the header; none of these orderings weights members per class). The
+     informative column for them is `sel val-test`, NOT accuracy. Measured on the f32 control:
+     FE 0.86, EF 1.98, JT 2.37 -- the overfitting order is the exact inverse of the accuracy
+     order. FE fuses each member's cone against THAT member's own RanPAC in matched geometry
+     and renormalises before averaging; EF and JT fuse against a POOLED base and pay 2-3x the
+     val overfit for it. Treat a future EF/JT win as suspect until its gap matches FE's.
+  3. THE RAY SWEEP IS THE MECHANISM READ. exp53 found the fused gain monotone in R because the
+     cone is an AGGREGATOR of noisy atom sets. A member ensemble is also an aggregator. If the
+     substitution reading is right, the `q32 alone` column stays monotone in R while the FE/EF
+     columns FLATTEN -- the ensemble has already done the aggregating. A still-monotone FE
+     column would mean rays contribute something averaging cannot.
+  4. JT bounds FE and EF from above and is the most likely to overfit; believe it only if its
+     val-test gap is comparable to FE's. Configs above JT_MAX components are skipped and the
+     count is recorded in _meta, never silently dropped.
+========================================================================================================
+[22384.1s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp56_ray_ensemble_rsweep_augreg_in21k.json

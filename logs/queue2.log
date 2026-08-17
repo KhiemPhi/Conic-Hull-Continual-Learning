@@ -1,0 +1,314 @@
++ source /home/khiemphi/venvs/ml_env/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ case "$(uname)" in
++++ uname
+++ export VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ _OLD_VIRTUAL_PATH=/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ PATH=/home/khiemphi/venvs/ml_env/bin:/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ export PATH
+++ VIRTUAL_ENV_PROMPT='(ml_env) '
+++ export VIRTUAL_ENV_PROMPT
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='((ml_env) ) '
+++ export PS1
+++ hash -r
++ cd /home/khiemphi/Conic-Hull-Continual-Learning
++ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 ORDER=pilot
++ OMP_NUM_THREADS=1
++ MKL_NUM_THREADS=1
++ ORDER=pilot
++ export http_proxy=http://fwdproxy:8080 https_proxy=http://fwdproxy:8080 HF_HUB_DISABLE_XET=1
++ http_proxy=http://fwdproxy:8080
++ https_proxy=http://fwdproxy:8080
++ HF_HUB_DISABLE_XET=1
++ M=q32,q32v1,q32v2,q32v3,q32v4
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60
++ pgrep -f exp61_cone_only
++ sleep 60

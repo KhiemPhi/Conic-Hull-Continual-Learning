@@ -157,18 +157,49 @@ if not int(os.environ.get("ALLOW_UNPINNED", 0)):
         f"floor at 0.27. Prefix with OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 or ALLOW_UNPINNED=1.")
 
 un = F.un
-_SPEC = re.compile(r"^([qma])(\d+)(?:b(\d+))?$")
+_SPEC = re.compile(r"^([qma])(\d+)(?:b(\d+))?(?:v(\d+))?$")
 _TARGETS = {"q": ["attn.qkv", "attn.proj"],
             "m": ["mlp.fc1", "mlp.fc2"],
             "a": ["attn.qkv", "attn.proj", "mlp.fc1", "mlp.fc2"]}
 
 
 def parse_member(spec):
+    """(targets, rank, bag_fraction, seed_variant).
+
+    The optional `v{n}` suffix is the SEED-ONLY DIVERSITY control (C1). `q32v1` is
+    architecturally IDENTICAL to `q32` -- same targets, same rank, same bagging -- and differs
+    only in its LoRA initialisation. It exists so that
+
+        MEMBERS=q32,q32v1,q32v2,q32v3,q32v4
+
+    builds a five-member ensemble whose members differ by nothing but init, which is the
+    control that decides whether this project's headline gain comes from the DIVERSITY DESIGN
+    (mlp targets, all-targets, class bagging, rank 64) or merely from ensembling. Without a
+    distinguishing suffix that ensemble is inexpressible: the feature cache is named after the
+    spec and `feats` is keyed on it, so a repeated `q32` collapses to one member.
+    """
     m = _SPEC.match(spec)
-    assert m, (f"bad member spec {spec!r}; expected e.g. q32, m32, a16, q32b70 "
-               f"({{q|m|a}}{{rank}}[b{{pct}}])")
-    kind, rank, bag = m.group(1), int(m.group(2)), m.group(3)
-    return _TARGETS[kind], rank, (int(bag) / 100.0 if bag else 1.0)
+    assert m, (f"bad member spec {spec!r}; expected e.g. q32, m32, a16, q32b70, q32v1 "
+               f"({{q|m|a}}{{rank}}[b{{pct}}][v{{variant}}])")
+    kind, rank, bag, var = m.group(1), int(m.group(2)), m.group(3), m.group(4)
+    return (_TARGETS[kind], rank, (int(bag) / 100.0 if bag else 1.0),
+            int(var) if var is not None else None)
+
+
+def init_offset(spec):
+    """Per-member init offset. DO NOT CHANGE THE NON-VARIANT BRANCH.
+
+    Every cached `exp55_feats_*.npz` in this repo was produced with the offset equal to the
+    member's POSITION in MEMBERS. That rule is positional and therefore fragile, but changing
+    it now would not raise anything -- the caches are named by spec, so a re-run would happily
+    load features that the current code could no longer reproduce. So the positional rule is
+    frozen for specs without a variant tag.
+
+    Variants take a DISJOINT range (100 + n). MEMBERS is never near 100 long, so a variant
+    offset can never collide with a positional one, and `q32v1` gets the same init wherever it
+    sits in the member list -- which the positional rule cannot promise."""
+    _, _, _, var = parse_member(spec)
+    return 100 + var if var is not None else MEMBERS.index(spec)
 
 
 def bar_for(ds, T, seed):
@@ -212,17 +243,19 @@ def member_features(ds, T, seed, spec):
         log(f"    cached member {spec}")
         return z["Ftr"], z["Fte"]
 
-    targets, rank, bagfrac = parse_member(spec)
+    targets, rank, bagfrac, _var = parse_member(spec)
     tr_aug, tr_ev, ytr, te_ev, yte, n_cls = F.get_data(ds)
     cpt = n_cls // T
-    # Seed offset by the member index so members do not share an init, while the class ORDER
-    # stays keyed on `seed` alone -- the task split must be identical across members or they
-    # are not solving the same problem and nothing is comparable.
-    torch.manual_seed(seed * 1000 + MEMBERS.index(spec))
+    # Seed offset per member so members do not share an init, while the class ORDER stays
+    # keyed on `seed` alone -- the task split must be identical across members or they are not
+    # solving the same problem and nothing is comparable. See init_offset for why variants use
+    # a disjoint range and why the positional rule is frozen.
+    off = init_offset(spec)
+    torch.manual_seed(seed * 1000 + off)
     np.random.seed(seed)
     task0 = CO.class_order(n_cls, seed)[:cpt]
     if bagfrac < 1.0:
-        keep = np.random.default_rng(10_000 + seed * 100 + MEMBERS.index(spec)).permutation(
+        keep = np.random.default_rng(10_000 + seed * 100 + off).permutation(
             len(task0))[:max(2, int(round(bagfrac * len(task0))))]
         task0_tr = task0[np.sort(keep)]
     else:

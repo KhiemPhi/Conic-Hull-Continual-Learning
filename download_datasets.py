@@ -17,14 +17,32 @@ HuggingFace `datasets` (not cleanly in torchvision):
     StanfordCars  = Donghyun99/Stanford-Cars
     ImageNet-A    = barkermrl/imagenet-a   (200 classes, natural adversarial examples)
     ImageNet-R    = axiong/imagenet-r      (200 classes, renditions)
+Backbone-selection grid (exp65): tasks chosen to span distance from the backbones'
+pretraining distribution, which is the axis backbone rankings reorder along:
+    RESISC45      = timm/resisc45          (45 classes, satellite -- non-natural imagery)
+    SVHN          = ufldl-stanford/svhn    (10 classes, `cropped_digits` -- structured /
+                                            low-level, where CLIP's linear probe misleads)
+    DomainNet     = wltjr1007/DomainNet    (345 classes x 6 domains -- clipart, infograph,
+                                            painting, quickdraw, real, sketch)
+
+DomainNet carries the domain as a COLUMN, and all six domains are interleaved across the
+same parquet shards, so there is no way to pull only sketch/quickdraw: the full 18.5 GB
+comes down and the loader filters on `domain` afterwards. It is therefore excluded from
+the default run and must be requested by name (see HEAVY below).
+
+Two upstream mirrors are unreachable from a Meta devserver -- csr.bu.edu (official
+DomainNet) and ufldl.stanford.edu (SVHN, which is what torchvision's D.SVHN fetches) are
+both refused by the fwdproxy destination filter, not merely slow. Both are routed through
+HuggingFace here instead; do not "fix" SVHN back to torchvision without re-checking that.
 
 Usage
 -----
-    # everything
+    # everything except the HEAVY sets
     python -u download_datasets.py
 
-    # a subset
+    # a subset (HEAVY sets are only ever fetched when named explicitly)
     python -u download_datasets.py --only CIFAR100 CUB200
+    python -u download_datasets.py --only DomainNet
 
     # just what demo_cone_boundary needs (CIFAR-100)
     python -u download_datasets.py --only CIFAR100
@@ -51,17 +69,29 @@ DATA_DIR = "./data"
 # HuggingFace repos for the non-torchvision sets. CUB200/StanfordCars mirror
 # demo_joint_floor.HF_REPOS; ImageNet-A/R are the Hendrycks robustness sets
 # (200 classes each) pulled from community mirrors with image/label columns.
+# A value may be either "repo" or ("repo", "config") where the repo ships more than one
+# config -- SVHN has cropped_digits (the 32x32 classification set everyone means) and
+# full_numbers (detection crops), and load_dataset refuses to guess between them.
 HF_REPOS = {
     "CUB200": "Donghyun99/CUB-200-2011",
     "StanfordCars": "Donghyun99/Stanford-Cars",
     "ImageNet-A": "barkermrl/imagenet-a",
     "ImageNet-R": "axiong/imagenet-r",
+    "RESISC45": "timm/resisc45",
+    "SVHN": ("ufldl-stanford/svhn", "cropped_digits"),
+    "DomainNet": "wltjr1007/DomainNet",
 }
 
 # All dataset keys this script knows how to fetch.
 TORCHVISION = ["CIFAR100", "CIFAR10", "STL10", "FGVCAircraft", "Flowers102",
                "OxfordIIITPet", "Food101"]
 ALL = TORCHVISION + list(HF_REPOS)
+
+# Sets big enough that pulling them by accident is a real cost. Excluded from the default
+# run; `--only DomainNet` still works. DomainNet is 18.5 GB because the six domains cannot
+# be requested separately (see module docstring).
+HEAVY = ["DomainNet"]
+DEFAULT = [n for n in ALL if n not in HEAVY]
 
 
 def _set_proxy():
@@ -110,15 +140,23 @@ def _download_hf(name):
             f"HuggingFace `datasets` needed for {name}: pip install datasets"
         ) from e
 
-    repo = HF_REPOS[name]
+    spec = HF_REPOS[name]
+    repo, config = spec if isinstance(spec, tuple) else (spec, None)
     # Cache under ./data/hf so it lives next to the torchvision sets. The demos use
     # the default HF cache; set HF_HOME below so both agree.
     cache = os.path.join(DATA_DIR, "hf")
     os.makedirs(cache, exist_ok=True)
     os.environ.setdefault("HF_HOME", cache)
-    print(f"[hf] downloading {repo} → {cache}")
-    dd = load_dataset(repo, cache_dir=cache)
+    print(f"[hf] downloading {repo}{f' [{config}]' if config else ''} → {cache}")
+    dd = load_dataset(repo, config, cache_dir=cache)
     print(f"[hf] {repo} splits: { {k: len(v) for k, v in dd.items()} }")
+    print(f"[hf] {repo} columns: {dd[next(iter(dd))].column_names}")
+    if name == "DomainNet":
+        # The domain lives in a column, not a config or a split, so every consumer has to
+        # filter. Spell the mapping out here rather than making each caller rediscover it.
+        print("[hf] DomainNet: filter on the `domain` column — "
+              "0=clipart 1=infograph 2=painting 3=quickdraw 4=real 5=sketch; "
+              "`label` is the 345-way class, shared across all six domains")
 
 
 def download(name):
@@ -134,7 +172,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--only", nargs="+", metavar="NAME", choices=ALL,
-                    help=f"subset to download (default: all). choices: {', '.join(ALL)}")
+                    help=f"subset to download (default: all except {', '.join(HEAVY)}). "
+                         f"choices: {', '.join(ALL)}")
     ap.add_argument("--no-proxy", action="store_true",
                     help="do not auto-set fwdproxy (use when off-devserver)")
     ap.add_argument("-j", "--jobs", type=int, default=4, metavar="N",
@@ -145,10 +184,14 @@ def main():
     if not args.no_proxy:
         _set_proxy()
 
-    names = args.only or ALL
+    names = args.only or DEFAULT
     jobs = max(1, min(args.jobs, len(names)))
     print(f"[plan] downloading into {os.path.abspath(DATA_DIR)} "
           f"({jobs} parallel): {', '.join(names)}")
+    skipped = [n for n in HEAVY if n not in names]
+    if skipped:
+        print(f"[plan] skipping HEAVY: {', '.join(skipped)} "
+              f"(fetch with --only {' '.join(skipped)})")
 
     failed = []
     lock = threading.Lock()

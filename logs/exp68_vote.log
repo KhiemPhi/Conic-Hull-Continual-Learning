@@ -1,0 +1,32 @@
+[    0.0s] === IMAGENETR|10|0|q32+m32+a16+q32b70+q64|m10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[   31.8s]     VERIFY ok: all per-member and ensemble A_last match exp56 to 1e-9
+[   31.8s]     best 80.73  ens 81.62  oracle 86.90  headroom<maj 80%
+[   31.8s] === IMAGENETR|10|1|q32+m32+a16+q32b70+q64|m10000_ordpilot|v1
+[   62.2s]     VERIFY ok: all per-member and ensemble A_last match exp56 to 1e-9
+[   62.2s]     best 81.10  ens 81.97  oracle 87.37  headroom<maj 77%
+[   62.2s] === IMAGENETR|10|2|q32+m32+a16+q32b70+q64|m10000_ordpilot|v1
+[   93.8s]     VERIFY ok: all per-member and ensemble A_last match exp56 to 1e-9
+[   93.8s]     best 81.00  ens 81.77  oracle 86.17  headroom<maj 78%
+
+================================================================================================
+EXP68 -- VOTE STRUCTURE: where the ensemble's unclaimed oracle headroom lives
+================================================================================================
+
+IMAGENETR T=10   3 seed(s), members ['q32', 'm32', 'a16', 'q32b70', 'q64'], majority = 3/5
+  best single 80.94   ensemble 81.78   ORACLE 86.81   no member right 13.19
+  headroom (oracle - best single) +5.87 pts; ensemble captures +0.84 = 14%
+
+   k correct     mass  ens acc here  best acc here
+           0    13.2%          0.5%           0.0%
+           1     3.5%         11.6%          17.8%
+           2     3.0%         45.3%          41.3%
+           3     3.2%         88.6%          72.6%
+           4     5.1%         99.6%          92.4%
+           5    72.1%        100.0%         100.0%
+
+      headroom mass by kTraceback (most recent call last):
+  File "/home/khiemphi/Conic-Hull-Continual-Learning/exp68_vote_structure.py", line 261, in <module>
+    print(f"  k={kk}: {np.mean([v['headroom_frac_by_k'][str(kk)] for v in vs])*100:.0f}%",
+                                ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+KeyError: '1'

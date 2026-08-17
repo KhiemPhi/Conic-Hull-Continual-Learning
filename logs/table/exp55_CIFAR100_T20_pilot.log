@@ -1,0 +1,244 @@
+[    0.0s] === CIFAR100|20|0|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  175.8s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=5) task0 train acc 0.998
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  411.5s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=5) task0 train acc 0.999
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  592.1s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=4) task0 train acc 0.999
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  784.8s]     trained member q64 (targets=['attn.qkv', 'attn.proj'] rank=64 bag=1 cls=5) task0 train acc 0.998
+[  826.7s]     member q32      A-Last 91.11  A-Avg 94.69
+[  836.4s]     member m32      A-Last 91.73  A-Avg 94.80
+[  845.9s]     member a16      A-Last 91.67  A-Avg 94.94
+[  855.6s]     member q32b70   A-Last 91.40  A-Avg 94.69
+[  865.2s]     member q64      A-Last 91.82  A-Avg 94.96
+[  887.0s]     concat   (3840d) A-Last 92.15  A-Avg 95.19
+[  887.1s]     ensemble           A-Last 92.32  A-Avg 95.29
+[  887.2s]     VERIFY ok: member q32 reproduces the exp16 bar
+[  887.2s] === CIFAR100|20|1|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1063.1s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=5) task0 train acc 0.998
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1311.3s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=5) task0 train acc 0.996
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1522.3s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=4) task0 train acc 0.996
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 1752.1s]     trained member q64 (targets=['attn.qkv', 'attn.proj'] rank=64 bag=1 cls=5) task0 train acc 0.995
+[ 1801.8s]     member q32      A-Last 92.25  A-Avg 95.41
+[ 1814.4s]     member m32      A-Last 91.91  A-Avg 95.28
+[ 1825.3s]     member a16      A-Last 91.84  A-Avg 95.23
+[ 1837.1s]     member q32b70   A-Last 91.95  A-Avg 95.27
+[ 1849.3s]     member q64      A-Last 92.31  A-Avg 95.37
+[ 1873.1s]     concat   (3840d) A-Last 92.71  A-Avg 95.79
+[ 1873.2s]     ensemble           A-Last 92.80  A-Avg 95.86
+[ 1873.4s] === CIFAR100|20|2|q32+m32+a16+q32b70+q64|ep40_lr0.0003_a4_ordpilot|m10000|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 2,949,120 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2082.7s]     trained member m32 (targets=['mlp.fc1', 'mlp.fc2'] rank=32 bag=1 cls=5) task0 train acc 0.997
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=16, alpha=4.0, targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 2,359,296 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2345.7s]     trained member a16 (targets=['attn.qkv', 'attn.proj', 'mlp.fc1', 'mlp.fc2'] rank=16 bag=1 cls=5) task0 train acc 0.997
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2550.1s]     trained member q32b70 (targets=['attn.qkv', 'attn.proj'] rank=32 bag=0.7 cls=4) task0 train acc 0.994
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=64, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 3,538,944 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[ 2774.6s]     trained member q64 (targets=['attn.qkv', 'attn.proj'] rank=64 bag=1 cls=5) task0 train acc 0.998
+[ 2826.3s]     member q32      A-Last 92.23  A-Avg 95.23
+[ 2837.9s]     member m32      A-Last 92.01  A-Avg 95.00
+[ 2849.6s]     member a16      A-Last 92.42  A-Avg 95.36
+[ 2860.6s]     member q32b70   A-Last 92.07  A-Avg 95.16
+[ 2872.0s]     member q64      A-Last 92.23  A-Avg 95.13
+[ 2895.0s]     concat   (3840d) A-Last 92.49  A-Avg 95.48
+[ 2895.1s]     ensemble           A-Last 92.89  A-Avg 95.77
+
+====================================================================================================
+EXP55 — LoRA member diversity (RanPAC only; no cones, no fusion, no beta)
+====================================================================================================
+
+members ['q32', 'm32', 'a16', 'q32b70', 'q64']   recipe ep40_lr0.0003_a4_ordpilot   ORDER=pilot   cells 24   (3 cells in the JSON belong to a DIFFERENT recipe/order and were excluded)
+    CIFAR100 T=10: seeds [0, 1, 2]
+    CIFAR100 T=20: seeds [0, 1, 2]
+    CUB200P T=10: seeds [0, 1, 2]
+    CUB200P T=20: seeds [0, 1, 2]
+    IMAGENETAP T=10: seeds [0, 1, 2]
+    IMAGENETAP T=20: seeds [0, 1, 2]
+    IMAGENETR T=10: seeds [0, 1, 2]
+    IMAGENETR T=20: seeds [0, 1, 2]
+
+----------------------------------------------------------------------------------------------------
+PRECONDITION — is there anything to ensemble? (read before accuracy)
+----------------------------------------------------------------------------------------------------
+  ds          pair                disagree   errcorr  both_wrong
+  CIFAR100    q32|m32                 4.1%      0.77        5.8%
+  CIFAR100    q32|a16                 4.0%      0.78        5.9%
+  CIFAR100    q32|q32b70              3.7%      0.79        5.9%
+  CIFAR100    q32|q64                 3.1%      0.82        6.0%
+  CIFAR100    m32|a16                 4.2%      0.76        5.8%
+  CIFAR100    m32|q32b70              4.7%      0.73        5.6%
+  CIFAR100    m32|q64                 4.2%      0.76        5.7%
+  CIFAR100    a16|q32b70              4.5%      0.74        5.7%
+  CIFAR100    a16|q64                 3.9%      0.77        5.8%
+  CIFAR100    q32b70|q64              3.6%      0.79        5.9%
+  CIFAR100    q32|m32                 4.9%      0.75        6.3%
+  CIFAR100    q32|a16                 4.5%      0.77        6.4%
+  CIFAR100    q32|q32b70              4.4%      0.78        6.5%
+  CIFAR100    q32|q64                 3.8%      0.80        6.5%
+  CIFAR100    m32|a16                 4.7%      0.76        6.3%
+  CIFAR100    m32|q32b70              5.0%      0.74        6.2%
+  CIFAR100    m32|q64                 4.5%      0.76        6.3%
+  CIFAR100    a16|q32b70              4.9%      0.75        6.2%
+  CIFAR100    a16|q64                 4.3%      0.77        6.3%
+  CIFAR100    q32b70|q64              4.4%      0.77        6.4%
+  CUB200P     q32|m32                 4.1%      0.84        8.8%
+  CUB200P     q32|a16                 4.7%      0.82        8.7%
+  CUB200P     q32|q32b70              3.6%      0.86        9.0%
+  CUB200P     q32|q64                 3.6%      0.86        9.0%
+  CUB200P     m32|a16                 5.1%      0.80        8.5%
+  CUB200P     m32|q32b70              4.3%      0.84        8.8%
+  CUB200P     m32|q64                 4.4%      0.83        8.8%
+  CUB200P     a16|q32b70              4.7%      0.83        8.8%
+  CUB200P     a16|q64                 4.4%      0.84        8.9%
+  CUB200P     q32b70|q64              4.0%      0.84        8.9%
+  CUB200P     q32|m32                 4.2%      0.84        9.1%
+  CUB200P     q32|a16                 4.4%      0.83        9.2%
+  CUB200P     q32|q32b70              3.8%      0.85        9.2%
+  CUB200P     q32|q64                 3.3%      0.87        9.4%
+  CUB200P     m32|a16                 4.7%      0.82        9.0%
+  CUB200P     m32|q32b70              4.6%      0.82        8.8%
+  CUB200P     m32|q64                 4.4%      0.83        9.0%
+  CUB200P     a16|q32b70              4.2%      0.85        9.2%
+  CUB200P     a16|q64                 4.6%      0.84        9.1%
+  CUB200P     q32b70|q64              4.0%      0.84        9.0%
+  IMAGENETAP  q32|m32                25.5%      0.75       32.6%
+  IMAGENETAP  q32|a16                24.2%      0.77       32.7%
+  IMAGENETAP  q32|q32b70             19.4%      0.82       33.6%
+  IMAGENETAP  q32|q64                18.5%      0.82       33.6%
+  IMAGENETAP  m32|a16                26.1%      0.74       33.4%
+  IMAGENETAP  m32|q32b70             24.4%      0.77       33.6%
+  IMAGENETAP  m32|q64                23.4%      0.77       33.4%
+  IMAGENETAP  a16|q32b70             25.1%      0.76       33.2%
+  IMAGENETAP  a16|q64                23.2%      0.78       33.5%
+  IMAGENETAP  q32b70|q64             18.6%      0.82       34.2%
+  IMAGENETAP  q32|m32                23.3%      0.79       36.1%
+  IMAGENETAP  q32|a16                25.3%      0.79       36.7%
+  IMAGENETAP  q32|q32b70             18.6%      0.84       38.3%
+  IMAGENETAP  q32|q64                15.6%      0.86       37.8%
+  IMAGENETAP  m32|a16                28.3%      0.75       35.9%
+  IMAGENETAP  m32|q32b70             25.4%      0.78       37.1%
+  IMAGENETAP  m32|q64                22.7%      0.80       36.6%
+  IMAGENETAP  a16|q32b70             27.2%      0.77       37.6%
+  IMAGENETAP  a16|q64                25.0%      0.80       37.1%
+  IMAGENETAP  q32b70|q64             17.5%      0.85       39.0%
+  IMAGENETR   q32|m32                15.5%      0.75       16.0%
+  IMAGENETR   q32|a16                14.4%      0.77       16.2%
+  IMAGENETR   q32|q32b70             12.1%      0.81       16.7%
+  IMAGENETR   q32|q64                10.6%      0.83       16.7%
+  IMAGENETR   m32|a16                15.4%      0.76       16.8%
+  IMAGENETR   m32|q32b70             15.8%      0.75       16.4%
+  IMAGENETR   m32|q64                15.0%      0.76       16.2%
+  IMAGENETR   a16|q32b70             14.8%      0.77       16.6%
+  IMAGENETR   a16|q64                14.0%      0.78       16.3%
+  IMAGENETR   q32b70|q64             11.3%      0.82       16.9%
+  IMAGENETR   q32|m32                15.3%      0.77       17.4%
+  IMAGENETR   q32|a16                14.7%      0.78       17.5%
+  IMAGENETR   q32|q32b70             12.4%      0.82       18.0%
+  IMAGENETR   q32|q64                10.9%      0.84       18.0%
+  IMAGENETR   m32|a16                15.9%      0.77       18.2%
+  IMAGENETR   m32|q32b70             16.0%      0.77       18.1%
+  IMAGENETR   m32|q64                15.7%      0.76       17.6%
+  IMAGENETR   a16|q32b70             15.1%      0.78       18.1%
+  IMAGENETR   a16|q64                14.4%      0.79       17.8%
+  IMAGENETR   q32b70|q64             11.9%      0.84       18.5%
+
+  ds            best single  per-class cv  per-class*   ORACLE  cv share   <- can a PER-CLASS rule reach it?
+  CIFAR100            92.88         92.83       94.01    95.48      -2%
+  CIFAR100            92.18         91.99       93.28    95.14      -6%
+  CUB200P             89.99         89.61       91.77    92.48     -15%
+  CUB200P             89.81         89.37       91.50    92.37     -17%
+  IMAGENETAP          62.89         62.16       68.33    71.51      -9%
+  IMAGENETAP          60.51         59.07       64.96    67.89     -20%
+  IMAGENETR           80.94         80.48       83.53    86.81      -8%
+  IMAGENETR           79.63         79.26       82.22    85.33      -7%
+   * per-class fitted on the rows it scores = upper bound; `cv` cross-fits within each class and is the realizable number. `cv share` = (cv - best) / (ORACLE - best).
+
+  ds          per-class winner counts (which member is best on how many classes)
+  CIFAR100    q32:32  m32:21  a16:16  q32b70:16  q64:14
+  CIFAR100    q32:35  m32:25  a16:18  q32b70:9  q64:12
+  CUB200P     q32:160  m32:18  a16:12  q32b70:3  q64:4
+  CUB200P     q32:156  m32:19  a16:11  q32b70:7  q64:5
+  IMAGENETAP  q32:136  m32:26  a16:19  q32b70:11  q64:7
+  IMAGENETAP  q32:135  m32:30  a16:18  q32b70:7  q64:8
+  IMAGENETR   q32:96  m32:36  a16:26  q32b70:19  q64:21
+  IMAGENETR   q32:97  m32:36  a16:27  q32b70:21  q64:18
+
+----------------------------------------------------------------------------------------------------
+A-Last — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds             T  sd         q32         m32         a16      q32b70         q64      concat    ensemble   concat-q32   GR-LoRA   ens-GR
+  CIFAR100      10   3       92.72       92.46       92.56       92.59       92.81       93.09       93.27        +0.37     91.97    +1.30
+  CIFAR100      20   3       91.86       91.88       91.98       91.81       92.12       92.45       92.67        +0.59     91.46    +1.21
+  CUB200P       10   3       89.71       89.71       89.50       89.68       89.67       89.86       90.19        +0.16     89.91    +0.28
+  CUB200P       20   3       89.27       89.41       89.20       89.55       89.38       89.71       89.64        +0.44     89.76    -0.12
+  IMAGENETAP    10   3       62.76       60.13       60.93       61.49       61.78       63.22       63.38        +0.47     63.60    -0.22
+  IMAGENETAP    20   3       59.11       58.60       57.27       56.31       58.62       60.07       59.73        +0.96     62.37    -2.64
+  IMAGENETR     10   3       80.76       79.07       79.51       79.78       80.69       81.54       81.78        +0.78     82.09    -0.31
+  IMAGENETR     20   3       79.63       77.57       78.20       78.33       79.22       79.94       80.31        +0.31     80.23    +0.08
+
+----------------------------------------------------------------------------------------------------
+A-Avg — RanPAC on each feature set, mean over seeds
+----------------------------------------------------------------------------------------------------
+  ds             T  sd         q32         m32         a16      q32b70         q64      concat    ensemble   concat-q32   GR-LoRA   ens-GR
+  CIFAR100      10   3       95.51       95.29       95.41       95.44       95.59       95.81       95.89        +0.30     94.65    +1.24
+  CIFAR100      20   3       95.11       95.02       95.17       95.04       95.15       95.49       95.64        +0.38     94.41    +1.23
+  CUB200P       10   3       92.97       93.06       92.86       93.00       92.89       93.11       93.36        +0.14     93.85    -0.49
+  CUB200P       20   3       93.09       93.02       93.01       93.01       93.20       93.18       93.36        +0.10     94.08    -0.72
+  IMAGENETAP    10   3       71.09       69.22       69.54       70.31       70.73       72.19       72.16        +1.10     70.24    +1.92
+  IMAGENETAP    20   3       68.33       68.57       67.41       66.08       68.27       69.56       69.14        +1.23     69.30    -0.16
+  IMAGENETR     10   3       85.49       84.37       84.68       84.61       85.52       86.36       86.55        +0.87     86.20    +0.35
+  IMAGENETR     20   3       84.76       83.32       83.71       83.62       84.34       85.16       85.32        +0.39     85.05    +0.27
+
+----------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. PRECONDITION FIRST. `headroom` = ORACLE - best_single is the ceiling for ANY combiner:
+     it is the accuracy of an oracle that picks a correct member whenever one exists. A
+     headroom near zero means the members are redundant and NO fusion recovers anything --
+     the answer is then harsher diversity (bagging, disjoint target modules, different
+     ranks) or a different mechanism entirely, NOT a cleverer combination rule. That is
+     exactly the trap exp54 fell into at the rule level.
+  2. `disagree` near 0 with `errcorr` near 1 means the members are the same network wearing
+     different hats. Expected for members differing only by init, which is precisely why the
+     default member set varies TARGET MODULES instead.
+  3. `concat - q32` is the Tier 2 verdict. Our IMAGENETR base deficit is -0.89 A-Avg, so
+     under about +0.5 means concatenation does not close it and nothing built on top will.
+  4. `ensemble` vs `concat` separates the two mechanisms: score averaging tests
+     decorrelation, concatenation tests representational richness. They can disagree, and
+     which one wins says what the members are actually contributing.
+  5. Members are NOT expected to be individually equal. `m32` adapting only the MLP may well
+     be worse alone than `q32`; a worse-but-decorrelated member is useful and that is the
+     whole premise. Judge members by the diversity table, not by their solo accuracy.
+====================================================================================================
+[ 2895.2s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp55_lora_diversity_augreg_in21k.json

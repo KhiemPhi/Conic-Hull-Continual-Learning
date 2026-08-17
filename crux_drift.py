@@ -18,6 +18,7 @@ Protocol
      (c) Gram / relative-geom    stability(is the class arrangement preserved? -> idea 3)
      (d) separability retained under each correction (stale / oracle / rotation).
 """
+import os
 import numpy as np
 import torch
 import torch.nn as nn
@@ -28,7 +29,7 @@ from timm.data import resolve_model_data_config, create_transform
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
 
-SEED = 0
+SEED = int(os.environ.get("SEED", 0))   # was hardcoded 0; seeds now env-driven
 torch.manual_seed(SEED); np.random.seed(SEED)
 DEV = "cuda"
 # orig_in21k weights are behind a blocked CDN on this box; use the locally-cached
@@ -135,7 +136,7 @@ F1_old_te, y1_old_te = extract(phi1, False, 0, N_OLD)
 F1_new_te, y1_new_te = extract(phi1, False, N_OLD, 100)
 assert np.array_equal(y0_old_te, y1_old_te)     # same samples, same order
 
-np.savez("crux_drift_feats.npz",
+np.savez(f"crux_drift_feats_s{SEED}.npz",
          F0_old_tr=F0_old_tr, F0_old_te=F0_old_te, F0_new_te=F0_new_te,
          F1_old_tr=F1_old_tr, F1_old_te=F1_old_te, F1_new_te=F1_new_te,
          y_old_tr=y0_old_tr, y_old_te=y0_old_te, y_new_te=y0_new_te)

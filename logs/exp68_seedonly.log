@@ -1,0 +1,47 @@
+[    0.0s] === IMAGENETR|10|0|q32+q32v1+q32v2+q32v3+q32v4|m10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[   31.0s]     VERIFY: no exp56 cell for this member set (expected for seed-only)
+[   31.1s]     best 80.80  ens 81.70  oracle 86.02  headroom<maj 70%
+[   31.1s] === IMAGENETR|10|1|q32+q32v1+q32v2+q32v3+q32v4|m10000_ordpilot|v1
+[   60.3s]     VERIFY: no exp56 cell for this member set (expected for seed-only)
+[   60.3s]     best 81.10  ens 81.63  oracle 86.02  headroom<maj 70%
+[   60.3s] === IMAGENETR|10|2|q32+q32v1+q32v2+q32v3+q32v4|m10000_ordpilot|v1
+[   90.4s]     VERIFY: no exp56 cell for this member set (expected for seed-only)
+[   90.4s]     best 81.30  ens 81.78  oracle 86.02  headroom<maj 75%
+
+================================================================================================
+EXP68 -- VOTE STRUCTURE: where the ensemble's unclaimed oracle headroom lives
+================================================================================================
+
+IMAGENETR T=10   3 seed(s), members ['q32', 'q32v1', 'q32v2', 'q32v3', 'q32v4'], majority = 3/5
+  best single 81.07   ensemble 81.71   ORACLE 86.02   no member right 13.98
+  headroom (oracle - best single) +4.95 pts; ensemble captures +0.64 = 13%
+
+   k correct     mass  ens acc here  best acc here
+           0    14.0%          0.4%           0.0%
+           1     2.8%          4.7%          18.2%
+           2     2.2%         42.7%          42.9%
+           3     2.7%         84.9%          66.6%
+           4     3.4%         99.2%          85.1%
+           5    74.9%        100.0%         100.0%
+
+      headroom mass by k  k=1: 46%  k=2: 25%  k=3: 18%  k=4: 10%  k=5: 0%
+  headroom BELOW majority (k<3): 72%   ensemble recovers 38% of headroom   breaks 0.00% of unanimous-correct
+  -> COMBINER NOT FIXABLE -- headroom is minority-correct
+
+------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. `mass` at k=0 is the irreducible floor for THIS member pool: no combination rule, however
+     clever, can classify those samples. It bounds every ensemble result in the paper.
+  2. Uniform averaging behaves like a vote near the boundary, so it can only recover samples a
+     MAJORITY already gets right. `headroom BELOW majority` is therefore the share of the
+     unclaimed oracle gap that averaging is STRUCTURALLY unable to reach. Pre-registered: >=60%
+     means the combiner is not the problem to fix -- the member pool is.
+  3. `breaks % of unanimous-correct` is the cost side: samples every member gets right that the
+     average gets wrong. Small here, but it is why the ensemble does not strictly dominate.
+  4. Compare the structural pool against the seed-only pool (SUFFIX=_seedonly). C1 found their
+     ensembles tie despite the structural pool having a HIGHER oracle; if its extra headroom
+     sits below majority, that tie is explained and the diversity design is not at fault --
+     the combiner is.
+================================================================================================
+[   90.4s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp68_vote_structure_seedonly_augreg_in21k.json

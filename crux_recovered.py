@@ -25,6 +25,7 @@ Diagnostics
                              recovered/recovered high but oracle/recovered low
                              => coherent-but-misaligned space (a frame error, not noise).
 """
+import os
 import numpy as np
 import torch
 import torch.nn as nn
@@ -35,7 +36,7 @@ from timm.data import resolve_model_data_config, create_transform
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
 
-SEED = 0
+SEED = int(os.environ.get("SEED", 0))   # was hardcoded 0; seeds now env-driven
 torch.manual_seed(SEED); np.random.seed(SEED)
 DEV = "cuda"
 MODEL = "vit_base_patch16_224.augreg2_in21k_ft_in1k"

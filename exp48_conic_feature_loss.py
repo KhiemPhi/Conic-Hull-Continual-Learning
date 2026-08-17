@@ -147,7 +147,8 @@ from torch.utils.data import DataLoader, Subset
 
 # exp19_dataset_hull parses T and SEED as scalars at import time; keep them scalar here.
 import exp39_cone_construction as X          # noqa: E402
-import fsa_train as F                        # noqa: E402
+import fsa_train as F
+import class_order as CO                        # noqa: E402
 from backbone import freeze_non_lora, get_lora_params, load_backbone  # noqa: E402
 
 T0 = time.time()
@@ -334,6 +335,7 @@ def train(arm):
     # v2's episode depends on GAMMA and KM_ITERS; v1's does not. Suffix only the v2 arms so
     # every existing v1 cache still hits.
     tag += f"_g{GAMMA:g}km{KM_ITERS}" if v2 else ""
+    tag += CO.order_tag()
     cache = os.path.join(REPO, f"exp48_feats_{tag}_{TAG}.npz")
     if os.path.exists(cache):
         z = np.load(cache)
@@ -343,7 +345,7 @@ def train(arm):
     tr_aug, tr_ev, ytr, te_ev, yte, n_cls = F.get_data(DS)
     cpt = n_cls // T
     torch.manual_seed(SEED); np.random.seed(SEED)
-    order = np.random.default_rng(SEED).permutation(n_cls)
+    order = CO.class_order(n_cls, SEED)   # was default_rng(SEED) = LEGACY order
     tasks = [order[i * cpt:(i + 1) * cpt] for i in range(T)]
 
     model = load_backbone(F.MODEL, pretrained=True, num_classes=0, device=DEV,
@@ -456,7 +458,7 @@ def evaluate(Ftr, Fte, ytr, yte, n_cls):
     Ztr, Zte = un(Ftr), un(Fte)
     d = Ztr.shape[1]
     cpt = n_cls // T
-    order = np.random.default_rng(SEED).permutation(n_cls)
+    order = CO.class_order(n_cls, SEED)   # was default_rng(SEED) = LEGACY order
     tasks = [order[i * cpt:(i + 1) * cpt] for i in range(T)]
     FIT = []
     for t in range(T):
@@ -556,7 +558,8 @@ if __name__ == "__main__":
         Ftr, Fte, ON_tr, ON_te = train(arm)
         for proto in PROTOCOLS:
             key = (f"{DS}|{T}|{SEED}|{arm}|{proto}|e{EPOCHS_T0}-{EPOCHS_T}|lam{LAM:g}"
-                   f"|P{P_CLS}K{K_ROW}s{N_SUP}R{R_EP}_t{TAU:g}|g{GAMMA:g}_k{KVAL:g}m{RMIN}|v2")
+                   f"|P{P_CLS}K{K_ROW}s{N_SUP}R{R_EP}_t{TAU:g}|g{GAMMA:g}_k{KVAL:g}m{RMIN}"
+                   f"{CO.order_tag()}|v2")
             if key in allres:
                 log(f"skip {key}"); continue
             log(f"=== {key}")

@@ -1,0 +1,385 @@
++ source /home/khiemphi/venvs/ml_env/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ case "$(uname)" in
++++ uname
+++ export VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ _OLD_VIRTUAL_PATH=/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ PATH=/home/khiemphi/venvs/ml_env/bin:/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ export PATH
+++ VIRTUAL_ENV_PROMPT='(ml_env) '
+++ export VIRTUAL_ENV_PROMPT
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='((ml_env) ) '
+++ export PS1
+++ hash -r
++ cd /home/khiemphi/Conic-Hull-Continual-Learning
++ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 ORDER=pilot
++ OMP_NUM_THREADS=1
++ MKL_NUM_THREADS=1
++ ORDER=pilot
++ export http_proxy=http://fwdproxy:8080 https_proxy=http://fwdproxy:8080
++ http_proxy=http://fwdproxy:8080
++ https_proxy=http://fwdproxy:8080
++ export HF_HUB_DISABLE_XET=1
++ HF_HUB_DISABLE_XET=1
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ sleep 60
++ pgrep -f run_c1.sh
++ echo '[chain] C1 finished, starting C6'
+[chain] C1 finished, starting C6
++ for i in 1 2 3 4
++ echo '[chain] C6 attempt 1/4'
+[chain] C6 attempt 1/4
++ MODE=scale
++ MODEL=vit_large_patch16_224.augreg_in21k
++ DS=IMAGENETR
++ T=10
++ SEED=0,1,2
++ python -u exp67_cost_and_scale.py
+[    0.0s] === vit_large_patch16_224__augreg_in21k|IMAGENETR|10|0|q32|ep40_lr0.0003_ordpilot|m10000|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 4,718,592 trainable adapter params
+[load_backbone] 'vit_large_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=1024
+[   21.6s]       ep  0 task0 train acc 0.255
+[  119.5s]       ep 10 task0 train acc 0.982
+[  215.0s]       ep 20 task0 train acc 0.987
+[  310.5s]       ep 30 task0 train acc 0.988
+[  395.0s]       ep 39 task0 train acc 0.993
+[  476.6s]     A_last 84.37  A_avg 88.55  (477s)
+[  476.6s] === vit_large_patch16_224__augreg_in21k|IMAGENETR|10|1|q32|ep40_lr0.0003_ordpilot|m10000|v1
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 4,718,592 trainable adapter params
+[load_backbone] 'vit_large_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=1024
+[  495.0s]       ep  0 task0 train acc 0.259
+[  597.7s]       ep 10 task0 train acc 0.978
+[  696.0s]       ep 20 task0 train acc 0.992
+[  813.7s]       ep 30 task0 train acc 0.990
+[  905.2s]       ep 39 task0 train acc 0.989
+[  961.9s]     A_last 85.27  A_avg 88.78  (485s)
+[  961.9s] === vit_large_patch16_224__augreg_in21k|IMAGENETR|10|2|q32|ep40_lr0.0003_ordpilot|m10000|v1
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 4,718,592 trainable adapter params
+[load_backbone] 'vit_large_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=1024
+[  980.4s]       ep  0 task0 train acc 0.198
+[ 1082.8s]       ep 10 task0 train acc 0.970
+[ 1178.1s]       ep 20 task0 train acc 0.986
+[ 1275.4s]       ep 30 task0 train acc 0.983
+[ 1364.0s]       ep 39 task0 train acc 0.989
+[ 1419.0s]     A_last 84.88  A_avg 89.43  (457s)
+
+====================================================================================================
+C6 EQUAL-INFERENCE-BUDGET BASELINE -- vit_large_patch16_224.augreg_in21k, single LoRA r32 + RanPAC, PILOT order
+====================================================================================================
+  ds             T  n          A-Last           A-Avg
+  IMAGENETR     10  3     84.84±0.45      88.92±0.46 
+
+  Compare against the 5-member ensemble at the SAME inference cost -- see the C7
+  latency rows. If this ties the ensemble, the paper's gain is capacity, not diversity.
+====================================================================================================
+[ 1419.0s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp67_cost_and_scale.json
++ echo '[chain] C6 OK'
+[chain] C6 OK
++ break
++ echo C6_DONE
+C6_DONE

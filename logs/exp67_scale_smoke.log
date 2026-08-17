@@ -1,0 +1,18 @@
+[    0.0s] === vit_large_patch16_224__augreg_in21k|IMAGENETR|10|0|q32|ep1_lr0.0003_ordpilot|m10000|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 48 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 48 layers, 4,718,592 trainable adapter params
+[load_backbone] 'vit_large_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=1024
+[  185.9s]       ep  0 task0 train acc 0.193
+[  259.9s]     A_last 75.10  A_avg 80.46  (260s)
+
+====================================================================================================
+C6 EQUAL-INFERENCE-BUDGET BASELINE -- vit_large_patch16_224.augreg_in21k, single LoRA r32 + RanPAC, PILOT order
+====================================================================================================
+  ds             T  n          A-Last           A-Avg
+  IMAGENETR     10  1     75.10±nan       80.46±nan  
+
+  Compare against the 5-member ensemble at the SAME inference cost -- see the C7
+  latency rows. If this ties the ensemble, the paper's gain is capacity, not diversity.
+====================================================================================================
+[  259.9s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp67_cost_and_scale_smoke.json

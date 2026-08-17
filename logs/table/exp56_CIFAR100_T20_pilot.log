@@ -1,0 +1,189 @@
+[    0.0s] === CIFAR100|20|0|q32+m32+a16+q32b70+q64|f64|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[    7.0s]     VERIFY: exp54 anchor N/A under ORDER=pilot (exp54 is legacy-order only); relying on the exp55 anchor, which is regenerated per order
+[    7.0s]     VERIFY: exp55 ensemble reference loaded
+[    7.0s]     5 members x 1 arms x 1 rules; 1 raysets x 1 rulesets x 1 orders = 1 configs
+[   24.2s]     VERIFY ok at s0: exp55 ensemble 1.000000
+[   24.3s]     s0: q32 100.00  m32 99.80  a16 100.00  q32b70 100.00  q64 100.00  | ens 100.00  bestFE 100.00
+[   46.7s]     s1: q32 99.00  m32 98.60  a16 99.10  q32b70 98.70  q64 98.60  | ens 99.00  bestFE 99.00
+[   74.8s]     s2: q32 98.07  m32 98.47  a16 98.40  q32b70 97.87  q64 98.40  | ens 98.60  bestFE 98.60
+[  109.5s]     s3: q32 97.30  m32 97.60  a16 97.10  q32b70 97.00  q64 97.40  | ens 97.75  bestFE 97.70
+[  153.8s]     s4: q32 97.40  m32 97.48  a16 97.56  q32b70 97.20  q64 97.48  | ens 97.72  bestFE 97.72
+[  210.0s]     s5: q32 96.47  m32 96.63  a16 96.77  q32b70 96.27  q64 96.73  | ens 96.93  bestFE 97.07
+[  268.4s]     s6: q32 95.91  m32 95.54  a16 95.89  q32b70 95.43  q64 95.91  | ens 96.00  bestFE 96.34
+[  332.4s]     s7: q32 95.65  m32 95.60  a16 95.75  q32b70 95.50  q64 96.05  | ens 96.15  bestFE 96.30
+[  432.8s]     s8: q32 95.09  m32 95.07  a16 95.20  q32b70 95.22  q64 95.42  | ens 95.67  bestFE 95.89
+[  543.4s]     s9: q32 94.50  m32 94.50  a16 94.84  q32b70 94.56  q64 94.98  | ens 95.20  bestFE 95.42
+[  665.4s]     s10: q32 93.73  m32 93.91  a16 94.16  q32b70 93.84  q64 94.18  | ens 94.53  bestFE 94.82
+[  800.4s]     s11: q32 93.48  m32 93.63  a16 94.02  q32b70 93.70  q64 93.98  | ens 94.37  bestFE 94.60
+[  950.8s]     s12: q32 93.20  m32 93.37  a16 93.74  q32b70 93.35  q64 93.58  | ens 93.98  bestFE 94.31
+[ 1125.5s]     s13: q32 93.14  m32 93.31  a16 93.63  q32b70 93.43  q64 93.54  | ens 93.99  bestFE 94.20
+[ 1319.1s]     s14: q32 92.88  m32 92.88  a16 93.12  q32b70 92.93  q64 93.09  | ens 93.47  bestFE 93.77
+[ 1519.4s]     s15: q32 91.95  m32 92.01  a16 92.21  q32b70 91.97  q64 92.22  | ens 92.74  bestFE 93.01
+[ 1833.2s]     s16: q32 91.80  m32 91.88  a16 92.06  q32b70 91.79  q64 92.15  | ens 92.58  bestFE 92.71
+[ 2161.2s]     s17: q32 91.66  m32 91.92  a16 91.70  q32b70 91.77  q64 91.84  | ens 92.39  bestFE 92.70
+[ 2475.7s]     s18: q32 91.38  m32 91.96  a16 91.84  q32b70 91.78  q64 91.82  | ens 92.44  bestFE 92.66
+[ 2831.2s]     s19: q32 91.11  m32 91.73  a16 91.67  q32b70 91.40  q64 91.82  | ens 92.32  bestFE 92.42
+[ 2831.2s]     VERIFY ok over all 20 stages: exp54=SKIPPED  exp55=yes
+[ 2831.2s]     cell took 2831s
+[ 2831.2s] === CIFAR100|20|1|q32+m32+a16+q32b70+q64|f64|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 2835.1s]     5 members x 1 arms x 1 rules; 1 raysets x 1 rulesets x 1 orders = 1 configs
+[ 2854.0s]     s0: q32 97.60  m32 97.80  a16 97.60  q32b70 98.20  q64 97.80  | ens 97.80  bestFE 97.80
+[ 2876.1s]     s1: q32 98.00  m32 98.40  a16 97.90  q32b70 97.90  q64 97.90  | ens 98.60  bestFE 98.40
+[ 2910.4s]     s2: q32 97.93  m32 98.07  a16 97.73  q32b70 97.93  q64 97.73  | ens 98.33  bestFE 98.33
+[ 2945.4s]     s3: q32 98.10  m32 98.05  a16 97.80  q32b70 97.85  q64 97.65  | ens 98.25  bestFE 98.25
+[ 2984.5s]     s4: q32 97.64  m32 97.96  a16 97.44  q32b70 97.32  q64 97.48  | ens 98.04  bestFE 98.08
+[ 3031.7s]     s5: q32 97.53  m32 97.50  a16 97.43  q32b70 97.37  q64 97.57  | ens 97.87  bestFE 97.83
+[ 3088.4s]     s6: q32 96.83  m32 96.69  a16 96.91  q32b70 96.57  q64 97.00  | ens 97.31  bestFE 97.23
+[ 3163.8s]     s7: q32 96.33  m32 96.25  a16 96.28  q32b70 96.05  q64 96.43  | ens 96.85  bestFE 96.65
+[ 3265.6s]     s8: q32 96.22  m32 96.09  a16 96.24  q32b70 96.13  q64 96.31  | ens 96.80  bestFE 96.73
+[ 3369.6s]     s9: q32 95.58  m32 95.42  a16 95.46  q32b70 95.22  q64 95.34  | ens 96.02  bestFE 96.00
+[ 3495.9s]     s10: q32 95.09  m32 95.07  a16 95.13  q32b70 95.02  q64 95.25  | ens 95.67  bestFE 95.47
+[ 3647.1s]     s11: q32 95.13  m32 94.98  a16 95.05  q32b70 95.23  q64 95.10  | ens 95.70  bestFE 95.57
+[ 3809.2s]     s12: q32 94.97  m32 94.83  a16 94.82  q32b70 94.92  q64 95.06  | ens 95.52  bestFE 95.38
+[ 3986.2s]     s13: q32 94.34  m32 93.96  a16 94.10  q32b70 94.17  q64 94.24  | ens 94.74  bestFE 94.61
+[ 4190.9s]     s14: q32 93.76  m32 93.43  a16 93.57  q32b70 93.69  q64 93.67  | ens 94.15  bestFE 94.16
+[ 4397.4s]     s15: q32 93.39  m32 92.94  a16 92.97  q32b70 93.30  q64 93.29  | ens 93.89  bestFE 93.86
+[ 4691.0s]     s16: q32 92.66  m32 92.28  a16 92.27  q32b70 92.42  q64 92.58  | ens 93.16  bestFE 93.06
+[ 4995.1s]     s17: q32 92.56  m32 92.04  a16 92.13  q32b70 92.28  q64 92.40  | ens 92.96  bestFE 92.93
+[ 5325.4s]     s18: q32 92.24  m32 91.93  a16 91.85  q32b70 91.95  q64 92.29  | ens 92.81  bestFE 92.85
+[ 5650.5s]     s19: q32 92.25  m32 91.91  a16 91.84  q32b70 91.95  q64 92.31  | ens 92.80  bestFE 92.83
+[ 5650.5s]     cell took 2819s
+[ 5650.5s] === CIFAR100|20|2|q32+m32+a16+q32b70+q64|f64|cone|FE|rsall|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 5653.6s]     5 members x 1 arms x 1 rules; 1 raysets x 1 rulesets x 1 orders = 1 configs
+[ 5668.7s]     s0: q32 99.60  m32 99.60  a16 99.60  q32b70 99.60  q64 99.60  | ens 99.60  bestFE 99.60
+[ 5690.8s]     s1: q32 98.80  m32 99.00  a16 99.00  q32b70 99.20  q64 99.10  | ens 99.10  bestFE 99.20
+[ 5719.2s]     s2: q32 97.80  m32 97.93  a16 97.80  q32b70 97.67  q64 97.93  | ens 98.13  bestFE 98.20
+[ 5752.2s]     s3: q32 97.40  m32 97.45  a16 97.55  q32b70 97.40  q64 97.30  | ens 97.85  bestFE 97.80
+[ 5793.5s]     s4: q32 96.92  m32 96.76  a16 97.32  q32b70 96.96  q64 96.52  | ens 97.40  bestFE 97.40
+[ 5844.9s]     s5: q32 96.37  m32 96.37  a16 96.50  q32b70 96.23  q64 95.90  | ens 96.80  bestFE 96.93
+[ 5898.5s]     s6: q32 95.89  m32 95.46  a16 95.83  q32b70 95.46  q64 95.37  | ens 96.14  bestFE 96.31
+[ 5959.4s]     s7: q32 95.95  m32 95.53  a16 95.83  q32b70 95.25  q64 95.45  | ens 96.28  bestFE 96.47
+[ 6047.2s]     s8: q32 95.42  m32 95.16  a16 95.42  q32b70 95.22  q64 95.07  | ens 95.98  bestFE 96.27
+[ 6145.0s]     s9: q32 94.96  m32 94.72  a16 95.08  q32b70 94.78  q64 94.80  | ens 95.70  bestFE 95.82
+[ 6254.2s]     s10: q32 94.71  m32 94.07  a16 94.75  q32b70 94.55  q64 94.56  | ens 95.36  bestFE 95.56
+[ 6385.2s]     s11: q32 94.62  m32 94.07  a16 94.62  q32b70 94.53  q64 94.58  | ens 95.28  bestFE 95.37
+[ 6529.8s]     s12: q32 94.60  m32 94.15  a16 94.66  q32b70 94.55  q64 94.65  | ens 95.28  bestFE 95.34
+[ 6693.9s]     s13: q32 94.00  m32 93.63  a16 94.11  q32b70 94.04  q64 94.03  | ens 94.74  bestFE 94.76
+[ 6855.8s]     s14: q32 93.56  m32 93.32  a16 93.80  q32b70 93.73  q64 93.76  | ens 94.29  bestFE 94.40
+[ 7031.5s]     s15: q32 93.39  m32 93.08  a16 93.59  q32b70 93.42  q64 93.45  | ens 94.04  bestFE 94.16
+[ 7305.8s]     s16: q32 93.31  m32 93.09  a16 93.62  q32b70 93.36  q64 93.32  | ens 94.06  bestFE 94.26
+[ 7616.4s]     s17: q32 92.86  m32 92.62  a16 93.22  q32b70 92.93  q64 92.86  | ens 93.59  bestFE 93.81
+[ 7944.2s]     s18: q32 92.23  m32 91.91  a16 92.39  q32b70 92.19  q64 92.13  | ens 92.89  bestFE 93.20
+[ 8289.2s]     s19: q32 92.23  m32 92.01  a16 92.42  q32b70 92.07  q64 92.23  | ens 92.89  bestFE 93.19
+[ 8289.2s]     cell took 2639s
+
+========================================================================================================
+EXP56 — does the cone read-out compose with the LoRA-member ensemble?
+========================================================================================================
+
+members ['q32', 'm32', 'a16', 'q32b70', 'q64']
+arms ['f64']  rules ['cone']  orders ['FE']  raysets all (1)  cells 23
+
+--------------------------------------------------------------------------------------------------------
+SHOPPING PENALTY — read before any accuracy. `sel` picks the config on VAL;
+`oracle` is the max over configs on TEST and is NOT obtainable.
+--------------------------------------------------------------------------------------------------------
+  ds             T order   sel(test)   oracle  penalty  sel val-test                 chosen config
+  CIFAR100      10 FE          96.01    96.01     0.00          0.02                      f64|cone
+  CIFAR100      20 FE          95.72    95.72     0.00         -0.40                      f64|cone
+  CUB200P       10 FE          93.33    93.33     0.00          1.05                      f64|cone
+  CUB200P       20 FE          93.42    93.42     0.00          0.56                      f64|cone
+  IMAGENETAP    10 FE          72.23    72.23     0.00         -0.77                      f64|cone
+  IMAGENETAP    20 FE          69.37    69.37     0.00         -3.17                      f64|cone
+  IMAGENETR     10 FE          87.01    87.01     0.00         -0.23                      f64|cone
+  IMAGENETR     20 FE          85.86    85.86     0.00         -0.10                      f64|cone
+
+--------------------------------------------------------------------------------------------------------
+A-Last — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  CIFAR100      10     2    92.78    93.27       nan    93.40     +0.14    91.97    +1.43
+  CIFAR100      20     3    91.86    92.67       nan    92.81     +0.14    91.46    +1.35
+  CUB200P       10     3    89.71    90.19       nan    90.16     -0.03    89.91    +0.25
+  CUB200P       20     3    89.27    89.64       nan    89.77     +0.13    89.76    +0.01
+  IMAGENETAP    10     3    62.76    63.38       nan    64.27     +0.89    63.60    +0.67
+  IMAGENETAP    20     3    59.11    59.73       nan    60.16     +0.42    62.37    -2.21
+  IMAGENETR     10     3    80.76    81.78       nan    82.58     +0.80    82.09    +0.49
+  IMAGENETR     20     3    79.63    80.31       nan    81.16     +0.86    80.23    +0.93
+
+--------------------------------------------------------------------------------------------------------
+A-Avg — baselines and the honest (val-selected) composition
+--------------------------------------------------------------------------------------------------------
+  ds             T seeds      q32      ens  q32+cone   sel_FE  best-ens  GR-LoRA  best-GR
+  CIFAR100      10     2    95.62    95.98       nan    96.01     +0.03    94.65    +1.36
+  CIFAR100      20     3    95.11    95.64       nan    95.72     +0.08    94.41    +1.31
+  CUB200P       10     3    92.97    93.36       nan    93.33     -0.03    93.85    -0.52
+  CUB200P       20     3    93.09    93.36       nan    93.42     +0.05    94.08    -0.66
+  IMAGENETAP    10     3    71.09    72.16       nan    72.23     +0.07    70.24    +1.99
+  IMAGENETAP    20     3    68.33    69.14       nan    69.37     +0.23    69.30    +0.07
+  IMAGENETR     10     3    85.49    86.55       nan    87.01     +0.46    86.20    +0.81
+  IMAGENETR     20     3    84.76    85.32       nan    85.86     +0.54    85.05    +0.81
+
+--------------------------------------------------------------------------------------------------------
+RAY-BUDGET SWEEP — single budgets, min to max. Does the cone's known
+monotonicity in R SURVIVE member averaging, or does the ensemble substitute for rays?
+--------------------------------------------------------------------------------------------------------
+  CIFAR100 T=10 (cpt=10)   fit rows/class 433-464 (median 450.5)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64           +0.12    +0.14
+  CIFAR100 T=20 (cpt=5)   fit rows/class 431-462 (median 450.5)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64           +0.37    +0.14
+  CUB200P T=10 (cpt=20)   fit rows/class 30-53 (median 43.0)   CLIPPED ARMS ['f64']: k=min(R, n_rows), so these are 'one ray per point' at a DIFFERENT R per class, not a fixed budget
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64*          -0.01    -0.03
+  CUB200P T=20 (cpt=10)   fit rows/class 26-52 (median 43.0)   CLIPPED ARMS ['f64']: k=min(R, n_rows), so these are 'one ray per point' at a DIFFERENT R per class, not a fixed budget
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64*          +0.17    +0.13
+  IMAGENETAP T=10 (cpt=20)   fit rows/class 1-75 (median 18.0)   CLIPPED ARMS ['f64']: k=min(R, n_rows), so these are 'one ray per point' at a DIFFERENT R per class, not a fixed budget
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64*          +1.00    +0.89
+  IMAGENETAP T=20 (cpt=10)   fit rows/class 2-75 (median 18.5)   CLIPPED ARMS ['f64']: k=min(R, n_rows), so these are 'one ray per point' at a DIFFERENT R per class, not a fixed budget
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64*          +0.87    +0.42
+  IMAGENETR T=10 (cpt=20)   fit rows/class 33-315 (median 100.0)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64           +0.77    +0.80
+  IMAGENETR T=20 (cpt=10)   fit rows/class 36-320 (median 101.5)
+    arm       q32 alone       FE     (A-Last, vs ens_ranpac)   * = clipped
+    f64           +1.22    +0.86
+
+--------------------------------------------------------------------------------------------------------
+PRE-REGISTERED TEST — sel_FE vs ens_ranpac, IMAGENETR A-Last, per T
+--------------------------------------------------------------------------------------------------------
+  T=10  ens_ranpac 81.78   sel_FE 82.58   delta +0.80   (predicted ~+0.38, FALSIFIED IF > +0.70)  -> FALSIFIED: levers INDEPENDENT
+  T=20  ens_ranpac 80.31   sel_FE 81.16   delta +0.86   (predicted ~+0.38, FALSIFIED IF > +0.70)  -> FALSIFIED: levers INDEPENDENT
+
+--------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  0. SHOPPING PENALTY FIRST. This file evaluates up to ~1300 configs per cell. `oracle` is the
+     max over them on TEST and is not obtainable by any deployable system; `sel` picks on VAL
+     and is the only honest number. A large penalty means the sweep found noise, and a large
+     `sel val-test` means even the val-selected config overfits the split.
+  1. THE PRE-REGISTERED TEST is sel_FE - ens_ranpac on IMAGENETR A-Last. exp52's decomposition
+     says +0.30 (rays) + 0.08 (non-negativity) ~ +0.38 should survive and the +0.74 linear-
+     combination piece should NOT, because the member ensemble already bought it. Above +0.70
+     that reading is dead and the levers are independent.
+  2. EF/JT ISOLATE WHERE THE AVERAGING HAPPENS -- they do NOT test exp55's oracle_class_cv
+     (see the EF note in the header; none of these orderings weights members per class). The
+     informative column for them is `sel val-test`, NOT accuracy. Measured on the f32 control:
+     FE 0.86, EF 1.98, JT 2.37 -- the overfitting order is the exact inverse of the accuracy
+     order. FE fuses each member's cone against THAT member's own RanPAC in matched geometry
+     and renormalises before averaging; EF and JT fuse against a POOLED base and pay 2-3x the
+     val overfit for it. Treat a future EF/JT win as suspect until its gap matches FE's.
+  3. THE RAY SWEEP IS THE MECHANISM READ. exp53 found the fused gain monotone in R because the
+     cone is an AGGREGATOR of noisy atom sets. A member ensemble is also an aggregator. If the
+     substitution reading is right, the `q32 alone` column stays monotone in R while the FE/EF
+     columns FLATTEN -- the ensemble has already done the aggregating. A still-monotone FE
+     column would mean rays contribute something averaging cannot.
+  4. JT bounds FE and EF from above and is the most likely to overfit; believe it only if its
+     val-test gap is comparable to FE's. Configs above JT_MAX components are skipped and the
+     count is recorded in _meta, never silently dropped.
+========================================================================================================
+[ 8289.2s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp56_ray_ensemble_table_augreg_in21k.json

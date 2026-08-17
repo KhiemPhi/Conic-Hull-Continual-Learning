@@ -28,7 +28,7 @@ from timm.data import resolve_model_data_config, create_transform
 
 from backbone import load_backbone, freeze_non_lora, get_lora_params
 
-SEED = 0
+SEED = int(os.environ.get("SEED", 0))   # was hardcoded 0; seeds now env-driven
 torch.manual_seed(SEED); np.random.seed(SEED)
 DEV = "cuda"
 MODEL = "vit_base_patch16_224.augreg2_in21k_ft_in1k"
@@ -179,7 +179,7 @@ for lam in [0.0, 50.0]:
     print(f"{tag:>10} {'stale=id':>11} {'-':>10} {stale:>16.4f}   (sanity == identity above)")
     print("-" * 78)
 
-np.savez("crux_transport.npz", frozen=frozen_acc,
+np.savez(f"crux_transport_s{SEED}.npz", frozen=frozen_acc,
          **{f"{t}|{n}": np.array(v) for (t, n), v in results.items()})
 print("\nRead: does any Psi's NCM reach frozen? if best-Psi << frozen => irreducible collapse;")
 print("if orthogonal already ~frozen => pure gauge; if mlp>>linear => info there but nonlinear.")

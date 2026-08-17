@@ -1,0 +1,1456 @@
+[    0.0s] === CIFAR100|10|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[    9.5s]     VERIFY: exp56 FE|f64|cone reference loaded
+[   48.7s]     s0: ens 99.40  FE-cone 99.40  FE-sub 99.40  FE-pm 99.40
+[  101.3s]     s1: ens 98.35  FE-cone 98.35  FE-sub 98.40  FE-pm 98.45
+[  173.9s]     s2: ens 97.87  FE-cone 97.73  FE-sub 97.83  FE-pm 97.77
+[  270.2s]     s3: ens 97.02  FE-cone 97.05  FE-sub 97.08  FE-pm 96.97
+[  420.3s]     s4: ens 95.96  FE-cone 96.00  FE-sub 96.02  FE-pm 96.04
+[  630.5s]     s5: ens 95.33  FE-cone 95.32  FE-sub 95.30  FE-pm 95.42
+[  907.1s]     s6: ens 95.11  FE-cone 95.14  FE-sub 95.16  FE-pm 95.17
+[ 1211.0s]     s7: ens 93.69  FE-cone 93.94  FE-sub 93.94  FE-pm 93.97
+[ 1676.4s]     s8: ens 93.39  FE-cone 93.58  FE-sub 93.46  FE-pm 93.49
+[ 2206.0s]     s9: ens 93.17  FE-cone 93.32  FE-sub 93.27  FE-pm 93.26
+[ 2206.1s]     cell took 2206s
+[ 2206.1s] === CIFAR100|10|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 2253.3s]     s0: ens 98.50  FE-cone 98.60  FE-sub 98.60  FE-pm 98.50
+[ 2316.9s]     s1: ens 98.15  FE-cone 98.15  FE-sub 98.15  FE-pm 98.30
+[ 2397.2s]     s2: ens 98.00  FE-cone 97.97  FE-sub 98.00  FE-pm 98.00
+[ 2511.1s]     s3: ens 96.97  FE-cone 97.00  FE-sub 97.00  FE-pm 96.97
+[ 2687.6s]     s4: ens 96.36  FE-cone 96.26  FE-sub 96.30  FE-pm 96.34
+[ 2911.2s]     s5: ens 96.15  FE-cone 96.03  FE-sub 96.07  FE-pm 96.07
+[ 3179.2s]     s6: ens 95.19  FE-cone 95.13  FE-sub 95.14  FE-pm 95.14
+[ 3499.1s]     s7: ens 94.21  FE-cone 94.29  FE-sub 94.19  FE-pm 94.30
+[ 3975.2s]     s8: ens 93.46  FE-cone 93.53  FE-sub 93.56  FE-pm 93.59
+[ 4425.8s]     s9: ens 93.36  FE-cone 93.48  FE-sub 93.47  FE-pm 93.53
+[ 4425.9s]     cell took 2220s
+[ 4425.9s] === CIFAR100|10|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 4467.2s]     s0: ens 99.30  FE-cone 99.30  FE-sub 99.30  FE-pm 99.30
+[ 4519.4s]     s1: ens 97.80  FE-cone 97.70  FE-sub 97.80  FE-pm 97.65
+[ 4589.2s]     s2: ens 96.77  FE-cone 96.67  FE-sub 96.87  FE-pm 96.77
+[ 4674.4s]     s3: ens 96.25  FE-cone 96.23  FE-sub 96.28  FE-pm 96.25
+[ 4816.2s]     s4: ens 95.68  FE-cone 95.72  FE-sub 95.66  FE-pm 95.68
+[ 4977.9s]     s5: ens 95.27  FE-cone 95.30  FE-sub 95.20  FE-pm 95.33
+[ 5212.0s]     s6: ens 94.76  FE-cone 94.77  FE-sub 94.73  FE-pm 94.74
+[ 5518.7s]     s7: ens 94.27  FE-cone 94.19  FE-sub 94.12  FE-pm 94.26
+[ 5990.6s]     s8: ens 93.79  FE-cone 93.77  FE-sub 93.80  FE-pm 93.89
+[ 6522.0s]     s9: ens 93.28  FE-cone 93.13  FE-sub 93.17  FE-pm 93.36
+[ 6522.0s]     cell took 2096s
+[ 6522.0s] === CIFAR100|20|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 6548.2s]     s0: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[ 6579.7s]     s1: ens 99.00  FE-cone 99.00  FE-sub 99.10  FE-pm 98.90
+[ 6619.0s]     s2: ens 98.60  FE-cone 98.60  FE-sub 98.60  FE-pm 98.60
+[ 6669.5s]     s3: ens 97.75  FE-cone 97.70  FE-sub 97.70  FE-pm 97.75
+[ 6731.6s]     s4: ens 97.72  FE-cone 97.72  FE-sub 97.76  FE-pm 97.68
+[ 6805.4s]     s5: ens 96.93  FE-cone 97.07  FE-sub 97.07  FE-pm 97.13
+[ 6887.3s]     s6: ens 96.00  FE-cone 96.34  FE-sub 96.34  FE-pm 96.31
+[ 6986.3s]     s7: ens 96.15  FE-cone 96.30  FE-sub 96.28  FE-pm 96.25
+[ 7133.0s]     s8: ens 95.67  FE-cone 95.89  FE-sub 95.89  FE-pm 95.80
+[ 7292.8s]     s9: ens 95.20  FE-cone 95.42  FE-sub 95.48  FE-pm 95.32
+[ 7476.2s]     s10: ens 94.53  FE-cone 94.82  FE-sub 94.73  FE-pm 94.62
+[ 7687.4s]     s11: ens 94.37  FE-cone 94.60  FE-sub 94.50  FE-pm 94.47
+[ 7922.8s]     s12: ens 93.98  FE-cone 94.31  FE-sub 94.15  FE-pm 94.18
+[ 8183.3s]     s13: ens 93.99  FE-cone 94.20  FE-sub 94.13  FE-pm 94.19
+[ 8443.3s]     s14: ens 93.47  FE-cone 93.77  FE-sub 93.71  FE-pm 93.73
+[ 8702.1s]     s15: ens 92.74  FE-cone 93.01  FE-sub 92.86  FE-pm 93.04
+[ 9053.0s]     s16: ens 92.58  FE-cone 92.71  FE-sub 92.72  FE-pm 92.81
+[ 9453.8s]     s17: ens 92.39  FE-cone 92.70  FE-sub 92.51  FE-pm 92.68
+[ 9957.9s]     s18: ens 92.44  FE-cone 92.66  FE-sub 92.57  FE-pm 92.76
+[10502.9s]     s19: ens 92.32  FE-cone 92.42  FE-sub 92.35  FE-pm 92.41
+[10503.0s]     cell took 3981s
+[10503.0s] === CIFAR100|20|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[10529.5s]     s0: ens 97.80  FE-cone 97.80  FE-sub 97.80  FE-pm 97.80
+[10558.5s]     s1: ens 98.60  FE-cone 98.40  FE-sub 98.50  FE-pm 98.40
+[10602.1s]     s2: ens 98.33  FE-cone 98.33  FE-sub 98.33  FE-pm 98.33
+[10654.3s]     s3: ens 98.25  FE-cone 98.25  FE-sub 98.35  FE-pm 98.40
+[10717.8s]     s4: ens 98.04  FE-cone 98.08  FE-sub 98.08  FE-pm 97.92
+[10792.6s]     s5: ens 97.87  FE-cone 97.83  FE-sub 97.87  FE-pm 97.83
+[10882.1s]     s6: ens 97.31  FE-cone 97.23  FE-sub 97.34  FE-pm 97.34
+[10977.3s]     s7: ens 96.85  FE-cone 96.65  FE-sub 96.83  FE-pm 96.67
+[11119.8s]     s8: ens 96.80  FE-cone 96.73  FE-sub 96.80  FE-pm 96.51
+[11286.4s]     s9: ens 96.02  FE-cone 96.00  FE-sub 95.90  FE-pm 95.88
+[11467.9s]     s10: ens 95.67  FE-cone 95.47  FE-sub 95.64  FE-pm 95.58
+[11676.8s]     s11: ens 95.70  FE-cone 95.57  FE-sub 95.60  FE-pm 95.68
+[11888.9s]     s12: ens 95.52  FE-cone 95.38  FE-sub 95.43  FE-pm 95.51
+[12139.2s]     s13: ens 94.74  FE-cone 94.61  FE-sub 94.77  FE-pm 94.79
+[12423.9s]     s14: ens 94.15  FE-cone 94.16  FE-sub 94.16  FE-pm 94.32
+[12729.5s]     s15: ens 93.89  FE-cone 93.86  FE-sub 93.90  FE-pm 93.94
+[13131.0s]     s16: ens 93.16  FE-cone 93.06  FE-sub 93.12  FE-pm 93.28
+[13529.3s]     s17: ens 92.96  FE-cone 92.93  FE-sub 92.93  FE-pm 93.19
+[13963.7s]     s18: ens 92.81  FE-cone 92.85  FE-sub 92.87  FE-pm 92.88
+[14499.9s]     s19: ens 92.80  FE-cone 92.83  FE-sub 92.75  FE-pm 92.93
+[14500.0s]     cell took 3997s
+[14500.0s] === CIFAR100|20|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[14526.8s]     s0: ens 99.60  FE-cone 99.60  FE-sub 99.60  FE-pm 99.60
+[14560.0s]     s1: ens 99.10  FE-cone 99.20  FE-sub 99.20  FE-pm 99.20
+[14603.0s]     s2: ens 98.13  FE-cone 98.20  FE-sub 97.80  FE-pm 98.07
+[14654.6s]     s3: ens 97.85  FE-cone 97.80  FE-sub 97.70  FE-pm 97.70
+[14719.2s]     s4: ens 97.40  FE-cone 97.40  FE-sub 97.52  FE-pm 97.48
+[14795.1s]     s5: ens 96.80  FE-cone 96.93  FE-sub 96.93  FE-pm 97.00
+[14881.5s]     s6: ens 96.14  FE-cone 96.31  FE-sub 96.14  FE-pm 96.29
+[14976.3s]     s7: ens 96.28  FE-cone 96.47  FE-sub 96.38  FE-pm 96.47
+[15126.0s]     s8: ens 95.98  FE-cone 96.27  FE-sub 96.16  FE-pm 96.27
+[15296.6s]     s9: ens 95.70  FE-cone 95.82  FE-sub 95.86  FE-pm 95.90
+[15479.5s]     s10: ens 95.36  FE-cone 95.56  FE-sub 95.51  FE-pm 95.58
+[15688.4s]     s11: ens 95.28  FE-cone 95.37  FE-sub 95.35  FE-pm 95.35
+[15913.9s]     s12: ens 95.28  FE-cone 95.34  FE-sub 95.32  FE-pm 95.31
+[16176.5s]     s13: ens 94.74  FE-cone 94.76  FE-sub 94.80  FE-pm 94.71
+[16467.5s]     s14: ens 94.29  FE-cone 94.40  FE-sub 94.63  FE-pm 94.47
+[16769.4s]     s15: ens 94.04  FE-cone 94.16  FE-sub 94.16  FE-pm 94.12
+[17223.8s]     s16: ens 94.06  FE-cone 94.26  FE-sub 94.29  FE-pm 94.21
+[17708.8s]     s17: ens 93.59  FE-cone 93.81  FE-sub 93.81  FE-pm 93.80
+[18223.3s]     s18: ens 92.89  FE-cone 93.20  FE-sub 93.21  FE-pm 93.11
+[18691.2s]     s19: ens 92.89  FE-cone 93.19  FE-sub 93.14  FE-pm 93.11
+[18691.3s]     cell took 4191s
+[18691.3s] === CIFAR100|50|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[18704.6s]     s0: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[18716.9s]     s1: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[18731.6s]     s2: ens 99.83  FE-cone 99.83  FE-sub 99.83  FE-pm 99.83
+[18747.5s]     s3: ens 99.38  FE-cone 99.38  FE-sub 99.38  FE-pm 99.38
+[18767.3s]     s4: ens 99.10  FE-cone 99.10  FE-sub 99.10  FE-pm 99.10
+[18791.3s]     s5: ens 98.75  FE-cone 98.75  FE-sub 98.75  FE-pm 98.75
+[18817.6s]     s6: ens 98.93  FE-cone 98.93  FE-sub 99.00  FE-pm 98.93
+[18847.7s]     s7: ens 98.44  FE-cone 98.25  FE-sub 98.44  FE-pm 98.25
+[18880.7s]     s8: ens 97.89  FE-cone 97.78  FE-sub 97.89  FE-pm 97.83
+[18917.0s]     s9: ens 97.45  FE-cone 97.30  FE-sub 97.50  FE-pm 97.35
+[18955.6s]     s10: ens 97.18  FE-cone 97.23  FE-sub 97.32  FE-pm 97.18
+[18997.1s]     s11: ens 97.04  FE-cone 97.25  FE-sub 97.12  FE-pm 97.04
+[19043.6s]     s12: ens 97.00  FE-cone 97.27  FE-sub 97.08  FE-pm 97.12
+[19093.2s]     s13: ens 96.43  FE-cone 96.64  FE-sub 96.36  FE-pm 96.61
+[19148.9s]     s14: ens 96.40  FE-cone 96.77  FE-sub 96.50  FE-pm 96.53
+[19207.2s]     s15: ens 95.69  FE-cone 95.84  FE-sub 95.78  FE-pm 95.78
+[19267.8s]     s16: ens 95.47  FE-cone 95.59  FE-sub 95.56  FE-pm 95.59
+[19332.5s]     s17: ens 95.53  FE-cone 95.61  FE-sub 95.61  FE-pm 95.58
+[19400.0s]     s18: ens 95.58  FE-cone 95.55  FE-sub 95.53  FE-pm 95.58
+[19475.9s]     s19: ens 95.45  FE-cone 95.45  FE-sub 95.35  FE-pm 95.45
+[19603.3s]     s20: ens 95.36  FE-cone 95.45  FE-sub 95.43  FE-pm 95.45
+[19741.4s]     s21: ens 94.80  FE-cone 95.00  FE-sub 94.89  FE-pm 95.00
+[19882.3s]     s22: ens 94.57  FE-cone 94.78  FE-sub 94.59  FE-pm 94.74
+[20036.8s]     s23: ens 94.48  FE-cone 94.50  FE-sub 94.50  FE-pm 94.58
+[20189.8s]     s24: ens 94.52  FE-cone 94.48  FE-sub 94.52  FE-pm 94.66
+[20361.2s]     s25: ens 94.40  FE-cone 94.44  FE-sub 94.35  FE-pm 94.60
+[20541.9s]     s26: ens 94.15  FE-cone 94.17  FE-sub 94.00  FE-pm 94.20
+[20722.3s]     s27: ens 93.95  FE-cone 93.95  FE-sub 93.84  FE-pm 94.07
+[20910.9s]     s28: ens 93.91  FE-cone 93.90  FE-sub 93.83  FE-pm 93.93
+[21113.9s]     s29: ens 93.63  FE-cone 93.63  FE-sub 93.62  FE-pm 93.73
+[21311.8s]     s30: ens 93.65  FE-cone 93.76  FE-sub 93.63  FE-pm 93.74
+[21526.0s]     s31: ens 93.27  FE-cone 93.34  FE-sub 93.20  FE-pm 93.45
+[21739.9s]     s32: ens 93.33  FE-cone 93.36  FE-sub 93.20  FE-pm 93.42
+[21972.4s]     s33: ens 93.38  FE-cone 93.49  FE-sub 93.21  FE-pm 93.57
+[22202.5s]     s34: ens 93.40  FE-cone 93.43  FE-sub 93.30  FE-pm 93.54
+[22450.4s]     s35: ens 93.19  FE-cone 93.31  FE-sub 93.12  FE-pm 93.29
+[22712.0s]     s36: ens 93.26  FE-cone 93.26  FE-sub 93.12  FE-pm 93.26
+[22926.9s]     s37: ens 92.93  FE-cone 92.88  FE-sub 92.82  FE-pm 92.96
+[23128.4s]     s38: ens 92.32  FE-cone 92.29  FE-sub 92.26  FE-pm 92.31
+[23349.6s]     s39: ens 92.07  FE-cone 92.07  FE-sub 91.99  FE-pm 92.17
+[23632.3s]     s40: ens 91.90  FE-cone 92.10  FE-sub 91.90  FE-pm 92.13
+[23929.2s]     s41: ens 91.74  FE-cone 91.87  FE-sub 91.89  FE-pm 91.99
+[24242.1s]     s42: ens 91.74  FE-cone 91.92  FE-sub 91.87  FE-pm 91.95
+[24553.8s]     s43: ens 91.72  FE-cone 91.90  FE-sub 91.82  FE-pm 91.94
+[24885.0s]     s44: ens 91.48  FE-cone 91.67  FE-sub 91.62  FE-pm 91.71
+[25218.8s]     s45: ens 91.51  FE-cone 91.70  FE-sub 91.67  FE-pm 91.88
+[25552.1s]     s46: ens 91.56  FE-cone 91.60  FE-sub 91.62  FE-pm 91.67
+[25916.3s]     s47: ens 91.50  FE-cone 91.62  FE-sub 91.53  FE-pm 91.78
+[26298.5s]     s48: ens 91.47  FE-cone 91.45  FE-sub 91.48  FE-pm 91.71
+[26689.7s]     s49: ens 91.25  FE-cone 91.27  FE-sub 91.20  FE-pm 91.42
+[26689.9s]     cell took 7999s
+[26690.0s] === CIFAR100|50|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[26702.8s]     s0: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[26713.4s]     s1: ens 97.50  FE-cone 97.50  FE-sub 97.50  FE-pm 97.50
+[26726.3s]     s2: ens 98.17  FE-cone 98.17  FE-sub 98.17  FE-pm 98.17
+[26741.3s]     s3: ens 97.88  FE-cone 97.88  FE-sub 97.88  FE-pm 97.88
+[26760.0s]     s4: ens 97.80  FE-cone 97.80  FE-sub 97.80  FE-pm 97.90
+[26781.3s]     s5: ens 97.83  FE-cone 98.00  FE-sub 97.83  FE-pm 98.00
+[26804.0s]     s6: ens 97.57  FE-cone 97.64  FE-sub 97.36  FE-pm 97.50
+[26829.4s]     s7: ens 97.56  FE-cone 97.62  FE-sub 97.56  FE-pm 97.56
+[26857.6s]     s8: ens 97.83  FE-cone 97.94  FE-sub 98.00  FE-pm 97.94
+[26888.2s]     s9: ens 97.30  FE-cone 97.35  FE-sub 97.35  FE-pm 97.40
+[26923.6s]     s10: ens 97.41  FE-cone 97.41  FE-sub 97.45  FE-pm 97.41
+[26961.9s]     s11: ens 97.50  FE-cone 97.42  FE-sub 97.54  FE-pm 97.42
+[27001.6s]     s12: ens 97.46  FE-cone 97.50  FE-sub 97.54  FE-pm 97.46
+[27043.5s]     s13: ens 97.25  FE-cone 97.25  FE-sub 97.36  FE-pm 97.32
+[27089.4s]     s14: ens 97.27  FE-cone 97.47  FE-sub 97.40  FE-pm 97.33
+[27139.4s]     s15: ens 96.91  FE-cone 96.91  FE-sub 96.81  FE-pm 96.97
+[27192.2s]     s16: ens 96.94  FE-cone 97.15  FE-sub 96.97  FE-pm 97.09
+[27249.3s]     s17: ens 96.67  FE-cone 96.86  FE-sub 96.72  FE-pm 96.81
+[27312.9s]     s18: ens 96.66  FE-cone 96.79  FE-sub 96.71  FE-pm 96.74
+[27381.4s]     s19: ens 96.35  FE-cone 96.47  FE-sub 96.28  FE-pm 96.40
+[27467.3s]     s20: ens 96.31  FE-cone 96.45  FE-sub 96.38  FE-pm 96.50
+[27559.7s]     s21: ens 96.11  FE-cone 96.27  FE-sub 96.25  FE-pm 96.32
+[27663.0s]     s22: ens 96.20  FE-cone 96.22  FE-sub 96.22  FE-pm 96.37
+[27769.7s]     s23: ens 95.85  FE-cone 95.96  FE-sub 95.85  FE-pm 96.02
+[27883.9s]     s24: ens 95.38  FE-cone 95.38  FE-sub 95.40  FE-pm 95.52
+[28004.4s]     s25: ens 95.44  FE-cone 95.42  FE-sub 95.40  FE-pm 95.63
+[28121.0s]     s26: ens 95.30  FE-cone 95.33  FE-sub 95.20  FE-pm 95.39
+[28242.3s]     s27: ens 95.16  FE-cone 95.23  FE-sub 95.11  FE-pm 95.25
+[28379.2s]     s28: ens 95.26  FE-cone 95.26  FE-sub 95.09  FE-pm 95.28
+[28513.7s]     s29: ens 95.15  FE-cone 95.18  FE-sub 95.03  FE-pm 95.17
+[28659.8s]     s30: ens 95.10  FE-cone 95.13  FE-sub 95.08  FE-pm 95.18
+[28819.4s]     s31: ens 94.88  FE-cone 95.02  FE-sub 94.84  FE-pm 95.03
+[28981.4s]     s32: ens 94.55  FE-cone 94.70  FE-sub 94.70  FE-pm 94.73
+[29155.8s]     s33: ens 94.13  FE-cone 94.24  FE-sub 94.34  FE-pm 94.28
+[29329.4s]     s34: ens 94.03  FE-cone 94.13  FE-sub 94.19  FE-pm 94.09
+[29512.0s]     s35: ens 94.01  FE-cone 94.01  FE-sub 94.10  FE-pm 94.12
+[29689.9s]     s36: ens 93.77  FE-cone 93.89  FE-sub 93.86  FE-pm 93.95
+[29889.6s]     s37: ens 93.34  FE-cone 93.29  FE-sub 93.32  FE-pm 93.46
+[30080.0s]     s38: ens 93.29  FE-cone 93.26  FE-sub 93.32  FE-pm 93.37
+[30267.2s]     s39: ens 93.04  FE-cone 93.21  FE-sub 93.16  FE-pm 93.24
+[30534.2s]     s40: ens 92.99  FE-cone 93.10  FE-sub 93.16  FE-pm 93.27
+[30821.5s]     s41: ens 92.51  FE-cone 92.68  FE-sub 92.61  FE-pm 92.67
+[31132.8s]     s42: ens 92.53  FE-cone 92.70  FE-sub 92.57  FE-pm 92.69
+[31474.8s]     s43: ens 92.45  FE-cone 92.49  FE-sub 92.50  FE-pm 92.51
+[31820.6s]     s44: ens 92.14  FE-cone 92.26  FE-sub 92.24  FE-pm 92.42
+[32196.1s]     s45: ens 92.04  FE-cone 92.25  FE-sub 92.21  FE-pm 92.34
+[32583.4s]     s46: ens 91.88  FE-cone 92.10  FE-sub 91.97  FE-pm 92.24
+[32983.6s]     s47: ens 91.91  FE-cone 92.18  FE-sub 92.02  FE-pm 92.30
+[33429.4s]     s48: ens 91.84  FE-cone 92.12  FE-sub 92.02  FE-pm 92.22
+[33850.7s]     s49: ens 91.85  FE-cone 92.15  FE-sub 92.03  FE-pm 92.31
+[33850.8s]     cell took 7161s
+[33850.8s] === CIFAR100|50|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[33865.1s]     s0: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[33877.6s]     s1: ens 99.25  FE-cone 99.25  FE-sub 99.25  FE-pm 99.25
+[33892.6s]     s2: ens 99.67  FE-cone 99.67  FE-sub 99.67  FE-pm 99.67
+[33910.4s]     s3: ens 99.38  FE-cone 99.38  FE-sub 99.38  FE-pm 99.38
+[33931.9s]     s4: ens 98.80  FE-cone 99.00  FE-sub 98.90  FE-pm 98.90
+[33957.2s]     s5: ens 97.92  FE-cone 98.00  FE-sub 98.00  FE-pm 97.92
+[33980.5s]     s6: ens 97.50  FE-cone 97.57  FE-sub 97.71  FE-pm 97.36
+[34007.9s]     s7: ens 97.31  FE-cone 97.50  FE-sub 97.56  FE-pm 97.25
+[34038.0s]     s8: ens 97.56  FE-cone 97.44  FE-sub 97.56  FE-pm 97.33
+[34070.2s]     s9: ens 97.75  FE-cone 97.55  FE-sub 97.75  FE-pm 97.45
+[34104.0s]     s10: ens 97.50  FE-cone 97.55  FE-sub 97.45  FE-pm 97.41
+[34145.1s]     s11: ens 96.96  FE-cone 96.92  FE-sub 96.96  FE-pm 96.79
+[34190.8s]     s12: ens 96.88  FE-cone 96.96  FE-sub 97.00  FE-pm 96.96
+[34234.5s]     s13: ens 96.82  FE-cone 96.96  FE-sub 96.89  FE-pm 96.93
+[34285.4s]     s14: ens 96.40  FE-cone 96.50  FE-sub 96.37  FE-pm 96.50
+[34347.8s]     s15: ens 96.16  FE-cone 96.16  FE-sub 96.22  FE-pm 96.25
+[34406.2s]     s16: ens 95.53  FE-cone 95.79  FE-sub 95.88  FE-pm 95.79
+[34471.6s]     s17: ens 95.56  FE-cone 95.86  FE-sub 95.83  FE-pm 95.86
+[34534.9s]     s18: ens 95.63  FE-cone 95.79  FE-sub 95.95  FE-pm 95.97
+[34605.3s]     s19: ens 95.67  FE-cone 95.67  FE-sub 96.05  FE-pm 96.05
+[34691.7s]     s20: ens 95.48  FE-cone 95.69  FE-sub 95.69  FE-pm 95.69
+[34795.3s]     s21: ens 95.64  FE-cone 95.82  FE-sub 95.70  FE-pm 95.89
+[34912.2s]     s22: ens 95.15  FE-cone 95.33  FE-sub 95.11  FE-pm 95.28
+[35030.0s]     s23: ens 95.00  FE-cone 95.27  FE-sub 95.10  FE-pm 95.19
+[35149.6s]     s24: ens 94.96  FE-cone 95.22  FE-sub 95.18  FE-pm 95.18
+[35279.4s]     s25: ens 94.96  FE-cone 95.25  FE-sub 95.13  FE-pm 95.29
+[35413.0s]     s26: ens 94.69  FE-cone 94.85  FE-sub 94.83  FE-pm 94.78
+[35541.5s]     s27: ens 94.71  FE-cone 94.88  FE-sub 94.88  FE-pm 94.88
+[35680.5s]     s28: ens 94.60  FE-cone 94.64  FE-sub 94.74  FE-pm 94.64
+[35846.6s]     s29: ens 94.60  FE-cone 94.62  FE-sub 94.75  FE-pm 94.68
+[36003.9s]     s30: ens 94.50  FE-cone 94.58  FE-sub 94.76  FE-pm 94.63
+[36163.5s]     s31: ens 94.55  FE-cone 94.66  FE-sub 94.66  FE-pm 94.62
+[36326.0s]     s32: ens 94.32  FE-cone 94.55  FE-sub 94.55  FE-pm 94.41
+[36505.2s]     s33: ens 93.93  FE-cone 94.04  FE-sub 94.10  FE-pm 94.06
+[36702.9s]     s34: ens 93.97  FE-cone 94.20  FE-sub 94.09  FE-pm 94.13
+[36914.9s]     s35: ens 93.88  FE-cone 93.93  FE-sub 94.03  FE-pm 93.88
+[37120.7s]     s36: ens 93.77  FE-cone 93.92  FE-sub 94.03  FE-pm 93.88
+[37346.0s]     s37: ens 93.62  FE-cone 93.76  FE-sub 93.92  FE-pm 93.70
+[37565.5s]     s38: ens 93.59  FE-cone 93.67  FE-sub 93.85  FE-pm 93.77
+[37790.5s]     s39: ens 93.50  FE-cone 93.59  FE-sub 93.85  FE-pm 93.60
+[38099.8s]     s40: ens 93.37  FE-cone 93.67  FE-sub 93.66  FE-pm 93.73
+[38409.2s]     s41: ens 93.29  FE-cone 93.56  FE-sub 93.61  FE-pm 93.64
+[38742.5s]     s42: ens 93.26  FE-cone 93.44  FE-sub 93.52  FE-pm 93.42
+[39078.1s]     s43: ens 92.84  FE-cone 93.10  FE-sub 93.06  FE-pm 93.24
+[39426.4s]     s44: ens 92.90  FE-cone 93.14  FE-sub 93.17  FE-pm 93.20
+[39763.7s]     s45: ens 92.76  FE-cone 92.97  FE-sub 92.83  FE-pm 93.02
+[40161.2s]     s46: ens 92.17  FE-cone 92.53  FE-sub 92.53  FE-pm 92.62
+[40510.8s]     s47: ens 92.05  FE-cone 92.35  FE-sub 92.30  FE-pm 92.42
+[40916.3s]     s48: ens 92.04  FE-cone 92.40  FE-sub 92.19  FE-pm 92.43
+[41348.7s]     s49: ens 92.07  FE-cone 92.41  FE-sub 92.15  FE-pm 92.56
+[41348.7s]     cell took 7498s
+[41348.7s] === IMAGENETR|10|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[41412.2s]     s0: ens 96.09  FE-cone 96.09  FE-sub 96.09  FE-pm 96.23
+[41491.4s]     s1: ens 92.82  FE-cone 93.04  FE-sub 92.82  FE-pm 92.67
+[41609.0s]     s2: ens 89.66  FE-cone 90.12  FE-sub 90.12  FE-pm 89.71
+[41743.2s]     s3: ens 88.30  FE-cone 89.01  FE-sub 88.65  FE-pm 88.38
+[41920.7s]     s4: ens 85.69  FE-cone 86.68  FE-sub 86.12  FE-pm 85.82
+[42152.6s]     s5: ens 84.77  FE-cone 85.31  FE-sub 85.23  FE-pm 84.63
+[42502.6s]     s6: ens 83.92  FE-cone 84.67  FE-sub 84.27  FE-pm 84.13
+[42884.9s]     s7: ens 83.60  FE-cone 84.11  FE-sub 83.74  FE-pm 83.26
+[43342.0s]     s8: ens 82.70  FE-cone 83.58  FE-sub 83.36  FE-pm 82.61
+[43839.8s]     s9: ens 81.62  FE-cone 82.65  FE-sub 82.50  FE-pm 81.82
+[43839.8s]     cell took 2491s
+[43839.9s] === IMAGENETR|10|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[43897.8s]     s0: ens 93.68  FE-cone 93.53  FE-sub 93.97  FE-pm 93.68
+[43974.2s]     s1: ens 90.40  FE-cone 90.70  FE-sub 90.70  FE-pm 90.32
+[44092.4s]     s2: ens 88.84  FE-cone 89.15  FE-sub 89.26  FE-pm 88.57
+[44242.7s]     s3: ens 87.26  FE-cone 87.01  FE-sub 86.77  FE-pm 87.22
+[44425.2s]     s4: ens 86.56  FE-cone 86.33  FE-sub 86.39  FE-pm 86.36
+[44633.6s]     s5: ens 85.05  FE-cone 85.08  FE-sub 84.80  FE-pm 84.94
+[44957.9s]     s6: ens 83.92  FE-cone 84.45  FE-sub 83.92  FE-pm 83.97
+[45332.4s]     s7: ens 83.49  FE-cone 83.86  FE-sub 83.65  FE-pm 83.40
+[45762.5s]     s8: ens 82.13  FE-cone 82.76  FE-sub 82.58  FE-pm 82.28
+[46263.9s]     s9: ens 81.97  FE-cone 82.67  FE-sub 82.35  FE-pm 81.87
+[46263.9s]     cell took 2424s
+[46263.9s] === IMAGENETR|10|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[46322.5s]     s0: ens 95.37  FE-cone 95.69  FE-sub 95.53  FE-pm 95.53
+[46399.0s]     s1: ens 91.04  FE-cone 91.59  FE-sub 91.20  FE-pm 91.20
+[46525.1s]     s2: ens 89.55  FE-cone 89.60  FE-sub 89.50  FE-pm 89.24
+[46677.2s]     s3: ens 87.46  FE-cone 88.00  FE-sub 87.92  FE-pm 87.46
+[46868.5s]     s4: ens 85.82  FE-cone 86.38  FE-sub 86.15  FE-pm 85.59
+[47089.7s]     s5: ens 84.71  FE-cone 85.73  FE-sub 85.26  FE-pm 84.79
+[47411.1s]     s6: ens 83.38  FE-cone 84.03  FE-sub 83.79  FE-pm 83.29
+[47785.6s]     s7: ens 83.08  FE-cone 83.52  FE-sub 83.39  FE-pm 83.10
+[48204.8s]     s8: ens 81.96  FE-cone 82.45  FE-sub 82.09  FE-pm 81.75
+[48741.7s]     s9: ens 81.77  FE-cone 82.43  FE-sub 82.08  FE-pm 81.62
+[48741.8s]     cell took 2478s
+[48741.8s] === IMAGENETR|20|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[48778.1s]     s0: ens 96.57  FE-cone 96.57  FE-sub 96.57  FE-pm 96.57
+[48819.8s]     s1: ens 93.33  FE-cone 93.33  FE-sub 93.33  FE-pm 93.33
+[48874.3s]     s2: ens 91.22  FE-cone 91.32  FE-sub 91.42  FE-pm 91.32
+[48947.0s]     s3: ens 89.82  FE-cone 90.55  FE-sub 89.96  FE-pm 89.89
+[49031.4s]     s4: ens 88.64  FE-cone 89.43  FE-sub 88.76  FE-pm 88.94
+[49132.3s]     s5: ens 88.03  FE-cone 88.39  FE-sub 88.03  FE-pm 87.98
+[49243.3s]     s6: ens 87.23  FE-cone 87.19  FE-sub 87.28  FE-pm 87.41
+[49381.3s]     s7: ens 86.35  FE-cone 86.58  FE-sub 86.50  FE-pm 86.50
+[49525.9s]     s8: ens 85.05  FE-cone 85.37  FE-sub 85.40  FE-pm 85.19
+[49688.8s]     s9: ens 84.34  FE-cone 84.54  FE-sub 84.64  FE-pm 84.44
+[49862.6s]     s10: ens 83.82  FE-cone 83.88  FE-sub 83.94  FE-pm 84.03
+[50077.0s]     s11: ens 83.21  FE-cone 83.48  FE-sub 83.18  FE-pm 83.24
+[50296.7s]     s12: ens 82.36  FE-cone 82.85  FE-sub 82.49  FE-pm 82.31
+[50624.4s]     s13: ens 82.25  FE-cone 82.60  FE-sub 82.18  FE-pm 82.15
+[50969.3s]     s14: ens 82.17  FE-cone 82.63  FE-sub 82.30  FE-pm 82.12
+[51323.8s]     s15: ens 82.07  FE-cone 82.57  FE-sub 82.11  FE-pm 81.76
+[51778.8s]     s16: ens 81.13  FE-cone 81.88  FE-sub 81.38  FE-pm 81.09
+[52224.7s]     s17: ens 80.83  FE-cone 81.75  FE-sub 81.38  FE-pm 80.57
+[52663.3s]     s18: ens 80.48  FE-cone 81.36  FE-sub 81.02  FE-pm 80.34
+[53126.0s]     s19: ens 80.12  FE-cone 80.93  FE-sub 80.62  FE-pm 79.97
+[53126.1s]     cell took 4384s
+[53126.1s] === IMAGENETR|20|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[53161.1s]     s0: ens 94.62  FE-cone 94.62  FE-sub 94.89  FE-pm 94.89
+[53201.1s]     s1: ens 92.96  FE-cone 92.82  FE-sub 92.96  FE-pm 92.96
+[53258.0s]     s2: ens 91.23  FE-cone 91.44  FE-sub 91.23  FE-pm 91.23
+[53328.5s]     s3: ens 90.32  FE-cone 89.93  FE-sub 90.16  FE-pm 90.09
+[53412.4s]     s4: ens 89.33  FE-cone 89.64  FE-sub 89.39  FE-pm 89.14
+[53508.1s]     s5: ens 87.99  FE-cone 88.36  FE-sub 88.25  FE-pm 87.88
+[53618.9s]     s6: ens 86.94  FE-cone 86.89  FE-sub 87.08  FE-pm 86.98
+[53750.1s]     s7: ens 85.66  FE-cone 86.23  FE-sub 86.07  FE-pm 85.49
+[53901.8s]     s8: ens 85.35  FE-cone 86.01  FE-sub 85.75  FE-pm 85.53
+[54072.3s]     s9: ens 85.39  FE-cone 85.49  FE-sub 85.46  FE-pm 85.32
+[54250.7s]     s10: ens 84.55  FE-cone 84.86  FE-sub 84.77  FE-pm 84.49
+[54450.5s]     s11: ens 83.99  FE-cone 84.63  FE-sub 84.33  FE-pm 84.02
+[54682.6s]     s12: ens 83.69  FE-cone 84.40  FE-sub 83.87  FE-pm 83.66
+[54980.3s]     s13: ens 83.12  FE-cone 83.63  FE-sub 83.10  FE-pm 83.22
+[55323.8s]     s14: ens 82.87  FE-cone 83.55  FE-sub 83.05  FE-pm 82.98
+[55682.7s]     s15: ens 82.36  FE-cone 83.22  FE-sub 82.57  FE-pm 82.36
+[56068.4s]     s16: ens 81.86  FE-cone 82.67  FE-sub 82.04  FE-pm 81.94
+[56455.9s]     s17: ens 81.24  FE-cone 82.10  FE-sub 81.50  FE-pm 81.30
+[56888.4s]     s18: ens 80.99  FE-cone 81.72  FE-sub 81.40  FE-pm 81.24
+[57359.2s]     s19: ens 81.07  FE-cone 81.78  FE-sub 81.43  FE-pm 81.18
+[57359.2s]     cell took 4233s
+[57359.3s] === IMAGENETR|20|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[57394.7s]     s0: ens 96.46  FE-cone 96.46  FE-sub 96.46  FE-pm 96.46
+[57431.6s]     s1: ens 93.13  FE-cone 93.29  FE-sub 93.29  FE-pm 93.29
+[57478.8s]     s2: ens 90.10  FE-cone 90.42  FE-sub 90.10  FE-pm 89.88
+[57563.1s]     s3: ens 88.92  FE-cone 88.53  FE-sub 88.69  FE-pm 88.92
+[57645.9s]     s4: ens 87.77  FE-cone 88.14  FE-sub 87.90  FE-pm 87.71
+[57744.3s]     s5: ens 87.57  FE-cone 87.36  FE-sub 87.36  FE-pm 87.52
+[57863.9s]     s6: ens 86.23  FE-cone 87.32  FE-sub 86.58  FE-pm 86.36
+[57982.2s]     s7: ens 85.31  FE-cone 86.43  FE-sub 86.12  FE-pm 85.74
+[58137.0s]     s8: ens 84.34  FE-cone 85.61  FE-sub 85.29  FE-pm 84.51
+[58295.7s]     s9: ens 84.00  FE-cone 84.92  FE-sub 84.86  FE-pm 84.03
+[58463.7s]     s10: ens 83.45  FE-cone 84.36  FE-sub 84.00  FE-pm 83.42
+[58662.4s]     s11: ens 82.95  FE-cone 84.05  FE-sub 83.83  FE-pm 83.17
+[58853.9s]     s12: ens 82.00  FE-cone 83.35  FE-sub 82.97  FE-pm 82.11
+[59136.6s]     s13: ens 81.12  FE-cone 82.49  FE-sub 82.01  FE-pm 81.26
+[59460.0s]     s14: ens 80.90  FE-cone 82.21  FE-sub 81.57  FE-pm 81.17
+[59806.6s]     s15: ens 81.08  FE-cone 82.23  FE-sub 81.61  FE-pm 81.15
+[60156.2s]     s16: ens 80.37  FE-cone 81.36  FE-sub 80.85  FE-pm 80.23
+[60544.8s]     s17: ens 79.69  FE-cone 80.74  FE-sub 80.23  FE-pm 79.69
+[60976.1s]     s18: ens 79.81  FE-cone 80.62  FE-sub 80.25  FE-pm 79.77
+[61432.5s]     s19: ens 79.73  FE-cone 80.77  FE-sub 80.25  FE-pm 79.77
+[61432.5s]     cell took 4073s
+[61432.6s] === IMAGENETR|50|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[61446.3s]     s0: ens 97.08  FE-cone 97.08  FE-sub 97.08  FE-pm 97.08
+[61462.2s]     s1: ens 96.11  FE-cone 96.11  FE-sub 96.11  FE-pm 96.11
+[61482.7s]     s2: ens 94.09  FE-cone 94.09  FE-sub 93.83  FE-pm 94.09
+[61509.9s]     s3: ens 92.53  FE-cone 92.19  FE-sub 92.36  FE-pm 92.36
+[61538.3s]     s4: ens 91.59  FE-cone 92.17  FE-sub 91.88  FE-pm 91.59
+[61574.9s]     s5: ens 91.12  FE-cone 91.37  FE-sub 91.37  FE-pm 91.00
+[61615.8s]     s6: ens 90.25  FE-cone 90.36  FE-sub 90.47  FE-pm 89.92
+[61657.3s]     s7: ens 89.02  FE-cone 89.68  FE-sub 89.39  FE-pm 89.11
+[61705.8s]     s8: ens 88.47  FE-cone 89.04  FE-sub 88.88  FE-pm 88.80
+[61784.9s]     s9: ens 87.62  FE-cone 87.99  FE-sub 87.91  FE-pm 87.91
+[61845.3s]     s10: ens 87.12  FE-cone 87.73  FE-sub 87.53  FE-pm 87.32
+[61906.2s]     s11: ens 86.22  FE-cone 86.92  FE-sub 86.60  FE-pm 86.29
+[61973.9s]     s12: ens 86.07  FE-cone 86.59  FE-sub 86.42  FE-pm 86.12
+[62052.4s]     s13: ens 85.27  FE-cone 85.98  FE-sub 85.38  FE-pm 85.33
+[62145.4s]     s14: ens 85.29  FE-cone 85.74  FE-sub 85.23  FE-pm 85.39
+[62230.2s]     s15: ens 83.98  FE-cone 84.36  FE-sub 84.17  FE-pm 84.27
+[62325.7s]     s16: ens 84.05  FE-cone 84.59  FE-sub 84.27  FE-pm 84.23
+[62420.4s]     s17: ens 84.46  FE-cone 84.89  FE-sub 84.51  FE-pm 84.55
+[62532.0s]     s18: ens 83.96  FE-cone 84.79  FE-sub 84.25  FE-pm 84.13
+[62643.1s]     s19: ens 82.84  FE-cone 83.64  FE-sub 83.24  FE-pm 83.04
+[62763.6s]     s20: ens 82.86  FE-cone 83.62  FE-sub 83.43  FE-pm 83.24
+[62905.4s]     s21: ens 82.51  FE-cone 83.12  FE-sub 83.01  FE-pm 82.80
+[63041.8s]     s22: ens 81.31  FE-cone 81.93  FE-sub 81.62  FE-pm 81.72
+[63198.2s]     s23: ens 80.83  FE-cone 81.44  FE-sub 81.37  FE-pm 81.00
+[63363.0s]     s24: ens 80.49  FE-cone 81.41  FE-sub 81.09  FE-pm 80.76
+[63513.2s]     s25: ens 80.44  FE-cone 81.11  FE-sub 80.79  FE-pm 80.67
+[63680.2s]     s26: ens 80.14  FE-cone 80.96  FE-sub 80.75  FE-pm 80.38
+[63853.8s]     s27: ens 80.01  FE-cone 80.85  FE-sub 80.52  FE-pm 80.25
+[64039.1s]     s28: ens 79.68  FE-cone 80.52  FE-sub 80.08  FE-pm 79.79
+[64219.0s]     s29: ens 79.47  FE-cone 80.21  FE-sub 80.04  FE-pm 79.63
+[64411.1s]     s30: ens 79.25  FE-cone 80.05  FE-sub 79.81  FE-pm 79.31
+[64617.4s]     s31: ens 79.39  FE-cone 79.93  FE-sub 80.08  FE-pm 79.31
+[64820.1s]     s32: ens 79.29  FE-cone 79.94  FE-sub 79.67  FE-pm 79.32
+[65030.9s]     s33: ens 79.01  FE-cone 79.84  FE-sub 79.43  FE-pm 79.01
+[65304.8s]     s34: ens 79.04  FE-cone 79.70  FE-sub 79.33  FE-pm 79.26
+[65623.1s]     s35: ens 79.29  FE-cone 79.82  FE-sub 79.77  FE-pm 79.36
+[65930.7s]     s36: ens 78.57  FE-cone 79.52  FE-sub 79.21  FE-pm 78.62
+[66237.1s]     s37: ens 78.55  FE-cone 79.78  FE-sub 79.10  FE-pm 78.76
+[66546.6s]     s38: ens 78.63  FE-cone 79.65  FE-sub 79.07  FE-pm 78.71
+[66875.5s]     s39: ens 78.55  FE-cone 79.46  FE-sub 78.89  FE-pm 78.67
+[67224.7s]     s40: ens 78.06  FE-cone 78.99  FE-sub 78.63  FE-pm 78.10
+[67578.1s]     s41: ens 77.82  FE-cone 78.84  FE-sub 78.24  FE-pm 77.99
+[67942.3s]     s42: ens 77.73  FE-cone 78.79  FE-sub 78.21  FE-pm 78.00
+[68307.6s]     s43: ens 77.66  FE-cone 78.82  FE-sub 78.22  FE-pm 77.89
+[68716.9s]     s44: ens 77.78  FE-cone 78.83  FE-sub 78.35  FE-pm 78.02
+[69103.8s]     s45: ens 77.43  FE-cone 78.41  FE-sub 77.89  FE-pm 77.48
+[69539.9s]     s46: ens 77.39  FE-cone 78.50  FE-sub 77.86  FE-pm 77.51
+[70002.0s]     s47: ens 77.11  FE-cone 78.19  FE-sub 77.69  FE-pm 77.16
+[70449.6s]     s48: ens 76.98  FE-cone 78.10  FE-sub 77.60  FE-pm 76.99
+[70903.4s]     s49: ens 77.05  FE-cone 78.18  FE-sub 77.68  FE-pm 77.07
+[70903.4s]     cell took 9471s
+[70903.5s] === IMAGENETR|50|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[70918.7s]     s0: ens 95.62  FE-cone 95.62  FE-sub 95.62  FE-pm 95.62
+[70935.0s]     s1: ens 89.38  FE-cone 89.38  FE-sub 89.04  FE-pm 89.38
+[70955.6s]     s2: ens 88.04  FE-cone 88.04  FE-sub 88.28  FE-pm 88.04
+[70982.8s]     s3: ens 87.25  FE-cone 85.46  FE-sub 87.25  FE-pm 87.25
+[71011.5s]     s4: ens 89.22  FE-cone 87.93  FE-sub 88.94  FE-pm 89.37
+[71049.7s]     s5: ens 89.44  FE-cone 88.70  FE-sub 88.57  FE-pm 89.69
+[71089.6s]     s6: ens 89.27  FE-cone 88.61  FE-sub 88.94  FE-pm 89.27
+[71132.9s]     s7: ens 87.06  FE-cone 86.96  FE-sub 87.15  FE-pm 87.25
+[71184.0s]     s8: ens 86.75  FE-cone 86.05  FE-sub 86.22  FE-pm 86.75
+[71239.8s]     s9: ens 86.60  FE-cone 86.52  FE-sub 86.75  FE-pm 86.44
+[71298.6s]     s10: ens 86.40  FE-cone 86.18  FE-sub 86.47  FE-pm 86.04
+[71370.4s]     s11: ens 86.07  FE-cone 86.27  FE-sub 86.33  FE-pm 86.33
+[71443.2s]     s12: ens 85.19  FE-cone 85.44  FE-sub 85.32  FE-pm 85.50
+[71525.2s]     s13: ens 85.72  FE-cone 85.00  FE-sub 84.95  FE-pm 85.72
+[71604.0s]     s14: ens 85.61  FE-cone 85.03  FE-sub 85.24  FE-pm 85.45
+[71693.0s]     s15: ens 84.90  FE-cone 84.65  FE-sub 84.45  FE-pm 84.45
+[71794.3s]     s16: ens 84.49  FE-cone 84.02  FE-sub 83.69  FE-pm 84.25
+[71903.1s]     s17: ens 84.11  FE-cone 83.62  FE-sub 83.40  FE-pm 83.98
+[72006.1s]     s18: ens 83.69  FE-cone 83.56  FE-sub 83.18  FE-pm 83.52
+[72121.9s]     s19: ens 82.98  FE-cone 82.82  FE-sub 82.98  FE-pm 82.78
+[72256.4s]     s20: ens 82.69  FE-cone 82.69  FE-sub 82.65  FE-pm 82.22
+[72371.9s]     s21: ens 82.59  FE-cone 82.67  FE-sub 82.63  FE-pm 82.48
+[72504.6s]     s22: ens 82.54  FE-cone 82.57  FE-sub 82.82  FE-pm 82.61
+[72651.4s]     s23: ens 82.23  FE-cone 82.19  FE-sub 82.43  FE-pm 82.30
+[72795.4s]     s24: ens 82.44  FE-cone 82.51  FE-sub 82.71  FE-pm 82.24
+[72942.1s]     s25: ens 81.83  FE-cone 82.03  FE-sub 82.00  FE-pm 81.67
+[73086.3s]     s26: ens 81.69  FE-cone 81.88  FE-sub 81.50  FE-pm 81.47
+[73237.5s]     s27: ens 81.53  FE-cone 81.35  FE-sub 81.62  FE-pm 81.26
+[73416.8s]     s28: ens 81.29  FE-cone 81.32  FE-sub 81.61  FE-pm 81.35
+[73612.7s]     s29: ens 81.04  FE-cone 81.12  FE-sub 81.18  FE-pm 81.07
+[73788.4s]     s30: ens 80.89  FE-cone 81.14  FE-sub 81.25  FE-pm 80.86
+[73980.8s]     s31: ens 80.69  FE-cone 80.96  FE-sub 80.59  FE-pm 80.53
+[74183.3s]     s32: ens 80.61  FE-cone 80.61  FE-sub 80.76  FE-pm 80.25
+[74379.7s]     s33: ens 80.50  FE-cone 80.88  FE-sub 80.83  FE-pm 80.35
+[74669.2s]     s34: ens 80.04  FE-cone 80.69  FE-sub 80.19  FE-pm 79.80
+[74953.5s]     s35: ens 79.84  FE-cone 80.44  FE-sub 80.09  FE-pm 79.72
+[75245.0s]     s36: ens 79.70  FE-cone 80.67  FE-sub 79.95  FE-pm 79.63
+[75541.4s]     s37: ens 79.65  FE-cone 80.80  FE-sub 80.23  FE-pm 79.63
+[75876.2s]     s38: ens 79.36  FE-cone 80.26  FE-sub 79.96  FE-pm 79.47
+[76217.3s]     s39: ens 79.14  FE-cone 80.32  FE-sub 79.87  FE-pm 79.12
+[76576.4s]     s40: ens 78.62  FE-cone 79.91  FE-sub 79.39  FE-pm 78.76
+[76923.5s]     s41: ens 78.57  FE-cone 79.72  FE-sub 79.19  FE-pm 78.57
+[77298.8s]     s42: ens 78.56  FE-cone 79.86  FE-sub 79.11  FE-pm 78.79
+[102864.8s]     s43: ens 78.15  FE-cone 79.52  FE-sub 78.87  FE-pm 78.31
+[103252.7s]     s44: ens 77.97  FE-cone 79.18  FE-sub 78.53  FE-pm 77.93
+[103633.8s]     s45: ens 77.79  FE-cone 79.06  FE-sub 78.30  FE-pm 77.83
+[104065.5s]     s46: ens 77.67  FE-cone 79.19  FE-sub 78.46  FE-pm 77.90
+[104532.6s]     s47: ens 77.67  FE-cone 78.89  FE-sub 78.42  FE-pm 78.04
+[104986.5s]     s48: ens 77.66  FE-cone 78.91  FE-sub 78.34  FE-pm 78.06
+[105482.4s]     s49: ens 77.57  FE-cone 79.05  FE-sub 78.38  FE-pm 78.15
+[105482.4s]     cell took 34579s
+[105482.5s] === IMAGENETR|50|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/axiong/imagenet-r/resolve/762a23f169e080bef0be7c9d96bf73a126cbb660/imagenet-r.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since axiong/imagenet-r couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'test' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/axiong___imagenet-r/test/0.0.0/762a23f169e080bef0be7c9d96bf73a126cbb660 (last modified on Tue Jul 28 10:22:33 2026).
+[105499.5s]     s0: ens 96.80  FE-cone 96.80  FE-sub 96.80  FE-pm 96.80
+[105518.2s]     s1: ens 94.23  FE-cone 94.23  FE-sub 94.23  FE-pm 94.23
+[105539.3s]     s2: ens 93.70  FE-cone 93.98  FE-sub 94.27  FE-pm 93.70
+[105563.8s]     s3: ens 92.37  FE-cone 92.37  FE-sub 92.37  FE-pm 92.37
+[105599.2s]     s4: ens 91.69  FE-cone 91.69  FE-sub 91.69  FE-pm 91.69
+[105652.8s]     s5: ens 90.90  FE-cone 91.47  FE-sub 90.90  FE-pm 90.90
+[105694.7s]     s6: ens 88.40  FE-cone 88.40  FE-sub 88.63  FE-pm 88.40
+[105742.2s]     s7: ens 87.07  FE-cone 87.56  FE-sub 87.46  FE-pm 87.27
+[105794.3s]     s8: ens 86.67  FE-cone 87.11  FE-sub 87.02  FE-pm 86.84
+[105854.5s]     s9: ens 86.02  FE-cone 86.10  FE-sub 85.86  FE-pm 86.17
+[105923.3s]     s10: ens 85.07  FE-cone 85.07  FE-sub 85.36  FE-pm 85.14
+[106004.0s]     s11: ens 84.85  FE-cone 85.25  FE-sub 84.92  FE-pm 84.85
+[106077.4s]     s12: ens 84.11  FE-cone 84.76  FE-sub 84.52  FE-pm 83.99
+[106158.1s]     s13: ens 84.26  FE-cone 84.98  FE-sub 84.65  FE-pm 84.43
+[106247.3s]     s14: ens 84.24  FE-cone 85.02  FE-sub 84.82  FE-pm 84.24
+[106331.8s]     s15: ens 83.80  FE-cone 84.47  FE-sub 84.28  FE-pm 83.90
+[106434.6s]     s16: ens 82.88  FE-cone 83.46  FE-sub 83.28  FE-pm 82.79
+[106549.9s]     s17: ens 82.79  FE-cone 83.00  FE-sub 83.08  FE-pm 82.79
+[106676.5s]     s18: ens 82.62  FE-cone 82.98  FE-sub 82.94  FE-pm 82.70
+[106797.9s]     s19: ens 81.63  FE-cone 82.40  FE-sub 82.09  FE-pm 81.40
+[106919.6s]     s20: ens 81.31  FE-cone 81.83  FE-sub 81.75  FE-pm 81.27
+[107058.0s]     s21: ens 81.04  FE-cone 81.76  FE-sub 81.47  FE-pm 80.76
+[107180.9s]     s22: ens 80.43  FE-cone 81.10  FE-sub 80.75  FE-pm 80.19
+[107327.7s]     s23: ens 79.92  FE-cone 80.77  FE-sub 80.49  FE-pm 79.85
+[107457.8s]     s24: ens 80.05  FE-cone 80.98  FE-sub 80.65  FE-pm 79.89
+[107622.0s]     s25: ens 79.70  FE-cone 80.67  FE-sub 80.23  FE-pm 79.86
+[107776.5s]     s26: ens 79.06  FE-cone 80.34  FE-sub 79.88  FE-pm 79.15
+[107948.8s]     s27: ens 79.29  FE-cone 80.36  FE-sub 79.86  FE-pm 79.20
+[108126.7s]     s28: ens 79.07  FE-cone 79.99  FE-sub 79.39  FE-pm 79.16
+[108318.7s]     s29: ens 79.08  FE-cone 80.26  FE-sub 79.74  FE-pm 79.28
+[108516.0s]     s30: ens 78.43  FE-cone 79.56  FE-sub 79.32  FE-pm 78.51
+[108713.5s]     s31: ens 78.14  FE-cone 79.49  FE-sub 78.93  FE-pm 78.03
+[108927.2s]     s32: ens 77.74  FE-cone 78.61  FE-sub 78.22  FE-pm 77.77
+[109135.1s]     s33: ens 77.49  FE-cone 78.40  FE-sub 78.25  FE-pm 77.69
+[109428.1s]     s34: ens 77.22  FE-cone 78.25  FE-sub 78.25  FE-pm 77.41
+[109725.1s]     s35: ens 77.18  FE-cone 78.47  FE-sub 78.49  FE-pm 77.37
+[110024.9s]     s36: ens 77.14  FE-cone 78.44  FE-sub 78.16  FE-pm 77.48
+[110351.7s]     s37: ens 77.41  FE-cone 78.57  FE-sub 78.59  FE-pm 77.41
+[110659.6s]     s38: ens 77.48  FE-cone 78.70  FE-sub 78.33  FE-pm 77.37
+[110977.2s]     s39: ens 77.41  FE-cone 78.54  FE-sub 78.01  FE-pm 77.31
+[111306.1s]     s40: ens 77.13  FE-cone 78.40  FE-sub 77.97  FE-pm 77.02
+[111675.8s]     s41: ens 76.66  FE-cone 77.95  FE-sub 77.61  FE-pm 76.58
+[112039.0s]     s42: ens 76.08  FE-cone 77.50  FE-sub 76.93  FE-pm 75.83
+[112396.2s]     s43: ens 76.02  FE-cone 77.50  FE-sub 76.81  FE-pm 75.91
+[112809.3s]     s44: ens 75.84  FE-cone 77.34  FE-sub 76.81  FE-pm 75.97
+[113188.0s]     s45: ens 75.73  FE-cone 77.19  FE-sub 76.93  FE-pm 75.95
+[113599.3s]     s46: ens 75.80  FE-cone 77.12  FE-sub 76.64  FE-pm 75.98
+[114033.8s]     s47: ens 75.84  FE-cone 77.36  FE-sub 76.63  FE-pm 76.00
+[114492.9s]     s48: ens 75.97  FE-cone 77.13  FE-sub 76.81  FE-pm 76.09
+[114969.5s]     s49: ens 76.07  FE-cone 77.40  FE-sub 76.82  FE-pm 76.32
+[114969.5s]     cell took 9487s
+[114969.6s] === CUB200P|10|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[115013.9s]     s0: ens 97.45  FE-cone 97.45  FE-sub 97.45  FE-pm 97.45
+[115078.0s]     s1: ens 96.76  FE-cone 96.54  FE-sub 96.54  FE-pm 96.54
+[115178.3s]     s2: ens 95.08  FE-cone 94.79  FE-sub 94.79  FE-pm 95.08
+[115295.4s]     s3: ens 94.37  FE-cone 93.84  FE-sub 94.16  FE-pm 94.16
+[115427.4s]     s4: ens 94.06  FE-cone 93.97  FE-sub 94.14  FE-pm 93.88
+[115617.3s]     s5: ens 93.52  FE-cone 93.59  FE-sub 93.02  FE-pm 93.38
+[115809.2s]     s6: ens 92.11  FE-cone 92.11  FE-sub 92.23  FE-pm 92.17
+[116032.0s]     s7: ens 91.83  FE-cone 91.78  FE-sub 91.67  FE-pm 91.72
+[116291.2s]     s8: ens 91.34  FE-cone 91.39  FE-sub 91.39  FE-pm 91.43
+[116588.7s]     s9: ens 90.29  FE-cone 90.25  FE-sub 90.25  FE-pm 90.33
+[116588.7s]     cell took 1619s
+[116588.8s] === CUB200P|10|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[116639.7s]     s0: ens 99.12  FE-cone 99.12  FE-sub 99.12  FE-pm 99.12
+[116708.8s]     s1: ens 97.89  FE-cone 98.10  FE-sub 98.10  FE-pm 98.10
+[116805.3s]     s2: ens 96.80  FE-cone 96.94  FE-sub 96.80  FE-pm 96.80
+[116923.1s]     s3: ens 94.75  FE-cone 95.07  FE-sub 94.75  FE-pm 94.75
+[117061.5s]     s4: ens 94.37  FE-cone 94.37  FE-sub 94.37  FE-pm 94.37
+[117226.0s]     s5: ens 94.26  FE-cone 94.05  FE-sub 94.26  FE-pm 94.12
+[117417.4s]     s6: ens 92.84  FE-cone 92.84  FE-sub 92.91  FE-pm 92.78
+[117623.4s]     s7: ens 91.06  FE-cone 91.06  FE-sub 91.11  FE-pm 91.11
+[117902.8s]     s8: ens 90.59  FE-cone 90.64  FE-sub 90.50  FE-pm 90.73
+[118181.7s]     s9: ens 90.20  FE-cone 90.25  FE-sub 90.25  FE-pm 90.03
+[118181.7s]     cell took 1593s
+[118181.8s] === CUB200P|10|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[118229.1s]     s0: ens 95.92  FE-cone 95.92  FE-sub 95.92  FE-pm 95.92
+[118300.7s]     s1: ens 93.97  FE-cone 93.76  FE-sub 94.18  FE-pm 93.97
+[118397.7s]     s2: ens 92.95  FE-cone 93.09  FE-sub 92.95  FE-pm 92.95
+[118513.7s]     s3: ens 92.65  FE-cone 92.96  FE-sub 92.96  FE-pm 92.75
+[118653.2s]     s4: ens 92.49  FE-cone 92.24  FE-sub 92.41  FE-pm 92.83
+[118817.1s]     s5: ens 91.66  FE-cone 91.72  FE-sub 91.72  FE-pm 91.52
+[119015.3s]     s6: ens 91.48  FE-cone 91.36  FE-sub 91.24  FE-pm 91.30
+[119267.5s]     s7: ens 90.56  FE-cone 90.45  FE-sub 90.25  FE-pm 90.51
+[119518.2s]     s8: ens 90.37  FE-cone 90.37  FE-sub 90.37  FE-pm 90.42
+[119805.2s]     s9: ens 90.08  FE-cone 89.99  FE-sub 90.12  FE-pm 90.08
+[119805.2s]     cell took 1623s
+[119805.3s] === CUB200P|20|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[119828.9s]     s0: ens 99.19  FE-cone 99.19  FE-sub 99.19  FE-pm 99.19
+[119863.5s]     s1: ens 98.30  FE-cone 98.30  FE-sub 98.30  FE-pm 98.30
+[119908.8s]     s2: ens 97.67  FE-cone 97.67  FE-sub 97.67  FE-pm 97.67
+[119966.9s]     s3: ens 97.41  FE-cone 97.41  FE-sub 97.41  FE-pm 97.41
+[120040.7s]     s4: ens 96.71  FE-cone 96.71  FE-sub 96.54  FE-pm 96.54
+[120127.1s]     s5: ens 95.51  FE-cone 95.51  FE-sub 95.51  FE-pm 95.66
+[120232.6s]     s6: ens 93.71  FE-cone 93.71  FE-sub 93.71  FE-pm 93.71
+[120352.2s]     s7: ens 93.84  FE-cone 93.73  FE-sub 93.94  FE-pm 94.05
+[120468.4s]     s8: ens 94.01  FE-cone 94.01  FE-sub 94.10  FE-pm 94.01
+[120594.1s]     s9: ens 93.37  FE-cone 93.37  FE-sub 93.37  FE-pm 93.37
+[120735.6s]     s10: ens 93.44  FE-cone 93.44  FE-sub 93.44  FE-pm 93.44
+[120895.8s]     s11: ens 92.66  FE-cone 92.59  FE-sub 92.66  FE-pm 92.66
+[121052.1s]     s12: ens 91.43  FE-cone 91.50  FE-sub 91.43  FE-pm 91.43
+[121239.7s]     s13: ens 91.63  FE-cone 91.75  FE-sub 91.50  FE-pm 91.75
+[121420.0s]     s14: ens 91.22  FE-cone 91.33  FE-sub 91.16  FE-pm 91.39
+[121624.2s]     s15: ens 90.92  FE-cone 91.03  FE-sub 90.97  FE-pm 90.97
+[121872.4s]     s16: ens 90.51  FE-cone 90.56  FE-sub 90.56  FE-pm 90.56
+[122120.1s]     s17: ens 90.44  FE-cone 90.63  FE-sub 90.49  FE-pm 90.44
+[122362.9s]     s18: ens 90.00  FE-cone 90.09  FE-sub 90.00  FE-pm 90.04
+[122657.8s]     s19: ens 89.65  FE-cone 89.57  FE-sub 89.69  FE-pm 89.61
+[122657.8s]     cell took 2852s
+[122657.9s] === CUB200P|20|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[122684.3s]     s0: ens 99.20  FE-cone 99.20  FE-sub 99.20  FE-pm 99.20
+[122715.8s]     s1: ens 98.68  FE-cone 99.12  FE-sub 99.12  FE-pm 99.12
+[122757.1s]     s2: ens 98.55  FE-cone 98.55  FE-sub 98.55  FE-pm 98.55
+[122809.4s]     s3: ens 98.10  FE-cone 98.10  FE-sub 98.10  FE-pm 98.10
+[122879.6s]     s4: ens 97.36  FE-cone 97.36  FE-sub 97.36  FE-pm 97.36
+[122960.6s]     s5: ens 96.80  FE-cone 96.94  FE-sub 96.94  FE-pm 96.94
+[123049.8s]     s6: ens 94.87  FE-cone 94.99  FE-sub 94.87  FE-pm 94.99
+[123155.1s]     s7: ens 94.86  FE-cone 94.86  FE-sub 94.86  FE-pm 94.86
+[123290.6s]     s8: ens 95.11  FE-cone 94.92  FE-sub 95.01  FE-pm 95.01
+[123422.0s]     s9: ens 94.54  FE-cone 94.71  FE-sub 94.46  FE-pm 94.54
+[123552.8s]     s10: ens 94.23  FE-cone 94.07  FE-sub 94.31  FE-pm 94.07
+[123701.5s]     s11: ens 94.05  FE-cone 94.05  FE-sub 94.05  FE-pm 93.98
+[123876.6s]     s12: ens 92.73  FE-cone 92.86  FE-sub 92.80  FE-pm 92.80
+[124041.8s]     s13: ens 92.66  FE-cone 92.60  FE-sub 92.54  FE-pm 92.47
+[124235.3s]     s14: ens 91.51  FE-cone 91.63  FE-sub 91.74  FE-pm 91.74
+[124458.1s]     s15: ens 90.36  FE-cone 90.68  FE-sub 90.58  FE-pm 90.85
+[124687.3s]     s16: ens 90.40  FE-cone 90.65  FE-sub 90.55  FE-pm 90.60
+[124934.5s]     s17: ens 90.35  FE-cone 90.45  FE-sub 90.31  FE-pm 90.40
+[125186.5s]     s18: ens 89.66  FE-cone 89.66  FE-sub 89.66  FE-pm 89.71
+[125449.4s]     s19: ens 89.61  FE-cone 89.65  FE-sub 89.74  FE-pm 89.65
+[125449.5s]     cell took 2792s
+[125449.6s] === CUB200P|20|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[125473.5s]     s0: ens 98.54  FE-cone 98.54  FE-sub 98.54  FE-pm 98.54
+[125504.7s]     s1: ens 96.33  FE-cone 96.33  FE-sub 96.33  FE-pm 96.33
+[125549.2s]     s2: ens 95.62  FE-cone 95.62  FE-sub 95.07  FE-pm 95.62
+[125617.3s]     s3: ens 93.76  FE-cone 93.14  FE-sub 93.76  FE-pm 93.76
+[125689.5s]     s4: ens 93.03  FE-cone 93.37  FE-sub 93.03  FE-pm 92.87
+[125766.0s]     s5: ens 92.81  FE-cone 92.81  FE-sub 92.81  FE-pm 92.67
+[125861.0s]     s6: ens 92.75  FE-cone 92.87  FE-sub 92.75  FE-pm 92.75
+[125966.6s]     s7: ens 93.07  FE-cone 93.17  FE-sub 93.07  FE-pm 93.07
+[126094.7s]     s8: ens 92.93  FE-cone 93.02  FE-sub 92.84  FE-pm 92.93
+[126218.1s]     s9: ens 93.08  FE-cone 92.83  FE-sub 93.00  FE-pm 92.91
+[126368.8s]     s10: ens 92.07  FE-cone 92.30  FE-sub 92.23  FE-pm 92.23
+[126512.1s]     s11: ens 90.96  FE-cone 91.52  FE-sub 91.17  FE-pm 91.24
+[126669.6s]     s12: ens 91.01  FE-cone 90.94  FE-sub 91.01  FE-pm 91.33
+[126832.9s]     s13: ens 91.13  FE-cone 91.36  FE-sub 91.19  FE-pm 91.24
+[127019.1s]     s14: ens 90.24  FE-cone 90.57  FE-sub 90.24  FE-pm 90.46
+[127221.5s]     s15: ens 90.04  FE-cone 89.88  FE-sub 89.88  FE-pm 89.93
+[127434.7s]     s16: ens 90.12  FE-cone 90.07  FE-sub 89.63  FE-pm 89.83
+[127662.0s]     s17: ens 89.81  FE-cone 89.63  FE-sub 89.63  FE-pm 89.81
+[127894.0s]     s18: ens 89.69  FE-cone 89.87  FE-sub 89.96  FE-pm 90.18
+[128141.7s]     s19: ens 89.65  FE-cone 90.08  FE-sub 90.08  FE-pm 90.12
+[128141.7s]     cell took 2692s
+[128141.8s] === CUB200P|50|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[128153.4s]     s0: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[128166.9s]     s1: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[128184.6s]     s2: ens 99.36  FE-cone 99.36  FE-sub 99.36  FE-pm 99.36
+[128206.0s]     s3: ens 99.50  FE-cone 99.50  FE-sub 99.50  FE-pm 99.50
+[128232.3s]     s4: ens 98.30  FE-cone 98.30  FE-sub 98.30  FE-pm 98.30
+[128262.5s]     s5: ens 97.52  FE-cone 97.52  FE-sub 97.52  FE-pm 97.52
+[128298.5s]     s6: ens 97.50  FE-cone 97.50  FE-sub 97.50  FE-pm 97.50
+[128341.0s]     s7: ens 97.55  FE-cone 97.55  FE-sub 97.55  FE-pm 97.55
+[128383.2s]     s8: ens 97.34  FE-cone 97.09  FE-sub 97.09  FE-pm 97.34
+[128436.2s]     s9: ens 96.98  FE-cone 96.76  FE-sub 96.76  FE-pm 96.98
+[128495.0s]     s10: ens 96.81  FE-cone 97.21  FE-sub 97.01  FE-pm 97.21
+[128563.8s]     s11: ens 96.91  FE-cone 96.73  FE-sub 97.09  FE-pm 96.91
+[128621.6s]     s12: ens 96.36  FE-cone 96.36  FE-sub 96.69  FE-pm 96.36
+[128684.5s]     s13: ens 96.18  FE-cone 96.18  FE-sub 96.33  FE-pm 96.18
+[128754.3s]     s14: ens 94.93  FE-cone 94.93  FE-sub 94.93  FE-pm 95.22
+[128832.9s]     s15: ens 94.34  FE-cone 94.74  FE-sub 94.74  FE-pm 94.74
+[128917.6s]     s16: ens 93.55  FE-cone 94.18  FE-sub 94.06  FE-pm 94.06
+[129000.0s]     s17: ens 93.56  FE-cone 93.79  FE-sub 93.91  FE-pm 93.68
+[129083.2s]     s18: ens 93.54  FE-cone 93.76  FE-sub 93.65  FE-pm 93.42
+[129177.0s]     s19: ens 93.30  FE-cone 93.41  FE-sub 93.41  FE-pm 93.52
+[129277.9s]     s20: ens 93.63  FE-cone 93.73  FE-sub 93.73  FE-pm 93.63
+[129378.8s]     s21: ens 93.89  FE-cone 93.99  FE-sub 94.08  FE-pm 93.99
+[129504.4s]     s22: ens 93.81  FE-cone 94.09  FE-sub 94.00  FE-pm 93.90
+[129610.1s]     s23: ens 93.92  FE-cone 94.10  FE-sub 94.19  FE-pm 94.19
+[129730.0s]     s24: ens 93.11  FE-cone 93.45  FE-sub 93.45  FE-pm 93.37
+[129848.7s]     s25: ens 93.40  FE-cone 93.40  FE-sub 93.65  FE-pm 93.40
+[129981.1s]     s26: ens 93.24  FE-cone 93.32  FE-sub 93.24  FE-pm 93.24
+[130111.8s]     s27: ens 93.03  FE-cone 93.26  FE-sub 93.26  FE-pm 93.03
+[130238.7s]     s28: ens 92.63  FE-cone 92.77  FE-sub 92.63  FE-pm 92.70
+[130389.2s]     s29: ens 92.38  FE-cone 92.74  FE-sub 92.52  FE-pm 92.59
+[130542.5s]     s30: ens 91.82  FE-cone 92.02  FE-sub 92.09  FE-pm 92.09
+[130694.8s]     s31: ens 91.64  FE-cone 91.58  FE-sub 91.78  FE-pm 91.58
+[130844.5s]     s32: ens 91.39  FE-cone 91.45  FE-sub 91.39  FE-pm 91.52
+[131008.5s]     s33: ens 91.38  FE-cone 91.51  FE-sub 91.38  FE-pm 91.57
+[131181.9s]     s34: ens 91.14  FE-cone 91.14  FE-sub 91.20  FE-pm 91.26
+[131362.8s]     s35: ens 91.12  FE-cone 91.12  FE-sub 91.12  FE-pm 91.12
+[131542.4s]     s36: ens 90.75  FE-cone 90.80  FE-sub 90.80  FE-pm 90.69
+[131722.8s]     s37: ens 91.00  FE-cone 91.00  FE-sub 91.00  FE-pm 90.94
+[131933.1s]     s38: ens 90.99  FE-cone 90.94  FE-sub 90.99  FE-pm 90.83
+[132127.6s]     s39: ens 90.70  FE-cone 90.70  FE-sub 90.70  FE-pm 90.87
+[132327.5s]     s40: ens 90.58  FE-cone 90.47  FE-sub 90.58  FE-pm 90.42
+[132532.8s]     s41: ens 90.54  FE-cone 90.49  FE-sub 90.49  FE-pm 90.24
+[132755.3s]     s42: ens 90.09  FE-cone 90.24  FE-sub 90.04  FE-pm 89.99
+[132977.4s]     s43: ens 90.05  FE-cone 89.86  FE-sub 90.00  FE-pm 90.05
+[133209.3s]     s44: ens 90.01  FE-cone 89.92  FE-sub 89.97  FE-pm 89.97
+[133431.2s]     s45: ens 89.45  FE-cone 89.49  FE-sub 89.31  FE-pm 89.54
+[133664.4s]     s46: ens 89.69  FE-cone 89.55  FE-sub 89.64  FE-pm 89.73
+[133919.0s]     s47: ens 89.59  FE-cone 89.42  FE-sub 89.50  FE-pm 89.55
+[134175.8s]     s48: ens 89.65  FE-cone 89.52  FE-sub 89.56  FE-pm 89.69
+[134433.3s]     s49: ens 89.19  FE-cone 88.97  FE-sub 88.97  FE-pm 89.23
+[134433.3s]     cell took 6292s
+[134433.4s] === CUB200P|50|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[134444.8s]     s0: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[134460.4s]     s1: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[134479.5s]     s2: ens 97.86  FE-cone 97.86  FE-sub 97.86  FE-pm 97.86
+[134501.6s]     s3: ens 98.40  FE-cone 98.40  FE-sub 98.40  FE-pm 98.40
+[134529.0s]     s4: ens 98.68  FE-cone 98.68  FE-sub 98.68  FE-pm 98.68
+[134559.4s]     s5: ens 98.53  FE-cone 98.53  FE-sub 98.53  FE-pm 98.53
+[134593.2s]     s6: ens 98.12  FE-cone 98.12  FE-sub 98.12  FE-pm 98.12
+[134631.2s]     s7: ens 98.37  FE-cone 98.37  FE-sub 98.37  FE-pm 98.37
+[134682.9s]     s8: ens 98.33  FE-cone 98.33  FE-sub 98.33  FE-pm 98.33
+[134739.5s]     s9: ens 98.10  FE-cone 98.10  FE-sub 98.10  FE-pm 98.52
+[134790.4s]     s10: ens 98.10  FE-cone 97.90  FE-sub 97.90  FE-pm 98.48
+[134846.7s]     s11: ens 97.05  FE-cone 97.05  FE-sub 97.40  FE-pm 97.40
+[134909.1s]     s12: ens 96.67  FE-cone 96.67  FE-sub 96.67  FE-pm 96.67
+[134973.4s]     s13: ens 96.11  FE-cone 96.26  FE-sub 96.11  FE-pm 96.26
+[135038.0s]     s14: ens 95.97  FE-cone 95.97  FE-sub 95.97  FE-pm 96.11
+[135113.3s]     s15: ens 94.10  FE-cone 94.23  FE-sub 94.23  FE-pm 94.10
+[135191.4s]     s16: ens 93.86  FE-cone 94.23  FE-sub 94.23  FE-pm 93.98
+[135280.4s]     s17: ens 93.97  FE-cone 93.97  FE-sub 93.97  FE-pm 93.97
+[135373.0s]     s18: ens 94.30  FE-cone 94.30  FE-sub 94.41  FE-pm 94.30
+[135466.6s]     s19: ens 93.91  FE-cone 93.91  FE-sub 93.91  FE-pm 93.91
+[135557.4s]     s20: ens 93.28  FE-cone 93.48  FE-sub 93.48  FE-pm 93.48
+[135657.1s]     s21: ens 93.56  FE-cone 93.56  FE-sub 93.56  FE-pm 93.75
+[135771.0s]     s22: ens 93.28  FE-cone 93.47  FE-sub 93.47  FE-pm 93.65
+[135884.2s]     s23: ens 93.45  FE-cone 93.62  FE-sub 93.45  FE-pm 93.45
+[136028.0s]     s24: ens 93.52  FE-cone 93.52  FE-sub 93.44  FE-pm 93.52
+[136156.5s]     s25: ens 93.28  FE-cone 93.37  FE-sub 93.20  FE-pm 93.28
+[136288.2s]     s26: ens 93.21  FE-cone 93.21  FE-sub 93.29  FE-pm 93.21
+[136454.4s]     s27: ens 93.31  FE-cone 93.08  FE-sub 93.24  FE-pm 93.24
+[136598.7s]     s28: ens 93.13  FE-cone 93.13  FE-sub 93.20  FE-pm 93.27
+[136736.8s]     s29: ens 92.99  FE-cone 92.99  FE-sub 92.92  FE-pm 92.92
+[136879.7s]     s30: ens 93.01  FE-cone 93.22  FE-sub 93.29  FE-pm 93.15
+[137049.8s]     s31: ens 92.47  FE-cone 92.41  FE-sub 92.61  FE-pm 92.54
+[137196.8s]     s32: ens 91.97  FE-cone 92.23  FE-sub 92.17  FE-pm 92.10
+[137368.4s]     s33: ens 91.83  FE-cone 92.15  FE-sub 92.40  FE-pm 91.95
+[137537.0s]     s34: ens 91.98  FE-cone 91.92  FE-sub 91.98  FE-pm 91.92
+[137715.0s]     s35: ens 90.81  FE-cone 91.05  FE-sub 91.29  FE-pm 90.87
+[137876.4s]     s36: ens 90.90  FE-cone 91.08  FE-sub 91.02  FE-pm 90.79
+[138055.7s]     s37: ens 90.30  FE-cone 90.53  FE-sub 90.58  FE-pm 90.36
+[138239.6s]     s38: ens 90.23  FE-cone 90.39  FE-sub 90.28  FE-pm 90.23
+[138437.9s]     s39: ens 90.04  FE-cone 90.15  FE-sub 90.31  FE-pm 90.04
+[138637.9s]     s40: ens 90.08  FE-cone 90.08  FE-sub 90.34  FE-pm 90.29
+[138839.4s]     s41: ens 89.69  FE-cone 89.79  FE-sub 89.64  FE-pm 89.69
+[139054.8s]     s42: ens 89.86  FE-cone 90.06  FE-sub 89.86  FE-pm 89.86
+[139276.1s]     s43: ens 89.64  FE-cone 89.88  FE-sub 89.74  FE-pm 89.79
+[139496.5s]     s44: ens 89.69  FE-cone 89.93  FE-sub 89.98  FE-pm 89.74
+[139719.6s]     s45: ens 89.10  FE-cone 89.33  FE-sub 89.33  FE-pm 89.15
+[139939.1s]     s46: ens 89.19  FE-cone 89.37  FE-sub 89.46  FE-pm 89.15
+[140182.6s]     s47: ens 89.22  FE-cone 89.13  FE-sub 89.26  FE-pm 89.26
+[140424.6s]     s48: ens 89.28  FE-cone 89.67  FE-sub 89.58  FE-pm 89.28
+[140679.5s]     s49: ens 89.23  FE-cone 89.69  FE-sub 89.57  FE-pm 89.23
+[140679.5s]     cell took 6246s
+[140679.6s] === CUB200P|50|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/Donghyun99/cub-200-2011/resolve/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea/cub-200-2011.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since Donghyun99/cub-200-2011 couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/Donghyun99___cub-200-2011/default/0.0.0/e6d24c6a45fc1f8e28df63aabce3fd09f33036ea (last modified on Tue Jul 28 10:21:29 2026).
+[140690.7s]     s0: ens 100.00  FE-cone 100.00  FE-sub 100.00  FE-pm 100.00
+[140703.6s]     s1: ens 97.30  FE-cone 97.30  FE-sub 97.30  FE-pm 97.30
+[140720.2s]     s2: ens 98.10  FE-cone 98.10  FE-sub 98.10  FE-pm 98.10
+[140743.3s]     s3: ens 97.97  FE-cone 97.97  FE-sub 97.97  FE-pm 97.97
+[140768.9s]     s4: ens 95.10  FE-cone 95.10  FE-sub 95.10  FE-pm 95.10
+[140800.4s]     s5: ens 95.58  FE-cone 95.24  FE-sub 95.24  FE-pm 95.24
+[140836.3s]     s6: ens 95.07  FE-cone 95.07  FE-sub 95.07  FE-pm 95.07
+[140876.0s]     s7: ens 95.15  FE-cone 95.92  FE-sub 95.15  FE-pm 95.41
+[140919.5s]     s8: ens 95.23  FE-cone 95.23  FE-sub 95.23  FE-pm 95.23
+[140965.9s]     s9: ens 93.35  FE-cone 93.35  FE-sub 93.35  FE-pm 93.35
+[141018.5s]     s10: ens 93.60  FE-cone 93.60  FE-sub 93.60  FE-pm 93.60
+[141079.8s]     s11: ens 93.23  FE-cone 93.40  FE-sub 93.40  FE-pm 93.06
+[141154.9s]     s12: ens 93.25  FE-cone 93.25  FE-sub 92.93  FE-pm 93.25
+[141217.5s]     s13: ens 91.96  FE-cone 91.96  FE-sub 91.96  FE-pm 92.26
+[141283.6s]     s14: ens 92.24  FE-cone 92.38  FE-sub 92.52  FE-pm 92.52
+[141352.3s]     s15: ens 91.81  FE-cone 91.68  FE-sub 91.55  FE-pm 91.41
+[141438.2s]     s16: ens 92.46  FE-cone 92.58  FE-sub 92.34  FE-pm 92.09
+[141536.0s]     s17: ens 92.50  FE-cone 92.50  FE-sub 92.61  FE-pm 91.79
+[141623.8s]     s18: ens 92.75  FE-cone 92.86  FE-sub 92.64  FE-pm 92.20
+[141712.6s]     s19: ens 92.86  FE-cone 93.17  FE-sub 92.86  FE-pm 92.65
+[141812.9s]     s20: ens 92.40  FE-cone 91.90  FE-sub 91.90  FE-pm 92.20
+[141913.4s]     s21: ens 92.31  FE-cone 92.02  FE-sub 92.21  FE-pm 92.02
+[142038.7s]     s22: ens 92.64  FE-cone 92.19  FE-sub 92.28  FE-pm 92.37
+[142161.6s]     s23: ens 92.56  FE-cone 92.30  FE-sub 92.56  FE-pm 92.39
+[142275.6s]     s24: ens 92.57  FE-cone 92.49  FE-sub 92.57  FE-pm 92.49
+[142408.3s]     s25: ens 92.49  FE-cone 92.33  FE-sub 92.33  FE-pm 92.41
+[142529.6s]     s26: ens 91.84  FE-cone 91.68  FE-sub 91.76  FE-pm 91.84
+[142653.6s]     s27: ens 91.42  FE-cone 91.34  FE-sub 91.27  FE-pm 91.57
+[142783.7s]     s28: ens 91.34  FE-cone 91.27  FE-sub 91.27  FE-pm 91.41
+[142926.4s]     s29: ens 91.24  FE-cone 91.38  FE-sub 91.31  FE-pm 91.24
+[143064.9s]     s30: ens 91.16  FE-cone 91.16  FE-sub 91.23  FE-pm 91.09
+[143207.6s]     s31: ens 91.25  FE-cone 91.38  FE-sub 91.32  FE-pm 91.32
+[143354.1s]     s32: ens 90.64  FE-cone 90.64  FE-sub 90.70  FE-pm 90.51
+[143506.6s]     s33: ens 90.85  FE-cone 90.79  FE-sub 90.85  FE-pm 90.79
+[143663.2s]     s34: ens 90.83  FE-cone 90.83  FE-sub 90.83  FE-pm 90.77
+[143831.4s]     s35: ens 90.99  FE-cone 90.82  FE-sub 91.05  FE-pm 90.94
+[144010.6s]     s36: ens 90.90  FE-cone 90.62  FE-sub 90.73  FE-pm 90.62
+[144182.7s]     s37: ens 90.37  FE-cone 90.31  FE-sub 90.31  FE-pm 90.31
+[144364.0s]     s38: ens 90.33  FE-cone 90.33  FE-sub 90.33  FE-pm 90.38
+[144550.8s]     s39: ens 89.57  FE-cone 89.78  FE-sub 89.36  FE-pm 89.67
+[144743.8s]     s40: ens 89.70  FE-cone 90.01  FE-sub 89.75  FE-pm 89.90
+[144954.8s]     s41: ens 89.75  FE-cone 89.95  FE-sub 89.60  FE-pm 89.90
+[145168.5s]     s42: ens 89.34  FE-cone 89.39  FE-sub 89.39  FE-pm 89.44
+[145382.8s]     s43: ens 89.42  FE-cone 89.23  FE-sub 89.19  FE-pm 89.47
+[145614.6s]     s44: ens 89.58  FE-cone 89.39  FE-sub 89.49  FE-pm 89.44
+[145840.4s]     s45: ens 89.31  FE-cone 89.13  FE-sub 89.17  FE-pm 89.36
+[146064.6s]     s46: ens 89.02  FE-cone 88.84  FE-sub 89.07  FE-pm 88.71
+[146305.2s]     s47: ens 89.20  FE-cone 88.94  FE-sub 89.25  FE-pm 89.07
+[146535.4s]     s48: ens 89.14  FE-cone 89.31  FE-sub 89.27  FE-pm 89.01
+[146797.4s]     s49: ens 89.19  FE-cone 89.14  FE-sub 89.10  FE-pm 89.06
+[146797.4s]     cell took 6118s
+[146797.6s] === IMAGENETAP|10|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[146840.7s]     s0: ens 85.47  FE-cone 85.47  FE-sub 85.47  FE-pm 85.47
+[146897.3s]     s1: ens 80.16  FE-cone 80.16  FE-sub 80.16  FE-pm 79.89
+[146967.9s]     s2: ens 76.32  FE-cone 76.11  FE-sub 76.11  FE-pm 75.91
+[147054.2s]     s3: ens 75.14  FE-cone 75.57  FE-sub 75.29  FE-pm 75.29
+[147154.0s]     s4: ens 73.13  FE-cone 73.01  FE-sub 72.77  FE-pm 73.37
+[147269.1s]     s5: ens 71.52  FE-cone 71.00  FE-sub 71.73  FE-pm 71.73
+[147396.2s]     s6: ens 69.31  FE-cone 69.49  FE-sub 69.22  FE-pm 69.76
+[147538.7s]     s7: ens 68.35  FE-cone 68.43  FE-sub 68.35  FE-pm 68.35
+[147700.2s]     s8: ens 64.80  FE-cone 65.60  FE-sub 65.16  FE-pm 65.16
+[147878.4s]     s9: ens 63.80  FE-cone 65.27  FE-sub 64.40  FE-pm 64.13
+[147878.4s]     cell took 1081s
+[147878.5s] === IMAGENETAP|10|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[147916.0s]     s0: ens 89.21  FE-cone 89.21  FE-sub 89.21  FE-pm 89.21
+[147975.5s]     s1: ens 80.81  FE-cone 80.07  FE-sub 80.81  FE-pm 80.44
+[148058.1s]     s2: ens 78.41  FE-cone 77.50  FE-sub 78.18  FE-pm 78.64
+[148150.3s]     s3: ens 75.00  FE-cone 74.83  FE-sub 75.17  FE-pm 74.33
+[148257.3s]     s4: ens 72.98  FE-cone 71.37  FE-sub 72.04  FE-pm 71.91
+[148366.3s]     s5: ens 69.38  FE-cone 68.46  FE-sub 69.04  FE-pm 69.27
+[148505.6s]     s6: ens 67.36  FE-cone 68.05  FE-sub 68.05  FE-pm 68.44
+[148650.0s]     s7: ens 66.18  FE-cone 65.86  FE-sub 65.78  FE-pm 65.70
+[148839.8s]     s8: ens 64.46  FE-cone 64.60  FE-sub 64.46  FE-pm 64.24
+[149034.4s]     s9: ens 62.67  FE-cone 62.87  FE-sub 62.60  FE-pm 63.00
+[149034.5s]     cell took 1156s
+[149034.6s] === IMAGENETAP|10|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[149073.5s]     s0: ens 85.44  FE-cone 85.44  FE-sub 85.44  FE-pm 85.44
+[149134.7s]     s1: ens 75.97  FE-cone 75.97  FE-sub 75.97  FE-pm 76.62
+[149226.3s]     s2: ens 75.06  FE-cone 75.06  FE-sub 75.06  FE-pm 74.83
+[149307.7s]     s3: ens 70.93  FE-cone 71.28  FE-sub 70.93  FE-pm 70.93
+[149414.4s]     s4: ens 70.98  FE-cone 71.24  FE-sub 71.24  FE-pm 71.24
+[149528.8s]     s5: ens 69.41  FE-cone 70.27  FE-sub 69.41  FE-pm 69.84
+[149663.4s]     s6: ens 68.27  FE-cone 68.36  FE-sub 67.90  FE-pm 68.18
+[149803.6s]     s7: ens 65.98  FE-cone 66.47  FE-sub 66.14  FE-pm 66.56
+[149968.0s]     s8: ens 64.56  FE-cone 65.16  FE-sub 64.86  FE-pm 64.86
+[150161.8s]     s9: ens 63.67  FE-cone 64.67  FE-sub 64.07  FE-pm 64.60
+[150161.8s]     cell took 1127s
+[150161.9s] === IMAGENETAP|20|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[150182.8s]     s0: ens 89.61  FE-cone 89.61  FE-sub 89.61  FE-pm 89.61
+[150217.3s]     s1: ens 85.47  FE-cone 84.92  FE-sub 85.47  FE-pm 84.92
+[150264.4s]     s2: ens 80.81  FE-cone 79.70  FE-sub 80.07  FE-pm 80.44
+[150306.1s]     s3: ens 75.82  FE-cone 76.09  FE-sub 75.54  FE-pm 75.54
+[150351.7s]     s4: ens 74.31  FE-cone 74.08  FE-sub 74.31  FE-pm 74.08
+[150402.5s]     s5: ens 72.87  FE-cone 73.08  FE-sub 72.87  FE-pm 73.48
+[150464.9s]     s6: ens 73.15  FE-cone 73.81  FE-sub 73.15  FE-pm 73.48
+[150530.2s]     s7: ens 72.56  FE-cone 72.41  FE-sub 72.70  FE-pm 72.70
+[150614.4s]     s8: ens 71.56  FE-cone 71.43  FE-sub 71.04  FE-pm 71.17
+[150690.1s]     s9: ens 70.60  FE-cone 70.48  FE-sub 70.60  FE-pm 70.72
+[150776.7s]     s10: ens 69.78  FE-cone 70.56  FE-sub 69.44  FE-pm 69.89
+[150876.5s]     s11: ens 68.92  FE-cone 69.96  FE-sub 67.98  FE-pm 69.23
+[150983.4s]     s12: ens 67.32  FE-cone 67.32  FE-sub 67.32  FE-pm 67.12
+[151089.0s]     s13: ens 66.67  FE-cone 67.21  FE-sub 66.94  FE-pm 66.48
+[151205.9s]     s14: ens 65.65  FE-cone 66.50  FE-sub 65.65  FE-pm 65.99
+[151319.1s]     s15: ens 65.01  FE-cone 65.34  FE-sub 64.93  FE-pm 65.17
+[151458.0s]     s16: ens 63.52  FE-cone 63.82  FE-sub 63.52  FE-pm 63.59
+[151598.6s]     s17: ens 62.03  FE-cone 62.46  FE-sub 62.17  FE-pm 62.17
+[151736.8s]     s18: ens 62.01  FE-cone 62.22  FE-sub 62.01  FE-pm 61.86
+[151891.7s]     s19: ens 61.80  FE-cone 62.00  FE-sub 61.67  FE-pm 62.07
+[151891.7s]     cell took 1730s
+[151891.9s] === IMAGENETAP|20|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[151912.8s]     s0: ens 95.56  FE-cone 95.56  FE-sub 95.56  FE-pm 95.56
+[151942.6s]     s1: ens 84.89  FE-cone 84.89  FE-sub 84.89  FE-pm 84.89
+[151980.9s]     s2: ens 84.24  FE-cone 84.24  FE-sub 83.70  FE-pm 84.24
+[152026.4s]     s3: ens 79.34  FE-cone 78.60  FE-sub 79.34  FE-pm 78.97
+[152074.2s]     s4: ens 77.78  FE-cone 77.78  FE-sub 77.78  FE-pm 78.06
+[152126.1s]     s5: ens 77.05  FE-cone 75.91  FE-sub 76.59  FE-pm 76.59
+[152183.6s]     s6: ens 75.24  FE-cone 76.22  FE-sub 75.24  FE-pm 75.24
+[152250.3s]     s7: ens 72.17  FE-cone 71.50  FE-sub 72.17  FE-pm 72.50
+[152321.6s]     s8: ens 69.10  FE-cone 69.57  FE-sub 69.10  FE-pm 69.25
+[152399.9s]     s9: ens 69.35  FE-cone 70.56  FE-sub 69.49  FE-pm 69.89
+[152482.5s]     s10: ens 68.40  FE-cone 68.90  FE-sub 68.40  FE-pm 68.90
+[152571.7s]     s11: ens 66.51  FE-cone 66.28  FE-sub 66.97  FE-pm 66.86
+[152669.5s]     s12: ens 66.63  FE-cone 67.05  FE-sub 66.63  FE-pm 66.53
+[152775.2s]     s13: ens 65.98  FE-cone 66.37  FE-sub 66.17  FE-pm 65.88
+[152884.2s]     s14: ens 64.11  FE-cone 64.02  FE-sub 64.11  FE-pm 64.11
+[153002.6s]     s15: ens 63.61  FE-cone 64.98  FE-sub 63.77  FE-pm 63.77
+[153134.1s]     s16: ens 63.70  FE-cone 63.70  FE-sub 63.62  FE-pm 63.32
+[153272.2s]     s17: ens 62.09  FE-cone 62.09  FE-sub 61.80  FE-pm 62.01
+[153424.3s]     s18: ens 61.30  FE-cone 61.65  FE-sub 61.23  FE-pm 60.89
+[153581.2s]     s19: ens 60.47  FE-cone 60.80  FE-sub 60.53  FE-pm 60.47
+[153581.3s]     cell took 1689s
+[153581.4s] === IMAGENETAP|20|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[153603.4s]     s0: ens 74.51  FE-cone 74.51  FE-sub 74.51  FE-pm 74.51
+[153634.3s]     s1: ens 81.65  FE-cone 81.65  FE-sub 81.65  FE-pm 82.28
+[153670.3s]     s2: ens 77.18  FE-cone 77.18  FE-sub 77.18  FE-pm 77.18
+[153711.9s]     s3: ens 72.73  FE-cone 72.73  FE-sub 72.73  FE-pm 73.38
+[153757.1s]     s4: ens 73.00  FE-cone 73.25  FE-sub 73.00  FE-pm 73.00
+[153810.5s]     s5: ens 70.52  FE-cone 70.29  FE-sub 70.52  FE-pm 70.29
+[153866.2s]     s6: ens 68.54  FE-cone 68.74  FE-sub 68.74  FE-pm 68.74
+[153925.3s]     s7: ens 64.71  FE-cone 64.71  FE-sub 64.88  FE-pm 64.88
+[153990.6s]     s8: ens 62.10  FE-cone 62.82  FE-sub 62.10  FE-pm 63.11
+[154065.2s]     s9: ens 61.92  FE-cone 63.21  FE-sub 62.31  FE-pm 63.60
+[154143.7s]     s10: ens 61.37  FE-cone 61.48  FE-sub 61.72  FE-pm 61.83
+[154230.9s]     s11: ens 61.93  FE-cone 62.14  FE-sub 61.82  FE-pm 61.93
+[154317.9s]     s12: ens 61.89  FE-cone 62.09  FE-sub 61.89  FE-pm 61.69
+[154418.1s]     s13: ens 60.31  FE-cone 60.96  FE-sub 60.41  FE-pm 60.59
+[154516.2s]     s14: ens 59.26  FE-cone 59.61  FE-sub 59.26  FE-pm 59.26
+[154630.8s]     s15: ens 58.77  FE-cone 59.52  FE-sub 58.86  FE-pm 59.19
+[154745.4s]     s16: ens 58.77  FE-cone 59.16  FE-sub 59.00  FE-pm 59.56
+[154865.9s]     s17: ens 58.14  FE-cone 58.75  FE-sub 57.99  FE-pm 58.67
+[154999.3s]     s18: ens 57.24  FE-cone 58.30  FE-sub 57.31  FE-pm 57.60
+[155144.1s]     s19: ens 56.93  FE-cone 57.67  FE-sub 56.67  FE-pm 57.47
+[155144.1s]     cell took 1563s
+[155144.2s] === IMAGENETAP|50|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[155155.0s]     s0: ens 94.87  FE-cone 94.87  FE-sub 94.87  FE-pm 94.87
+[155170.7s]     s1: ens 85.71  FE-cone 85.71  FE-sub 85.71  FE-pm 85.71
+[155189.3s]     s2: ens 85.88  FE-cone 84.71  FE-sub 84.71  FE-pm 83.53
+[155211.0s]     s3: ens 85.33  FE-cone 86.00  FE-sub 86.00  FE-pm 85.33
+[155236.5s]     s4: ens 82.68  FE-cone 82.68  FE-sub 82.68  FE-pm 82.68
+[155263.7s]     s5: ens 80.44  FE-cone 80.44  FE-sub 80.44  FE-pm 80.00
+[155294.2s]     s6: ens 80.38  FE-cone 79.62  FE-sub 79.25  FE-pm 79.62
+[155326.5s]     s7: ens 78.47  FE-cone 78.47  FE-sub 78.47  FE-pm 78.12
+[155359.1s]     s8: ens 76.29  FE-cone 76.29  FE-sub 76.29  FE-pm 76.29
+[155393.0s]     s9: ens 75.54  FE-cone 75.54  FE-sub 75.27  FE-pm 75.27
+[155434.1s]     s10: ens 75.51  FE-cone 75.26  FE-sub 75.26  FE-pm 75.51
+[155478.4s]     s11: ens 73.84  FE-cone 73.15  FE-sub 73.84  FE-pm 73.61
+[155525.1s]     s12: ens 74.29  FE-cone 74.29  FE-sub 74.29  FE-pm 74.29
+[155568.1s]     s13: ens 73.58  FE-cone 73.58  FE-sub 73.38  FE-pm 74.00
+[155610.9s]     s14: ens 72.27  FE-cone 72.27  FE-sub 72.27  FE-pm 73.08
+[155656.5s]     s15: ens 72.39  FE-cone 72.20  FE-sub 72.39  FE-pm 72.20
+[155705.3s]     s16: ens 72.38  FE-cone 72.55  FE-sub 72.38  FE-pm 72.38
+[155761.5s]     s17: ens 71.86  FE-cone 71.70  FE-sub 71.86  FE-pm 71.54
+[155815.7s]     s18: ens 70.94  FE-cone 70.94  FE-sub 70.64  FE-pm 70.64
+[155869.4s]     s19: ens 69.68  FE-cone 69.83  FE-sub 69.54  FE-pm 69.54
+[155937.0s]     s20: ens 69.64  FE-cone 69.78  FE-sub 69.78  FE-pm 69.78
+[156000.1s]     s21: ens 68.54  FE-cone 68.41  FE-sub 68.67  FE-pm 68.15
+[156062.8s]     s22: ens 67.92  FE-cone 68.43  FE-sub 67.92  FE-pm 68.18
+[156130.2s]     s23: ens 67.21  FE-cone 67.58  FE-sub 67.58  FE-pm 67.46
+[156199.4s]     s24: ens 66.87  FE-cone 66.75  FE-sub 66.75  FE-pm 66.75
+[156269.9s]     s25: ens 65.85  FE-cone 66.31  FE-sub 65.73  FE-pm 66.31
+[156337.7s]     s26: ens 65.47  FE-cone 66.74  FE-sub 65.47  FE-pm 66.40
+[156409.8s]     s27: ens 65.55  FE-cone 66.44  FE-sub 65.88  FE-pm 66.44
+[156484.9s]     s28: ens 64.98  FE-cone 65.31  FE-sub 64.98  FE-pm 65.09
+[156576.3s]     s29: ens 65.18  FE-cone 65.38  FE-sub 65.07  FE-pm 65.80
+[156665.3s]     s30: ens 64.62  FE-cone 65.02  FE-sub 64.62  FE-pm 65.32
+[156750.9s]     s31: ens 63.86  FE-cone 64.75  FE-sub 63.96  FE-pm 64.55
+[156840.1s]     s32: ens 63.94  FE-cone 64.62  FE-sub 63.94  FE-pm 64.81
+[156929.9s]     s33: ens 63.66  FE-cone 64.23  FE-sub 63.66  FE-pm 64.23
+[157025.7s]     s34: ens 63.84  FE-cone 64.57  FE-sub 63.84  FE-pm 64.12
+[157115.6s]     s35: ens 63.70  FE-cone 63.88  FE-sub 63.52  FE-pm 64.32
+[157212.0s]     s36: ens 63.00  FE-cone 63.34  FE-sub 63.08  FE-pm 63.52
+[157317.8s]     s37: ens 62.77  FE-cone 63.27  FE-sub 62.85  FE-pm 63.02
+[157417.8s]     s38: ens 62.46  FE-cone 62.95  FE-sub 62.62  FE-pm 63.12
+[157524.3s]     s39: ens 62.65  FE-cone 63.14  FE-sub 62.65  FE-pm 63.14
+[157629.5s]     s40: ens 61.49  FE-cone 62.44  FE-sub 61.81  FE-pm 62.52
+[157750.5s]     s41: ens 61.08  FE-cone 61.31  FE-sub 61.00  FE-pm 61.85
+[157869.6s]     s42: ens 60.03  FE-cone 61.32  FE-sub 60.48  FE-pm 60.79
+[157995.0s]     s43: ens 59.55  FE-cone 60.67  FE-sub 60.00  FE-pm 60.00
+[158139.2s]     s44: ens 58.97  FE-cone 60.13  FE-sub 59.11  FE-pm 59.99
+[158275.6s]     s45: ens 58.97  FE-cone 60.11  FE-sub 59.33  FE-pm 59.97
+[158406.1s]     s46: ens 58.75  FE-cone 59.82  FE-sub 59.04  FE-pm 59.60
+[158540.3s]     s47: ens 59.08  FE-cone 59.99  FE-sub 59.02  FE-pm 59.57
+[158667.9s]     s48: ens 58.97  FE-cone 59.59  FE-sub 58.63  FE-pm 59.04
+[158815.8s]     s49: ens 58.47  FE-cone 59.53  FE-sub 58.73  FE-pm 58.93
+[158815.8s]     cell took 3672s
+[158815.9s] === IMAGENETAP|50|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/1d04812197b88e02740e919e975bf113d6af0831/imagenet-a.py
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[158827.0s]     s0: ens 97.87  FE-cone 97.87  FE-sub 97.87  FE-pm 97.87
+[158841.1s]     s1: ens 96.83  FE-cone 96.83  FE-sub 96.83  FE-pm 96.83
+[158858.7s]     s2: ens 92.47  FE-cone 91.40  FE-sub 91.40  FE-pm 91.40
+[158877.0s]     s3: ens 86.67  FE-cone 83.81  FE-sub 83.81  FE-pm 83.81
+[158900.7s]     s4: ens 86.33  FE-cone 85.61  FE-sub 85.61  FE-pm 85.61
+[158927.5s]     s5: ens 83.78  FE-cone 83.78  FE-sub 83.78  FE-pm 83.11
+[158958.1s]     s6: ens 81.56  FE-cone 82.68  FE-sub 82.12  FE-pm 82.68
+[158991.5s]     s7: ens 80.86  FE-cone 80.86  FE-sub 80.86  FE-pm 80.86
+[159030.5s]     s8: ens 80.31  FE-cone 80.31  FE-sub 80.31  FE-pm 80.31
+[159070.4s]     s9: ens 77.86  FE-cone 77.49  FE-sub 77.49  FE-pm 78.60
+[159108.2s]     s10: ens 78.50  FE-cone 78.50  FE-sub 78.18  FE-pm 78.18
+[159147.5s]     s11: ens 76.52  FE-cone 77.10  FE-sub 76.52  FE-pm 77.68
+[159188.1s]     s12: ens 75.33  FE-cone 74.80  FE-sub 74.80  FE-pm 74.80
+[159230.5s]     s13: ens 74.77  FE-cone 74.30  FE-sub 74.77  FE-pm 74.53
+[159277.8s]     s14: ens 73.18  FE-cone 72.73  FE-sub 73.18  FE-pm 73.64
+[159327.1s]     s15: ens 73.02  FE-cone 72.81  FE-sub 73.02  FE-pm 72.81
+[159378.4s]     s16: ens 72.97  FE-cone 72.56  FE-sub 72.56  FE-pm 73.37
+[159436.9s]     s17: ens 71.70  FE-cone 72.26  FE-sub 71.70  FE-pm 73.02
+[159490.9s]     s18: ens 71.25  FE-cone 71.60  FE-sub 70.72  FE-pm 71.43
+[159551.3s]     s19: ens 69.33  FE-cone 70.17  FE-sub 69.50  FE-pm 70.83
+[159612.7s]     s20: ens 68.68  FE-cone 68.19  FE-sub 68.68  FE-pm 69.17
+[159682.9s]     s21: ens 67.88  FE-cone 68.35  FE-sub 67.88  FE-pm 68.35
+[159750.6s]     s22: ens 67.06  FE-cone 66.33  FE-sub 67.06  FE-pm 67.20
+[159840.4s]     s23: ens 67.13  FE-cone 67.13  FE-sub 67.28  FE-pm 68.40
+[159913.8s]     s24: ens 66.67  FE-cone 67.34  FE-sub 66.67  FE-pm 67.88
+[    0.1s] skip IMAGENETAP|50|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+[    0.1s] === IMAGENETAP|50|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/main/README.md
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[    3.3s]     VERIFY: exp56 FE|f64|cone reference loaded
+[   14.0s]     s0: ens 97.87  FE-cone 97.87  FE-sub 97.87  FE-pm 97.87
+[   26.9s]     s1: ens 96.83  FE-cone 96.83  FE-sub 96.83  FE-pm 96.83
+[   43.6s]     s2: ens 92.47  FE-cone 91.40  FE-sub 91.40  FE-pm 91.40
+[   63.1s]     s3: ens 86.67  FE-cone 83.81  FE-sub 83.81  FE-pm 83.81
+[   85.3s]     s4: ens 86.33  FE-cone 85.61  FE-sub 85.61  FE-pm 85.61
+[  116.6s]     s5: ens 83.78  FE-cone 83.78  FE-sub 83.78  FE-pm 83.11
+[  158.4s]     s6: ens 81.56  FE-cone 82.68  FE-sub 82.12  FE-pm 82.68
+[  197.3s]     s7: ens 80.86  FE-cone 80.86  FE-sub 80.86  FE-pm 80.86
+[  230.8s]     s8: ens 80.31  FE-cone 80.31  FE-sub 80.31  FE-pm 80.31
+[  270.2s]     s9: ens 77.86  FE-cone 77.49  FE-sub 77.49  FE-pm 78.60
+[  310.2s]     s10: ens 78.50  FE-cone 78.50  FE-sub 78.18  FE-pm 78.18
+[  349.2s]     s11: ens 76.52  FE-cone 77.10  FE-sub 76.52  FE-pm 77.68
+[  390.2s]     s12: ens 75.33  FE-cone 74.80  FE-sub 74.80  FE-pm 74.80
+[  437.3s]     s13: ens 74.77  FE-cone 74.30  FE-sub 74.77  FE-pm 74.53
+[  480.6s]     s14: ens 73.18  FE-cone 72.73  FE-sub 73.18  FE-pm 73.64
+[  527.9s]     s15: ens 73.02  FE-cone 72.81  FE-sub 73.02  FE-pm 72.81
+[  577.8s]     s16: ens 72.97  FE-cone 72.56  FE-sub 72.56  FE-pm 73.37
+[    0.0s] skip IMAGENETAP|50|0|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+[    0.0s] === IMAGENETAP|50|1|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/main/README.md
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[    2.7s]     VERIFY: exp56 FE|f64|cone reference loaded
+[   12.7s]     s0: ens 97.87  FE-cone 97.87  FE-sub 97.87  FE-pm 97.87
+[   25.7s]     s1: ens 96.83  FE-cone 96.83  FE-sub 96.83  FE-pm 96.83
+[   42.3s]     s2: ens 92.47  FE-cone 91.40  FE-sub 91.40  FE-pm 91.40
+[   65.5s]     s3: ens 86.67  FE-cone 83.81  FE-sub 83.81  FE-pm 83.81
+[   88.6s]     s4: ens 86.33  FE-cone 85.61  FE-sub 85.61  FE-pm 85.61
+[  115.5s]     s5: ens 83.78  FE-cone 83.78  FE-sub 83.78  FE-pm 83.11
+[  148.4s]     s6: ens 81.56  FE-cone 82.68  FE-sub 82.12  FE-pm 82.68
+[  183.7s]     s7: ens 80.86  FE-cone 80.86  FE-sub 80.86  FE-pm 80.86
+[  217.6s]     s8: ens 80.31  FE-cone 80.31  FE-sub 80.31  FE-pm 80.31
+[  252.8s]     s9: ens 77.86  FE-cone 77.49  FE-sub 77.49  FE-pm 78.60
+[  288.3s]     s10: ens 78.50  FE-cone 78.50  FE-sub 78.18  FE-pm 78.18
+[  325.9s]     s11: ens 76.52  FE-cone 77.10  FE-sub 76.52  FE-pm 77.68
+[  370.3s]     s12: ens 75.33  FE-cone 74.80  FE-sub 74.80  FE-pm 74.80
+[  411.4s]     s13: ens 74.77  FE-cone 74.30  FE-sub 74.77  FE-pm 74.53
+[  455.1s]     s14: ens 73.18  FE-cone 72.73  FE-sub 73.18  FE-pm 73.64
+[  510.5s]     s15: ens 73.02  FE-cone 72.81  FE-sub 73.02  FE-pm 72.81
+[  558.1s]     s16: ens 72.97  FE-cone 72.56  FE-sub 72.56  FE-pm 73.37
+[  608.6s]     s17: ens 71.70  FE-cone 72.26  FE-sub 71.70  FE-pm 73.02
+[  666.9s]     s18: ens 71.25  FE-cone 71.60  FE-sub 70.72  FE-pm 71.43
+[  725.7s]     s19: ens 69.33  FE-cone 70.17  FE-sub 69.50  FE-pm 70.83
+[  782.1s]     s20: ens 68.68  FE-cone 68.19  FE-sub 68.68  FE-pm 69.17
+[  844.7s]     s21: ens 67.88  FE-cone 68.35  FE-sub 67.88  FE-pm 68.35
+[  910.8s]     s22: ens 67.06  FE-cone 66.33  FE-sub 67.06  FE-pm 67.20
+[  977.9s]     s23: ens 67.13  FE-cone 67.13  FE-sub 67.28  FE-pm 68.40
+[ 1044.7s]     s24: ens 66.67  FE-cone 67.34  FE-sub 66.67  FE-pm 67.88
+[ 1124.3s]     s25: ens 66.15  FE-cone 67.44  FE-sub 66.28  FE-pm 67.83
+[ 1195.4s]     s26: ens 65.23  FE-cone 65.48  FE-sub 65.10  FE-pm 67.13
+[ 1266.6s]     s27: ens 65.36  FE-cone 66.71  FE-sub 65.36  FE-pm 66.34
+[ 1348.1s]     s28: ens 65.16  FE-cone 65.51  FE-sub 64.81  FE-pm 64.81
+[ 1427.2s]     s29: ens 64.91  FE-cone 64.79  FE-sub 65.14  FE-pm 64.79
+[ 1512.1s]     s30: ens 64.74  FE-cone 64.96  FE-sub 64.74  FE-pm 65.29
+[ 1606.3s]     s31: ens 64.12  FE-cone 65.18  FE-sub 64.12  FE-pm 64.76
+[ 1702.6s]     s32: ens 63.38  FE-cone 64.42  FE-sub 63.38  FE-pm 64.42
+[ 1803.3s]     s33: ens 63.80  FE-cone 64.31  FE-sub 63.80  FE-pm 64.00
+[ 1896.7s]     s34: ens 63.41  FE-cone 64.40  FE-sub 63.41  FE-pm 63.81
+[ 1990.0s]     s35: ens 62.30  FE-cone 62.96  FE-sub 62.30  FE-pm 62.87
+[ 2079.9s]     s36: ens 61.78  FE-cone 62.14  FE-sub 61.78  FE-pm 61.68
+[ 2182.5s]     s37: ens 61.56  FE-cone 61.56  FE-sub 61.65  FE-pm 61.73
+[ 2288.4s]     s38: ens 62.29  FE-cone 62.12  FE-sub 62.12  FE-pm 62.96
+[ 2397.3s]     s39: ens 61.59  FE-cone 61.84  FE-sub 61.84  FE-pm 62.16
+[ 2518.9s]     s40: ens 61.09  FE-cone 61.17  FE-sub 60.69  FE-pm 61.88
+[ 2642.7s]     s41: ens 60.60  FE-cone 60.99  FE-sub 60.99  FE-pm 61.76
+[ 2770.3s]     s42: ens 59.90  FE-cone 61.15  FE-sub 60.49  FE-pm 61.45
+[ 2896.1s]     s43: ens 59.74  FE-cone 60.90  FE-sub 60.10  FE-pm 60.83
+[ 3020.4s]     s44: ens 59.57  FE-cone 60.50  FE-sub 59.50  FE-pm 60.43
+[ 3150.4s]     s45: ens 58.88  FE-cone 59.66  FE-sub 59.09  FE-pm 59.94
+[ 3285.8s]     s46: ens 58.87  FE-cone 60.07  FE-sub 59.15  FE-pm 59.93
+[ 3413.8s]     s47: ens 58.71  FE-cone 59.81  FE-sub 59.26  FE-pm 60.01
+[ 3556.1s]     s48: ens 58.47  FE-cone 59.48  FE-sub 59.01  FE-pm 59.54
+[ 3699.8s]     s49: ens 58.13  FE-cone 58.73  FE-sub 58.53  FE-pm 59.07
+[ 3699.8s]     cell took 3700s
+[ 3700.0s] === IMAGENETAP|50|2|q32+m32+a16+q32b70+q64|f64|cone+sub+pm|opcag0.5|s0.03_i500|np2|m10000_ordpilot|v1
+'[Errno -2] Name or service not known' thrown while requesting HEAD https://huggingface.co/datasets/barkermrl/imagenet-a/resolve/main/README.md
+Retrying in 1s [Retry 1/5].
+Using the latest cached version of the dataset since barkermrl/imagenet-a couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /home/khiemphi/Conic-Hull-Continual-Learning/data/hf/barkermrl___imagenet-a/default/0.0.0/1d04812197b88e02740e919e975bf113d6af0831 (last modified on Tue Jul 28 10:22:11 2026).
+[ 3710.3s]     s0: ens 77.78  FE-cone 77.78  FE-sub 77.78  FE-pm 77.78
+[ 3722.6s]     s1: ens 71.79  FE-cone 74.36  FE-sub 74.36  FE-pm 74.36
+[ 3738.7s]     s2: ens 80.28  FE-cone 80.28  FE-sub 80.28  FE-pm 80.28
+[ 3760.9s]     s3: ens 79.84  FE-cone 79.84  FE-sub 79.84  FE-pm 79.84
+[ 3784.3s]     s4: ens 83.54  FE-cone 81.01  FE-sub 79.75  FE-pm 82.91
+[ 3812.0s]     s5: ens 78.11  FE-cone 76.12  FE-sub 75.12  FE-pm 77.61
+[ 3838.8s]     s6: ens 76.92  FE-cone 76.92  FE-sub 75.21  FE-pm 76.92
+[ 3869.8s]     s7: ens 73.68  FE-cone 73.68  FE-sub 72.47  FE-pm 74.90
+[ 3902.3s]     s8: ens 74.35  FE-cone 73.23  FE-sub 72.49  FE-pm 73.98
+[ 3936.3s]     s9: ens 70.78  FE-cone 71.43  FE-sub 69.81  FE-pm 71.75
+[ 3968.7s]     s10: ens 71.64  FE-cone 70.15  FE-sub 69.25  FE-pm 70.75
+[ 4004.6s]     s11: ens 73.01  FE-cone 71.47  FE-sub 72.75  FE-pm 71.98
+[ 4038.9s]     s12: ens 71.85  FE-cone 70.12  FE-sub 70.62  FE-pm 71.85
+[ 4073.9s]     s13: ens 70.02  FE-cone 68.38  FE-sub 70.02  FE-pm 70.49
+[ 4112.0s]     s14: ens 70.07  FE-cone 68.03  FE-sub 68.03  FE-pm 68.71
+[ 4153.6s]     s15: ens 69.51  FE-cone 69.08  FE-sub 68.66  FE-pm 69.30
+[ 4202.0s]     s16: ens 67.66  FE-cone 66.87  FE-sub 66.47  FE-pm 68.06
+[ 4245.8s]     s17: ens 66.09  FE-cone 65.33  FE-sub 65.13  FE-pm 66.28
+[ 4299.9s]     s18: ens 65.12  FE-cone 65.12  FE-sub 64.22  FE-pm 65.30
+[ 4354.5s]     s19: ens 63.49  FE-cone 62.11  FE-sub 62.80  FE-pm 63.84
+[ 4423.4s]     s20: ens 63.05  FE-cone 62.89  FE-sub 62.40  FE-pm 64.70
+[ 4480.7s]     s21: ens 62.24  FE-cone 62.99  FE-sub 61.18  FE-pm 63.44
+[ 4535.4s]     s22: ens 61.53  FE-cone 61.53  FE-sub 59.31  FE-pm 62.08
+[ 4594.9s]     s23: ens 61.61  FE-cone 61.88  FE-sub 59.46  FE-pm 61.88
+[ 4650.7s]     s24: ens 61.27  FE-cone 61.40  FE-sub 59.46  FE-pm 62.69
+[ 4716.7s]     s25: ens 61.99  FE-cone 62.83  FE-sub 61.38  FE-pm 63.44
+[ 4809.5s]     s26: ens 61.55  FE-cone 62.37  FE-sub 61.08  FE-pm 62.60
+[ 4880.2s]     s27: ens 60.14  FE-cone 61.73  FE-sub 60.36  FE-pm 61.39
+[ 4946.4s]     s28: ens 60.27  FE-cone 61.50  FE-sub 60.04  FE-pm 61.62
+[ 5021.3s]     s29: ens 61.07  FE-cone 61.39  FE-sub 60.96  FE-pm 61.93
+[ 5099.6s]     s30: ens 60.89  FE-cone 61.93  FE-sub 60.79  FE-pm 61.51
+[ 5170.0s]     s31: ens 60.63  FE-cone 61.54  FE-sub 60.22  FE-pm 61.23
+[ 5254.6s]     s32: ens 60.08  FE-cone 60.67  FE-sub 59.58  FE-pm 60.67
+[ 5337.4s]     s33: ens 59.48  FE-cone 59.48  FE-sub 59.00  FE-pm 59.87
+[ 5419.2s]     s34: ens 58.65  FE-cone 61.15  FE-sub 58.46  FE-pm 59.67
+[ 5507.6s]     s35: ens 58.41  FE-cone 59.78  FE-sub 57.86  FE-pm 59.14
+[ 5597.5s]     s36: ens 57.63  FE-cone 59.80  FE-sub 57.72  FE-pm 59.62
+[ 5684.8s]     s37: ens 56.30  FE-cone 59.34  FE-sub 56.82  FE-pm 57.86
+[ 5777.2s]     s38: ens 56.22  FE-cone 58.94  FE-sub 56.90  FE-pm 57.67
+[ 5876.7s]     s39: ens 56.54  FE-cone 59.52  FE-sub 57.20  FE-pm 57.86
+[ 5973.2s]     s40: ens 56.49  FE-cone 59.13  FE-sub 56.97  FE-pm 58.33
+[ 6092.3s]     s41: ens 56.61  FE-cone 59.22  FE-sub 57.09  FE-pm 58.12
+[ 6211.0s]     s42: ens 56.63  FE-cone 58.82  FE-sub 56.94  FE-pm 58.04
+[ 6324.9s]     s43: ens 56.12  FE-cone 58.33  FE-sub 56.65  FE-pm 57.19
+[ 6439.7s]     s44: ens 55.96  FE-cone 58.22  FE-sub 56.33  FE-pm 56.79
+[ 6567.0s]     s45: ens 55.61  FE-cone 57.36  FE-sub 56.49  FE-pm 57.14
+[ 6682.7s]     s46: ens 55.24  FE-cone 57.53  FE-sub 55.88  FE-pm 57.46
+[ 6798.5s]     s47: ens 55.61  FE-cone 58.03  FE-sub 55.68  FE-pm 57.13
+[ 6918.1s]     s48: ens 55.40  FE-cone 57.91  FE-sub 55.33  FE-pm 56.69
+[ 7029.0s]     s49: ens 55.20  FE-cone 55.80  FE-sub 55.20  FE-pm 55.93
+[ 7029.0s]     cell took 3329s
+
+============================================================================================================
+EXP66 CONTROL BATTERY -- arm f64 FIXED on every cell (C3), rules ['cone', 'sub', 'pm'] (C2), 13 member subsets (C5)
+============================================================================================================
+
+cells 36   verified against exp56: 2/36   members ['q32', 'm32', 'a16', 'q32b70', 'q64']
+
+------------------------------------------------------------------------------------------------------------
+C2 RULE CONTROL -- same rays, same storage, full member set.
+   cone = non-negative combination | sub = SVD span (non-negativity DROPPED) | pm = max single ray
+------------------------------------------------------------------------------------------------------------
+  ds            T  n   ens_ranpac      FE-cone       FE-sub        FE-pm  d(cone-ens)   d(sub-ens)    d(pm-ens)
+  CIFAR100     10  3        93.27        93.31        93.30        93.38        +0.04        +0.03        +0.11
+  CIFAR100     20  3        92.67        92.81        92.75        92.82        +0.14        +0.08        +0.15
+  CIFAR100     50  3        91.72        91.94        91.79        92.10        +0.22        +0.07        +0.37
+  CUB200P      10  3        90.19        90.16        90.20        90.15        -0.03        +0.01        -0.04
+  CUB200P      20  3        89.64        89.77        89.84        89.79        +0.13        +0.20        +0.16
+  CUB200P      50  3        89.20        89.27        89.21        89.17        +0.07        +0.01        -0.03
+  IMAGENETAP   10  3        63.38        64.27        63.69        63.91        +0.89        +0.31        +0.53
+  IMAGENETAP   20  3        59.73        60.16        59.62        60.00        +0.42        -0.11        +0.27
+  IMAGENETAP   50  3        57.27        58.02        57.49        57.98        +0.76        +0.22        +0.71
+  IMAGENETR    10  3        81.78        82.58        82.31        81.77        +0.80        +0.53        -0.02
+  IMAGENETR    20  3        80.31        81.16        80.77        80.31        +0.86        +0.46        -0.00
+  IMAGENETR    50  3        76.89        78.21        77.63        77.18        +1.32        +0.73        +0.28
+
+  cone - sub, mean over 12 cells: +0.255 (min -0.071, max +0.583)
+  READ: if this is inside seed noise, the gain is the SPAN of the rays, not the conic
+        combination, and the paper should not be about cones.
+
+------------------------------------------------------------------------------------------------------------
+C5 MEMBER ABLATION -- A-Last, rule = cone
+------------------------------------------------------------------------------------------------------------
+
+  CIFAR100 T=10   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             92.72       92.84     -0.47
+    single:m32             92.46       92.52     -0.79
+    single:a16             92.56       92.73     -0.58
+    single:q32b70          92.59       92.71     -0.60
+    single:q64             92.81       92.97     -0.34
+    nested:M2              93.09       93.02     -0.29
+    nested:M3              93.10       93.12     -0.19
+    nested:M4              93.24       93.28     -0.03
+    loo:-q32               93.25       93.29     -0.02
+    loo:-m32               93.23       93.35     +0.04
+    loo:-a16               93.21       93.26     -0.05
+    loo:-q32b70            93.18       93.21     -0.10
+    full                   93.27       93.31     +0.00
+
+  CIFAR100 T=20   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             91.86       92.24     -0.58
+    single:m32             91.88       92.12     -0.69
+    single:a16             91.98       92.21     -0.61
+    single:q32b70          91.81       92.08     -0.73
+    single:q64             92.12       92.27     -0.54
+    nested:M2              92.41       92.52     -0.29
+    nested:M3              92.52       92.73     -0.08
+    nested:M4              92.62       92.72     -0.09
+    loo:-q32               92.63       92.82     +0.00
+    loo:-m32               92.56       92.74     -0.07
+    loo:-a16               92.53       92.67     -0.15
+    loo:-q32b70            92.65       92.80     -0.02
+    full                   92.67       92.81     +0.00
+
+  CIFAR100 T=50   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             90.96       91.37     -0.57
+    single:m32             90.95       91.20     -0.74
+    single:a16             91.24       91.34     -0.61
+    single:q32b70          91.22       91.73     -0.22
+    single:q64             91.13       91.40     -0.54
+    nested:M2              91.52       91.77     -0.17
+    nested:M3              91.78       91.91     -0.03
+    nested:M4              91.77       92.00     +0.05
+    loo:-q32               91.81       91.99     +0.04
+    loo:-m32               91.69       91.99     +0.04
+    loo:-a16               91.48       91.85     -0.09
+    loo:-q32b70            91.72       91.93     -0.01
+    full                   91.72       91.94     +0.00
+
+  CUB200P T=10   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             89.71       89.69     -0.47
+    single:m32             89.71       89.71     -0.45
+    single:a16             89.50       89.50     -0.66
+    single:q32b70          89.68       89.92     -0.24
+    single:q64             89.67       89.71     -0.45
+    nested:M2              90.12       90.10     -0.06
+    nested:M3              90.03       90.13     -0.03
+    nested:M4              90.06       90.15     -0.01
+    loo:-q32               90.10       90.08     -0.08
+    loo:-m32               90.20       90.22     +0.06
+    loo:-a16               90.22       90.29     +0.13
+    loo:-q32b70            90.19       90.10     -0.06
+    full                   90.19       90.16     +0.00
+
+  CUB200P T=20   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             89.27       89.40     -0.37
+    single:m32             89.41       89.58     -0.18
+    single:a16             89.20       89.26     -0.51
+    single:q32b70          89.55       89.67     -0.10
+    single:q64             89.38       89.45     -0.31
+    nested:M2              89.58       89.69     -0.07
+    nested:M3              89.58       89.77     +0.00
+    nested:M4              89.61       89.81     +0.04
+    loo:-q32               89.72       89.79     +0.03
+    loo:-m32               89.65       89.82     +0.06
+    loo:-a16               89.69       89.84     +0.07
+    loo:-q32b70            89.64       89.82     +0.06
+    full                   89.64       89.77     +0.00
+
+  CUB200P T=50   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             88.46       88.58     -0.69
+    single:m32             89.02       89.09     -0.18
+    single:a16             89.14       89.17     -0.10
+    single:q32b70          88.80       88.93     -0.34
+    single:q64             88.96       89.10     -0.17
+    nested:M2              89.20       89.13     -0.14
+    nested:M3              89.23       89.24     -0.03
+    nested:M4              89.13       89.26     -0.01
+    loo:-q32               89.24       89.37     +0.10
+    loo:-m32               88.96       89.10     -0.17
+    loo:-a16               89.12       89.16     -0.11
+    loo:-q32b70            89.26       89.23     -0.04
+    full                   89.20       89.27     +0.00
+
+  IMAGENETAP T=10   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             62.76       63.82     -0.44
+    single:m32             60.13       61.24     -3.02
+    single:a16             60.93       61.73     -2.53
+    single:q32b70          61.49       63.13     -1.13
+    single:q64             61.78       63.13     -1.13
+    nested:M2              62.47       63.29     -0.98
+    nested:M3              63.07       63.98     -0.29
+    nested:M4              63.31       64.58     +0.31
+    loo:-q32               63.00       64.00     -0.27
+    loo:-m32               63.58       64.62     +0.36
+    loo:-a16               63.18       64.53     +0.27
+    loo:-q32b70            63.20       64.31     +0.04
+    full                   63.38       64.27     +0.00
+
+  IMAGENETAP T=20   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             59.11       59.98     -0.18
+    single:m32             58.60       58.91     -1.24
+    single:a16             57.27       58.56     -1.60
+    single:q32b70          56.31       57.07     -3.09
+    single:q64             58.62       59.49     -0.67
+    nested:M2              60.60       60.22     +0.07
+    nested:M3              60.36       60.60     +0.44
+    nested:M4              59.64       60.47     +0.31
+    loo:-q32               59.51       59.73     -0.42
+    loo:-m32               59.18       59.91     -0.24
+    loo:-a16               59.58       60.09     -0.07
+    loo:-q32b70            60.40       60.67     +0.51
+    full                   59.73       60.16     +0.00
+
+  IMAGENETAP T=50   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             56.22       57.67     -0.36
+    single:m32             55.47       55.91     -2.11
+    single:a16             56.91       58.27     +0.24
+    single:q32b70          55.53       56.89     -1.13
+    single:q64             55.67       57.49     -0.53
+    nested:M2              56.96       58.00     -0.02
+    nested:M3              57.80       58.69     +0.67
+    nested:M4              57.73       58.47     +0.44
+    loo:-q32               57.62       58.24     +0.22
+    loo:-m32               57.20       58.18     +0.16
+    loo:-a16               56.76       57.73     -0.29
+    loo:-q32b70            57.71       58.38     +0.36
+    full                   57.27       58.02     +0.00
+
+  IMAGENETR T=10   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             80.76       81.53     -1.06
+    single:m32             79.07       80.44     -2.14
+    single:a16             79.51       80.89     -1.69
+    single:q32b70          79.78       80.95     -1.63
+    single:q64             80.69       81.87     -0.71
+    nested:M2              81.41       82.36     -0.22
+    nested:M3              81.53       82.50     -0.08
+    nested:M4              81.63       82.53     -0.06
+    loo:-q32               81.55       82.48     -0.10
+    loo:-m32               81.57       82.48     -0.10
+    loo:-a16               81.73       82.54     -0.04
+    loo:-q32b70            81.89       82.49     -0.09
+    full                   81.78       82.58     +0.00
+
+  IMAGENETR T=20   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             79.63       80.93     -0.23
+    single:m32             77.57       78.67     -2.49
+    single:a16             78.20       79.54     -1.62
+    single:q32b70          78.33       79.62     -1.54
+    single:q64             79.22       80.61     -0.56
+    nested:M2              79.71       80.84     -0.32
+    nested:M3              79.98       80.89     -0.27
+    nested:M4              80.23       81.11     -0.06
+    loo:-q32               80.13       81.09     -0.07
+    loo:-m32               80.11       81.11     -0.06
+    loo:-a16               80.25       81.16     -0.01
+    loo:-q32b70            80.33       81.26     +0.09
+    full                   80.31       81.16     +0.00
+
+  IMAGENETR T=50   (seeds [0, 1, 2])
+    subset            ens_ranpac     FE-cone   vs full
+    single:q32             75.74       77.33     -0.88
+    single:m32             75.31       76.85     -1.36
+    single:a16             75.93       77.49     -0.72
+    single:q32b70          74.57       75.87     -2.34
+    single:q64             75.87       77.29     -0.92
+    nested:M2              76.62       77.96     -0.25
+    nested:M3              76.97       78.14     -0.07
+    nested:M4              76.90       78.06     -0.15
+    loo:-q32               76.89       78.15     -0.06
+    loo:-m32               76.51       77.97     -0.24
+    loo:-a16               76.69       77.91     -0.31
+    loo:-q32b70            77.05       78.43     +0.22
+    full                   76.89       78.21     +0.00
+
+------------------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  C2 is the decisive one. cone/sub/pm store the SAME rays at the SAME cost; only the scoring
+     rule differs. A cone-sub gap inside seed noise means the read-out is a low-rank region
+     score and "conic" is decoration. That outcome is the PRIOR here, not a surprise -- see
+     cone-is-dead-weight-final and nonneg-space-hypothesis-falsified.
+  C3 there is exactly one arm in this file and it was fixed before the run. Any table built
+     from it is free of the per-cell selection in results.txt. Cells where the arm CLIPS
+     (rays_for(ARM, median) >= median) are flagged in _meta and must be reported as such.
+  C5 read `nested:Mk` for saturation and `loo:-m` for attribution. If nested:M3 ~= full, the
+     method is 40% cheaper than published and that is a result, not a concession. If every
+     loo row is ~= full, no single member matters and the diversity story is about the
+     ENSEMBLE, not the members -- which C1 (seed-only ensemble) then has to rule out.
+  NONE of this addresses "is it just ensembling?" -- that is C1 and it needs new training.
+============================================================================================================
+[ 7029.2s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp66_controls_augreg_in21k.json

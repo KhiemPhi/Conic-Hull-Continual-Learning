@@ -1,0 +1,1010 @@
++ source /home/khiemphi/venvs/ml_env/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ case "$(uname)" in
++++ uname
+++ export VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ _OLD_VIRTUAL_PATH=/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ PATH=/home/khiemphi/venvs/ml_env/bin:/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ export PATH
+++ VIRTUAL_ENV_PROMPT='(ml_env) '
+++ export VIRTUAL_ENV_PROMPT
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='((ml_env) ) '
+++ export PS1
+++ hash -r
++ cd /home/khiemphi/Conic-Hull-Continual-Learning
++ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 ORDER=pilot
++ OMP_NUM_THREADS=1
++ MKL_NUM_THREADS=1
++ ORDER=pilot
++ export http_proxy=http://fwdproxy:8080 https_proxy=http://fwdproxy:8080 HF_HUB_DISABLE_XET=1
++ http_proxy=http://fwdproxy:8080
++ https_proxy=http://fwdproxy:8080
++ HF_HUB_DISABLE_XET=1
++ for T in 10 20 50
++ for i in 1 2 3
++ echo '[chain] cone_only T=10 attempt 1'
+[chain] cone_only T=10 attempt 1
++ DS=CIFAR100,IMAGENETR,CUB200P,IMAGENETAP
++ T=10
++ SEED=0,1,2
++ R=64
++ MEMBERS=q32,m32,a16,q32b70,q64
++ VERIFY=1
++ python -u exp61_cone_only.py
+[    0.0s] === CIFAR100|10|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[    7.0s]     VERIFY exp55 ok   exp56 ok
+[   36.5s]     s0: rp1 99.10  cone1 99.10  ensRP 99.40  coneENS 99.60  FE 99.40
+[   76.3s]     s1: rp1 98.20  cone1 98.05  ensRP 98.35  coneENS 98.25  FE 98.35
+[  134.3s]     s2: rp1 97.60  cone1 97.33  ensRP 97.87  coneENS 97.37  FE 97.73
+[  225.6s]     s3: rp1 96.67  cone1 96.50  ensRP 97.02  coneENS 96.80  FE 97.05
+[  343.6s]     s4: rp1 95.46  cone1 95.64  ensRP 95.96  coneENS 95.68  FE 96.00
+[  476.0s]     s5: rp1 94.83  cone1 94.88  ensRP 95.33  coneENS 95.12  FE 95.32
+[  659.7s]     s6: rp1 94.54  cone1 94.70  ensRP 95.11  coneENS 94.83  FE 95.14
+[  859.6s]     s7: rp1 93.21  cone1 93.29  ensRP 93.69  coneENS 93.54  FE 93.94
+[ 1151.2s]     s8: rp1 92.93  cone1 92.86  ensRP 93.39  coneENS 93.13  FE 93.58
+[ 1481.9s]     s9: rp1 92.80  cone1 92.68  ensRP 93.17  coneENS 92.85  FE 93.32
+[ 1482.0s]     cell 1482s
+[ 1482.0s] === CIFAR100|10|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 1517.8s]     s0: rp1 98.40  cone1 97.80  ensRP 98.50  coneENS 98.40  FE 98.60
+[ 1563.3s]     s1: rp1 98.30  cone1 97.70  ensRP 98.15  coneENS 98.05  FE 98.15
+[ 1620.1s]     s2: rp1 97.60  cone1 97.33  ensRP 98.00  coneENS 97.73  FE 97.97
+[ 1686.7s]     s3: rp1 96.73  cone1 96.33  ensRP 96.97  coneENS 96.60  FE 97.00
+[ 1789.3s]     s4: rp1 95.94  cone1 95.74  ensRP 96.36  coneENS 95.92  FE 96.26
+[ 1924.0s]     s5: rp1 95.75  cone1 95.48  ensRP 96.15  coneENS 95.73  FE 96.03
+[ 2085.2s]     s6: rp1 94.84  cone1 94.59  ensRP 95.19  coneENS 94.90  FE 95.13
+[ 2281.8s]     s7: rp1 93.84  cone1 93.51  ensRP 94.21  coneENS 94.00  FE 94.29
+[ 2592.4s]     s8: rp1 92.88  cone1 92.80  ensRP 93.46  coneENS 93.40  FE 93.53
+[ 2947.5s]     s9: rp1 92.77  cone1 92.69  ensRP 93.36  coneENS 93.33  FE 93.48
+[ 2947.5s]     cell 1466s
+[ 2947.5s] === CIFAR100|10|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 2980.4s]     s0: rp1 99.10  cone1 99.00  ensRP 99.30  coneENS 99.30  FE 99.30
+[ 3019.3s]     s1: rp1 97.40  cone1 97.65  ensRP 97.80  coneENS 97.60  FE 97.70
+[ 3070.3s]     s2: rp1 96.43  cone1 96.63  ensRP 96.77  coneENS 96.63  FE 96.67
+[ 3136.8s]     s3: rp1 96.00  cone1 95.88  ensRP 96.25  coneENS 96.10  FE 96.23
+[ 3240.6s]     s4: rp1 95.34  cone1 95.10  ensRP 95.68  coneENS 95.62  FE 95.72
+[ 3373.2s]     s5: rp1 94.72  cone1 94.52  ensRP 95.27  coneENS 95.15  FE 95.30
+[ 3541.9s]     s6: rp1 94.33  cone1 93.94  ensRP 94.76  coneENS 94.64  FE 94.77
+[ 3735.1s]     s7: rp1 93.73  cone1 93.73  ensRP 94.27  coneENS 94.20  FE 94.19
+[ 4037.3s]     s8: rp1 93.16  cone1 93.07  ensRP 93.79  coneENS 93.64  FE 93.77
+[ 4386.3s]     s9: rp1 92.60  cone1 92.48  ensRP 93.28  coneENS 93.12  FE 93.13
+[ 4386.3s]     cell 1439s
+[ 4386.3s] skip IMAGENETR|10|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[ 4386.3s] skip IMAGENETR|10|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[ 4386.3s] skip IMAGENETR|10|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[ 4386.3s] === CUB200P|10|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[ 4428.1s]     s0: rp1 97.02  cone1 96.60  ensRP 97.45  coneENS 96.17  FE 97.45
+[ 4490.3s]     s1: rp1 96.11  cone1 95.90  ensRP 96.76  coneENS 96.54  FE 96.54
+[ 4578.3s]     s2: rp1 93.78  cone1 94.50  ensRP 95.08  coneENS 94.93  FE 94.79
+[ 4683.5s]     s3: rp1 93.30  cone1 93.30  ensRP 94.37  coneENS 93.62  FE 93.84
+[ 4807.2s]     s4: rp1 93.71  cone1 92.76  ensRP 94.06  coneENS 93.20  FE 93.97
+[ 4954.6s]     s5: rp1 92.31  cone1 92.09  ensRP 93.52  coneENS 91.74  FE 93.59
+[ 5125.6s]     s6: rp1 91.44  cone1 91.38  ensRP 92.11  coneENS 91.02  FE 92.11
+[ 5317.6s]     s7: rp1 91.08  cone1 90.60  ensRP 91.83  coneENS 90.49  FE 91.78
+[ 5530.2s]     s8: rp1 90.39  cone1 90.01  ensRP 91.34  coneENS 89.97  FE 91.39
+[ 5769.5s]     s9: rp1 89.36  cone1 89.10  ensRP 90.29  coneENS 89.27  FE 90.25
+[ 5769.5s]     cell 1383s
+[ 5769.5s] === CUB200P|10|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[ 5819.9s]     s0: rp1 98.68  cone1 98.24  ensRP 99.12  coneENS 98.68  FE 99.12
+[ 5890.4s]     s1: rp1 97.68  cone1 97.47  ensRP 97.89  coneENS 97.89  FE 98.10
+[ 5978.2s]     s2: rp1 96.52  cone1 96.24  ensRP 96.80  coneENS 96.38  FE 96.94
+[ 6085.7s]     s3: rp1 94.65  cone1 93.81  ensRP 94.75  coneENS 94.02  FE 95.07
+[ 6216.3s]     s4: rp1 94.20  cone1 93.27  ensRP 94.37  coneENS 93.61  FE 94.37
+[ 6361.0s]     s5: rp1 93.70  cone1 92.92  ensRP 94.26  coneENS 92.99  FE 94.05
+[ 6521.2s]     s6: rp1 92.60  cone1 91.80  ensRP 92.84  coneENS 91.73  FE 92.84
+[ 6717.4s]     s7: rp1 91.06  cone1 90.15  ensRP 91.06  coneENS 90.15  FE 91.06
+[ 6929.4s]     s8: rp1 90.87  cone1 89.74  ensRP 90.59  coneENS 89.79  FE 90.64
+[ 7173.7s]     s9: rp1 89.91  cone1 89.23  ensRP 90.20  coneENS 89.31  FE 90.25
+[ 7173.7s]     cell 1404s
+[ 7173.7s] === CUB200P|10|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[ 7214.8s]     s0: rp1 96.33  cone1 96.33  ensRP 95.92  coneENS 95.92  FE 95.92
+[ 7280.2s]     s1: rp1 93.14  cone1 94.18  ensRP 93.97  coneENS 94.18  FE 93.76
+[ 7365.0s]     s2: rp1 92.95  cone1 92.38  ensRP 92.95  coneENS 91.96  FE 93.09
+[ 7467.6s]     s3: rp1 92.23  cone1 92.23  ensRP 92.65  coneENS 91.70  FE 92.96
+[ 7596.8s]     s4: rp1 92.83  cone1 92.24  ensRP 92.49  coneENS 92.32  FE 92.24
+[ 7744.7s]     s5: rp1 91.52  cone1 90.75  ensRP 91.66  coneENS 91.17  FE 91.72
+[ 7937.1s]     s6: rp1 91.36  cone1 90.53  ensRP 91.48  coneENS 90.77  FE 91.36
+[ 8125.3s]     s7: rp1 90.40  cone1 89.41  ensRP 90.56  coneENS 89.25  FE 90.45
+[ 8351.7s]     s8: rp1 90.23  cone1 89.16  ensRP 90.37  coneENS 88.97  FE 90.37
+[ 8614.9s]     s9: rp1 89.86  cone1 88.89  ensRP 90.08  coneENS 88.93  FE 89.99
+[ 8614.9s]     cell 1441s
+[ 8614.9s] === IMAGENETAP|10|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[ 8652.9s]     s0: rp1 86.03  cone1 84.36  ensRP 85.47  coneENS 84.92  FE 85.47
+[ 8708.6s]     s1: rp1 78.80  cone1 75.00  ensRP 80.16  coneENS 76.90  FE 80.16
+[ 8775.4s]     s2: rp1 74.70  cone1 72.47  ensRP 76.32  coneENS 74.49  FE 76.11
+[ 8855.8s]     s3: rp1 74.71  cone1 72.84  ensRP 75.14  coneENS 73.99  FE 75.57
+[ 8947.3s]     s4: rp1 72.41  cone1 70.60  ensRP 73.13  coneENS 71.08  FE 73.01
+[ 9049.7s]     s5: rp1 70.58  cone1 69.23  ensRP 71.52  coneENS 70.27  FE 71.00
+[ 9169.0s]     s6: rp1 68.49  cone1 66.94  ensRP 69.31  coneENS 67.85  FE 69.49
+[ 9313.3s]     s7: rp1 66.40  cone1 65.66  ensRP 68.35  coneENS 66.15  FE 68.43
+[ 9459.2s]     s8: rp1 64.87  cone1 63.19  ensRP 64.80  coneENS 63.92  FE 65.60
+[ 9617.4s]     s9: rp1 64.27  cone1 62.60  ensRP 63.80  coneENS 63.67  FE 65.27
+[ 9617.4s]     cell 1002s
+[ 9617.4s] === IMAGENETAP|10|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[ 9652.8s]     s0: rp1 87.05  cone1 87.05  ensRP 89.21  coneENS 87.05  FE 89.21
+[ 9709.9s]     s1: rp1 80.07  cone1 75.65  ensRP 80.81  coneENS 76.75  FE 80.07
+[ 9785.5s]     s2: rp1 77.05  cone1 74.09  ensRP 78.41  coneENS 75.23  FE 77.50
+[ 9872.1s]     s3: rp1 73.67  cone1 71.50  ensRP 75.00  coneENS 72.33  FE 74.83
+[ 9966.3s]     s4: rp1 72.18  cone1 69.09  ensRP 72.98  coneENS 69.09  FE 71.37
+[10065.4s]     s5: rp1 69.04  cone1 65.94  ensRP 69.38  coneENS 65.83  FE 68.46
+[10177.3s]     s6: rp1 67.65  cone1 65.29  ensRP 67.36  coneENS 65.29  FE 68.05
+[10303.2s]     s7: rp1 66.34  cone1 64.41  ensRP 66.18  coneENS 64.25  FE 65.86
+[10455.9s]     s8: rp1 64.96  cone1 63.02  ensRP 64.46  coneENS 63.02  FE 64.60
+[10625.6s]     s9: rp1 62.67  cone1 61.53  ensRP 62.67  coneENS 61.47  FE 62.87
+[10625.6s]     cell 1008s
+[10625.6s] === IMAGENETAP|10|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[10663.2s]     s0: rp1 82.28  cone1 77.85  ensRP 85.44  coneENS 82.91  FE 85.44
+[10717.2s]     s1: rp1 75.65  cone1 70.45  ensRP 75.97  coneENS 75.32  FE 75.97
+[10784.5s]     s2: rp1 73.47  cone1 70.07  ensRP 75.06  coneENS 72.34  FE 75.06
+[10859.3s]     s3: rp1 69.72  cone1 66.61  ensRP 70.93  coneENS 68.17  FE 71.28
+[10947.4s]     s4: rp1 69.30  cone1 65.80  ensRP 70.98  coneENS 67.49  FE 71.24
+[11051.9s]     s5: rp1 67.91  cone1 66.84  ensRP 69.41  coneENS 68.77  FE 70.27
+[11170.8s]     s6: rp1 64.57  cone1 64.85  ensRP 68.27  coneENS 67.07  FE 68.36
+[11309.0s]     s7: rp1 63.66  cone1 63.16  ensRP 65.98  coneENS 64.90  FE 66.47
+[11468.5s]     s8: rp1 62.90  cone1 62.37  ensRP 64.56  coneENS 63.80  FE 65.16
+[11633.1s]     s9: rp1 61.33  cone1 61.53  ensRP 63.67  coneENS 63.13  FE 64.67
+[11633.1s]     cell 1008s
+
+============================================================================================
+EXP61 -- what does deleting RanPAC cost?   R=64  ORDER=pilot
+============================================================================================
+
+  CIFAR100 T=10  seeds [0, 1, 2]   anchors {'exp55': True, 'exp56': True}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            92.72±0.11     95.51±0.21     +0.75    +0.86    0.9 GB
+    cone_q32          92.62±0.12     95.37±0.15     +0.65    +0.72     40 MB
+    ens_ranpac        93.27±0.10     95.89±0.16     +1.30    +1.24    4.3 GB
+    cone_ens          93.10±0.24     95.71±0.10     +1.13    +1.06    0.3 GB
+    FE                93.31±0.18     95.90±0.20     +1.34    +1.25    4.3 GB
+    cone_ens - FE = -0.21 A-Last / -0.19 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.55   cone +0.48   (A-Last)
+
+  CUB200P T=10  seeds [0, 1, 2]   anchors {'exp55': False, 'exp56': False}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            89.71±0.31     92.97±0.96     -0.20    -0.88    0.9 GB
+    cone_q32          89.07±0.17     92.51±0.84     -0.84    -1.34     40 MB
+    ens_ranpac        90.19±0.11     93.36±1.03     +0.28    -0.49    4.3 GB
+    cone_ens          89.17±0.21     92.56±0.98     -0.74    -1.29    0.3 GB
+    FE                90.16±0.15     93.33±1.05     +0.25    -0.52    4.3 GB
+    cone_ens - FE = -0.99 A-Last / -0.78 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.48   cone +0.10   (A-Last)
+
+  IMAGENETAP T=10  seeds [0, 1, 2]   anchors {'exp55': False, 'exp56': False}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            62.76±1.47     71.09±1.74     -0.84    +0.85    0.9 GB
+    cone_q32          61.89±0.62     69.00±1.79     -1.71    -1.24     40 MB
+    ens_ranpac        63.38±0.62     72.16±0.98     -0.22    +1.92    4.3 GB
+    cone_ens          62.76±1.15     70.25±0.99     -0.84    +0.01    0.3 GB
+    FE                64.27±1.25     72.23±0.81     +0.67    +1.99    4.3 GB
+    cone_ens - FE = -1.51 A-Last / -1.98 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.62   cone +0.87   (A-Last)
+
+  IMAGENETR T=10  seeds [0, 1, 2]   anchors {'exp55': True, 'exp56': True}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            80.76±0.50     85.49±0.32     -1.33    -0.71    0.9 GB
+    cone_q32          80.80±0.40     85.46±0.66     -1.29    -0.74     40 MB
+    ens_ranpac        81.78±0.18     86.55±0.32     -0.31    +0.35    4.3 GB
+    cone_ens          81.56±0.18     86.16±0.45     -0.53    -0.04    0.3 GB
+    FE                82.58±0.13     87.01±0.49     +0.49    +0.81    4.3 GB
+    cone_ens - FE = -1.02 A-Last / -0.85 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +1.02   cone +0.76   (A-Last)
+
+--------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. The two anchors must both be `True`. ens_ranpac reproduces exp55 and FE reproduces
+     exp56, both to 1e-9, or the cones/features are not the published ones.
+  2. cone_ens - FE is the price of deleting RanPAC. Within ~0.3 makes the memory win
+     (6.5x WORSE than GR-LoRA -> 2x BETTER) close to free.
+  3. Compare the two ensemble gains. If the cone ensembles BETTER than RanPAC does, the
+     cone-only ensemble closes more of the single-member gap than exp54's -0.49 suggests,
+     and cone-native becomes viable on accuracy rather than only on memory.
+============================================================================================
++ break
++ for T in 10 20 50
++ for i in 1 2 3
++ echo '[chain] cone_only T=20 attempt 1'
+[chain] cone_only T=20 attempt 1
++ DS=CIFAR100,IMAGENETR,CUB200P,IMAGENETAP
++ T=20
++ SEED=0,1,2
++ R=64
++ MEMBERS=q32,m32,a16,q32b70,q64
++ VERIFY=1
++ python -u exp61_cone_only.py
+[    0.0s] === CIFAR100|20|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[    6.8s]     VERIFY exp55 ok   exp56 ok
+[   23.2s]     s0: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[   44.0s]     s1: rp1 99.00  cone1 99.00  ensRP 99.00  coneENS 98.90  FE 99.00
+[   71.9s]     s2: rp1 98.07  cone1 97.93  ensRP 98.60  coneENS 98.33  FE 98.60
+[  107.4s]     s3: rp1 97.30  cone1 97.10  ensRP 97.75  coneENS 97.55  FE 97.70
+[  146.8s]     s4: rp1 97.40  cone1 97.04  ensRP 97.72  coneENS 97.52  FE 97.72
+[  195.4s]     s5: rp1 96.47  cone1 96.70  ensRP 96.93  coneENS 97.00  FE 97.07
+[  248.8s]     s6: rp1 95.91  cone1 95.91  ensRP 96.00  coneENS 96.29  FE 96.34
+[  311.0s]     s7: rp1 95.65  cone1 95.73  ensRP 96.15  coneENS 96.30  FE 96.30
+[  397.9s]     s8: rp1 95.09  cone1 95.18  ensRP 95.67  coneENS 95.71  FE 95.89
+[  499.9s]     s9: rp1 94.50  cone1 94.58  ensRP 95.20  coneENS 95.10  FE 95.42
+[  612.6s]     s10: rp1 93.73  cone1 93.95  ensRP 94.53  coneENS 94.56  FE 94.82
+[  740.2s]     s11: rp1 93.48  cone1 93.67  ensRP 94.37  coneENS 94.37  FE 94.60
+[  890.0s]     s12: rp1 93.20  cone1 93.40  ensRP 93.98  coneENS 94.05  FE 94.31
+[ 1040.3s]     s13: rp1 93.14  cone1 93.49  ensRP 93.99  coneENS 94.01  FE 94.20
+[ 1204.3s]     s14: rp1 92.88  cone1 93.00  ensRP 93.47  coneENS 93.49  FE 93.77
+[ 1384.6s]     s15: rp1 91.95  cone1 92.12  ensRP 92.74  coneENS 92.74  FE 93.01
+[ 1653.8s]     s16: rp1 91.80  cone1 91.94  ensRP 92.58  coneENS 92.67  FE 92.71
+[ 1937.7s]     s17: rp1 91.66  cone1 91.59  ensRP 92.39  coneENS 92.46  FE 92.70
+[ 2253.6s]     s18: rp1 91.38  cone1 91.74  ensRP 92.44  coneENS 92.53  FE 92.66
+[ 2584.2s]     s19: rp1 91.11  cone1 91.41  ensRP 92.32  coneENS 92.27  FE 92.42
+[ 2584.2s]     cell 2584s
+[ 2584.2s] === CIFAR100|20|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 2603.9s]     s0: rp1 97.60  cone1 97.20  ensRP 97.80  coneENS 98.20  FE 97.80
+[ 2624.7s]     s1: rp1 98.00  cone1 97.20  ensRP 98.60  coneENS 98.20  FE 98.40
+[ 2652.3s]     s2: rp1 97.93  cone1 97.27  ensRP 98.33  coneENS 98.00  FE 98.33
+[ 2684.5s]     s3: rp1 98.10  cone1 97.35  ensRP 98.25  coneENS 97.85  FE 98.25
+[ 2723.7s]     s4: rp1 97.64  cone1 97.36  ensRP 98.04  coneENS 97.68  FE 98.08
+[ 2773.4s]     s5: rp1 97.53  cone1 97.23  ensRP 97.87  coneENS 97.60  FE 97.83
+[ 2839.7s]     s6: rp1 96.83  cone1 96.66  ensRP 97.31  coneENS 96.86  FE 97.23
+[ 2902.2s]     s7: rp1 96.33  cone1 96.10  ensRP 96.85  coneENS 96.35  FE 96.65
+[ 2992.9s]     s8: rp1 96.22  cone1 96.09  ensRP 96.80  coneENS 96.24  FE 96.73
+[ 3087.9s]     s9: rp1 95.58  cone1 95.18  ensRP 96.02  coneENS 95.38  FE 96.00
+[ 3196.9s]     s10: rp1 95.09  cone1 94.95  ensRP 95.67  coneENS 95.16  FE 95.47
+[ 3321.4s]     s11: rp1 95.13  cone1 94.95  ensRP 95.70  coneENS 95.28  FE 95.57
+[ 3463.1s]     s12: rp1 94.97  cone1 94.85  ensRP 95.52  coneENS 95.09  FE 95.38
+[ 3612.8s]     s13: rp1 94.34  cone1 94.00  ensRP 94.74  coneENS 94.39  FE 94.61
+[ 3784.3s]     s14: rp1 93.76  cone1 93.48  ensRP 94.15  coneENS 93.91  FE 94.16
+[ 3967.9s]     s15: rp1 93.39  cone1 93.08  ensRP 93.89  coneENS 93.59  FE 93.86
+[ 4229.2s]     s16: rp1 92.66  cone1 92.38  ensRP 93.16  coneENS 92.99  FE 93.06
+[ 4527.8s]     s17: rp1 92.56  cone1 92.23  ensRP 92.96  coneENS 92.81  FE 92.93
+[ 4842.8s]     s18: rp1 92.24  cone1 92.04  ensRP 92.81  coneENS 92.67  FE 92.85
+[ 5180.1s]     s19: rp1 92.25  cone1 92.08  ensRP 92.80  coneENS 92.68  FE 92.83
+[ 5180.1s]     cell 2596s
+[ 5180.1s] === CIFAR100|20|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 5200.0s]     s0: rp1 99.60  cone1 99.40  ensRP 99.60  coneENS 99.60  FE 99.60
+[ 5224.2s]     s1: rp1 98.80  cone1 98.90  ensRP 99.10  coneENS 99.20  FE 99.20
+[ 5250.4s]     s2: rp1 97.80  cone1 97.53  ensRP 98.13  coneENS 97.73  FE 98.20
+[ 5283.7s]     s3: rp1 97.40  cone1 97.25  ensRP 97.85  coneENS 97.65  FE 97.80
+[ 5334.5s]     s4: rp1 96.92  cone1 96.76  ensRP 97.40  coneENS 97.08  FE 97.40
+[ 5378.6s]     s5: rp1 96.37  cone1 96.43  ensRP 96.80  coneENS 96.63  FE 96.93
+[ 5430.5s]     s6: rp1 95.89  cone1 96.06  ensRP 96.14  coneENS 95.97  FE 96.31
+[ 5490.6s]     s7: rp1 95.95  cone1 96.08  ensRP 96.28  coneENS 96.05  FE 96.47
+[ 5577.4s]     s8: rp1 95.42  cone1 95.89  ensRP 95.98  coneENS 95.89  FE 96.27
+[ 5674.0s]     s9: rp1 94.96  cone1 95.56  ensRP 95.70  coneENS 95.62  FE 95.82
+[ 5783.6s]     s10: rp1 94.71  cone1 95.02  ensRP 95.36  coneENS 95.15  FE 95.56
+[ 5908.9s]     s11: rp1 94.62  cone1 94.83  ensRP 95.28  coneENS 95.03  FE 95.37
+[ 6052.4s]     s12: rp1 94.60  cone1 94.88  ensRP 95.28  coneENS 95.11  FE 95.34
+[ 6220.8s]     s13: rp1 94.00  cone1 94.33  ensRP 94.74  coneENS 94.54  FE 94.76
+[ 6390.8s]     s14: rp1 93.56  cone1 93.99  ensRP 94.29  coneENS 94.20  FE 94.40
+[ 6575.3s]     s15: rp1 93.39  cone1 93.71  ensRP 94.04  coneENS 93.95  FE 94.16
+[ 6836.6s]     s16: rp1 93.31  cone1 93.62  ensRP 94.06  coneENS 93.86  FE 94.26
+[ 7136.2s]     s17: rp1 92.86  cone1 93.16  ensRP 93.59  coneENS 93.44  FE 93.81
+[ 7452.2s]     s18: rp1 92.23  cone1 92.49  ensRP 92.89  coneENS 92.78  FE 93.20
+[ 7779.0s]     s19: rp1 92.23  cone1 92.58  ensRP 92.89  coneENS 92.86  FE 93.19
+[ 7779.0s]     cell 2599s
+[ 7779.0s] === IMAGENETR|20|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[ 7805.8s]     s0: rp1 96.26  cone1 95.64  ensRP 96.57  coneENS 95.95  FE 96.57
+[ 7843.1s]     s1: rp1 93.04  cone1 92.61  ensRP 93.33  coneENS 93.48  FE 93.33
+[ 7890.5s]     s2: rp1 91.02  cone1 90.72  ensRP 91.22  coneENS 91.73  FE 91.32
+[ 7950.1s]     s3: rp1 89.74  cone1 89.45  ensRP 89.82  coneENS 90.04  FE 90.55
+[ 8032.2s]     s4: rp1 87.72  cone1 87.66  ensRP 88.64  coneENS 88.58  FE 89.43
+[ 8106.9s]     s5: rp1 86.86  cone1 86.20  ensRP 88.03  coneENS 86.81  FE 88.39
+[ 8204.4s]     s6: rp1 86.03  cone1 85.36  ensRP 87.23  coneENS 86.21  FE 87.19
+[ 8308.3s]     s7: rp1 85.35  cone1 84.43  ensRP 86.35  coneENS 85.51  FE 86.58
+[ 8426.8s]     s8: rp1 84.07  cone1 83.27  ensRP 85.05  coneENS 83.83  FE 85.37
+[ 8551.9s]     s9: rp1 83.29  cone1 82.57  ensRP 84.34  coneENS 83.19  FE 84.54
+[ 8686.5s]     s10: rp1 82.70  cone1 82.00  ensRP 83.82  coneENS 82.70  FE 83.88
+[ 8844.1s]     s11: rp1 81.98  cone1 81.44  ensRP 83.21  coneENS 82.36  FE 83.48
+[ 9014.8s]     s12: rp1 81.70  cone1 81.22  ensRP 82.36  coneENS 82.03  FE 82.85
+[ 9267.5s]     s13: rp1 81.23  cone1 81.14  ensRP 82.25  coneENS 81.80  FE 82.60
+[ 9523.9s]     s14: rp1 81.52  cone1 80.95  ensRP 82.17  coneENS 81.60  FE 82.63
+[ 9815.7s]     s15: rp1 81.04  cone1 80.73  ensRP 82.07  coneENS 81.32  FE 82.57
+[10148.4s]     s16: rp1 80.21  cone1 79.98  ensRP 81.13  coneENS 80.60  FE 81.88
+[10466.4s]     s17: rp1 80.22  cone1 79.88  ensRP 80.83  coneENS 80.55  FE 81.75
+[10822.6s]     s18: rp1 79.67  cone1 79.48  ensRP 80.48  coneENS 80.18  FE 81.36
+[11199.5s]     s19: rp1 79.28  cone1 78.98  ensRP 80.12  coneENS 79.65  FE 80.93
+[11199.5s]     cell 3421s
+[11199.5s] === IMAGENETR|20|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[11230.7s]     s0: rp1 93.82  cone1 92.20  ensRP 94.62  coneENS 92.74  FE 94.62
+[11264.5s]     s1: rp1 92.67  cone1 92.53  ensRP 92.96  coneENS 91.52  FE 92.82
+[11309.9s]     s2: rp1 91.23  cone1 91.13  ensRP 91.23  coneENS 90.92  FE 91.44
+[11367.9s]     s3: rp1 89.47  cone1 88.69  ensRP 90.32  coneENS 88.69  FE 89.93
+[11434.2s]     s4: rp1 88.89  cone1 88.26  ensRP 89.33  coneENS 88.33  FE 89.64
+[11511.9s]     s5: rp1 86.24  cone1 87.14  ensRP 87.99  coneENS 87.57  FE 88.36
+[11605.5s]     s6: rp1 86.57  cone1 85.93  ensRP 86.94  coneENS 86.39  FE 86.89
+[11705.0s]     s7: rp1 85.74  cone1 84.38  ensRP 85.66  coneENS 84.83  FE 86.23
+[11819.9s]     s8: rp1 85.13  cone1 83.93  ensRP 85.35  coneENS 84.40  FE 86.01
+[11947.4s]     s9: rp1 84.92  cone1 83.68  ensRP 85.39  coneENS 84.12  FE 85.49
+[12094.6s]     s10: rp1 83.81  cone1 83.04  ensRP 84.55  coneENS 83.16  FE 84.86
+[12255.5s]     s11: rp1 83.10  cone1 82.68  ensRP 83.99  coneENS 82.82  FE 84.63
+[12426.1s]     s12: rp1 83.01  cone1 82.72  ensRP 83.69  coneENS 82.75  FE 84.40
+[12659.0s]     s13: rp1 82.50  cone1 82.07  ensRP 83.12  coneENS 82.14  FE 83.63
+[12930.7s]     s14: rp1 82.20  cone1 81.84  ensRP 82.87  coneENS 81.75  FE 83.55
+[13219.5s]     s15: rp1 81.68  cone1 81.51  ensRP 82.36  coneENS 81.47  FE 83.22
+[13543.8s]     s16: rp1 81.33  cone1 80.90  ensRP 81.86  coneENS 80.80  FE 82.67
+[13884.7s]     s17: rp1 80.63  cone1 80.13  ensRP 81.24  coneENS 80.11  FE 82.10
+[14238.2s]     s18: rp1 80.40  cone1 79.75  ensRP 80.99  coneENS 80.05  FE 81.72
+[14613.6s]     s19: rp1 80.57  cone1 80.13  ensRP 81.07  coneENS 80.33  FE 81.78
+[14613.6s]     cell 3414s
+[14613.7s] === IMAGENETR|20|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[14640.8s]     s0: rp1 97.11  cone1 95.50  ensRP 96.46  coneENS 97.43  FE 96.46
+[14683.5s]     s1: rp1 92.65  cone1 92.65  ensRP 93.13  coneENS 92.65  FE 93.29
+[14736.7s]     s2: rp1 89.56  cone1 89.45  ensRP 90.10  coneENS 89.67  FE 90.42
+[14791.3s]     s3: rp1 88.45  cone1 88.45  ensRP 88.92  coneENS 88.53  FE 88.53
+[14857.7s]     s4: rp1 87.29  cone1 87.29  ensRP 87.77  coneENS 87.41  FE 88.14
+[14932.2s]     s5: rp1 87.31  cone1 87.16  ensRP 87.57  coneENS 87.10  FE 87.36
+[15020.6s]     s6: rp1 85.97  cone1 86.36  ensRP 86.23  coneENS 85.93  FE 87.32
+[15121.7s]     s7: rp1 85.47  cone1 85.20  ensRP 85.31  coneENS 84.78  FE 86.43
+[15239.7s]     s8: rp1 84.55  cone1 84.34  ensRP 84.34  coneENS 83.91  FE 85.61
+[15363.3s]     s9: rp1 83.86  cone1 83.83  ensRP 84.00  coneENS 83.57  FE 84.92
+[15504.8s]     s10: rp1 83.24  cone1 83.24  ensRP 83.45  coneENS 82.87  FE 84.36
+[15658.0s]     s11: rp1 82.54  cone1 82.87  ensRP 82.95  coneENS 82.54  FE 84.05
+[15829.1s]     s12: rp1 81.64  cone1 81.54  ensRP 82.00  coneENS 81.51  FE 83.35
+[16062.1s]     s13: rp1 80.85  cone1 80.66  ensRP 81.12  coneENS 80.54  FE 82.49
+[16313.7s]     s14: rp1 80.71  cone1 80.28  ensRP 80.90  coneENS 80.33  FE 82.21
+[16598.1s]     s15: rp1 80.68  cone1 80.32  ensRP 81.08  coneENS 80.38  FE 82.23
+[16918.3s]     s16: rp1 79.56  cone1 79.34  ensRP 80.37  coneENS 79.62  FE 81.36
+[17254.1s]     s17: rp1 79.11  cone1 78.79  ensRP 79.69  coneENS 79.24  FE 80.74
+[17593.2s]     s18: rp1 79.17  cone1 78.73  ensRP 79.81  coneENS 79.24  FE 80.62
+[17951.9s]     s19: rp1 79.05  cone1 78.68  ensRP 79.73  coneENS 79.25  FE 80.77
+[17951.9s]     cell 3338s
+[17951.9s] === CUB200P|20|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[17971.9s]     s0: rp1 99.19  cone1 99.19  ensRP 99.19  coneENS 98.37  FE 99.19
+[18002.4s]     s1: rp1 97.87  cone1 95.32  ensRP 98.30  coneENS 96.17  FE 98.30
+[18042.7s]     s2: rp1 97.08  cone1 96.21  ensRP 97.67  coneENS 96.21  FE 97.67
+[18093.0s]     s3: rp1 97.41  cone1 96.54  ensRP 97.41  coneENS 96.54  FE 97.41
+[18152.4s]     s4: rp1 95.85  cone1 96.19  ensRP 96.71  coneENS 96.54  FE 96.71
+[18218.5s]     s5: rp1 94.65  cone1 94.21  ensRP 95.51  coneENS 94.50  FE 95.51
+[18296.6s]     s6: rp1 92.23  cone1 93.34  ensRP 93.71  coneENS 93.71  FE 93.71
+[18391.1s]     s7: rp1 94.05  cone1 93.52  ensRP 93.84  coneENS 93.84  FE 93.73
+[18494.0s]     s8: rp1 94.20  cone1 93.72  ensRP 94.01  coneENS 94.20  FE 94.01
+[18605.3s]     s9: rp1 93.28  cone1 92.68  ensRP 93.37  coneENS 93.02  FE 93.37
+[18725.3s]     s10: rp1 93.28  cone1 92.73  ensRP 93.44  coneENS 92.73  FE 93.44
+[18858.5s]     s11: rp1 92.24  cone1 92.17  ensRP 92.66  coneENS 91.74  FE 92.59
+[19002.3s]     s12: rp1 90.97  cone1 90.97  ensRP 91.43  coneENS 90.71  FE 91.50
+[19159.8s]     s13: rp1 91.50  cone1 91.02  ensRP 91.63  coneENS 91.08  FE 91.75
+[19325.3s]     s14: rp1 91.04  cone1 90.42  ensRP 91.22  coneENS 90.53  FE 91.33
+[19493.0s]     s15: rp1 90.44  cone1 90.33  ensRP 90.92  coneENS 90.60  FE 91.03
+[19698.4s]     s16: rp1 89.91  cone1 89.86  ensRP 90.51  coneENS 90.11  FE 90.56
+[19907.0s]     s17: rp1 89.87  cone1 89.68  ensRP 90.44  coneENS 90.11  FE 90.63
+[20115.4s]     s18: rp1 89.46  cone1 89.55  ensRP 90.00  coneENS 90.00  FE 90.09
+[20350.3s]     s19: rp1 89.10  cone1 89.10  ensRP 89.65  coneENS 89.57  FE 89.57
+[20350.3s]     cell 2398s
+[20350.3s] === CUB200P|20|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[20371.7s]     s0: rp1 99.20  cone1 99.20  ensRP 99.20  coneENS 100.00  FE 99.20
+[20401.9s]     s1: rp1 99.12  cone1 99.12  ensRP 98.68  coneENS 99.12  FE 99.12
+[20442.3s]     s2: rp1 98.55  cone1 97.97  ensRP 98.55  coneENS 97.67  FE 98.55
+[20494.0s]     s3: rp1 98.31  cone1 97.26  ensRP 98.10  coneENS 97.68  FE 98.10
+[20553.3s]     s4: rp1 96.86  cone1 96.69  ensRP 97.36  coneENS 97.02  FE 97.36
+[20625.8s]     s5: rp1 96.24  cone1 95.83  ensRP 96.80  coneENS 96.66  FE 96.94
+[20718.0s]     s6: rp1 94.15  cone1 93.32  ensRP 94.87  coneENS 93.91  FE 94.99
+[20814.9s]     s7: rp1 94.33  cone1 93.70  ensRP 94.86  coneENS 94.33  FE 94.86
+[20912.6s]     s8: rp1 94.45  cone1 93.51  ensRP 95.11  coneENS 94.07  FE 94.92
+[21020.0s]     s9: rp1 94.03  cone1 92.92  ensRP 94.54  coneENS 93.52  FE 94.71
+[21153.1s]     s10: rp1 93.92  cone1 92.28  ensRP 94.23  coneENS 92.90  FE 94.07
+[21296.3s]     s11: rp1 93.63  cone1 91.86  ensRP 94.05  coneENS 92.78  FE 94.05
+[21444.2s]     s12: rp1 92.20  cone1 91.01  ensRP 92.73  coneENS 91.67  FE 92.86
+[21597.8s]     s13: rp1 92.04  cone1 90.68  ensRP 92.66  coneENS 91.24  FE 92.60
+[21769.9s]     s14: rp1 91.40  cone1 90.07  ensRP 91.51  coneENS 90.59  FE 91.63
+[21946.9s]     s15: rp1 89.77  cone1 88.85  ensRP 90.36  coneENS 89.23  FE 90.68
+[22130.7s]     s16: rp1 89.64  cone1 88.94  ensRP 90.40  coneENS 89.29  FE 90.65
+[22335.3s]     s17: rp1 89.50  cone1 88.75  ensRP 90.35  coneENS 89.03  FE 90.45
+[22571.6s]     s18: rp1 88.77  cone1 88.14  ensRP 89.66  coneENS 88.64  FE 89.66
+[22799.3s]     s19: rp1 88.85  cone1 88.21  ensRP 89.61  coneENS 88.59  FE 89.65
+[22799.3s]     cell 2449s
+[22799.3s] === CUB200P|20|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[22821.9s]     s0: rp1 98.54  cone1 98.54  ensRP 98.54  coneENS 98.54  FE 98.54
+[22851.2s]     s1: rp1 95.92  cone1 96.33  ensRP 96.33  coneENS 96.33  FE 96.33
+[22892.3s]     s2: rp1 96.16  cone1 95.62  ensRP 95.62  coneENS 95.62  FE 95.62
+[22942.3s]     s3: rp1 92.93  cone1 93.76  ensRP 93.76  coneENS 93.97  FE 93.14
+[23003.7s]     s4: rp1 92.70  cone1 93.53  ensRP 93.03  coneENS 93.37  FE 93.37
+[23079.5s]     s5: rp1 93.37  cone1 91.96  ensRP 92.81  coneENS 91.96  FE 92.81
+[23161.7s]     s6: rp1 93.72  cone1 92.15  ensRP 92.75  coneENS 92.27  FE 92.87
+[23252.4s]     s7: rp1 92.96  cone1 92.12  ensRP 93.07  coneENS 92.65  FE 93.17
+[23353.8s]     s8: rp1 93.12  cone1 92.65  ensRP 92.93  coneENS 92.56  FE 93.02
+[23464.9s]     s9: rp1 92.91  cone1 92.15  ensRP 93.08  coneENS 92.15  FE 92.83
+[23606.3s]     s10: rp1 91.46  cone1 91.16  ensRP 92.07  coneENS 91.92  FE 92.30
+[23740.4s]     s11: rp1 90.68  cone1 90.26  ensRP 90.96  coneENS 91.10  FE 91.52
+[23898.8s]     s12: rp1 90.75  cone1 90.56  ensRP 91.01  coneENS 91.07  FE 90.94
+[24055.0s]     s13: rp1 91.30  cone1 90.41  ensRP 91.13  coneENS 90.71  FE 91.36
+[24231.0s]     s14: rp1 90.68  cone1 89.91  ensRP 90.24  coneENS 90.35  FE 90.57
+[24407.3s]     s15: rp1 89.98  cone1 89.46  ensRP 90.04  coneENS 89.72  FE 89.88
+[24616.3s]     s16: rp1 89.88  cone1 89.34  ensRP 90.12  coneENS 89.73  FE 90.07
+[24814.1s]     s17: rp1 89.91  cone1 89.16  ensRP 89.81  coneENS 89.49  FE 89.63
+[25039.7s]     s18: rp1 89.73  cone1 88.66  ensRP 89.69  coneENS 89.38  FE 89.87
+[25267.1s]     s19: rp1 89.86  cone1 89.02  ensRP 89.65  coneENS 89.44  FE 90.08
+[25267.1s]     cell 2468s
+[25267.1s] === IMAGENETAP|20|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[25287.4s]     s0: rp1 90.91  cone1 88.31  ensRP 89.61  coneENS 89.61  FE 89.61
+[25316.1s]     s1: rp1 84.92  cone1 80.45  ensRP 85.47  coneENS 82.12  FE 84.92
+[25351.8s]     s2: rp1 78.97  cone1 77.49  ensRP 80.81  coneENS 80.44  FE 79.70
+[25389.3s]     s3: rp1 76.36  cone1 73.37  ensRP 75.82  coneENS 73.91  FE 76.09
+[25432.5s]     s4: rp1 73.17  cone1 72.25  ensRP 74.31  coneENS 73.85  FE 74.08
+[25481.7s]     s5: rp1 72.27  cone1 70.24  ensRP 72.87  coneENS 72.27  FE 73.08
+[25539.6s]     s6: rp1 71.50  cone1 70.02  ensRP 73.15  coneENS 71.83  FE 73.81
+[25605.3s]     s7: rp1 71.12  cone1 69.25  ensRP 72.56  coneENS 69.83  FE 72.41
+[25685.3s]     s8: rp1 69.22  cone1 68.83  ensRP 71.56  coneENS 68.83  FE 71.43
+[25754.6s]     s9: rp1 68.92  cone1 67.59  ensRP 70.60  coneENS 68.19  FE 70.48
+[25829.1s]     s10: rp1 68.31  cone1 67.64  ensRP 69.78  coneENS 68.54  FE 70.56
+[25910.3s]     s11: rp1 67.57  cone1 67.36  ensRP 68.92  coneENS 68.09  FE 69.96
+[26001.4s]     s12: rp1 65.65  cone1 65.46  ensRP 67.32  coneENS 66.34  FE 67.32
+[26099.3s]     s13: rp1 64.75  cone1 65.21  ensRP 66.67  coneENS 65.76  FE 67.21
+[26200.8s]     s14: rp1 64.29  cone1 64.21  ensRP 65.65  coneENS 64.72  FE 66.50
+[26302.5s]     s15: rp1 63.55  cone1 62.82  ensRP 65.01  coneENS 63.47  FE 65.34
+[26426.2s]     s16: rp1 61.77  cone1 60.85  ensRP 63.52  coneENS 61.84  FE 63.82
+[26563.5s]     s17: rp1 60.79  cone1 60.20  ensRP 62.03  coneENS 60.93  FE 62.46
+[26698.2s]     s18: rp1 60.52  cone1 59.60  ensRP 62.01  coneENS 60.24  FE 62.22
+[26840.4s]     s19: rp1 60.13  cone1 60.13  ensRP 61.80  coneENS 60.07  FE 62.00
+[26840.5s]     cell 1573s
+[26840.5s] === IMAGENETAP|20|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[26862.6s]     s0: rp1 95.56  cone1 95.56  ensRP 95.56  coneENS 95.56  FE 95.56
+[26890.1s]     s1: rp1 86.33  cone1 84.89  ensRP 84.89  coneENS 85.61  FE 84.89
+[26926.0s]     s2: rp1 84.24  cone1 79.89  ensRP 84.24  coneENS 80.98  FE 84.24
+[26969.6s]     s3: rp1 80.81  cone1 74.54  ensRP 79.34  coneENS 74.54  FE 78.60
+[27016.3s]     s4: rp1 78.35  cone1 75.50  ensRP 77.78  coneENS 74.36  FE 77.78
+[27067.4s]     s5: rp1 76.14  cone1 73.86  ensRP 77.05  coneENS 73.41  FE 75.91
+[27123.0s]     s6: rp1 74.27  cone1 72.90  ensRP 75.24  coneENS 73.49  FE 76.22
+[27185.3s]     s7: rp1 71.67  cone1 71.33  ensRP 72.17  coneENS 71.17  FE 71.50
+[27252.4s]     s8: rp1 69.10  cone1 68.94  ensRP 69.10  coneENS 68.79  FE 69.57
+[27335.7s]     s9: rp1 68.82  cone1 69.09  ensRP 69.35  coneENS 68.15  FE 70.56
+[27418.6s]     s10: rp1 69.39  cone1 68.28  ensRP 68.40  coneENS 67.78  FE 68.90
+[27501.6s]     s11: rp1 66.51  cone1 66.28  ensRP 66.51  coneENS 64.91  FE 66.28
+[27597.7s]     s12: rp1 67.57  cone1 66.11  ensRP 66.63  coneENS 65.90  FE 67.05
+[27703.4s]     s13: rp1 66.17  cone1 65.19  ensRP 65.98  coneENS 64.60  FE 66.37
+[27800.3s]     s14: rp1 65.18  cone1 64.29  ensRP 64.11  coneENS 63.30  FE 64.02
+[27908.8s]     s15: rp1 65.38  cone1 64.73  ensRP 63.61  coneENS 63.77  FE 64.98
+[28033.8s]     s16: rp1 64.67  cone1 63.62  ensRP 63.70  coneENS 63.02  FE 63.70
+[28159.8s]     s17: rp1 63.53  cone1 62.45  ensRP 62.09  coneENS 61.80  FE 62.09
+[28296.2s]     s18: rp1 63.11  cone1 61.72  ensRP 61.30  coneENS 60.40  FE 61.65
+[28432.1s]     s19: rp1 62.07  cone1 60.53  ensRP 60.47  coneENS 59.40  FE 60.80
+[28432.1s]     cell 1592s
+[28432.1s] === IMAGENETAP|20|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[28453.3s]     s0: rp1 74.51  cone1 74.51  ensRP 74.51  coneENS 74.51  FE 74.51
+[28485.8s]     s1: rp1 80.38  cone1 72.78  ensRP 81.65  coneENS 74.68  FE 81.65
+[28522.5s]     s2: rp1 75.52  cone1 70.12  ensRP 77.18  coneENS 69.29  FE 77.18
+[28564.7s]     s3: rp1 70.78  cone1 63.64  ensRP 72.73  coneENS 67.21  FE 72.73
+[28609.1s]     s4: rp1 69.00  cone1 65.00  ensRP 73.00  coneENS 67.50  FE 73.25
+[28661.3s]     s5: rp1 68.48  cone1 65.76  ensRP 70.52  coneENS 66.44  FE 70.29
+[28722.8s]     s6: rp1 65.83  cone1 64.27  ensRP 68.54  coneENS 64.85  FE 68.74
+[28782.5s]     s7: rp1 62.11  cone1 61.76  ensRP 64.71  coneENS 62.28  FE 64.71
+[28844.9s]     s8: rp1 60.37  cone1 60.37  ensRP 62.10  coneENS 59.65  FE 62.82
+[28912.8s]     s9: rp1 60.23  cone1 58.94  ensRP 61.92  coneENS 59.97  FE 63.21
+[28983.2s]     s10: rp1 60.67  cone1 58.82  ensRP 61.37  coneENS 61.25  FE 61.48
+[29062.0s]     s11: rp1 60.43  cone1 59.14  ensRP 61.93  coneENS 60.64  FE 62.14
+[29142.8s]     s12: rp1 59.88  cone1 58.48  ensRP 61.89  coneENS 59.88  FE 62.09
+[29233.5s]     s13: rp1 59.57  cone1 57.91  ensRP 60.31  coneENS 58.83  FE 60.96
+[29337.5s]     s14: rp1 57.57  cone1 56.33  ensRP 59.26  coneENS 57.93  FE 59.61
+[29439.3s]     s15: rp1 57.37  cone1 56.04  ensRP 58.77  coneENS 57.62  FE 59.52
+[29541.5s]     s16: rp1 57.03  cone1 55.45  ensRP 58.77  coneENS 56.71  FE 59.16
+[29656.8s]     s17: rp1 56.11  cone1 55.58  ensRP 58.14  coneENS 56.94  FE 58.75
+[29779.9s]     s18: rp1 55.48  cone1 55.55  ensRP 57.24  coneENS 56.54  FE 58.30
+[29913.2s]     s19: rp1 55.13  cone1 55.00  ensRP 56.93  coneENS 55.53  FE 57.67
+[29913.3s]     cell 1481s
+
+============================================================================================
+EXP61 -- what does deleting RanPAC cost?   R=64  ORDER=pilot
+============================================================================================
+
+  CIFAR100 T=10  seeds [0, 1, 2]   anchors {'exp55': True, 'exp56': True}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            92.72±0.11     95.51±0.21     +0.75    +0.86    0.9 GB
+    cone_q32          92.62±0.12     95.37±0.15     +0.65    +0.72     40 MB
+    ens_ranpac        93.27±0.10     95.89±0.16     +1.30    +1.24    4.3 GB
+    cone_ens          93.10±0.24     95.71±0.10     +1.13    +1.06    0.3 GB
+    FE                93.31±0.18     95.90±0.20     +1.34    +1.25    4.3 GB
+    cone_ens - FE = -0.21 A-Last / -0.19 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.55   cone +0.48   (A-Last)
+
+  CIFAR100 T=20  seeds [0, 1, 2]   anchors {'exp55': True, 'exp56': True}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            91.86±0.65     95.11±0.38      +nan     +nan    0.9 GB
+    cone_q32          92.02±0.59     95.09±0.33      +nan     +nan     40 MB
+    ens_ranpac        92.67±0.31     95.64±0.31      +nan     +nan    4.3 GB
+    cone_ens          92.60±0.30     95.49±0.17      +nan     +nan    0.3 GB
+    FE                92.81±0.39     95.72±0.23      +nan     +nan    4.3 GB
+    cone_ens - FE = -0.21 A-Last / -0.24 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.81   cone +0.58   (A-Last)
+
+  CUB200P T=10  seeds [0, 1, 2]   anchors {'exp55': False, 'exp56': False}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            89.71±0.31     92.97±0.96     -0.20    -0.88    0.9 GB
+    cone_q32          89.07±0.17     92.51±0.84     -0.84    -1.34     40 MB
+    ens_ranpac        90.19±0.11     93.36±1.03     +0.28    -0.49    4.3 GB
+    cone_ens          89.17±0.21     92.56±0.98     -0.74    -1.29    0.3 GB
+    FE                90.16±0.15     93.33±1.05     +0.25    -0.52    4.3 GB
+    cone_ens - FE = -0.99 A-Last / -0.78 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.48   cone +0.10   (A-Last)
+
+  CUB200P T=20  seeds [0, 1, 2]   anchors {'exp55': False, 'exp56': False}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            89.27±0.53     93.09±0.71      +nan     +nan    0.9 GB
+    cone_q32          88.78±0.49     92.53±0.60      +nan     +nan     40 MB
+    ens_ranpac        89.64±0.02     93.36±0.94      +nan     +nan    4.3 GB
+    cone_ens          89.20±0.53     92.84±0.66      +nan     +nan    0.3 GB
+    FE                89.77±0.27     93.42±0.94      +nan     +nan    4.3 GB
+    cone_ens - FE = -0.57 A-Last / -0.57 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.37   cone +0.42   (A-Last)
+
+  IMAGENETAP T=10  seeds [0, 1, 2]   anchors {'exp55': False, 'exp56': False}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            62.76±1.47     71.09±1.74     -0.84    +0.85    0.9 GB
+    cone_q32          61.89±0.62     69.00±1.79     -1.71    -1.24     40 MB
+    ens_ranpac        63.38±0.62     72.16±0.98     -0.22    +1.92    4.3 GB
+    cone_ens          62.76±1.15     70.25±0.99     -0.84    +0.01    0.3 GB
+    FE                64.27±1.25     72.23±0.81     +0.67    +1.99    4.3 GB
+    cone_ens - FE = -1.51 A-Last / -1.98 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.62   cone +0.87   (A-Last)
+
+  IMAGENETAP T=20  seeds [0, 1, 2]   anchors {'exp55': False, 'exp56': False}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            59.11±3.58     68.33±4.48      +nan     +nan    0.9 GB
+    cone_q32          58.56±3.09     66.77±4.86      +nan     +nan     40 MB
+    ens_ranpac        59.73±2.51     69.14±3.53      +nan     +nan    4.3 GB
+    cone_ens          58.33±2.45     67.33±4.27      +nan     +nan    0.3 GB
+    FE                60.16±2.24     69.37±3.41      +nan     +nan    4.3 GB
+    cone_ens - FE = -1.82 A-Last / -2.04 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.62   cone -0.22   (A-Last)
+
+  IMAGENETR T=10  seeds [0, 1, 2]   anchors {'exp55': True, 'exp56': True}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            80.76±0.50     85.49±0.32     -1.33    -0.71    0.9 GB
+    cone_q32          80.80±0.40     85.46±0.66     -1.29    -0.74     40 MB
+    ens_ranpac        81.78±0.18     86.55±0.32     -0.31    +0.35    4.3 GB
+    cone_ens          81.56±0.18     86.16±0.45     -0.53    -0.04    0.3 GB
+    FE                82.58±0.13     87.01±0.49     +0.49    +0.81    4.3 GB
+    cone_ens - FE = -1.02 A-Last / -0.85 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +1.02   cone +0.76   (A-Last)
+
+  IMAGENETR T=20  seeds [0, 1, 2]   anchors {'exp55': False, 'exp56': False}
+    arm                     A-Last           A-Avg  vs GR-L  vs GR-A    memory
+    rp_q32            79.63±0.82     84.76±0.39     -0.60    -0.29    0.9 GB
+    cone_q32          79.27±0.77     84.35±0.25     -0.96    -0.70     40 MB
+    ens_ranpac        80.31±0.69     85.32±0.53     +0.08    +0.27    4.3 GB
+    cone_ens          79.74±0.55     84.66±0.30     -0.49    -0.39    0.3 GB
+    FE                81.16±0.55     85.86±0.33     +0.93    +0.81    4.3 GB
+    cone_ens - FE = -1.42 A-Last / -1.21 A-Avg   for 4.3 GB -> 0.3 GB
+    ensemble gain: RanPAC +0.67   cone +0.48   (A-Last)
+
+--------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. The two anchors must both be `True`. ens_ranpac reproduces exp55 and FE reproduces
+     exp56, both to 1e-9, or the cones/features are not the published ones.
+  2. cone_ens - FE is the price of deleting RanPAC. Within ~0.3 makes the memory win
+     (6.5x WORSE than GR-LoRA -> 2x BETTER) close to free.
+  3. Compare the two ensemble gains. If the cone ensembles BETTER than RanPAC does, the
+     cone-only ensemble closes more of the single-member gap than exp54's -0.49 suggests,
+     and cone-native becomes viable on accuracy rather than only on memory.
+============================================================================================
++ break
++ for T in 10 20 50
++ for i in 1 2 3
++ echo '[chain] cone_only T=50 attempt 1'
+[chain] cone_only T=50 attempt 1
++ DS=CIFAR100,IMAGENETR,CUB200P,IMAGENETAP
++ T=50
++ SEED=0,1,2
++ R=64
++ MEMBERS=q32,m32,a16,q32b70,q64
++ VERIFY=1
++ python -u exp61_cone_only.py
+[    0.0s] === CIFAR100|50|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[    8.7s]     VERIFY exp55 ok   exp56 ok
+[   18.7s]     s0: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[   28.5s]     s1: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[   39.2s]     s2: rp1 99.83  cone1 100.00  ensRP 99.83  coneENS 99.83  FE 99.83
+[   51.9s]     s3: rp1 99.75  cone1 99.25  ensRP 99.38  coneENS 99.25  FE 99.38
+[   67.2s]     s4: rp1 98.90  cone1 98.50  ensRP 99.10  coneENS 98.60  FE 99.10
+[   84.6s]     s5: rp1 98.58  cone1 98.42  ensRP 98.75  coneENS 98.42  FE 98.75
+[  103.8s]     s6: rp1 98.86  cone1 98.43  ensRP 98.93  coneENS 98.57  FE 98.93
+[  126.0s]     s7: rp1 98.12  cone1 97.81  ensRP 98.44  coneENS 98.00  FE 98.25
+[  150.2s]     s8: rp1 97.50  cone1 97.11  ensRP 97.89  coneENS 97.39  FE 97.78
+[  177.0s]     s9: rp1 97.00  cone1 96.60  ensRP 97.45  coneENS 96.90  FE 97.30
+[  206.5s]     s10: rp1 96.95  cone1 96.55  ensRP 97.18  coneENS 96.86  FE 97.23
+[  237.4s]     s11: rp1 96.88  cone1 96.50  ensRP 97.04  coneENS 96.79  FE 97.25
+[  270.9s]     s12: rp1 97.00  cone1 96.62  ensRP 97.00  coneENS 96.92  FE 97.27
+[  308.4s]     s13: rp1 96.21  cone1 96.07  ensRP 96.43  coneENS 96.36  FE 96.64
+[  351.3s]     s14: rp1 96.20  cone1 96.17  ensRP 96.40  coneENS 96.40  FE 96.77
+[  396.4s]     s15: rp1 95.66  cone1 95.50  ensRP 95.69  coneENS 95.84  FE 95.84
+[  450.4s]     s16: rp1 95.29  cone1 95.09  ensRP 95.47  coneENS 95.47  FE 95.59
+[  503.5s]     s17: rp1 95.47  cone1 95.17  ensRP 95.53  coneENS 95.53  FE 95.61
+[  558.2s]     s18: rp1 95.11  cone1 95.16  ensRP 95.58  coneENS 95.45  FE 95.55
+[  624.7s]     s19: rp1 95.00  cone1 95.03  ensRP 95.45  coneENS 95.38  FE 95.45
+[  700.2s]     s20: rp1 94.93  cone1 95.00  ensRP 95.36  coneENS 95.38  FE 95.45
+[  781.7s]     s21: rp1 94.66  cone1 94.48  ensRP 94.80  coneENS 94.75  FE 95.00
+[  866.2s]     s22: rp1 94.22  cone1 94.20  ensRP 94.57  coneENS 94.43  FE 94.78
+[  954.9s]     s23: rp1 94.04  cone1 93.98  ensRP 94.48  coneENS 94.27  FE 94.50
+[ 1049.6s]     s24: rp1 94.08  cone1 93.96  ensRP 94.52  coneENS 94.30  FE 94.48
+[ 1146.4s]     s25: rp1 93.96  cone1 93.81  ensRP 94.40  coneENS 94.19  FE 94.44
+[ 1249.9s]     s26: rp1 93.74  cone1 93.56  ensRP 94.15  coneENS 93.83  FE 94.17
+[ 1361.7s]     s27: rp1 93.46  cone1 93.32  ensRP 93.95  coneENS 93.71  FE 93.95
+[ 1476.6s]     s28: rp1 93.60  cone1 93.47  ensRP 93.91  coneENS 93.79  FE 93.90
+[ 1595.6s]     s29: rp1 93.10  cone1 93.15  ensRP 93.63  coneENS 93.47  FE 93.63
+[ 1710.3s]     s30: rp1 93.19  cone1 93.10  ensRP 93.65  coneENS 93.50  FE 93.76
+[ 1838.2s]     s31: rp1 92.81  cone1 92.78  ensRP 93.27  coneENS 93.16  FE 93.34
+[ 1970.3s]     s32: rp1 92.92  cone1 92.85  ensRP 93.33  coneENS 93.15  FE 93.36
+[ 2118.6s]     s33: rp1 93.03  cone1 92.85  ensRP 93.38  coneENS 93.26  FE 93.49
+[ 2252.2s]     s34: rp1 92.94  cone1 92.87  ensRP 93.40  coneENS 93.19  FE 93.43
+[ 2406.1s]     s35: rp1 92.76  cone1 92.65  ensRP 93.19  coneENS 92.88  FE 93.31
+[ 2578.5s]     s36: rp1 92.77  cone1 92.74  ensRP 93.26  coneENS 92.95  FE 93.26
+[ 2751.0s]     s37: rp1 92.30  cone1 92.33  ensRP 92.93  coneENS 92.71  FE 92.88
+[ 2929.6s]     s38: rp1 91.65  cone1 91.65  ensRP 92.32  coneENS 92.10  FE 92.29
+[ 3119.0s]     s39: rp1 91.38  cone1 91.42  ensRP 92.07  coneENS 91.94  FE 92.07
+[ 3371.7s]     s40: rp1 91.29  cone1 91.44  ensRP 91.90  coneENS 91.93  FE 92.10
+[ 3623.1s]     s41: rp1 91.15  cone1 91.26  ensRP 91.74  coneENS 91.76  FE 91.87
+[ 3891.3s]     s42: rp1 91.00  cone1 91.12  ensRP 91.74  coneENS 91.63  FE 91.92
+[ 4176.3s]     s43: rp1 91.07  cone1 91.19  ensRP 91.72  coneENS 91.67  FE 91.90
+[ 4463.4s]     s44: rp1 90.87  cone1 91.01  ensRP 91.48  coneENS 91.50  FE 91.67
+[ 4754.2s]     s45: rp1 90.93  cone1 91.05  ensRP 91.51  coneENS 91.53  FE 91.70
+[ 5047.0s]     s46: rp1 90.95  cone1 91.04  ensRP 91.56  coneENS 91.54  FE 91.60
+[ 5345.1s]     s47: rp1 90.83  cone1 91.12  ensRP 91.50  coneENS 91.56  FE 91.62
+[ 5664.8s]     s48: rp1 90.89  cone1 91.01  ensRP 91.47  coneENS 91.50  FE 91.45
+[ 5998.9s]     s49: rp1 90.65  cone1 90.75  ensRP 91.25  coneENS 91.34  FE 91.27
+[ 5998.9s]     cell 5999s
+[ 5998.9s] === CIFAR100|50|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[ 6010.2s]     s0: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[ 6019.3s]     s1: rp1 96.50  cone1 96.75  ensRP 97.50  coneENS 97.00  FE 97.50
+[ 6030.5s]     s2: rp1 97.00  cone1 97.50  ensRP 98.17  coneENS 97.67  FE 98.17
+[ 6043.6s]     s3: rp1 97.38  cone1 97.00  ensRP 97.88  coneENS 97.62  FE 97.88
+[ 6058.8s]     s4: rp1 96.90  cone1 96.70  ensRP 97.80  coneENS 97.40  FE 97.80
+[ 6076.5s]     s5: rp1 97.08  cone1 97.17  ensRP 97.83  coneENS 97.58  FE 98.00
+[ 6096.7s]     s6: rp1 96.71  cone1 96.86  ensRP 97.57  coneENS 97.29  FE 97.64
+[ 6120.7s]     s7: rp1 96.81  cone1 97.06  ensRP 97.56  coneENS 97.19  FE 97.62
+[ 6145.5s]     s8: rp1 97.22  cone1 97.28  ensRP 97.83  coneENS 97.67  FE 97.94
+[ 6171.7s]     s9: rp1 97.00  cone1 96.75  ensRP 97.30  coneENS 97.10  FE 97.35
+[ 6201.2s]     s10: rp1 97.05  cone1 96.77  ensRP 97.41  coneENS 97.05  FE 97.41
+[ 6236.1s]     s11: rp1 97.29  cone1 96.92  ensRP 97.50  coneENS 97.29  FE 97.42
+[ 6272.5s]     s12: rp1 96.96  cone1 96.73  ensRP 97.46  coneENS 97.00  FE 97.50
+[ 6310.0s]     s13: rp1 96.64  cone1 96.61  ensRP 97.25  coneENS 96.93  FE 97.25
+[ 6354.1s]     s14: rp1 96.67  cone1 96.47  ensRP 97.27  coneENS 96.83  FE 97.47
+[ 6398.7s]     s15: rp1 96.25  cone1 95.88  ensRP 96.91  coneENS 96.50  FE 96.91
+[ 6448.4s]     s16: rp1 96.24  cone1 95.85  ensRP 96.94  coneENS 96.50  FE 97.15
+[ 6497.5s]     s17: rp1 96.03  cone1 95.78  ensRP 96.67  coneENS 96.28  FE 96.86
+[ 6548.2s]     s18: rp1 95.97  cone1 95.71  ensRP 96.66  coneENS 96.29  FE 96.79
+[ 6604.1s]     s19: rp1 95.53  cone1 95.20  ensRP 96.35  coneENS 95.88  FE 96.47
+[ 6677.1s]     s20: rp1 95.43  cone1 95.24  ensRP 96.31  coneENS 95.76  FE 96.45
+[ 6754.1s]     s21: rp1 95.32  cone1 95.18  ensRP 96.11  coneENS 95.73  FE 96.27
+[ 6838.0s]     s22: rp1 95.28  cone1 95.11  ensRP 96.20  coneENS 95.63  FE 96.22
+[ 6927.5s]     s23: rp1 94.92  cone1 94.65  ensRP 95.85  coneENS 95.29  FE 95.96
+[ 7021.7s]     s24: rp1 94.42  cone1 94.12  ensRP 95.38  coneENS 94.84  FE 95.38
+[ 7117.7s]     s25: rp1 94.35  cone1 94.35  ensRP 95.44  coneENS 94.96  FE 95.42
+[ 7215.8s]     s26: rp1 94.30  cone1 94.17  ensRP 95.30  coneENS 94.83  FE 95.33
+[ 7318.4s]     s27: rp1 94.16  cone1 94.05  ensRP 95.16  coneENS 94.75  FE 95.23
+[ 7420.2s]     s28: rp1 94.07  cone1 94.02  ensRP 95.26  coneENS 94.71  FE 95.26
+[ 7536.5s]     s29: rp1 93.90  cone1 93.83  ensRP 95.15  coneENS 94.62  FE 95.18
+[ 7658.3s]     s30: rp1 94.10  cone1 93.84  ensRP 95.10  coneENS 94.61  FE 95.13
+[ 7784.1s]     s31: rp1 93.75  cone1 93.81  ensRP 94.88  coneENS 94.45  FE 95.02
+[ 7914.9s]     s32: rp1 93.59  cone1 93.48  ensRP 94.55  coneENS 94.20  FE 94.70
+[ 8054.9s]     s33: rp1 92.87  cone1 93.07  ensRP 94.13  coneENS 93.87  FE 94.24
+[ 8197.9s]     s34: rp1 92.84  cone1 93.13  ensRP 94.03  coneENS 93.87  FE 94.13
+[ 8358.6s]     s35: rp1 92.81  cone1 93.08  ensRP 94.01  coneENS 93.85  FE 94.01
+[ 8515.9s]     s36: rp1 92.82  cone1 92.59  ensRP 93.77  coneENS 93.59  FE 93.89
+[ 8685.5s]     s37: rp1 92.29  cone1 92.14  ensRP 93.34  coneENS 93.16  FE 93.29
+[ 8855.4s]     s38: rp1 92.19  cone1 92.10  ensRP 93.29  coneENS 93.01  FE 93.26
+[ 9033.5s]     s39: rp1 92.01  cone1 91.91  ensRP 93.04  coneENS 92.88  FE 93.21
+[ 9268.6s]     s40: rp1 92.02  cone1 91.95  ensRP 92.99  coneENS 92.95  FE 93.10
+[ 9524.6s]     s41: rp1 91.58  cone1 91.32  ensRP 92.51  coneENS 92.32  FE 92.68
+[ 9800.2s]     s42: rp1 91.43  cone1 91.33  ensRP 92.53  coneENS 92.26  FE 92.70
+[10073.7s]     s43: rp1 91.35  cone1 91.26  ensRP 92.45  coneENS 92.28  FE 92.49
+[10351.5s]     s44: rp1 91.11  cone1 91.07  ensRP 92.14  coneENS 92.17  FE 92.26
+[10636.3s]     s45: rp1 91.04  cone1 90.91  ensRP 92.04  coneENS 92.00  FE 92.25
+[10933.3s]     s46: rp1 91.00  cone1 90.86  ensRP 91.88  coneENS 91.93  FE 92.10
+[11245.5s]     s47: rp1 90.99  cone1 90.93  ensRP 91.91  coneENS 91.93  FE 92.18
+[11541.3s]     s48: rp1 90.94  cone1 90.90  ensRP 91.84  coneENS 91.90  FE 92.12
+[11856.6s]     s49: rp1 90.93  cone1 90.90  ensRP 91.85  coneENS 91.91  FE 92.15
+[11856.6s]     cell 5858s
+[11856.6s] === CIFAR100|50|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+/home/khiemphi/venvs/ml_env/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+[11867.2s]     s0: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[11876.0s]     s1: rp1 99.25  cone1 98.25  ensRP 99.25  coneENS 98.75  FE 99.25
+[11886.7s]     s2: rp1 99.33  cone1 99.17  ensRP 99.67  coneENS 99.50  FE 99.67
+[11899.8s]     s3: rp1 99.12  cone1 98.88  ensRP 99.38  coneENS 99.25  FE 99.38
+[11914.4s]     s4: rp1 98.90  cone1 98.70  ensRP 98.80  coneENS 98.80  FE 99.00
+[11931.4s]     s5: rp1 97.42  cone1 97.50  ensRP 97.92  coneENS 97.92  FE 98.00
+[11951.1s]     s6: rp1 96.71  cone1 96.57  ensRP 97.50  coneENS 97.43  FE 97.57
+[11973.7s]     s7: rp1 96.75  cone1 96.50  ensRP 97.31  coneENS 97.00  FE 97.50
+[11998.3s]     s8: rp1 96.94  cone1 96.39  ensRP 97.56  coneENS 97.17  FE 97.44
+[12025.2s]     s9: rp1 96.70  cone1 96.50  ensRP 97.75  coneENS 97.30  FE 97.55
+[12052.8s]     s10: rp1 96.50  cone1 96.41  ensRP 97.50  coneENS 97.36  FE 97.55
+[12082.9s]     s11: rp1 95.88  cone1 95.54  ensRP 96.96  coneENS 96.75  FE 96.92
+[12116.0s]     s12: rp1 95.96  cone1 95.88  ensRP 96.88  coneENS 96.88  FE 96.96
+[12153.1s]     s13: rp1 95.79  cone1 95.93  ensRP 96.82  coneENS 96.89  FE 96.96
+[12192.1s]     s14: rp1 95.37  cone1 95.37  ensRP 96.40  coneENS 96.30  FE 96.50
+[12233.3s]     s15: rp1 95.22  cone1 95.03  ensRP 96.16  coneENS 95.97  FE 96.16
+[12278.9s]     s16: rp1 94.65  cone1 94.56  ensRP 95.53  coneENS 95.71  FE 95.79
+[12327.7s]     s17: rp1 94.47  cone1 94.44  ensRP 95.56  coneENS 95.58  FE 95.86
+[12377.6s]     s18: rp1 94.82  cone1 94.61  ensRP 95.63  coneENS 95.63  FE 95.79
+[12433.4s]     s19: rp1 94.77  cone1 94.50  ensRP 95.67  coneENS 95.62  FE 95.67
+[12510.3s]     s20: rp1 94.55  cone1 94.33  ensRP 95.48  coneENS 95.55  FE 95.69
+[12589.4s]     s21: rp1 94.68  cone1 94.61  ensRP 95.64  coneENS 95.70  FE 95.82
+[12671.6s]     s22: rp1 94.09  cone1 93.98  ensRP 95.15  coneENS 95.20  FE 95.33
+[12753.9s]     s23: rp1 93.85  cone1 93.88  ensRP 95.00  coneENS 94.94  FE 95.27
+[12851.7s]     s24: rp1 94.00  cone1 93.70  ensRP 94.96  coneENS 94.90  FE 95.22
+[12952.1s]     s25: rp1 94.06  cone1 93.79  ensRP 94.96  coneENS 94.87  FE 95.25
+[13069.5s]     s26: rp1 93.59  cone1 93.46  ensRP 94.69  coneENS 94.37  FE 94.85
+[13176.9s]     s27: rp1 93.61  cone1 93.46  ensRP 94.71  coneENS 94.45  FE 94.88
+[13294.9s]     s28: rp1 93.40  cone1 93.34  ensRP 94.60  coneENS 94.36  FE 94.64
+[13417.7s]     s29: rp1 93.50  cone1 93.47  ensRP 94.60  coneENS 94.45  FE 94.62
+[13540.1s]     s30: rp1 93.61  cone1 93.55  ensRP 94.50  coneENS 94.53  FE 94.58
+[13666.6s]     s31: rp1 93.58  cone1 93.59  ensRP 94.55  coneENS 94.56  FE 94.66
+[13803.5s]     s32: rp1 93.42  cone1 93.48  ensRP 94.32  coneENS 94.36  FE 94.55
+[13937.3s]     s33: rp1 93.03  cone1 92.94  ensRP 93.93  coneENS 93.90  FE 94.04
+[14092.3s]     s34: rp1 93.11  cone1 93.04  ensRP 93.97  coneENS 94.01  FE 94.20
+[14249.0s]     s35: rp1 92.96  cone1 92.93  ensRP 93.88  coneENS 93.76  FE 93.93
+[14407.2s]     s36: rp1 93.04  cone1 92.91  ensRP 93.77  coneENS 93.76  FE 93.92
+[14561.7s]     s37: rp1 92.82  cone1 92.75  ensRP 93.62  coneENS 93.54  FE 93.76
+[14715.8s]     s38: rp1 92.72  cone1 92.69  ensRP 93.59  coneENS 93.54  FE 93.67
+[14885.7s]     s39: rp1 92.64  cone1 92.66  ensRP 93.50  coneENS 93.36  FE 93.59
+[15142.8s]     s40: rp1 92.65  cone1 92.68  ensRP 93.37  coneENS 93.45  FE 93.67
+[15400.4s]     s41: rp1 92.43  cone1 92.57  ensRP 93.29  coneENS 93.32  FE 93.56
+[15658.1s]     s42: rp1 92.35  cone1 92.49  ensRP 93.26  coneENS 93.22  FE 93.44
+[15943.6s]     s43: rp1 91.89  cone1 92.09  ensRP 92.84  coneENS 92.91  FE 93.10
+[16247.4s]     s44: rp1 92.03  cone1 92.14  ensRP 92.90  coneENS 92.93  FE 93.14
+[16544.6s]     s45: rp1 91.88  cone1 92.02  ensRP 92.76  coneENS 92.77  FE 92.97
+[16838.2s]     s46: rp1 91.36  cone1 91.45  ensRP 92.17  coneENS 92.27  FE 92.53
+[17148.9s]     s47: rp1 91.06  cone1 91.36  ensRP 92.05  coneENS 92.21  FE 92.35
+[17469.6s]     s48: rp1 91.03  cone1 91.37  ensRP 92.04  coneENS 92.21  FE 92.40
+[17802.6s]     s49: rp1 91.30  cone1 91.43  ensRP 92.07  coneENS 92.26  FE 92.41
+[17802.6s]     cell 5946s
+[17802.6s] === IMAGENETR|50|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[17814.2s]     s0: rp1 96.35  cone1 97.81  ensRP 97.08  coneENS 96.35  FE 97.08
+[17828.1s]     s1: rp1 96.11  cone1 91.44  ensRP 96.11  coneENS 93.39  FE 96.11
+[17845.8s]     s2: rp1 92.80  cone1 91.00  ensRP 94.09  coneENS 91.77  FE 94.09
+[17867.0s]     s3: rp1 92.36  cone1 91.15  ensRP 92.53  coneENS 91.15  FE 92.19
+[17892.0s]     s4: rp1 91.16  cone1 89.86  ensRP 91.59  coneENS 90.14  FE 92.17
+[17922.8s]     s5: rp1 90.26  cone1 89.52  ensRP 91.12  coneENS 89.15  FE 91.37
+[17956.3s]     s6: rp1 89.82  cone1 87.97  ensRP 90.25  coneENS 87.54  FE 90.36
+[17995.3s]     s7: rp1 89.87  cone1 87.88  ensRP 89.02  coneENS 87.12  FE 89.68
+[18035.6s]     s8: rp1 87.56  cone1 87.40  ensRP 88.47  coneENS 86.33  FE 89.04
+[18080.8s]     s9: rp1 87.33  cone1 86.45  ensRP 87.62  coneENS 86.23  FE 87.99
+[18133.0s]     s10: rp1 86.91  cone1 85.75  ensRP 87.12  coneENS 86.03  FE 87.73
+[18190.1s]     s11: rp1 86.10  cone1 85.21  ensRP 86.22  coneENS 84.95  FE 86.92
+[18251.5s]     s12: rp1 86.48  cone1 84.84  ensRP 86.07  coneENS 84.66  FE 86.59
+[18319.9s]     s13: rp1 85.60  cone1 83.65  ensRP 85.27  coneENS 83.97  FE 85.98
+[18392.2s]     s14: rp1 85.18  cone1 83.55  ensRP 85.29  coneENS 83.66  FE 85.74
+[18468.7s]     s15: rp1 83.64  cone1 82.96  ensRP 83.98  coneENS 83.20  FE 84.36
+[18548.4s]     s16: rp1 83.55  cone1 82.73  ensRP 84.05  coneENS 83.05  FE 84.59
+[18634.3s]     s17: rp1 83.99  cone1 83.08  ensRP 84.46  coneENS 83.34  FE 84.89
+[18721.9s]     s18: rp1 84.08  cone1 82.43  ensRP 83.96  coneENS 82.76  FE 84.79
+[18823.3s]     s19: rp1 80.89  cone1 81.41  ensRP 82.84  coneENS 81.89  FE 83.64
+[18928.7s]     s20: rp1 82.78  cone1 80.86  ensRP 82.86  coneENS 81.84  FE 83.62
+[19034.6s]     s21: rp1 82.58  cone1 80.60  ensRP 82.51  coneENS 81.21  FE 83.12
+[19147.4s]     s22: rp1 81.24  cone1 79.27  ensRP 81.31  coneENS 79.89  FE 81.93
+[19262.2s]     s23: rp1 80.80  cone1 79.02  ensRP 80.83  coneENS 79.32  FE 81.44
+[19388.1s]     s24: rp1 80.59  cone1 78.91  ensRP 80.49  coneENS 79.18  FE 81.41
+[19515.1s]     s25: rp1 80.29  cone1 78.73  ensRP 80.44  coneENS 78.92  FE 81.11
+[19648.0s]     s26: rp1 80.04  cone1 78.39  ensRP 80.14  coneENS 78.75  FE 80.96
+[19786.6s]     s27: rp1 79.71  cone1 78.40  ensRP 80.01  coneENS 78.73  FE 80.85
+[19926.5s]     s28: rp1 79.27  cone1 77.91  ensRP 79.68  coneENS 78.49  FE 80.52
+[20084.5s]     s29: rp1 79.25  cone1 77.83  ensRP 79.47  coneENS 78.05  FE 80.21
+[20247.0s]     s30: rp1 78.96  cone1 77.77  ensRP 79.25  coneENS 77.96  FE 80.05
+[20401.3s]     s31: rp1 78.80  cone1 77.49  ensRP 79.39  coneENS 77.90  FE 79.93
+[20589.8s]     s32: rp1 78.90  cone1 77.90  ensRP 79.29  coneENS 77.93  FE 79.94
+[20761.7s]     s33: rp1 78.84  cone1 77.47  ensRP 79.01  coneENS 77.79  FE 79.84
+[21019.3s]     s34: rp1 78.79  cone1 77.51  ensRP 79.04  coneENS 77.68  FE 79.70
+[21265.0s]     s35: rp1 79.00  cone1 77.65  ensRP 79.29  coneENS 77.74  FE 79.82
+[21524.6s]     s36: rp1 78.42  cone1 77.23  ensRP 78.57  coneENS 77.39  FE 79.52
+[21795.1s]     s37: rp1 78.61  cone1 77.46  ensRP 78.55  coneENS 77.54  FE 79.78
+[22058.3s]     s38: rp1 78.55  cone1 77.38  ensRP 78.63  coneENS 77.57  FE 79.65
+[22339.2s]     s39: rp1 78.37  cone1 77.19  ensRP 78.55  coneENS 77.34  FE 79.46
+[22610.4s]     s40: rp1 77.84  cone1 76.75  ensRP 78.06  coneENS 77.08  FE 78.99
+[22927.8s]     s41: rp1 77.60  cone1 76.66  ensRP 77.82  coneENS 76.71  FE 78.84
+[23245.6s]     s42: rp1 77.45  cone1 76.43  ensRP 77.73  coneENS 76.63  FE 78.79
+[23576.3s]     s43: rp1 77.18  cone1 76.48  ensRP 77.66  coneENS 76.65  FE 78.82
+[23884.1s]     s44: rp1 77.27  cone1 76.46  ensRP 77.78  coneENS 76.54  FE 78.83
+[24218.6s]     s45: rp1 76.85  cone1 76.12  ensRP 77.43  coneENS 76.35  FE 78.41
+[24545.0s]     s46: rp1 76.87  cone1 76.08  ensRP 77.39  coneENS 76.26  FE 78.50
+[24873.0s]     s47: rp1 76.50  cone1 75.74  ensRP 77.11  coneENS 75.86  FE 78.19
+[25235.4s]     s48: rp1 76.38  cone1 75.43  ensRP 76.98  coneENS 75.67  FE 78.10
+[25583.2s]     s49: rp1 76.42  cone1 75.67  ensRP 77.05  coneENS 75.80  FE 78.18
+[25583.2s]     cell 7781s
+[25583.2s] === IMAGENETR|50|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[25597.5s]     s0: rp1 94.16  cone1 94.16  ensRP 95.62  coneENS 94.89  FE 95.62
+[25611.4s]     s1: rp1 90.41  cone1 84.93  ensRP 89.38  coneENS 85.96  FE 89.38
+[25629.0s]     s2: rp1 87.80  cone1 84.45  ensRP 88.04  coneENS 84.69  FE 88.04
+[25649.9s]     s3: rp1 86.45  cone1 84.46  ensRP 87.25  coneENS 84.46  FE 85.46
+[25675.5s]     s4: rp1 87.93  cone1 86.78  ensRP 89.22  coneENS 86.49  FE 87.93
+[25704.7s]     s5: rp1 88.70  cone1 87.45  ensRP 89.44  coneENS 87.70  FE 88.70
+[25737.0s]     s6: rp1 88.28  cone1 87.84  ensRP 89.27  coneENS 87.73  FE 88.61
+[25773.6s]     s7: rp1 85.71  cone1 84.76  ensRP 87.06  coneENS 85.71  FE 86.96
+[25815.4s]     s8: rp1 85.44  cone1 83.87  ensRP 86.75  coneENS 84.83  FE 86.05
+[25861.0s]     s9: rp1 85.44  cone1 83.89  ensRP 86.60  coneENS 84.82  FE 86.52
+[25910.4s]     s10: rp1 85.25  cone1 84.04  ensRP 86.40  coneENS 84.90  FE 86.18
+[25964.5s]     s11: rp1 84.82  cone1 84.03  ensRP 86.07  coneENS 84.95  FE 86.27
+[26026.7s]     s12: rp1 84.34  cone1 83.31  ensRP 85.19  coneENS 84.10  FE 85.44
+[26093.3s]     s13: rp1 84.23  cone1 82.46  ensRP 85.72  coneENS 83.62  FE 85.00
+[26158.6s]     s14: rp1 84.13  cone1 82.49  ensRP 85.61  coneENS 83.60  FE 85.03
+[26232.5s]     s15: rp1 83.41  cone1 81.92  ensRP 84.90  coneENS 83.01  FE 84.65
+[26315.4s]     s16: rp1 83.07  cone1 81.85  ensRP 84.49  coneENS 82.46  FE 84.02
+[26400.1s]     s17: rp1 82.82  cone1 81.19  ensRP 84.11  coneENS 81.94  FE 83.62
+[26489.3s]     s18: rp1 82.32  cone1 80.74  ensRP 83.69  coneENS 81.81  FE 83.56
+[26586.0s]     s19: rp1 81.71  cone1 80.44  ensRP 82.98  coneENS 81.55  FE 82.82
+[26684.8s]     s20: rp1 81.63  cone1 80.34  ensRP 82.69  coneENS 81.08  FE 82.69
+[26786.4s]     s21: rp1 81.22  cone1 79.91  ensRP 82.59  coneENS 81.10  FE 82.67
+[26894.2s]     s22: rp1 81.43  cone1 80.18  ensRP 82.54  coneENS 81.21  FE 82.57
+[27005.5s]     s23: rp1 81.15  cone1 79.74  ensRP 82.23  coneENS 80.74  FE 82.19
+[27127.0s]     s24: rp1 81.03  cone1 79.96  ensRP 82.44  coneENS 81.03  FE 82.51
+[27254.5s]     s25: rp1 80.39  cone1 79.67  ensRP 81.83  coneENS 80.65  FE 82.03
+[27382.3s]     s26: rp1 80.14  cone1 79.30  ensRP 81.69  coneENS 80.43  FE 81.88
+[27513.9s]     s27: rp1 79.83  cone1 78.86  ensRP 81.53  coneENS 79.98  FE 81.35
+[27655.2s]     s28: rp1 79.79  cone1 78.96  ensRP 81.29  coneENS 79.85  FE 81.32
+[27805.0s]     s29: rp1 79.57  cone1 78.98  ensRP 81.04  coneENS 79.93  FE 81.12
+[27959.4s]     s30: rp1 79.52  cone1 79.03  ensRP 80.89  coneENS 79.85  FE 81.14
+[28120.0s]     s31: rp1 79.20  cone1 78.94  ensRP 80.69  coneENS 79.79  FE 80.96
+[28291.1s]     s32: rp1 78.91  cone1 78.60  ensRP 80.61  coneENS 79.42  FE 80.61
+[28477.3s]     s33: rp1 78.80  cone1 78.72  ensRP 80.50  coneENS 79.53  FE 80.88
+[28727.7s]     s34: rp1 78.50  cone1 78.45  ensRP 80.04  coneENS 79.39  FE 80.69
+[28973.2s]     s35: rp1 78.24  cone1 78.45  ensRP 79.84  coneENS 79.41  FE 80.44
+[29235.8s]     s36: rp1 78.09  cone1 78.50  ensRP 79.70  coneENS 79.33  FE 80.67
+[29517.7s]     s37: rp1 78.03  cone1 78.45  ensRP 79.65  coneENS 79.45  FE 80.80
+[29793.6s]     s38: rp1 77.87  cone1 78.04  ensRP 79.36  coneENS 79.06  FE 80.26
+[30075.1s]     s39: rp1 77.62  cone1 78.04  ensRP 79.14  coneENS 78.72  FE 80.32
+[30367.1s]     s40: rp1 77.18  cone1 77.42  ensRP 78.62  coneENS 78.05  FE 79.91
+[30660.8s]     s41: rp1 77.25  cone1 77.33  ensRP 78.57  coneENS 77.94  FE 79.72
+[30985.7s]     s42: rp1 77.24  cone1 77.32  ensRP 78.56  coneENS 77.94  FE 79.86
+[31302.5s]     s43: rp1 77.08  cone1 77.04  ensRP 78.15  coneENS 77.45  FE 79.52
+[31638.2s]     s44: rp1 76.91  cone1 76.67  ensRP 77.97  coneENS 77.25  FE 79.18
+[31977.7s]     s45: rp1 76.59  cone1 76.50  ensRP 77.79  coneENS 77.04  FE 79.06
+[32334.7s]     s46: rp1 76.49  cone1 76.52  ensRP 77.67  coneENS 77.17  FE 79.19
+[32681.2s]     s47: rp1 76.45  cone1 76.37  ensRP 77.67  coneENS 77.13  FE 78.89
+[33057.3s]     s48: rp1 76.29  cone1 76.30  ensRP 77.66  coneENS 77.05  FE 78.91
+[33433.7s]     s49: rp1 76.15  cone1 76.30  ensRP 77.57  coneENS 77.10  FE 79.05
+[33433.8s]     cell 7851s
+[33433.8s] === IMAGENETR|50|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[33446.0s]     s0: rp1 96.80  cone1 92.80  ensRP 96.80  coneENS 96.80  FE 96.80
+[33460.4s]     s1: rp1 94.62  cone1 89.23  ensRP 94.23  coneENS 90.77  FE 94.23
+[33480.2s]     s2: rp1 93.70  cone1 89.11  ensRP 93.70  coneENS 91.12  FE 93.98
+[33501.6s]     s3: rp1 91.97  cone1 87.35  ensRP 92.37  coneENS 90.16  FE 92.37
+[33526.8s]     s4: rp1 91.37  cone1 88.02  ensRP 91.69  coneENS 89.78  FE 91.69
+[33557.2s]     s5: rp1 89.88  cone1 86.85  ensRP 90.90  coneENS 89.45  FE 91.47
+[33594.7s]     s6: rp1 88.40  cone1 85.38  ensRP 88.40  coneENS 86.89  FE 88.40
+[33635.0s]     s7: rp1 86.48  cone1 85.19  ensRP 87.07  coneENS 86.57  FE 87.56
+[33678.2s]     s8: rp1 86.14  cone1 85.00  ensRP 86.67  coneENS 86.23  FE 87.11
+[33729.0s]     s9: rp1 85.15  cone1 84.21  ensRP 86.02  coneENS 85.55  FE 86.10
+[33781.7s]     s10: rp1 84.56  cone1 83.32  ensRP 85.07  coneENS 84.71  FE 85.07
+[33837.3s]     s11: rp1 84.13  cone1 83.13  ensRP 84.85  coneENS 84.13  FE 85.25
+[33901.0s]     s12: rp1 83.81  cone1 82.40  ensRP 84.11  coneENS 83.52  FE 84.76
+[33970.2s]     s13: rp1 83.98  cone1 82.81  ensRP 84.26  coneENS 83.43  FE 84.98
+[34043.6s]     s14: rp1 83.72  cone1 82.42  ensRP 84.24  coneENS 83.41  FE 85.02
+[34125.4s]     s15: rp1 83.22  cone1 82.16  ensRP 83.80  coneENS 83.46  FE 84.47
+[34207.6s]     s16: rp1 82.08  cone1 80.71  ensRP 82.88  coneENS 81.77  FE 83.46
+[34302.5s]     s17: rp1 81.93  cone1 80.49  ensRP 82.79  coneENS 81.34  FE 83.00
+[34402.5s]     s18: rp1 81.90  cone1 79.95  ensRP 82.62  coneENS 81.03  FE 82.98
+[34495.6s]     s19: rp1 81.13  cone1 79.22  ensRP 81.63  coneENS 80.48  FE 82.40
+[34606.8s]     s20: rp1 80.75  cone1 78.97  ensRP 81.31  coneENS 80.19  FE 81.83
+[34712.0s]     s21: rp1 80.76  cone1 78.97  ensRP 81.04  coneENS 80.04  FE 81.76
+[34822.7s]     s22: rp1 79.98  cone1 78.16  ensRP 80.43  coneENS 79.59  FE 81.10
+[34931.4s]     s23: rp1 79.58  cone1 78.06  ensRP 79.92  coneENS 79.34  FE 80.77
+[35046.4s]     s24: rp1 79.79  cone1 78.26  ensRP 80.05  coneENS 79.62  FE 80.98
+[35170.1s]     s25: rp1 79.86  cone1 78.07  ensRP 79.70  coneENS 79.39  FE 80.67
+[35305.3s]     s26: rp1 79.06  cone1 77.52  ensRP 79.06  coneENS 78.87  FE 80.34
+[35442.3s]     s27: rp1 79.08  cone1 77.57  ensRP 79.29  coneENS 78.88  FE 80.36
+[35593.6s]     s28: rp1 78.50  cone1 77.15  ensRP 79.07  coneENS 78.76  FE 79.99
+[35762.3s]     s29: rp1 78.62  cone1 77.24  ensRP 79.08  coneENS 78.92  FE 80.26
+[35921.5s]     s30: rp1 77.87  cone1 76.60  ensRP 78.43  coneENS 78.24  FE 79.56
+[36091.9s]     s31: rp1 77.61  cone1 76.39  ensRP 78.14  coneENS 77.87  FE 79.49
+[36267.2s]     s32: rp1 77.11  cone1 75.55  ensRP 77.74  coneENS 77.00  FE 78.61
+[36448.8s]     s33: rp1 77.00  cone1 75.49  ensRP 77.49  coneENS 76.78  FE 78.40
+[36683.6s]     s34: rp1 76.52  cone1 75.41  ensRP 77.22  coneENS 76.69  FE 78.25
+[36926.2s]     s35: rp1 76.34  cone1 75.63  ensRP 77.18  coneENS 76.62  FE 78.47
+[37170.7s]     s36: rp1 76.24  cone1 75.33  ensRP 77.14  coneENS 76.45  FE 78.44
+[37445.3s]     s37: rp1 76.21  cone1 75.52  ensRP 77.41  coneENS 76.59  FE 78.57
+[37714.6s]     s38: rp1 76.22  cone1 75.31  ensRP 77.48  coneENS 76.55  FE 78.70
+[37982.1s]     s39: rp1 76.18  cone1 75.33  ensRP 77.41  coneENS 76.50  FE 78.54
+[38260.2s]     s40: rp1 76.04  cone1 75.11  ensRP 77.13  coneENS 76.39  FE 78.40
+[38548.1s]     s41: rp1 75.60  cone1 74.63  ensRP 76.66  coneENS 75.86  FE 77.95
+[38851.1s]     s42: rp1 74.88  cone1 74.23  ensRP 76.08  coneENS 75.39  FE 77.50
+[39163.0s]     s43: rp1 74.79  cone1 74.18  ensRP 76.02  coneENS 75.41  FE 77.50
+[39489.5s]     s44: rp1 74.75  cone1 73.79  ensRP 75.84  coneENS 75.14  FE 77.34
+[39802.7s]     s45: rp1 74.70  cone1 73.81  ensRP 75.73  coneENS 75.06  FE 77.19
+[40147.1s]     s46: rp1 74.62  cone1 73.53  ensRP 75.80  coneENS 74.94  FE 77.12
+[40499.4s]     s47: rp1 74.68  cone1 73.51  ensRP 75.84  coneENS 74.78  FE 77.36
+[40868.4s]     s48: rp1 74.64  cone1 73.53  ensRP 75.97  coneENS 74.93  FE 77.13
+[41252.8s]     s49: rp1 74.65  cone1 73.65  ensRP 76.07  coneENS 75.02  FE 77.40
+[41252.8s]     cell 7819s
+[41252.8s] === CUB200P|50|0|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[41263.4s]     s0: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[41276.3s]     s1: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[41293.4s]     s2: rp1 99.36  cone1 99.36  ensRP 99.36  coneENS 99.36  FE 99.36
+[41313.8s]     s3: rp1 99.50  cone1 99.01  ensRP 99.50  coneENS 99.01  FE 99.50
+[41338.2s]     s4: rp1 97.87  cone1 96.60  ensRP 98.30  coneENS 97.45  FE 98.30
+[41368.6s]     s5: rp1 97.16  cone1 97.52  ensRP 97.52  coneENS 97.16  FE 97.52
+[41401.0s]     s6: rp1 97.19  cone1 97.50  ensRP 97.50  coneENS 96.88  FE 97.50
+[41442.3s]     s7: rp1 97.55  cone1 97.00  ensRP 97.55  coneENS 97.00  FE 97.55
+[41481.0s]     s8: rp1 97.09  cone1 96.85  ensRP 97.34  coneENS 97.09  FE 97.09
+[41529.1s]     s9: rp1 96.76  cone1 96.76  ensRP 96.98  coneENS 96.76  FE 96.76
+[41582.3s]     s10: rp1 96.61  cone1 96.41  ensRP 96.81  coneENS 96.81  FE 97.21
+[41634.5s]     s11: rp1 96.73  cone1 97.27  ensRP 96.91  coneENS 96.73  FE 96.73
+[41690.8s]     s12: rp1 96.36  cone1 96.69  ensRP 96.36  coneENS 96.53  FE 96.36
+[41773.9s]     s13: rp1 95.87  cone1 96.18  ensRP 96.18  coneENS 96.48  FE 96.18
+[41844.2s]     s14: rp1 94.07  cone1 94.79  ensRP 94.93  coneENS 95.22  FE 94.93
+[41907.8s]     s15: rp1 93.94  cone1 94.74  ensRP 94.34  coneENS 94.61  FE 94.74
+[41981.2s]     s16: rp1 92.92  cone1 93.55  ensRP 93.55  coneENS 93.93  FE 94.18
+[42073.0s]     s17: rp1 93.08  cone1 93.79  ensRP 93.56  coneENS 93.44  FE 93.79
+[42160.8s]     s18: rp1 93.20  cone1 93.76  ensRP 93.54  coneENS 93.42  FE 93.76
+[42238.6s]     s19: rp1 93.09  cone1 93.52  ensRP 93.30  coneENS 93.41  FE 93.41
+[42331.4s]     s20: rp1 93.53  cone1 93.73  ensRP 93.63  coneENS 93.83  FE 93.73
+[42430.3s]     s21: rp1 93.79  cone1 93.89  ensRP 93.89  coneENS 93.99  FE 93.99
+[42537.7s]     s22: rp1 93.90  cone1 94.00  ensRP 93.81  coneENS 94.00  FE 94.09
+[42640.9s]     s23: rp1 93.74  cone1 93.92  ensRP 93.92  coneENS 94.01  FE 94.10
+[42746.3s]     s24: rp1 92.76  cone1 92.85  ensRP 93.11  coneENS 92.68  FE 93.45
+[42865.7s]     s25: rp1 92.99  cone1 92.90  ensRP 93.40  coneENS 92.90  FE 93.40
+[42979.3s]     s26: rp1 92.92  cone1 93.00  ensRP 93.24  coneENS 92.68  FE 93.32
+[43112.0s]     s27: rp1 92.65  cone1 92.65  ensRP 93.03  coneENS 92.42  FE 93.26
+[43235.3s]     s28: rp1 92.26  cone1 91.89  ensRP 92.63  coneENS 92.04  FE 92.77
+[43373.6s]     s29: rp1 92.09  cone1 91.81  ensRP 92.38  coneENS 91.88  FE 92.74
+[43537.2s]     s30: rp1 91.68  cone1 91.40  ensRP 91.82  coneENS 91.61  FE 92.02
+[43672.7s]     s31: rp1 91.31  cone1 91.38  ensRP 91.64  coneENS 91.31  FE 91.58
+[43833.7s]     s32: rp1 90.94  cone1 90.81  ensRP 91.39  coneENS 90.81  FE 91.45
+[43982.2s]     s33: rp1 90.51  cone1 91.07  ensRP 91.38  coneENS 90.82  FE 91.51
+[44133.9s]     s34: rp1 90.59  cone1 90.72  ensRP 91.14  coneENS 90.66  FE 91.14
+[44289.9s]     s35: rp1 90.59  cone1 90.59  ensRP 91.12  coneENS 90.65  FE 91.12
+[44454.3s]     s36: rp1 90.23  cone1 90.23  ensRP 90.75  coneENS 90.17  FE 90.80
+[44621.7s]     s37: rp1 90.32  cone1 90.32  ensRP 91.00  coneENS 90.21  FE 91.00
+[44793.0s]     s38: rp1 90.17  cone1 90.28  ensRP 90.99  coneENS 90.17  FE 90.94
+[44959.6s]     s39: rp1 90.11  cone1 90.33  ensRP 90.70  coneENS 90.17  FE 90.70
+[45146.5s]     s40: rp1 89.69  cone1 89.95  ensRP 90.58  coneENS 89.84  FE 90.47
+[45326.4s]     s41: rp1 89.67  cone1 89.93  ensRP 90.54  coneENS 89.83  FE 90.49
+[45512.0s]     s42: rp1 89.54  cone1 89.59  ensRP 90.09  coneENS 89.54  FE 90.24
+[45702.4s]     s43: rp1 89.37  cone1 89.18  ensRP 90.05  coneENS 89.42  FE 89.86
+[45898.7s]     s44: rp1 89.40  cone1 89.21  ensRP 90.01  coneENS 89.45  FE 89.92
+[46092.5s]     s45: rp1 88.85  cone1 88.62  ensRP 89.45  coneENS 88.94  FE 89.49
+[46316.4s]     s46: rp1 88.83  cone1 88.69  ensRP 89.69  coneENS 89.01  FE 89.55
+[46533.0s]     s47: rp1 88.71  cone1 88.44  ensRP 89.59  coneENS 89.02  FE 89.42
+[46742.9s]     s48: rp1 88.70  cone1 88.61  ensRP 89.65  coneENS 89.04  FE 89.52
+[46958.0s]     s49: rp1 88.42  cone1 88.04  ensRP 89.19  coneENS 88.55  FE 88.97
+[46958.0s]     cell 5705s
+[46958.0s] === CUB200P|50|1|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[46968.6s]     s0: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[46981.9s]     s1: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[47000.1s]     s2: rp1 98.57  cone1 99.29  ensRP 97.86  coneENS 99.29  FE 97.86
+[47022.2s]     s3: rp1 98.40  cone1 99.47  ensRP 98.40  coneENS 99.47  FE 98.40
+[47047.2s]     s4: rp1 98.68  cone1 99.12  ensRP 98.68  coneENS 98.24  FE 98.68
+[47077.5s]     s5: rp1 98.53  cone1 98.16  ensRP 98.53  coneENS 98.16  FE 98.53
+[47109.1s]     s6: rp1 97.81  cone1 97.50  ensRP 98.12  coneENS 97.19  FE 98.12
+[47147.2s]     s7: rp1 97.83  cone1 97.56  ensRP 98.37  coneENS 97.56  FE 98.37
+[47191.3s]     s8: rp1 98.09  cone1 97.61  ensRP 98.33  coneENS 97.37  FE 98.33
+[47236.6s]     s9: rp1 98.10  cone1 97.26  ensRP 98.10  coneENS 97.47  FE 98.10
+[47286.5s]     s10: rp1 98.10  cone1 97.90  ensRP 98.10  coneENS 97.90  FE 97.90
+[47340.3s]     s11: rp1 97.05  cone1 97.05  ensRP 97.05  coneENS 97.22  FE 97.05
+[47407.3s]     s12: rp1 96.51  cone1 96.51  ensRP 96.67  coneENS 96.35  FE 96.67
+[47468.1s]     s13: rp1 96.41  cone1 95.81  ensRP 96.11  coneENS 96.11  FE 96.26
+[47535.6s]     s14: rp1 95.97  cone1 95.55  ensRP 95.97  coneENS 95.41  FE 95.97
+[47601.6s]     s15: rp1 94.10  cone1 93.71  ensRP 94.10  coneENS 93.05  FE 94.23
+[47676.1s]     s16: rp1 94.10  cone1 93.61  ensRP 93.86  coneENS 93.37  FE 94.23
+[47750.8s]     s17: rp1 93.85  cone1 93.50  ensRP 93.97  coneENS 93.39  FE 93.97
+[47832.7s]     s18: rp1 94.09  cone1 93.87  ensRP 94.30  coneENS 93.43  FE 94.30
+[47917.8s]     s19: rp1 93.81  cone1 93.49  ensRP 93.91  coneENS 93.28  FE 93.91
+[48002.7s]     s20: rp1 93.28  cone1 92.98  ensRP 93.28  coneENS 92.88  FE 93.48
+[48092.1s]     s21: rp1 93.46  cone1 92.98  ensRP 93.56  coneENS 92.79  FE 93.56
+[48186.6s]     s22: rp1 93.10  cone1 92.55  ensRP 93.28  coneENS 92.18  FE 93.47
+[48286.1s]     s23: rp1 92.74  cone1 92.38  ensRP 93.45  coneENS 92.03  FE 93.62
+[48397.0s]     s24: rp1 93.27  cone1 92.84  ensRP 93.52  coneENS 92.50  FE 93.52
+[48514.2s]     s25: rp1 93.04  cone1 92.22  ensRP 93.28  coneENS 91.97  FE 93.37
+[48623.2s]     s26: rp1 92.74  cone1 92.19  ensRP 93.21  coneENS 92.03  FE 93.21
+[48741.0s]     s27: rp1 92.77  cone1 92.31  ensRP 93.31  coneENS 92.31  FE 93.08

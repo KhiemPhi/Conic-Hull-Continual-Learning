@@ -1,0 +1,304 @@
+[    5.8s] device cuda  out exp65_backbone_selection.json  resuming from 0 cells
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[   11.3s] === CUB200P [in21k] vit_base_patch16_224.augreg_in21k  n_cls 200  train 9430 (fit 8472)  test 2358  input (3, 224, 224)
+[  156.1s]     frozen  lr 0.001   val  89.35  test  87.40  (0.15M trainable, 145s)
+[  323.0s]     frozen  lr 0.003   val  89.04  test  87.57  (0.15M trainable, 167s)
+[  500.7s]     frozen  lr 0.01    val  89.04  test  86.64  (0.15M trainable, 178s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[  658.1s]     lora4   lr 0.0001  val  86.85  test  85.75  (0.37M trainable, 157s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[  827.2s]     lora4   lr 0.0003  val  90.29  test  89.53  (0.37M trainable, 169s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[  979.2s]     lora4   lr 0.001   val  91.34  test  88.85  (0.37M trainable, 152s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 1142.2s]     lora32  lr 0.0001  val  86.85  test  85.88  (1.92M trainable, 163s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 1292.2s]     lora32  lr 0.0003  val  90.08  test  89.14  (1.92M trainable, 150s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 1474.4s]     lora32  lr 0.001   val  91.13  test  88.93  (1.92M trainable, 182s)
+[ 1651.4s]     full    lr 1e-05   val  87.06  test  85.33  (85.95M trainable, 177s)
+[ 1817.1s]     full    lr 3e-05   val  89.87  test  88.30  (85.95M trainable, 166s)
+[ 2000.8s]     full    lr 0.0001  val  88.73  test  87.32  (85.95M trainable, 184s)
+[ 2004.1s] === CUB200P [in1k] vit_base_patch16_224.augreg2_in21k_ft_in1k  n_cls 200  train 9430 (fit 8472)  test 2358  input (3, 224, 224)
+[ 2144.2s]     frozen  lr 0.001   val  89.56  test  88.72  (0.15M trainable, 140s)
+[ 2294.4s]     frozen  lr 0.003   val  90.40  test  89.10  (0.15M trainable, 150s)
+[ 2453.5s]     frozen  lr 0.01    val  88.41  test  87.49  (0.15M trainable, 159s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 2610.0s]     lora4   lr 0.0001  val  83.72  test  82.82  (0.37M trainable, 157s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 2797.3s]     lora4   lr 0.0003  val  90.08  test  88.13  (0.37M trainable, 187s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 2947.9s]     lora4   lr 0.001   val  90.40  test  88.46  (0.37M trainable, 151s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 3122.4s]     lora32  lr 0.0001  val  84.86  test  82.57  (1.92M trainable, 175s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 3295.5s]     lora32  lr 0.0003  val  89.46  test  88.25  (1.92M trainable, 173s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 3464.1s]     lora32  lr 0.001   val  89.77  test  88.51  (1.92M trainable, 169s)
+[ 3642.4s]     full    lr 1e-05   val  84.03  test  83.21  (85.95M trainable, 178s)
+[ 3795.0s]     full    lr 3e-05   val  88.20  test  87.40  (85.95M trainable, 153s)
+[ 3960.5s]     full    lr 0.0001  val  88.62  test  86.85  (85.95M trainable, 166s)
+[ 3964.7s] === CUB200P [clip] vit_base_patch16_clip_224.openai  n_cls 200  train 9430 (fit 8472)  test 2358  input (3, 224, 224)
+[ 4139.0s]     frozen  lr 0.001   val  82.36  test  79.56  (0.15M trainable, 174s)
+[ 4318.5s]     frozen  lr 0.003   val  83.92  test  81.17  (0.15M trainable, 179s)
+[ 4474.2s]     frozen  lr 0.01    val  83.61  test  80.75  (0.15M trainable, 156s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 4634.8s]     lora4   lr 0.0001  val  69.83  test  66.54  (0.37M trainable, 161s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 4798.5s]     lora4   lr 0.0003  val  85.39  test  82.61  (0.37M trainable, 164s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 4951.7s]     lora4   lr 0.001   val  87.89  test  86.01  (0.37M trainable, 153s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 5107.1s]     lora32  lr 0.0001  val  71.71  test  70.70  (1.92M trainable, 155s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 5293.8s]     lora32  lr 0.0003  val  85.39  test  83.55  (1.92M trainable, 187s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 5460.7s]     lora32  lr 0.001   val  88.20  test  86.22  (1.92M trainable, 167s)
+[ 5640.9s]     full    lr 1e-05   val  84.03  test  82.91  (85.95M trainable, 180s)
+[ 5809.2s]     full    lr 3e-05   val  89.04  test  86.51  (85.95M trainable, 168s)
+[ 5963.0s]     full    lr 0.0001  val  13.26  test  14.25  (85.95M trainable, 154s)
+[ 5966.7s] === CUB200P [siglip] vit_base_patch16_siglip_224.webli  n_cls 200  train 9430 (fit 8472)  test 2358  input (3, 224, 224)
+[ 6117.4s]     frozen  lr 0.001   val  83.51  test  82.91  (0.15M trainable, 151s)
+[ 6270.3s]     frozen  lr 0.003   val  85.59  test  84.90  (0.15M trainable, 153s)
+[ 6417.9s]     frozen  lr 0.01    val  86.33  test  85.16  (0.15M trainable, 148s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 6576.3s]     lora4   lr 0.0001  val  68.37  test  66.71  (0.37M trainable, 158s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 6733.4s]     lora4   lr 0.0003  val  83.19  test  82.23  (0.37M trainable, 157s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 6894.6s]     lora4   lr 0.001   val  88.00  test  86.17  (0.37M trainable, 161s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 7054.5s]     lora32  lr 0.0001  val  69.42  test  69.25  (1.92M trainable, 160s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 7210.7s]     lora32  lr 0.0003  val  83.30  test  82.78  (1.92M trainable, 156s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 7368.6s]     lora32  lr 0.001   val  87.89  test  87.23  (1.92M trainable, 158s)
+[ 7534.3s]     full    lr 1e-05   val  80.27  test  78.03  (93.04M trainable, 166s)
+[ 7705.5s]     full    lr 3e-05   val  86.95  test  86.68  (93.04M trainable, 171s)
+[ 7874.4s]     full    lr 0.0001  val  87.06  test  86.13  (93.04M trainable, 169s)
+[ 7878.6s] === CUB200P [dinov2] vit_base_patch14_dinov2.lvd142m  n_cls 200  train 9430 (fit 8472)  test 2358  input (3, 224, 224)
+[ 8021.2s]     frozen  lr 0.001   val  89.67  test  89.31  (0.15M trainable, 143s)
+[ 8168.9s]     frozen  lr 0.003   val  89.35  test  89.23  (0.15M trainable, 148s)
+[ 8310.1s]     frozen  lr 0.01    val  89.14  test  88.55  (0.15M trainable, 141s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 8498.4s]     lora4   lr 0.0001  val  87.16  test  85.41  (0.37M trainable, 188s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 8685.3s]     lora4   lr 0.0003  val  90.19  test  90.16  (0.37M trainable, 187s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 8869.5s]     lora4   lr 0.001   val  91.86  test  89.65  (0.37M trainable, 184s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 9055.2s]     lora32  lr 0.0001  val  86.43  test  86.01  (1.92M trainable, 186s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 9238.5s]     lora32  lr 0.0003  val  90.71  test  89.65  (1.92M trainable, 183s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[ 9424.3s]     lora32  lr 0.001   val  91.34  test  89.53  (1.92M trainable, 186s)
+[ 9630.2s]     full    lr 1e-05   val  89.04  test  87.36  (85.88M trainable, 206s)
+[ 9833.1s]     full    lr 3e-05   val  91.34  test  88.76  (85.88M trainable, 203s)
+[10035.6s]     full    lr 0.0001  val  14.82  test  12.72  (85.88M trainable, 202s)
+[10038.8s] === CUB200P [mae] vit_base_patch16_224.mae  n_cls 200  train 9430 (fit 8472)  test 2358  input (3, 224, 224)
+[10180.2s]     frozen  lr 0.001   val  14.61  test  12.85  (0.15M trainable, 141s)
+[10324.7s]     frozen  lr 0.003   val  22.55  test  19.59  (0.15M trainable, 144s)
+[10475.9s]     frozen  lr 0.01    val  33.61  test  29.39  (0.15M trainable, 151s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[10627.5s]     lora4   lr 0.0001  val  19.31  test  15.99  (0.37M trainable, 152s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[10783.5s]     lora4   lr 0.0003  val  51.98  test  47.71  (0.37M trainable, 156s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[10928.0s]     lora4   lr 0.001   val  70.88  test  69.93  (0.37M trainable, 144s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[11074.6s]     lora32  lr 0.0001  val  19.52  test  15.95  (1.92M trainable, 147s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[11226.8s]     lora32  lr 0.0003  val  51.57  test  49.28  (1.92M trainable, 152s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[11371.7s]     lora32  lr 0.001   val  72.34  test  72.39  (1.92M trainable, 145s)
+[11524.5s]     full    lr 1e-05   val  22.23  test  19.76  (85.95M trainable, 153s)
+[11678.0s]     full    lr 3e-05   val  56.78  test  53.82  (85.95M trainable, 153s)
+[11830.2s]     full    lr 0.0001  val  78.18  test  75.61  (85.95M trainable, 152s)
+[11835.3s] === IMAGENETR [in21k] vit_base_patch16_224.augreg_in21k  n_cls 200  train 24000 (fit 21610)  test 6000  input (3, 224, 224)
+[12187.7s]     frozen  lr 0.001   val  66.78  test  69.33  (0.15M trainable, 352s)
+[12537.5s]     frozen  lr 0.003   val  65.52  test  66.80  (0.15M trainable, 350s)
+[12883.7s]     frozen  lr 0.01    val  64.64  test  65.68  (0.15M trainable, 346s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[13251.6s]     lora4   lr 0.0001  val  79.21  test  79.85  (0.37M trainable, 368s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[13608.1s]     lora4   lr 0.0003  val  83.89  test  83.87  (0.37M trainable, 356s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[13957.5s]     lora4   lr 0.001   val  83.93  test  83.57  (0.37M trainable, 349s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[14314.8s]     lora32  lr 0.0001  val  79.75  test  80.18  (1.92M trainable, 357s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[14681.9s]     lora32  lr 0.0003  val  83.31  test  84.25  (1.92M trainable, 367s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[15074.0s]     lora32  lr 0.001   val  84.10  test  83.65  (1.92M trainable, 392s)
+[15462.3s]     full    lr 1e-05   val  82.93  test  83.65  (85.95M trainable, 388s)
+[15843.5s]     full    lr 3e-05   val  85.02  test  85.32  (85.95M trainable, 381s)
+[16231.3s]     full    lr 0.0001  val  81.84  test  82.75  (85.95M trainable, 388s)
+[16235.3s] === IMAGENETR [in1k] vit_base_patch16_224.augreg2_in21k_ft_in1k  n_cls 200  train 24000 (fit 21610)  test 6000  input (3, 224, 224)
+[16593.0s]     frozen  lr 0.001   val  72.47  test  73.10  (0.15M trainable, 358s)
+[16969.6s]     frozen  lr 0.003   val  71.38  test  72.42  (0.15M trainable, 377s)
+[17326.5s]     frozen  lr 0.01    val  70.25  test  70.65  (0.15M trainable, 357s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[17717.7s]     lora4   lr 0.0001  val  80.42  test  81.23  (0.37M trainable, 391s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[18088.7s]     lora4   lr 0.0003  val  83.60  test  84.48  (0.37M trainable, 371s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[18456.5s]     lora4   lr 0.001   val  84.23  test  84.48  (0.37M trainable, 368s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[18827.9s]     lora32  lr 0.0001  val  80.42  test  81.13  (1.92M trainable, 371s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[19210.6s]     lora32  lr 0.0003  val  84.06  test  84.77  (1.92M trainable, 383s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[19614.1s]     lora32  lr 0.001   val  84.14  test  84.97  (1.92M trainable, 403s)
+[20008.9s]     full    lr 1e-05   val  83.77  test  84.10  (85.95M trainable, 395s)
+[20386.1s]     full    lr 3e-05   val  84.23  test  85.73  (85.95M trainable, 377s)
+[20778.5s]     full    lr 0.0001  val  82.72  test  83.45  (85.95M trainable, 392s)
+[20782.9s] === IMAGENETR [clip] vit_base_patch16_clip_224.openai  n_cls 200  train 24000 (fit 21610)  test 6000  input (3, 224, 224)
+[21136.2s]     frozen  lr 0.001   val  79.08  test  79.77  (0.15M trainable, 353s)
+[21491.5s]     frozen  lr 0.003   val  78.87  test  80.02  (0.15M trainable, 355s)
+[21835.1s]     frozen  lr 0.01    val  77.53  test  78.67  (0.15M trainable, 344s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[22196.6s]     lora4   lr 0.0001  val  82.26  test  80.65  (0.37M trainable, 361s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[22565.6s]     lora4   lr 0.0003  val  85.98  test  85.20  (0.37M trainable, 369s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[22926.6s]     lora4   lr 0.001   val  87.11  test  86.53  (0.37M trainable, 361s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[23288.8s]     lora32  lr 0.0001  val  83.39  test  82.08  (1.92M trainable, 362s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[23648.6s]     lora32  lr 0.0003  val  86.61  test  85.93  (1.92M trainable, 360s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[24016.5s]     lora32  lr 0.001   val  87.74  test  87.83  (1.92M trainable, 368s)
+[24397.6s]     full    lr 1e-05   val  85.19  test  85.45  (85.95M trainable, 381s)
+[24776.1s]     full    lr 3e-05   val  86.07  test  86.35  (85.95M trainable, 379s)
+[25166.4s]     full    lr 0.0001  val  10.46  test   9.63  (85.95M trainable, 390s)
+[25170.1s] === IMAGENETR [siglip] vit_base_patch16_siglip_224.webli  n_cls 200  train 24000 (fit 21610)  test 6000  input (3, 224, 224)
+[25515.8s]     frozen  lr 0.001   val  90.00  test  89.47  (0.15M trainable, 346s)
+[25867.9s]     frozen  lr 0.003   val  89.87  test  89.48  (0.15M trainable, 352s)
+[26210.1s]     frozen  lr 0.01    val  88.83  test  88.78  (0.15M trainable, 342s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[26596.7s]     lora4   lr 0.0001  val  88.83  test  87.75  (0.37M trainable, 387s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[26982.4s]     lora4   lr 0.0003  val  90.96  test  90.62  (0.37M trainable, 386s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[27370.2s]     lora4   lr 0.001   val  91.09  test  91.15  (0.37M trainable, 388s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[27761.0s]     lora32  lr 0.0001  val  89.50  test  88.40  (1.92M trainable, 391s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[28146.0s]     lora32  lr 0.0003  val  91.42  test  90.93  (1.92M trainable, 385s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[28531.5s]     lora32  lr 0.001   val  91.72  test  91.57  (1.92M trainable, 386s)
+[28950.5s]     full    lr 1e-05   val  90.92  test  89.15  (93.04M trainable, 419s)
+[29365.1s]     full    lr 3e-05   val  90.54  test  90.28  (93.04M trainable, 415s)
+[29782.0s]     full    lr 0.0001  val  87.53  test  86.77  (93.04M trainable, 417s)
+[29785.6s] === IMAGENETR [dinov2] vit_base_patch14_dinov2.lvd142m  n_cls 200  train 24000 (fit 21610)  test 6000  input (3, 224, 224)
+[30127.6s]     frozen  lr 0.001   val  84.10  test  84.50  (0.15M trainable, 342s)
+[30477.9s]     frozen  lr 0.003   val  83.05  test  83.48  (0.15M trainable, 350s)
+[30820.7s]     frozen  lr 0.01    val  81.97  test  82.25  (0.15M trainable, 343s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[31299.0s]     lora4   lr 0.0001  val  86.36  test  87.48  (0.37M trainable, 478s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[31779.0s]     lora4   lr 0.0003  val  89.46  test  90.63  (0.37M trainable, 480s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[32257.7s]     lora4   lr 0.001   val  89.87  test  90.67  (0.37M trainable, 479s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[32728.8s]     lora32  lr 0.0001  val  87.07  test  87.73  (1.92M trainable, 471s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[33195.3s]     lora32  lr 0.0003  val  89.37  test  90.58  (1.92M trainable, 466s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[33661.4s]     lora32  lr 0.001   val  90.13  test  90.67  (1.92M trainable, 466s)
+[34180.1s]     full    lr 1e-05   val  88.16  test  89.40  (85.88M trainable, 519s)
+[34703.3s]     full    lr 3e-05   val  89.04  test  89.95  (85.88M trainable, 523s)
+[35222.8s]     full    lr 0.0001  val   8.24  test   8.00  (85.88M trainable, 519s)
+[35227.7s] === IMAGENETR [mae] vit_base_patch16_224.mae  n_cls 200  train 24000 (fit 21610)  test 6000  input (3, 224, 224)
+[35578.9s]     frozen  lr 0.001   val  16.23  test  15.85  (0.15M trainable, 351s)
+[35930.4s]     frozen  lr 0.003   val  25.31  test  24.48  (0.15M trainable, 351s)
+[36279.9s]     frozen  lr 0.01    val  34.10  test  32.93  (0.15M trainable, 350s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[36656.0s]     lora4   lr 0.0001  val  35.48  test  35.20  (0.37M trainable, 376s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[37014.7s]     lora4   lr 0.0003  val  55.98  test  53.87  (0.37M trainable, 359s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=4, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[37381.2s]     lora4   lr 0.001   val  65.15  test  65.95  (0.37M trainable, 366s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[37737.1s]     lora32  lr 0.0001  val  37.03  test  37.03  (1.92M trainable, 356s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[38090.2s]     lora32  lr 0.0003  val  57.11  test  55.63  (1.92M trainable, 353s)
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[38454.0s]     lora32  lr 0.001   val  66.61  test  66.65  (1.92M trainable, 364s)
+[38838.7s]     full    lr 1e-05   val  31.55  test  30.50  (85.95M trainable, 385s)
+[39217.1s]     full    lr 3e-05   val  59.33  test  58.22  (85.95M trainable, 378s)
+[39594.0s]     full    lr 0.0001  val  70.08  test  69.75  (85.95M trainable, 377s)
+
+====================================================================================================
+EXP65 P1 -- does backbone ranking REORDER across adaptation budgets?
+====================================================================================================
+
+backbones ['in21k', 'in1k', 'clip', 'siglip', 'dinov2', 'mae']
+budgets ['frozen', 'lora4', 'lora32', 'full']  datasets ['CUB200P', 'IMAGENETR']  epochs 10  seed 0
+
+----------------------------------------------------------------------------------------------------
+TEST ACCURACY (lr chosen on val)   * = top-1 at that budget
+----------------------------------------------------------------------------------------------------
+
+  CUB200P
+    budget          in21k        in1k        clip      siglip      dinov2         mae    top-1
+    frozen         87.40       89.10       81.17       85.16       89.31*      29.39    dinov2
+    lora4          88.85       88.46       86.01       86.17       89.65*      69.93    dinov2
+    lora32         88.93       88.51       86.22       87.23       89.53*      72.39    dinov2
+    full           88.30       86.85       86.51       86.13       88.76*      75.61    dinov2
+    lr              0.001       0.003       0.003        0.01       0.001        0.01   (at frozen)
+
+  IMAGENETR
+    budget          in21k        in1k        clip      siglip      dinov2         mae    top-1
+    frozen         69.33       73.10       79.77       89.47*      84.50       32.93    siglip
+    lora4          83.57       84.48       86.53       91.15*      90.67       65.95    siglip
+    lora32         83.65       84.97       87.83       91.57*      90.67       66.65    siglip
+    full           85.32       85.73       86.35       89.15       89.95*      69.75    dinov2
+    lr              0.001       0.001       0.001       0.001       0.001        0.01   (at frozen)
+
+----------------------------------------------------------------------------------------------------
+PRE-REGISTERED: reorder rate over (dataset, budget-pair) cells
+----------------------------------------------------------------------------------------------------
+  CUB200P     frozen -> lora4    top1  dinov2 -> dinov2   tau  +0.87   stable
+  CUB200P     frozen -> lora32   top1  dinov2 -> dinov2   tau  +0.87   stable
+  CUB200P     frozen -> full     top1  dinov2 -> dinov2   tau  +0.73   stable
+  CUB200P      lora4 -> lora32   top1  dinov2 -> dinov2   tau  +1.00   stable
+  CUB200P      lora4 -> full     top1  dinov2 -> dinov2   tau  +0.87   stable
+  CUB200P     lora32 -> full     top1  dinov2 -> dinov2   tau  +0.87   stable
+  IMAGENETR   frozen -> lora4    top1  siglip -> siglip   tau  +1.00   stable
+  IMAGENETR   frozen -> lora32   top1  siglip -> siglip   tau  +1.00   stable
+  IMAGENETR   frozen -> full     top1  siglip -> dinov2   tau  +0.87   REORDER
+  IMAGENETR    lora4 -> lora32   top1  siglip -> siglip   tau  +1.00   stable
+  IMAGENETR    lora4 -> full     top1  siglip -> dinov2   tau  +0.87   REORDER
+  IMAGENETR   lora32 -> full     top1  siglip -> dinov2   tau  +0.87   REORDER
+
+  reorder_rate = 3/12 = 0.25   (ALIVE >= 0.20, DEAD < 0.10)  -> ALIVE -- budget conditioning is real
+
+----------------------------------------------------------------------------------------------------
+REGRET of picking the backbone by FROZEN accuracy, then training at budget beta
+----------------------------------------------------------------------------------------------------
+  ds         budget        best  frozen-pick  regret (pts)
+  CUB200P    lora4        89.65        89.65          0.00
+  CUB200P    lora32       89.53        89.53          0.00
+  CUB200P    full         88.76        88.76          0.00
+  IMAGENETR  lora4        91.15        91.15          0.00
+  IMAGENETR  lora32       91.57        91.57          0.00
+  IMAGENETR  full         89.95        89.15          0.80
+
+  mean regret 0.13 pts   max 0.80 pts
+
+----------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. reorder_rate IS the result. It decides whether a budget-CONDITIONED selector can beat a
+     budget-blind one even in principle. Nothing about cones is measured here.
+  2. REGRET is the practitioner's version and can disagree with reorder_rate: a stable top-1
+     with large regret means the action is below rank 1, and the metric needs rethinking
+     before the premise does.
+  3. Kendall tau is the full-ranking companion to the top-1 flip. tau near +1 with a flip
+     means two near-tied backbones swapped and the reorder is cosmetic; tau near 0 with no
+     flip means the tail reordered violently under a stable winner. Read both.
+  4. If this returns DEAD, the honest next step is NOT to re-cut the metric until it returns
+     ALIVE. It is to drop the budget framing and ask whether a conic score beats LogME at a
+     fixed budget -- a question three prior closures say we should expect to lose.
+====================================================================================================
+[39594.1s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp65_backbone_selection.json
