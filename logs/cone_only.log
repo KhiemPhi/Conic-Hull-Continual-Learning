@@ -1008,3 +1008,30 @@ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF
 [48514.2s]     s25: rp1 93.04  cone1 92.22  ensRP 93.28  coneENS 91.97  FE 93.37
 [48623.2s]     s26: rp1 92.74  cone1 92.19  ensRP 93.21  coneENS 92.03  FE 93.21
 [48741.0s]     s27: rp1 92.77  cone1 92.31  ensRP 93.31  coneENS 92.31  FE 93.08
+[48855.1s]     s28: rp1 92.98  cone1 92.39  ensRP 93.13  coneENS 92.46  FE 93.13
+[48981.1s]     s29: rp1 92.49  cone1 92.21  ensRP 92.99  coneENS 92.28  FE 92.99
+[49110.1s]     s30: rp1 92.87  cone1 92.32  ensRP 93.01  coneENS 92.25  FE 93.22
+[49244.2s]     s31: rp1 92.27  cone1 91.20  ensRP 92.47  coneENS 91.33  FE 92.41
+[49382.5s]     s32: rp1 92.04  cone1 91.12  ensRP 91.97  coneENS 91.45  FE 92.23
+[49545.6s]     s33: rp1 91.95  cone1 91.06  ensRP 91.83  coneENS 91.38  FE 92.15
+[49707.3s]     s34: rp1 91.49  cone1 90.62  ensRP 91.98  coneENS 90.99  FE 91.92
+[49900.9s]     s35: rp1 90.81  cone1 89.78  ensRP 90.81  coneENS 90.56  FE 91.05
+[50114.3s]     s36: rp1 90.79  cone1 89.79  ensRP 90.90  coneENS 90.32  FE 91.08
+[50325.2s]     s37: rp1 90.02  cone1 89.00  ensRP 90.30  coneENS 89.73  FE 90.53
+[50532.7s]     s38: rp1 89.90  cone1 88.90  ensRP 90.23  coneENS 89.56  FE 90.39
+[50739.8s]     s39: rp1 89.71  cone1 88.58  ensRP 90.04  coneENS 89.12  FE 90.15
+[50946.0s]     s40: rp1 89.77  cone1 88.83  ensRP 90.08  coneENS 89.30  FE 90.08
+[51169.1s]     s41: rp1 89.13  cone1 88.42  ensRP 89.69  coneENS 88.88  FE 89.79
+[51414.3s]     s42: rp1 89.27  cone1 88.63  ensRP 89.86  coneENS 89.12  FE 90.06
+[51657.7s]     s43: rp1 89.25  cone1 88.53  ensRP 89.64  coneENS 88.87  FE 89.88
+[51903.9s]     s44: rp1 89.27  cone1 88.61  ensRP 89.69  coneENS 88.89  FE 89.93
+[52163.1s]     s45: rp1 88.22  cone1 87.94  ensRP 89.10  coneENS 88.41  FE 89.33
+[52448.2s]     s46: rp1 88.33  cone1 87.83  ensRP 89.19  coneENS 88.47  FE 89.37
+[52705.2s]     s47: rp1 88.73  cone1 88.11  ensRP 89.22  coneENS 88.73  FE 89.13
+[52949.6s]     s48: rp1 88.54  cone1 88.11  ensRP 89.28  coneENS 88.67  FE 89.67
+[53168.9s]     s49: rp1 88.59  cone1 88.08  ensRP 89.23  coneENS 88.63  FE 89.69
+[53168.9s]     cell 6211s
+[53169.0s] === CUB200P|50|2|q32+m32+a16+q32b70+q64|R64|opcag0.5|m10000_ordpilot|v1
+[53179.0s]     s0: rp1 100.00  cone1 100.00  ensRP 100.00  coneENS 100.00  FE 100.00
+[53191.8s]     s1: rp1 94.59  cone1 98.20  ensRP 97.30  coneENS 99.10  FE 97.30
+[53212.7s]     s2: rp1 98.73  cone1 97.47  ensRP 98.10  coneENS 97.47  FE 98.10

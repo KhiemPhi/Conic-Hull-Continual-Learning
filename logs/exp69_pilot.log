@@ -1,0 +1,298 @@
++ source /home/khiemphi/venvs/ml_env/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ case "$(uname)" in
++++ uname
+++ export VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ VIRTUAL_ENV=/home/khiemphi/venvs/ml_env
+++ _OLD_VIRTUAL_PATH=/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ PATH=/home/khiemphi/venvs/ml_env/bin:/usr/local/fbpkg/vscodefb/vscode-server/426/bin/remote-cli:/usr/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/facebook/scripts:/usr/facebook/scripts/db:/usr/facebook/ops/scripts:/usr/facebook/scripts:/usr/local/sbin:/usr/sbin:/sbin:/var/www/scripts/bin:/home/khiemphi/.yarn/bin:/home/khiemphi/bin
+++ export PATH
+++ VIRTUAL_ENV_PROMPT='(ml_env) '
+++ export VIRTUAL_ENV_PROMPT
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='((ml_env) ) '
+++ export PS1
+++ hash -r
++ cd /home/khiemphi/Conic-Hull-Continual-Learning
++ export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 ORDER=pilot
++ OMP_NUM_THREADS=1
++ MKL_NUM_THREADS=1
++ ORDER=pilot
++ export http_proxy=http://fwdproxy:8080 https_proxy=http://fwdproxy:8080 HF_HUB_DISABLE_XET=1
++ http_proxy=http://fwdproxy:8080
++ https_proxy=http://fwdproxy:8080
++ HF_HUB_DISABLE_XET=1
++ for A in frozen,fs cont0 cont50 cont50_accum
++ for i in 1 2 3 4
++ echo '[exp69] arms=frozen,fs attempt 1/4'
+[exp69] arms=frozen,fs attempt 1/4
++ DS=IMAGENETR
++ T=10
++ SEED=0
++ ARMS=frozen,fs
++ python -u exp69_gram_ranpac.py
+[    0.0s] === IMAGENETR|10|0|frozen|e40-4|lr0.0003-0.0001|m20|M10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[   34.9s]     [frozen] t=0 seen= 20  ranpac  85.65  ncm  68.84  eps    0d  rigid  nan%  gram 1.00
+[   58.1s]     [frozen] t=1 seen= 40  ranpac  79.71  ncm  61.54  eps    0d  rigid  nan%  gram 1.00
+[   81.6s]     [frozen] t=2 seen= 60  ranpac  78.00  ncm  57.94  eps    0d  rigid  nan%  gram 1.00
+[  108.9s]     [frozen] t=3 seen= 80  ranpac  75.96  ncm  54.58  eps    0d  rigid  nan%  gram 1.00
+[  132.5s]     [frozen] t=4 seen=100  ranpac  73.62  ncm  52.34  eps    0d  rigid  nan%  gram 1.00
+[  157.9s]     [frozen] t=5 seen=120  ranpac  72.02  ncm  50.59  eps    0d  rigid  nan%  gram 1.00
+[  183.3s]     [frozen] t=6 seen=140  ranpac  71.37  ncm  49.56  eps    0d  rigid  nan%  gram 1.00
+[  211.1s]     [frozen] t=7 seen=160  ranpac  70.85  ncm  48.36  eps    0d  rigid  nan%  gram 1.00
+[  238.3s]     [frozen] t=8 seen=180  ranpac  70.12  ncm  47.79  eps    0d  rigid  nan%  gram 1.00
+[  271.5s]     [frozen] t=9 seen=200  ranpac  69.35  ncm  46.90  eps    0d  rigid  nan%  gram 1.00
+[  271.6s]     DONE frozen: ranpac 69.35/74.66  ncm 46.90/53.84  (272s)
+[  271.6s] === IMAGENETR|10|0|fs|e40-4|lr0.0003-0.0001|m20|M10000_ordpilot|v1
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  548.9s]     [fs] t=0 seen= 20  ranpac  95.51  ncm  93.48  eps    0d  rigid  nan%  gram 1.00
+[  575.2s]     [fs] t=1 seen= 40  ranpac  92.67  ncm  87.47  eps    0d  rigid  nan%  gram 1.00
+[  603.5s]     [fs] t=2 seen= 60  ranpac  88.49  ncm  82.38  eps    0d  rigid  nan%  gram 1.00
+[  642.2s]     [fs] t=3 seen= 80  ranpac  86.98  ncm  79.66  eps    0d  rigid  nan%  gram 1.00
+[  677.5s]     [fs] t=4 seen=100  ranpac  84.41  ncm  76.15  eps    0d  rigid  nan%  gram 1.00
+[  706.4s]     [fs] t=5 seen=120  ranpac  84.08  ncm  74.58  eps    0d  rigid  nan%  gram 1.00
+[  732.7s]     [fs] t=6 seen=140  ranpac  83.28  ncm  73.70  eps    0d  rigid  nan%  gram 1.00
+[  770.3s]     [fs] t=7 seen=160  ranpac  82.63  ncm  72.56  eps    0d  rigid  nan%  gram 1.00
+[  802.4s]     [fs] t=8 seen=180  ranpac  81.67  ncm  71.82  eps    0d  rigid  nan%  gram 1.00
+[  832.5s]     [fs] t=9 seen=200  ranpac  80.58  ncm  70.53  eps    0d  rigid  nan%  gram 1.00
+[  832.6s]     DONE fs: ranpac 80.58/86.03  ncm 70.53/78.23  (561s)
+
+================================================================================================
+EXP69 -- Gram-preserving CONTINUAL adaptation + RanPAC, on a benchmark WITH headroom
+================================================================================================
+
+IMAGENETR T=10
+  arm             n  RanPAC A-Last  RanPAC A-Avg  NCM A-Last  rigidity%   gram
+  frozen          1          69.35         74.66       46.90        nan   1.00
+  fs              1          80.58         86.03       70.53        nan   1.00
+  [GR-LoRA]                  82.09         86.20
+  [our FE (5-member+cone)]             82.58         87.01
+  [our base q32|ranpac]             80.76         85.49
+
+  PRE-REGISTERED
+    primary   cont50 - fs    = +nan   (ALIVE >= +1.00, DEAD < +0.30)
+    necessary cont50 - cont0 = +nan   (the PENALTY must be the mechanism, >= +0.50)
+    -> AMBIGUOUS / mechanism unclear
+
+------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. `fs` is our published base, not a straw man. Beating it is the entire point; losing to it
+     says first-session-only adaptation was correct and the Gram line does not rescue it.
+  2. cont0 vs cont50 is what assigns CREDIT. cont50 > cont0 means the penalty did it; a tie
+     means plain continual adaptation did it and the gauge derivation earns nothing.
+  3. cont50_accum exposes frame mixing: RanPAC's ReLU lift is NOT O(d)-invariant, so
+     accumulating G/C while the backbone rotates is invalid even when Gram is preserved. A
+     large accum-vs-recompute gap is a result about the READ-OUT, not the adaptation.
+  4. NCM vs RanPAC localises any failure. The penalty was validated with NCM; if it lifts NCM
+     and not RanPAC, the problem is the non-invariant random-ReLU lift, not the penalty.
+  5. rigidity and gram must MOVE in cont50 vs cont0. If they do not, the penalty is not biting
+     on this dataset and a null tells us nothing about the hypothesis.
+================================================================================================
+[  832.6s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp69_gram_ranpac_augreg_in21k.json
++ echo '[exp69] frozen,fs OK'
+[exp69] frozen,fs OK
++ break
++ for A in frozen,fs cont0 cont50 cont50_accum
++ for i in 1 2 3 4
++ echo '[exp69] arms=cont0 attempt 1/4'
+[exp69] arms=cont0 attempt 1/4
++ DS=IMAGENETR
++ T=10
++ SEED=0
++ ARMS=cont0
++ python -u exp69_gram_ranpac.py
+[    0.0s] === IMAGENETR|10|0|cont0|e40-4|lr0.0003-0.0001|m20|M10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  257.5s]     [cont0] t=0 seen= 20  ranpac  95.51  ncm  94.20  eps    0d  rigid  nan%  gram 1.00
+[  299.9s]     [cont0] t=1 seen= 40  ranpac  89.16  ncm  87.40  eps   13d  rigid   76%  gram 0.97
+[  341.1s]     [cont0] t=2 seen= 60  ranpac  82.33  ncm  82.38  eps   29d  rigid   76%  gram 0.85
+[  383.2s]     [cont0] t=3 seen= 80  ranpac  79.90  ncm  79.02  eps   48d  rigid   81%  gram 0.78
+[  424.8s]     [cont0] t=4 seen=100  ranpac  77.63  ncm  76.15  eps   48d  rigid   79%  gram 0.79
+[  470.9s]     [cont0] t=5 seen=120  ranpac  73.60  ncm  71.25  eps   48d  rigid   80%  gram 0.77
+[  512.9s]     [cont0] t=6 seen=140  ranpac  72.47  ncm  67.53  eps   57d  rigid   82%  gram 0.77
+[  560.4s]     [cont0] t=7 seen=160  ranpac  70.78  ncm  68.28  eps   54d  rigid   81%  gram 0.81
+[  604.0s]     [cont0] t=8 seen=180  ranpac  71.91  ncm  68.26  eps   53d  rigid   81%  gram 0.82
+[  652.9s]     [cont0] t=9 seen=200  ranpac  69.48  ncm  64.72  eps   54d  rigid   81%  gram 0.82
+[  652.9s]     DONE cont0: ranpac 69.48/78.28  ncm 64.72/75.92  (653s)
+
+================================================================================================
+EXP69 -- Gram-preserving CONTINUAL adaptation + RanPAC, on a benchmark WITH headroom
+================================================================================================
+
+IMAGENETR T=10
+  arm             n  RanPAC A-Last  RanPAC A-Avg  NCM A-Last  rigidity%   gram
+  frozen          1          69.35         74.66       46.90        nan   1.00
+  fs              1          80.58         86.03       70.53        nan   1.00
+  cont0           1          69.48         78.28       64.72       81.0   0.82
+  [GR-LoRA]                  82.09         86.20
+  [our FE (5-member+cone)]             82.58         87.01
+  [our base q32|ranpac]             80.76         85.49
+
+  PRE-REGISTERED
+    primary   cont50 - fs    = +nan   (ALIVE >= +1.00, DEAD < +0.30)
+    necessary cont50 - cont0 = +nan   (the PENALTY must be the mechanism, >= +0.50)
+    -> AMBIGUOUS / mechanism unclear
+
+------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. `fs` is our published base, not a straw man. Beating it is the entire point; losing to it
+     says first-session-only adaptation was correct and the Gram line does not rescue it.
+  2. cont0 vs cont50 is what assigns CREDIT. cont50 > cont0 means the penalty did it; a tie
+     means plain continual adaptation did it and the gauge derivation earns nothing.
+  3. cont50_accum exposes frame mixing: RanPAC's ReLU lift is NOT O(d)-invariant, so
+     accumulating G/C while the backbone rotates is invalid even when Gram is preserved. A
+     large accum-vs-recompute gap is a result about the READ-OUT, not the adaptation.
+  4. NCM vs RanPAC localises any failure. The penalty was validated with NCM; if it lifts NCM
+     and not RanPAC, the problem is the non-invariant random-ReLU lift, not the penalty.
+  5. rigidity and gram must MOVE in cont50 vs cont0. If they do not, the penalty is not biting
+     on this dataset and a null tells us nothing about the hypothesis.
+================================================================================================
+[  652.9s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp69_gram_ranpac_augreg_in21k.json
++ echo '[exp69] cont0 OK'
+[exp69] cont0 OK
++ break
++ for A in frozen,fs cont0 cont50 cont50_accum
++ for i in 1 2 3 4
++ echo '[exp69] arms=cont50 attempt 1/4'
+[exp69] arms=cont50 attempt 1/4
++ DS=IMAGENETR
++ T=10
++ SEED=0
++ ARMS=cont50
++ python -u exp69_gram_ranpac.py
+[    0.0s] === IMAGENETR|10|0|cont50|e40-4|lr0.0003-0.0001|m20|M10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  246.6s]     [cont50] t=0 seen= 20  ranpac  95.51  ncm  94.20  eps    0d  rigid  nan%  gram 1.00
+[  309.5s]     [cont50] t=1 seen= 40  ranpac  89.01  ncm  87.55  eps    9d  rigid   82%  gram 0.99
+[  368.1s]     [cont50] t=2 seen= 60  ranpac  82.18  ncm  83.60  eps   13d  rigid   82%  gram 0.99
+[  435.1s]     [cont50] t=3 seen= 80  ranpac  80.29  ncm  80.21  eps   19d  rigid   82%  gram 0.97
+[  501.3s]     [cont50] t=4 seen=100  ranpac  76.51  ncm  76.61  eps   26d  rigid   82%  gram 0.94
+[  573.8s]     [cont50] t=5 seen=120  ranpac  75.02  ncm  74.64  eps   27d  rigid   82%  gram 0.95
+[  638.2s]     [cont50] t=6 seen=140  ranpac  75.09  ncm  73.35  eps   32d  rigid   82%  gram 0.94
+[  729.6s]     [cont50] t=7 seen=160  ranpac  73.31  ncm  72.10  eps   31d  rigid   82%  gram 0.94
+[  794.6s]     [cont50] t=8 seen=180  ranpac  73.09  ncm  71.05  eps   35d  rigid   81%  gram 0.93
+[  875.6s]     [cont50] t=9 seen=200  ranpac  71.60  ncm  68.53  eps   37d  rigid   81%  gram 0.93
+[  875.7s]     DONE cont50: ranpac 71.60/79.16  ncm 68.53/78.18  (876s)
+
+================================================================================================
+EXP69 -- Gram-preserving CONTINUAL adaptation + RanPAC, on a benchmark WITH headroom
+================================================================================================
+
+IMAGENETR T=10
+  arm             n  RanPAC A-Last  RanPAC A-Avg  NCM A-Last  rigidity%   gram
+  frozen          1          69.35         74.66       46.90        nan   1.00
+  fs              1          80.58         86.03       70.53        nan   1.00
+  cont0           1          69.48         78.28       64.72       81.0   0.82
+  cont50          1          71.60         79.16       68.53       80.8   0.93
+  [GR-LoRA]                  82.09         86.20
+  [our FE (5-member+cone)]             82.58         87.01
+  [our base q32|ranpac]             80.76         85.49
+
+  PRE-REGISTERED
+    primary   cont50 - fs    = -8.98   (ALIVE >= +1.00, DEAD < +0.30)
+    necessary cont50 - cont0 = +2.12   (the PENALTY must be the mechanism, >= +0.50)
+    -> DEAD -- first-session-only was the right call
+
+------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. `fs` is our published base, not a straw man. Beating it is the entire point; losing to it
+     says first-session-only adaptation was correct and the Gram line does not rescue it.
+  2. cont0 vs cont50 is what assigns CREDIT. cont50 > cont0 means the penalty did it; a tie
+     means plain continual adaptation did it and the gauge derivation earns nothing.
+  3. cont50_accum exposes frame mixing: RanPAC's ReLU lift is NOT O(d)-invariant, so
+     accumulating G/C while the backbone rotates is invalid even when Gram is preserved. A
+     large accum-vs-recompute gap is a result about the READ-OUT, not the adaptation.
+  4. NCM vs RanPAC localises any failure. The penalty was validated with NCM; if it lifts NCM
+     and not RanPAC, the problem is the non-invariant random-ReLU lift, not the penalty.
+  5. rigidity and gram must MOVE in cont50 vs cont0. If they do not, the penalty is not biting
+     on this dataset and a null tells us nothing about the hypothesis.
+================================================================================================
+[  875.7s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp69_gram_ranpac_augreg_in21k.json
++ echo '[exp69] cont50 OK'
+[exp69] cont50 OK
++ break
++ for A in frozen,fs cont0 cont50 cont50_accum
++ for i in 1 2 3 4
++ echo '[exp69] arms=cont50_accum attempt 1/4'
+[exp69] arms=cont50_accum attempt 1/4
++ DS=IMAGENETR
++ T=10
++ SEED=0
++ ARMS=cont50_accum
++ python -u exp69_gram_ranpac.py
+[    0.0s] === IMAGENETR|10|0|cont50_accum|e40-4|lr0.0003-0.0001|m20|M10000_ordpilot|v1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[inject_lora] 24 layer(s) replaced with LoRALinear (rank=32, alpha=4.0, targets=['attn.qkv', 'attn.proj'])
+[load_backbone] LoRA active (task_shared) — 24 layers, 1,769,472 trainable adapter params
+[load_backbone] 'vit_base_patch16_224.augreg_in21k'  pretrained=True  device=cuda  feature_dim=768
+[  256.7s]     [cont50_accum] t=0 seen= 20  ranpac  95.51  ncm  93.48  eps    0d  rigid  nan%  gram 1.00
+[  321.9s]     [cont50_accum] t=1 seen= 40  ranpac  91.94  ncm  87.47  eps   11d  rigid   81%  gram 0.99
+[  410.5s]     [cont50_accum] t=2 seen= 60  ranpac  87.07  ncm  82.23  eps   19d  rigid   81%  gram 0.96
+[  478.3s]     [cont50_accum] t=3 seen= 80  ranpac  82.92  ncm  79.02  eps   26d  rigid   81%  gram 0.93
+[  546.4s]     [cont50_accum] t=4 seen=100  ranpac  77.80  ncm  74.54  eps   34d  rigid   82%  gram 0.90
+[  624.0s]     [cont50_accum] t=5 seen=120  ranpac  76.41  ncm  74.09  eps   34d  rigid   82%  gram 0.91
+[  692.8s]     [cont50_accum] t=6 seen=140  ranpac  74.64  ncm  72.45  eps   37d  rigid   82%  gram 0.90
+[  778.9s]     [cont50_accum] t=7 seen=160  ranpac  71.94  ncm  70.91  eps   36d  rigid   81%  gram 0.90
+[  849.8s]     [cont50_accum] t=8 seen=180  ranpac  69.68  ncm  69.68  eps   40d  rigid   80%  gram 0.90
+[  925.7s]     [cont50_accum] t=9 seen=200  ranpac  67.63  ncm  67.97  eps   36d  rigid   79%  gram 0.91
+[  925.7s]     DONE cont50_accum: ranpac 67.63/79.55  ncm 67.97/77.18  (926s)
+
+================================================================================================
+EXP69 -- Gram-preserving CONTINUAL adaptation + RanPAC, on a benchmark WITH headroom
+================================================================================================
+
+IMAGENETR T=10
+  arm             n  RanPAC A-Last  RanPAC A-Avg  NCM A-Last  rigidity%   gram
+  frozen          1          69.35         74.66       46.90        nan   1.00
+  fs              1          80.58         86.03       70.53        nan   1.00
+  cont0           1          69.48         78.28       64.72       81.0   0.82
+  cont50          1          71.60         79.16       68.53       80.8   0.93
+  cont50_accum    1          67.63         79.55       67.97       79.1   0.91
+  [GR-LoRA]                  82.09         86.20
+  [our FE (5-member+cone)]             82.58         87.01
+  [our base q32|ranpac]             80.76         85.49
+
+  PRE-REGISTERED
+    primary   cont50 - fs    = -8.98   (ALIVE >= +1.00, DEAD < +0.30)
+    necessary cont50 - cont0 = +2.12   (the PENALTY must be the mechanism, >= +0.50)
+    -> DEAD -- first-session-only was the right call
+
+------------------------------------------------------------------------------------------------
+HOW TO READ THIS
+  1. `fs` is our published base, not a straw man. Beating it is the entire point; losing to it
+     says first-session-only adaptation was correct and the Gram line does not rescue it.
+  2. cont0 vs cont50 is what assigns CREDIT. cont50 > cont0 means the penalty did it; a tie
+     means plain continual adaptation did it and the gauge derivation earns nothing.
+  3. cont50_accum exposes frame mixing: RanPAC's ReLU lift is NOT O(d)-invariant, so
+     accumulating G/C while the backbone rotates is invalid even when Gram is preserved. A
+     large accum-vs-recompute gap is a result about the READ-OUT, not the adaptation.
+  4. NCM vs RanPAC localises any failure. The penalty was validated with NCM; if it lifts NCM
+     and not RanPAC, the problem is the non-invariant random-ReLU lift, not the penalty.
+  5. rigidity and gram must MOVE in cont50 vs cont0. If they do not, the penalty is not biting
+     on this dataset and a null tells us nothing about the hypothesis.
+================================================================================================
+[  925.7s] wrote /home/khiemphi/Conic-Hull-Continual-Learning/exp69_gram_ranpac_augreg_in21k.json
++ echo '[exp69] cont50_accum OK'
+[exp69] cont50_accum OK
++ break
++ echo EXP69_PILOT_DONE
+EXP69_PILOT_DONE
